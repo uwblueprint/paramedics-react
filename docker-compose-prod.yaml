@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  # The primary API endpoint service
+  paramedics-react:
+    image: uwblueprint/paramedics-react:prod
+    container_name: paramedics-react
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    volumes:
+    - type: bind
+      source: ./
+      target: /app
+    - '/app/node_modules'
+    ports:
+    - "5000:5000"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 100m

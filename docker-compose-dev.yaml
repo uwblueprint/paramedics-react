@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  # The primary API endpoint service
+  paramedics-react-dev:
+    image: uwblueprint/paramedics-react:dev
+    container_name: paramedics-react-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+    - type: bind
+      source: ./
+      target: /app
+    - '/app/node_modules'
+    ports:
+    - "3000:3000"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 100m
+    # For some reason, this is needed for container to work
+    tty: true
