@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_USERS, GET_USER } from './graphql-queries';
+import { GET_USERS, GET_USER } from './js/graphql/user-queries';
 
 function App({ onSelectedUser }) {
   const { loading, error, data } =  useQuery(GET_USERS);
