@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { gql } from "apollo-boost";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const App = () => {
+  const [addEvent, { eventData }] = useMutation(gql`
+    mutation {
+      addEvent(
+        name: "COVID19"
+        isActive: true
+        eventDate: "2020-03-05"
+        createdBy: 1
+      ) {
+        name
+      }
+    }
+  `);
+
+  const { loading, error, data } = useQuery(
+    gql`
+      {
+        events {
+          name
+          eventDate
+        }
+      }
+    `
   );
-}
+  console.log(loading, error, data);
+  if (loading) return <h1>Loading</h1>;
+  if (error) return <h1>Error</h1>;
+  return (
+    <>
+      <h1>Events</h1>
+      {data.events.map(event => (
+        <h1>{event.name}</h1>
+      ))}
+      <button onClick={addEvent}>Add event!</button>
+    </>
+  );
+};
 
 export default App;
