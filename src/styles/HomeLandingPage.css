@@ -1,0 +1,17 @@
+.landing-wrapper {
+  margin: 3em 3em;
+}
+
+.landing-top-bar {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.user-icon {
+  display: flex;
+  margin-left: auto;
+  align-self: center;
+}
+.user-text {
+  margin-right: 0.5em;
+}
