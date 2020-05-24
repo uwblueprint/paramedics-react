@@ -1,11 +1,10 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
+import CardOptions from "./CardOptions";
 
 interface EventCardProps {
   date: string;
@@ -20,8 +19,9 @@ const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
       <CardContent className={classes.cardContent}>
         <Box display="flex">
           <Typography color="textSecondary">{date}</Typography>
+
           <Box ml="auto">
-            <MoreHorizIcon />
+            <CardOptions />
           </Box>
         </Box>
 
