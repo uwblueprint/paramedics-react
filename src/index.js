@@ -8,11 +8,16 @@ import App from "./containers/App.tsx";
 import * as serviceWorker from "./serviceWorker";
 import { initStore } from "./redux/store";
 
+import { ApolloProvider } from "@apollo/react-hooks";
+import client from "./graphql/apollo/client";
+
 ReactDOM.render(
   <BrowserRouter>
-    <Provider store={initStore()}>
-      <App />
-    </Provider>
+    <ApolloProvider client={client}>
+      <Provider store={initStore()}>
+        <App />
+      </Provider>
+    </ApolloProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );
