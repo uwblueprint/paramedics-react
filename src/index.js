@@ -1,12 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
 
 import "./styles/index.css";
 import App from "./containers/App.tsx";
 import * as serviceWorker from "./serviceWorker";
-import { initStore } from "./redux/store";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import client from "./graphql/apollo/client";
@@ -14,9 +12,7 @@ import client from "./graphql/apollo/client";
 ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
-      <Provider store={initStore()}>
-        <App />
-      </Provider>
+      <App />
     </ApolloProvider>
   </BrowserRouter>,
   document.getElementById("root")

@@ -5,7 +5,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 
-const CardOptions = ({}) => {
+const CardOptions = () => {
   const classes = useCardOptionsStyles();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

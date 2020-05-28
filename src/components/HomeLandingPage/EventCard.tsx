@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CardOptions from "./CardOptions";
 
 interface EventCardProps {
-  date: string;
+  date: Date;
   eventTitle: string;
   address: string;
 }

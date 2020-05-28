@@ -5,13 +5,24 @@ import Typography from "@material-ui/core/Typography";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import EventCard from "../components/HomeLandingPage/EventCard";
 import AddEventButton from "../components/HomeLandingPage/AddEventButton";
+import { useAllEvents } from "../graphql/queries/hooks/events";
+import { useQuery } from "react-apollo";
+import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
 
 const HomeLandingPage = () => {
   const [selectedTab, setTab] = useState(0);
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTab(newValue);
   };
+
   const tabLabels = ["Current Events", "Archived Events"];
+
+  // Fetch events from backend
+  useAllEvents();
+
+  // Fetch events from cache
+  const { data } = useQuery(GET_ALL_EVENTS);
+  const events: Array<EventType> = data ? data.events : [];
 
   return (
     <div className="landing-wrapper">
@@ -35,11 +46,13 @@ const HomeLandingPage = () => {
           tabLabels={tabLabels}
         />
       </div>
-      <EventCard
-        date="2020-02-28"
-        eventTitle="St. Patrick's Day"
-        address="Ezra Street L123XA, Ontario Canada"
-      />
+      {events.map((event: EventType) => (
+        <EventCard
+          date={event.eventDate}
+          eventTitle={event.name}
+          address="N/A"
+        />
+      ))}
       <div className="add-event-container">
         <AddEventButton />
       </div>
