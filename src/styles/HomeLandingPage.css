@@ -1,0 +1,28 @@
+.landing-wrapper {
+  background-color: #f0f0f0;
+  height: 100vh;
+}
+
+.landing-top-bar {
+  display: flex;
+  padding-bottom: 2em;
+}
+
+.landing-top-section {
+  padding: 3em 3em 0em 3em;
+  background-color: white;
+}
+
+.user-icon {
+  display: flex;
+  margin-left: auto;
+  align-self: center;
+}
+.user-text {
+  margin-right: 0.5em;
+}
+.add-event-container {
+  position: absolute;
+  right: 4rem;
+  bottom: 4rem;
+}
