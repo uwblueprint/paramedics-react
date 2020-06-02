@@ -1,0 +1,19 @@
+.event-creation-top-section {
+  padding: 3em 3em 0em 3em;
+  background-color: white;
+  border: 1px solid #c4c4c4;
+}
+
+.user-icon {
+  display: flex;
+  margin-left: auto;
+  align-self: center;
+}
+.user-text {
+  margin-right: 0.5em;
+}
+.add-event-container {
+  position: absolute;
+  right: 4rem;
+  bottom: 4rem;
+}
