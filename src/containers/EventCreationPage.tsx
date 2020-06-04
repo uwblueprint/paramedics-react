@@ -14,6 +14,27 @@ const EventCreationPage = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+
+  const useTextFieldStyles = makeStyles({
+    root: {
+      border: "1px solid #E8E8E8",
+      boxSizing: "border-box",
+      borderRadius: "10px",
+      backgroundColor: "#FFFFFF",
+      padding: "20px",
+      marginBottom: "30px",
+      width: "100%",
+    },
+    label: {
+      color: "black",
+      margin: "20px",
+      fontWeight: "bold",
+    },
+    eventForm: {
+      padding: "30px"
+    }
+  });
+
   const classes = useTextFieldStyles();
 
   return (
@@ -29,11 +50,13 @@ const EventCreationPage = () => {
         </div>
       </div>
       <CancelModal open={open} handleClose={handleClose} />
-      <div className="event-form">
+      <div className={classes.eventForm}>
         <form>
           <TextField
             id="event-name"
-            label="Event Name:"
+            label={<Typography className={classes.label}>
+              Event Name:
+          </Typography>}
             placeholder="Event Name Here"
             InputLabelProps={{
               shrink: true,
@@ -41,21 +64,19 @@ const EventCreationPage = () => {
             className={classes.root}
             // value={values.name}
             // onChange={handleChange("name")}
-            fullWidth
             margin="normal"
-            variant="filled"
           />
           <TextField
             id="event-date"
-            label="Date of Event:"
+            label={<Typography className={classes.label}>
+              Date of Event:
+            </Typography>}
             placeholder="YYYY:MM:DD"
             InputLabelProps={{
               shrink: true,
             }}
             className={classes.root}
-            fullWidth
             margin="normal"
-            variant="filled"
           />
         </form>
       </div>
@@ -63,10 +84,6 @@ const EventCreationPage = () => {
   );
 };
 
-const useTextFieldStyles = makeStyles({
-  root: {
-    background: "#FFFFFF",
-  },
-});
+
 
 export default EventCreationPage;
