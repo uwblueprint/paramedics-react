@@ -3,39 +3,44 @@ import "../styles/EventCreationPage.css";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Modal from "@material-ui/core/Modal";
 import CancelModal from "../components/EventCreationPage/CancelModal";
+import NextButton from "../components/EventCreationPage/NextButton"
+import FormField from "../components/EventCreationPage/FormField";
+import Stepper from "../components/EventCreationPage/Stepper";
 
 const EventCreationPage = () => {
   const [open, setOpen] = useState(false);
-  const [eventName, setEventName] = useState("");
-  const [eventDate, setEventDate] = useState("");
+  const [eventName, setEventName] = useState<string>("");
+  const [eventDate, setEventDate] = useState<string>("");
+  const [eventLocation, setLocation] = useState<string>("");
+  const [activeStep, setActiveStep] = useState<number>(0);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleNameChange = (e: any) => {
+    setEventName(e.target.value);
+  };
+  const handleDateChange = (e: any) => {
+    setEventDate(e.target.value);
+  };
+  const handleLocationChange = (e: any) => {
+    setEventDate(e.target.value);
+  };
+  const handleNext = () => {
+    setActiveStep(prevStep => prevStep + 1);
+  };
+  const handleComplete = () => {
 
+  };
 
-  const useTextFieldStyles = makeStyles({
-    root: {
-      border: "1px solid #E8E8E8",
-      boxSizing: "border-box",
-      borderRadius: "10px",
-      backgroundColor: "#FFFFFF",
-      padding: "20px",
-      marginBottom: "30px",
-      width: "100%",
-    },
-    label: {
-      color: "black",
-      margin: "20px",
-      fontWeight: "bold",
-    },
-    eventForm: {
-      padding: "30px"
-    }
-  });
+  const content = (activeStep === 0) ? <div className="event-form">
+    <form>
+      <FormField label="Event Name:" placeholder="Event Name Here" onChange={handleNameChange} value={eventName} />
+      <FormField label="Date of Event:" placeholder="YYYY:MM:DD" onChange={handleDateChange} value={eventLocation} />
+    </form>
+  </div> :
+    <FormField label="Event Location:" placeholder="Enter Location Here" onChange={handleLocationChange} value={eventLocation} />;
 
-  const classes = useTextFieldStyles();
 
   return (
     <div className="landing-wrapper">
@@ -49,41 +54,13 @@ const EventCreationPage = () => {
           </div>
         </div>
       </div>
+      {content}
       <CancelModal open={open} handleClose={handleClose} />
-      <div className={classes.eventForm}>
-        <form>
-          <TextField
-            id="event-name"
-            label={<Typography className={classes.label}>
-              Event Name:
-          </Typography>}
-            placeholder="Event Name Here"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            className={classes.root}
-            // value={values.name}
-            // onChange={handleChange("name")}
-            margin="normal"
-          />
-          <TextField
-            id="event-date"
-            label={<Typography className={classes.label}>
-              Date of Event:
-            </Typography>}
-            placeholder="YYYY:MM:DD"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            className={classes.root}
-            margin="normal"
-          />
-        </form>
-      </div>
+      <Stepper activeStep={activeStep} nextButton={<div className="next-container"><NextButton handleClick={activeStep < 1 ? handleNext : handleComplete} /></div>
+      } />
     </div>
   );
 };
-
 
 
 export default EventCreationPage;
