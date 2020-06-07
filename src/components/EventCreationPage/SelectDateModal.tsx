@@ -5,6 +5,10 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
+// import {
+//   MuiPickersUtilsProvider,
+//   KeyboardDatePicker,
+// } from '@material-ui/pickers';
 import Typography from "@material-ui/core/Typography";
 
 const SelectDateModal = ({
@@ -15,12 +19,12 @@ const SelectDateModal = ({
   handleClose: () => any;
 }) => {
   const classes = useModalStyles();
-  const handleCancel = () => {};
+  const handleCancel = () => { };
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
         <Typography classes={{ root: classes.text }}>
-          Are you sure you want to cancel this event?
+          Select Event Date:
         </Typography>
         <Grid
           container

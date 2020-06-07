@@ -9,6 +9,7 @@ import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
+import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
 
 const EventCreationPage = () => {
   const [openCancelModal, setOpenHandleModal] = useState(false);
@@ -25,6 +26,7 @@ const EventCreationPage = () => {
 
   const handleOpenDateModal = () => setOpenHandleModal(true);
   const handleCloseDateModal = () => setOpenHandleModal(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
   const handleNameChange = (e: any) => {
     setEventName(e.target.value);
@@ -42,7 +44,9 @@ const EventCreationPage = () => {
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
-  const handleComplete = () => { };
+  const handleComplete = () => {
+
+  };
 
   const content =
     activeStep === 0 ? (
