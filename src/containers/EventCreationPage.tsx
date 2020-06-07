@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import CancelModal from "../components/EventCreationPage/CancelModal";
 import NextButton from "../components/EventCreationPage/NextButton";
+import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 
@@ -29,6 +30,9 @@ const EventCreationPage = () => {
   };
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
+  };
+  const handleBack = () => {
+    setActiveStep((prevStep) => prevStep - 1);
   };
   const handleComplete = () => {};
 
@@ -81,6 +85,13 @@ const EventCreationPage = () => {
               handleClick={activeStep < 1 ? handleNext : handleComplete}
             />
           </div>
+        }
+        backButton={
+          activeStep === 1 ? (
+            <div className="back-container">
+              <BackButton handleClick={handleBack} />
+            </div>
+          ) : null
         }
       />
     </div>

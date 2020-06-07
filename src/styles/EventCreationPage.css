@@ -17,6 +17,11 @@
   right: 4rem;
   bottom: 4rem;
 }
+.back-container {
+  position: absolute;
+  right: 20rem;
+  bottom: 4rem;
+}
 
 .event-form {
   padding: 30px;
