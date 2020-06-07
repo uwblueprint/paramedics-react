@@ -12,8 +12,12 @@
 .user-text {
   margin-right: 0.5em;
 }
-.add-event-container {
+.next-container {
   position: absolute;
   right: 4rem;
   bottom: 4rem;
+}
+
+.event-form {
+  padding: 30px;
 }
