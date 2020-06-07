@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "../styles/EventCreationPage.css";
-import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import CancelModal from "../components/EventCreationPage/CancelModal";
+import Map from "../components/EventCreationPage/Map";
 import NextButton from "../components/EventCreationPage/NextButton";
 import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
@@ -17,7 +16,8 @@ const EventCreationPage = () => {
 
   const [eventName, setEventName] = useState<string>("");
   const [eventDate, setEventDate] = useState<string>("");
-  const [eventLocation, setLocation] = useState<string>("");
+  const [eventLocation, setEventLocation] = useState<string>("");
+
   const [activeStep, setActiveStep] = useState<number>(0);
 
   const handleOpenCancelModal = () => setOpenHandleModal(true);
@@ -31,45 +31,48 @@ const EventCreationPage = () => {
   };
   const handleDateChange = (e: any) => {
     setEventDate(e.target.value);
+
   };
   const handleLocationChange = (e: any) => {
-    setEventDate(e.target.value);
+    setEventLocation(e.target.value);
   };
+
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
-  const handleComplete = () => {};
+  const handleComplete = () => { };
 
   const content =
     activeStep === 0 ? (
-      <div className="event-form">
+      <form>
+        <FormField
+          label="Event Name:"
+          placeholder="Event Name Here"
+          onChange={handleNameChange}
+          value={eventName}
+        />
+        <FormField
+          label="Date of Event:"
+          placeholder="YYYY:MM:DD"
+          onChange={handleDateChange}
+          value={eventDate}
+          handleClick={handleOpenDateModal}
+        />
+      </form>
+    ) : (
         <form>
           <FormField
-            label="Event Name:"
-            placeholder="Event Name Here"
-            onChange={handleNameChange}
-            value={eventName}
-          />
-          <FormField
-            label="Date of Event:"
-            placeholder="YYYY:MM:DD"
-            onChange={handleDateChange}
+            label="Event Location:"
+            placeholder="Enter Location Here"
+            onChange={handleLocationChange}
             value={eventLocation}
-            handleClick={handleOpenDateModal}
           />
+          <Map />
         </form>
-      </div>
-    ) : (
-      <FormField
-        label="Event Location:"
-        placeholder="Enter Location Here"
-        onChange={handleLocationChange}
-        value={eventLocation}
-      />
-    );
+      );
 
   return (
     <div className="landing-wrapper">
@@ -87,7 +90,9 @@ const EventCreationPage = () => {
           </div>
         </div>
       </div>
-      {content}
+      <div className="event-form">
+        {content}
+      </div>
       <CancelModal
         open={openCancelModal}
         handleClose={handleCloseCancelModal}

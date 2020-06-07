@@ -42,15 +42,6 @@ const useTextFieldStyles = makeStyles({
     marginBottom: "10px",
     width: "100%",
   },
-  rootClicked: {
-    border: "1px solid #E8E8E8",
-    boxSizing: "border-box",
-    borderRadius: "10px",
-    backgroundColor: "",
-    padding: "20px",
-    marginBottom: "10px",
-    width: "100%",
-  },
   label: {
     color: "black",
     margin: "20px",
