@@ -9,16 +9,23 @@ import NextButton from "../components/EventCreationPage/NextButton";
 import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
+import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 
 const EventCreationPage = () => {
-  const [open, setOpen] = useState(false);
+  const [openCancelModal, setOpenHandleModal] = useState(false);
+  const [openDateModal, setOpenDateModal] = useState(false);
+
   const [eventName, setEventName] = useState<string>("");
   const [eventDate, setEventDate] = useState<string>("");
   const [eventLocation, setLocation] = useState<string>("");
   const [activeStep, setActiveStep] = useState<number>(0);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpenCancelModal = () => setOpenHandleModal(true);
+  const handleCloseCancelModal = () => setOpenHandleModal(false);
+
+  const handleOpenDateModal = () => setOpenHandleModal(true);
+  const handleCloseDateModal = () => setOpenHandleModal(false);
+
   const handleNameChange = (e: any) => {
     setEventName(e.target.value);
   };
@@ -51,6 +58,7 @@ const EventCreationPage = () => {
             placeholder="YYYY:MM:DD"
             onChange={handleDateChange}
             value={eventLocation}
+            handleClick={handleOpenDateModal}
           />
         </form>
       </div>
@@ -69,14 +77,22 @@ const EventCreationPage = () => {
         <div className="landing-top-bar">
           <Typography variant="h3">Create New Event</Typography>
           <div className="user-icon">
-            <Button variant="outlined" color="primary" onClick={handleOpen}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleOpenCancelModal}
+            >
               Cancel
             </Button>
           </div>
         </div>
       </div>
       {content}
-      <CancelModal open={open} handleClose={handleClose} />
+      <CancelModal
+        open={openCancelModal}
+        handleClose={handleCloseCancelModal}
+      />
+      <SelectDateModal open={openDateModal} handleClose={handleOpenDateModal} />
       <Stepper
         activeStep={activeStep}
         nextButton={

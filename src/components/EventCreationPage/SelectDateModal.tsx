@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 
-const CancelModal = ({
+const SelectDateModal = ({
   open,
   handleClose,
 }: {
@@ -78,4 +78,4 @@ const useModalStyles = makeStyles({
   },
 });
 
-export default CancelModal;
+export default SelectDateModal;

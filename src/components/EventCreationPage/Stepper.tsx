@@ -36,6 +36,7 @@ const useStepperStyles = makeStyles({
   root: {
     maxWidth: 400,
     flexGrow: 1,
+    padding: 0,
   },
   dots: {
     position: "absolute",
