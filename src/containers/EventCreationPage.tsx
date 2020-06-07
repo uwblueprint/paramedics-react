@@ -31,7 +31,6 @@ const EventCreationPage = () => {
   };
   const handleDateChange = (e: any) => {
     setEventDate(e.target.value);
-
   };
   const handleLocationChange = (e: any) => {
     setEventLocation(e.target.value);

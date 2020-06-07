@@ -27,6 +27,8 @@ const FormField = ({
       }}
       className={classes.root}
       margin="normal"
+      onChange={onChange}
+      value={value}
       onClick={handleClick}
     />
   );
@@ -41,6 +43,23 @@ const useTextFieldStyles = makeStyles({
     padding: "20px",
     marginBottom: "10px",
     width: "100%",
+    '& label.Mui-focused': {
+      color: '#2E5584',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#2E5584',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '#E8E8E8',
+      },
+      '&:hover fieldset': {
+        borderColor: '#2E5584',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#2E5584',
+      },
+    },
   },
   label: {
     color: "black",
