@@ -1,11 +1,16 @@
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
 
 export const ADD_EVENT = gql`
-  mutation AddTodo($type: String!) {
-    addTodo(type: $type) {
+  mutation addEvent($name: String!, $eventDate: Date!, $createdBy: ID!, $isActive: Boolean!) {
+    addEvent(name: $name, eventDate: $eventDate, createdBy: $createdBy, isActive: $isActive) {
       id
-      type
+      name
+      eventDate
+      createdBy {
+        id
+        firstName
+      }
+      isActive
     }
   }
 `;
