@@ -9,9 +9,13 @@ import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
-import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
+import { useMutation } from 'react-apollo';
+import { ADD_EVENT } from "../graphql/mutations/templates/events";
+// import { addEvent } from "../graphql/mutations/hooks/events";
 
 const EventCreationPage = () => {
+  const [addEvent] = useMutation(ADD_EVENT);
+
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
 
@@ -45,7 +49,10 @@ const EventCreationPage = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
   const handleComplete = () => {
-
+    const date = '2020-08-17';
+    addEvent({ variables: { name: eventName, eventDate: date, createdBy: 1, isActive: true } });
+    // const date = new Date();
+    // addEvent(eventName, eventDate: date, 1, true);
   };
 
   const content =
