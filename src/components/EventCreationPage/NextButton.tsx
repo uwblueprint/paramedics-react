@@ -2,10 +2,16 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
-import { NavLink } from "react-router-dom";
 
-const NextButton = ({ handleClick }: { handleClick: () => any | null; }) => {
+const NextButton = ({
+  handleClick,
+  disabled,
+}: {
+  handleClick: () => any | null;
+  disabled: boolean;
+}) => {
   const classes = useEventButtonStyles();
+  console.log(disabled);
   return (
     <Button
       variant="contained"
@@ -13,7 +19,9 @@ const NextButton = ({ handleClick }: { handleClick: () => any | null; }) => {
       onClick={handleClick}
       classes={{
         root: classes.root,
+        disabled: classes.disabled,
       }}
+      disabled={disabled}
     >
       Next
     </Button>
@@ -23,6 +31,10 @@ const NextButton = ({ handleClick }: { handleClick: () => any | null; }) => {
 const useEventButtonStyles = makeStyles({
   root: {
     minWidth: "13rem",
+  },
+  disabled: {
+    cursor: "not-allowed !important",
+    "pointer-events": "all !important",
   },
 });
 

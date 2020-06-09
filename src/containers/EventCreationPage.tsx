@@ -20,7 +20,7 @@ const EventCreationPage = () => {
   const [openDateModal, setOpenDateModal] = useState(false);
 
   const [eventName, setEventName] = useState<string>("");
-  const [eventDate, setEventDate] = useState<string>("");
+  const [eventDate, setEventDate] = useState<Date | null>(null);
   const [eventLocation, setEventLocation] = useState<string>("");
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -28,9 +28,8 @@ const EventCreationPage = () => {
   const handleOpenCancelModal = () => setOpenHandleModal(true);
   const handleCloseCancelModal = () => setOpenHandleModal(false);
 
-  const handleOpenDateModal = () => setOpenHandleModal(true);
-  const handleCloseDateModal = () => setOpenHandleModal(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const handleOpenDateModal = () => setOpenDateModal(true);
+  const handleCloseDateModal = () => setOpenDateModal(false);
 
   const handleNameChange = (e: any) => {
     setEventName(e.target.value);
@@ -55,6 +54,21 @@ const EventCreationPage = () => {
     // addEvent(eventName, eventDate: date, 1, true);
   };
 
+  const dateParts: {
+    year?: string;
+    month?: string;
+    day?: string;
+    literal?: string;
+  } = eventDate
+      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+        (obj, currentPart) => ({
+          ...obj,
+          [currentPart.type]: currentPart.value,
+        }),
+        {}
+      )
+      : {};
+  console.log(dateParts);
   const content =
     activeStep === 0 ? (
       <form>
@@ -68,7 +82,11 @@ const EventCreationPage = () => {
           label="Date of Event:"
           placeholder="YYYY:MM:DD"
           onChange={handleDateChange}
-          value={eventDate}
+          value={
+            eventDate
+              ? `${dateParts.year}:${dateParts.month}:${dateParts.day}`
+              : ""
+          }
           handleClick={handleOpenDateModal}
         />
       </form>
@@ -100,20 +118,24 @@ const EventCreationPage = () => {
           </div>
         </div>
       </div>
-      <div className="event-form">
-        {content}
-      </div>
+      <div className="event-form">{content}</div>
       <CancelModal
         open={openCancelModal}
         handleClose={handleCloseCancelModal}
       />
-      <SelectDateModal open={openDateModal} handleClose={handleOpenDateModal} />
+      <SelectDateModal
+        open={openDateModal}
+        handleClose={handleCloseDateModal}
+        eventDate={eventDate}
+        setEventDate={setEventDate}
+      />
       <Stepper
         activeStep={activeStep}
         nextButton={
           <div className="next-container">
             <NextButton
               handleClick={activeStep < 1 ? handleNext : handleComplete}
+              disabled={eventName === "" || eventDate === null}
             />
           </div>
         }
