@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/EventCreationPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -9,15 +9,17 @@ import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
-import { useMutation } from 'react-apollo';
+import { useMutation } from "react-apollo";
 import { ADD_EVENT } from "../graphql/mutations/templates/events";
-// import { addEvent } from "../graphql/mutations/hooks/events";
+import { useEventMutation } from "../graphql/mutations/hooks/events";
+import { isObjectType } from "graphql";
 
 const EventCreationPage = () => {
-  const [addEvent] = useMutation(ADD_EVENT);
+  // const [addEvent] = useMutation(ADD_EVENT);
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
+  const [complete, setComplete] = useState(false);
 
   const [eventName, setEventName] = useState<string>("");
   const [eventDate, setEventDate] = useState<Date | null>(null);
@@ -47,11 +49,21 @@ const EventCreationPage = () => {
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
+
+  useEventMutation(
+    {
+      name: eventName,
+      eventDate: eventDate || new Date(),
+      createdBy: 1,
+      isActive: true,
+    },
+    complete,
+    setComplete
+  );
+
   const handleComplete = () => {
-    const date = '2020-08-17';
-    addEvent({ variables: { name: eventName, eventDate: date, createdBy: 1, isActive: true } });
-    // const date = new Date();
-    // addEvent(eventName, eventDate: date, 1, true);
+    setComplete(true);
+    window.location.href = "/events/";
   };
 
   const dateParts: {
@@ -60,15 +72,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-      : {};
-  console.log(dateParts);
+    : {};
   const content =
     activeStep === 0 ? (
       <form>
@@ -91,16 +102,16 @@ const EventCreationPage = () => {
         />
       </form>
     ) : (
-        <form>
-          <FormField
-            label="Event Location:"
-            placeholder="Enter Location Here"
-            onChange={handleLocationChange}
-            value={eventLocation}
-          />
-          <Map />
-        </form>
-      );
+      <form>
+        <FormField
+          label="Event Location:"
+          placeholder="Enter Location Here"
+          onChange={handleLocationChange}
+          value={eventLocation}
+        />
+        <Map />
+      </form>
+    );
 
   return (
     <div className="landing-wrapper">
