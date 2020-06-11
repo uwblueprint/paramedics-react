@@ -15,8 +15,6 @@ import { useEventMutation } from "../graphql/mutations/hooks/events";
 import { isObjectType } from "graphql";
 
 const EventCreationPage = () => {
-  // const [addEvent] = useMutation(ADD_EVENT);
-
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
   const [complete, setComplete] = useState(false);
