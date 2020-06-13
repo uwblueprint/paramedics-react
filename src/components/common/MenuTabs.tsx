@@ -31,7 +31,7 @@ const MenuTabs = ({
             </Typography>
           }
           classes={{
-            root: classes.root,
+            root: classes.tabSize,
             textColorInherit: classes.tabTextColor,
           }}
         />
@@ -42,6 +42,12 @@ const MenuTabs = ({
 const useTabStyles = makeStyles({
   root: {
     textTransform: "none",
+    width: "30rem",
+  },
+  tabSize: {
+    textTransform: "none",
+    width: "15rem",
+    maxWidth: "15rem",
   },
   indicator: {
     backgroundColor: "#000000",
