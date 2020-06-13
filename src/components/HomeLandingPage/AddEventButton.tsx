@@ -25,7 +25,7 @@ const AddEventButton = () => {
 const useEventButtonStyles = makeStyles({
   root: {
     borderRadius: "3rem",
-    minWidth: "13rem",
+    minWidth: "15rem",
   },
 });
 

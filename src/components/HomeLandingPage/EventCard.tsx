@@ -41,10 +41,10 @@ const useEventCardStyles = makeStyles({
     display: "inline-block",
     boxShadow: "none",
     width: "20rem",
-    margin: "4rem 3rem",
+    height: "10rem",
   },
   cardContent: {
-    padding: "1em 2em",
+    padding: "2em 2em",
   },
 });
 
