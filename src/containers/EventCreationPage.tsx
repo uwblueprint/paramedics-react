@@ -9,10 +9,7 @@ import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
-import { useMutation } from "react-apollo";
-import { ADD_EVENT } from "../graphql/mutations/templates/events";
 import { useEventMutation } from "../graphql/mutations/hooks/events";
-import { isObjectType } from "graphql";
 
 const EventCreationPage = () => {
   const [openCancelModal, setOpenHandleModal] = useState(false);

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import FormLabel from "@material-ui/core/FormLabel";
 
 const FormField = ({
   label,
@@ -21,7 +19,6 @@ const FormField = ({
 
   return (
     <TextField
-      // label={<FormLabel className={classes.label}>{label}</FormLabel>}
       label={label}
       placeholder={placeholder}
       InputLabelProps={{
