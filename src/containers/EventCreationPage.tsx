@@ -70,14 +70,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-    : {};
+      : {};
   const content =
     activeStep === 0 ? (
       <form>
@@ -100,16 +100,16 @@ const EventCreationPage = () => {
         />
       </form>
     ) : (
-      <form>
-        <FormField
-          label="Event Location:"
-          placeholder="Enter Location Here"
-          onChange={handleLocationChange}
-          value={eventLocation}
-        />
-        <Map />
-      </form>
-    );
+        <form>
+          <FormField
+            label="Event Location:"
+            placeholder="Enter Location Here"
+            onChange={handleLocationChange}
+            value={eventLocation}
+          />
+          <Map />
+        </form>
+      );
 
   return (
     <div className="landing-wrapper">
@@ -121,6 +121,7 @@ const EventCreationPage = () => {
               variant="outlined"
               color="primary"
               onClick={handleOpenCancelModal}
+              style={{ minWidth: "18rem", minHeight: "2.5rem", fontSize: "18px" }}
             >
               Cancel
             </Button>

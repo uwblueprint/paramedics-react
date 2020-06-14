@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import FormLabel from "@material-ui/core/FormLabel";
 
 const FormField = ({
   label,
@@ -20,7 +21,8 @@ const FormField = ({
 
   return (
     <TextField
-      label={<Typography className={classes.label}>{label}</Typography>}
+      // label={<FormLabel className={classes.label}>{label}</FormLabel>}
+      label={label}
       placeholder={placeholder}
       InputLabelProps={{
         shrink: true,
@@ -42,29 +44,23 @@ const useTextFieldStyles = makeStyles({
     backgroundColor: "#FFFFFF",
     padding: "20px",
     marginBottom: "10px",
+    height: "15vh",
     width: "100%",
+    '& .MuiInput-formControl': {
+      marginTop: "auto"
+    },
+    '& label': {
+      fontWeight: "bold",
+      margin: "20px",
+      color: "black",
+      fontSize: "18px"
+    },
     '& label.Mui-focused': {
       color: '#2E5584',
     },
     '& .MuiInput-underline:after': {
       borderBottomColor: '#2E5584',
     },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: '#E8E8E8',
-      },
-      '&:hover fieldset': {
-        borderColor: '#2E5584',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: '#2E5584',
-      },
-    },
-  },
-  label: {
-    color: "black",
-    margin: "20px",
-    fontWeight: "bold",
   },
   eventForm: {
     padding: "30px",

@@ -22,7 +22,9 @@ const BackButton = ({ handleClick }: { handleClick: () => any | null }) => {
 
 const useEventButtonStyles = makeStyles({
   root: {
-    minWidth: "13rem",
+    minWidth: "15rem",
+    minHeight: "2.5rem",
+    fontSize: "18px",
   },
 });
 

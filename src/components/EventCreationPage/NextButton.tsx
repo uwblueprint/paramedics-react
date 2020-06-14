@@ -30,7 +30,9 @@ const NextButton = ({
 
 const useEventButtonStyles = makeStyles({
   root: {
-    minWidth: "13rem",
+    minWidth: "15rem",
+    minHeight: "2.5rem",
+    fontSize: "18px",
   },
   disabled: {
     cursor: "not-allowed !important",
