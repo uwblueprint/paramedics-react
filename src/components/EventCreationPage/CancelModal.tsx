@@ -15,7 +15,6 @@ const CancelModal = ({
   handleClose: () => any;
 }) => {
   const classes = useModalStyles();
-  const handleCancel = () => {};
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
