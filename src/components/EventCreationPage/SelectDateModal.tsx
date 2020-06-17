@@ -41,6 +41,7 @@ const useModalStyles = makeStyles({
     position: "absolute",
   },
 });
+
 const datePickerTheme = createMuiTheme({
   overrides: {
     MuiPickersBasePicker: {

@@ -17,9 +17,11 @@ const useEventButtonStyles = makeStyles({
 const NextButton = ({
   handleClick,
   disabled,
+  buttonText,
 }: {
   handleClick: () => any | null;
   disabled: boolean;
+  buttonText: string;
 }) => {
   const classes = useEventButtonStyles();
   return (
@@ -33,7 +35,7 @@ const NextButton = ({
       }}
       disabled={disabled}
     >
-      Next
+      {buttonText}
     </Button>
   );
 };
