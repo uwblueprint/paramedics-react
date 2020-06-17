@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import "../styles/EventCreationPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -12,6 +13,8 @@ import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useEventMutation } from "../graphql/mutations/hooks/events";
 
 const EventCreationPage = () => {
+  const history = useHistory();
+
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
   const [complete, setComplete] = useState(false);
@@ -58,7 +61,7 @@ const EventCreationPage = () => {
 
   const handleComplete = () => {
     setComplete(true);
-    window.location.href = "/events/";
+    history.push("/events");
   };
 
   const dateParts: {
@@ -67,14 +70,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-      : {};
+    : {};
   const content =
     activeStep === 0 ? (
       <form>
@@ -93,20 +96,20 @@ const EventCreationPage = () => {
               ? `${dateParts.year}:${dateParts.month}:${dateParts.day}`
               : ""
           }
-          handleClick={handleOpenDateModal}
+          handleFocus={handleOpenDateModal}
         />
       </form>
     ) : (
-        <form>
-          <FormField
-            label="Event Location:"
-            placeholder="Enter Location Here"
-            onChange={handleLocationChange}
-            value={eventLocation}
-          />
-          <Map />
-        </form>
-      );
+      <form>
+        <FormField
+          label="Event Location:"
+          placeholder="Enter Location Here"
+          onChange={handleLocationChange}
+          value={eventLocation}
+        />
+        <Map />
+      </form>
+    );
 
   return (
     <div className="landing-wrapper">
@@ -118,7 +121,11 @@ const EventCreationPage = () => {
               variant="outlined"
               color="primary"
               onClick={handleOpenCancelModal}
-              style={{ minWidth: "18rem", minHeight: "2.5rem", fontSize: "18px" }}
+              style={{
+                minWidth: "18rem",
+                minHeight: "2.5rem",
+                fontSize: "18px",
+              }}
             >
               Cancel
             </Button>

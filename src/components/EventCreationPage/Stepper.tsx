@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import MobileStepper from "@material-ui/core/MobileStepper";
 
 export default function Stepper({
@@ -12,7 +12,6 @@ export default function Stepper({
   backButton?: React.ReactNode;
 }) {
   const classes = useStepperStyles();
-  const theme = useTheme();
 
   return (
     <MobileStepper

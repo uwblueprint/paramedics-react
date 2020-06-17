@@ -58,6 +58,7 @@ const HomeLandingPage = () => {
           {events.map((event: EventType) => (
             <Grid item>
               <EventCard
+                key={event.name}
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"

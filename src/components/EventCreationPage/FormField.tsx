@@ -7,13 +7,13 @@ const FormField = ({
   placeholder,
   onChange,
   value,
-  handleClick,
+  handleFocus,
 }: {
   label: string;
   placeholder: string;
   onChange: (e: any) => any;
   value: string;
-  handleClick?: () => any;
+  handleFocus?: () => any;
 }) => {
   const classes = useTextFieldStyles();
 
@@ -28,7 +28,7 @@ const FormField = ({
       margin="normal"
       onChange={onChange}
       value={value}
-      onClick={handleClick}
+      onFocus={handleFocus}
     />
   );
 };
