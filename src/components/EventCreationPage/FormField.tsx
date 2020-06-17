@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
@@ -43,20 +43,20 @@ const useTextFieldStyles = makeStyles({
     marginBottom: "10px",
     height: "120px",
     width: "100%",
-    '& .MuiInput-formControl': {
-      marginTop: "auto"
+    "& .MuiInput-formControl": {
+      marginTop: "auto",
     },
-    '& label': {
+    "& label": {
       fontWeight: "bold",
       margin: "20px",
       color: "black",
-      fontSize: "18px"
+      fontSize: "18px",
     },
-    '& label.Mui-focused': {
-      color: '#2E5584',
+    "& label.Mui-focused": {
+      color: "#2E5584",
     },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#2E5584',
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "#2E5584",
     },
   },
   eventForm: {
