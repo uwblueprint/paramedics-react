@@ -26,7 +26,7 @@ const SelectDateModal = ({
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
-        <Typography classes={{ root: classes.text }}>
+        <Typography variant="h6" classes={{ root: classes.text }}>
           Select Event Date:
         </Typography>
         <ThemeProvider theme={datePickerTheme}>
@@ -88,7 +88,8 @@ const useModalStyles = makeStyles({
   },
   text: {
     color: "black",
-    textAlign: "center",
+    textAlign: "left",
+    marginLeft: "2rem",
     marginTop: "3rem",
   },
   buttonContainer: {

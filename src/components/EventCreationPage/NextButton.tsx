@@ -10,7 +10,6 @@ const NextButton = ({
   disabled: boolean;
 }) => {
   const classes = useEventButtonStyles();
-  console.log(disabled);
   return (
     <Button
       variant="contained"
