@@ -25,6 +25,7 @@ const MenuTabs = ({
     >
       {tabLabels.map((label: string) => (
         <Tab
+          key={label}
           label={
             <Typography variant="body1">
               <Box fontWeight="fontWeightBold">{label}</Box>
