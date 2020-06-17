@@ -10,6 +10,52 @@ import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Typography from "@material-ui/core/Typography";
 
+const useModalStyles = makeStyles({
+  root: {
+    position: "absolute",
+    left: "0%",
+    right: "0%",
+    top: "0%",
+    bottom: "0%",
+    color: "#FFFFFF",
+
+    background: "#FFFFFF",
+    border: "1.35101px solid #C4C4C4",
+    boxSizing: "border-box",
+    borderRadius: "5px",
+    width: "30rem",
+    height: "30rem",
+    margin: "auto",
+    outline: 0,
+  },
+  text: {
+    color: "black",
+    textAlign: "left",
+    marginLeft: "2rem",
+    marginTop: "3rem",
+  },
+  buttonContainer: {
+    marginTop: "2rem",
+  },
+  cancelButton: {
+    position: "absolute",
+  },
+});
+const datePickerTheme = createMuiTheme({
+  overrides: {
+    MuiPickersBasePicker: {
+      container: {
+        alignItems: "center",
+      },
+    },
+    MuiPickersSlideTransition: {
+      transitionContainer: {
+        color: "black",
+      },
+    },
+  },
+});
+
 const SelectDateModal = ({
   open,
   handleClose,
@@ -67,51 +113,5 @@ const SelectDateModal = ({
     </Modal>
   );
 };
-
-const useModalStyles = makeStyles({
-  root: {
-    position: "absolute",
-    left: "0%",
-    right: "0%",
-    top: "0%",
-    bottom: "0%",
-    color: "#FFFFFF",
-
-    background: "#FFFFFF",
-    border: "1.35101px solid #C4C4C4",
-    boxSizing: "border-box",
-    borderRadius: "5px",
-    width: "30rem",
-    height: "30rem",
-    margin: "auto",
-    outline: 0,
-  },
-  text: {
-    color: "black",
-    textAlign: "left",
-    marginLeft: "2rem",
-    marginTop: "3rem",
-  },
-  buttonContainer: {
-    marginTop: "2rem",
-  },
-  cancelButton: {
-    position: "absolute",
-  },
-});
-const datePickerTheme = createMuiTheme({
-  overrides: {
-    MuiPickersBasePicker: {
-      container: {
-        alignItems: "center",
-      },
-    },
-    MuiPickersSlideTransition: {
-      transitionContainer: {
-        color: "black",
-      },
-    },
-  },
-});
 
 export default SelectDateModal;

@@ -2,37 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
-const FormField = ({
-  label,
-  placeholder,
-  onChange,
-  value,
-  handleFocus,
-}: {
-  label: string;
-  placeholder: string;
-  onChange: (e: any) => any;
-  value: string;
-  handleFocus?: () => any;
-}) => {
-  const classes = useTextFieldStyles();
-
-  return (
-    <TextField
-      label={label}
-      placeholder={placeholder}
-      InputLabelProps={{
-        shrink: true,
-      }}
-      className={classes.root}
-      margin="normal"
-      onChange={onChange}
-      value={value}
-      onFocus={handleFocus}
-    />
-  );
-};
-
 const useTextFieldStyles = makeStyles({
   root: {
     border: "1px solid #E8E8E8",
@@ -63,5 +32,36 @@ const useTextFieldStyles = makeStyles({
     padding: "30px",
   },
 });
+
+const FormField = ({
+  label,
+  placeholder,
+  onChange,
+  value,
+  handleFocus,
+}: {
+  label: string;
+  placeholder: string;
+  onChange: (e: any) => any;
+  value: string;
+  handleFocus?: () => any;
+}) => {
+  const classes = useTextFieldStyles();
+
+  return (
+    <TextField
+      label={label}
+      placeholder={placeholder}
+      InputLabelProps={{
+        shrink: true,
+      }}
+      className={classes.root}
+      margin="normal"
+      onChange={onChange}
+      value={value}
+      onFocus={handleFocus}
+    />
+  );
+};
 
 export default FormField;
