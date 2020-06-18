@@ -57,13 +57,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
+<<<<<<< HEAD
     : {};
 
   const handleComplete = () => {
@@ -86,6 +87,11 @@ const EventCreationPage = () => {
     history.replace("/events");
   };
 
+||||||| merged common ancestors
+    : {};
+=======
+      : {};
+>>>>>>> 96df5b386e4ecd640999a58418a7a0f506ce2c6c
   const content =
     activeStep === 0 ? (
       <form>
@@ -108,16 +114,16 @@ const EventCreationPage = () => {
         />
       </form>
     ) : (
-      <form>
-        <FormField
-          label="Event Location:"
-          placeholder="Enter Location Here"
-          onChange={handleLocationChange}
-          value={eventLocation}
-        />
-        <Map />
-      </form>
-    );
+        <form>
+          <FormField
+            label="Event Location:"
+            placeholder="Enter Location Here"
+            onChange={handleLocationChange}
+            value={eventLocation}
+          />
+          <Map />
+        </form>
+      );
 
   return (
     <div className="landing-wrapper">
@@ -158,6 +164,7 @@ const EventCreationPage = () => {
             <NextButton
               handleClick={activeStep < 1 ? handleNext : handleComplete}
               disabled={eventName === "" || eventDate === null}
+              buttonText={activeStep < 1 ? "Next" : "Create"}
             />
           </div>
         }

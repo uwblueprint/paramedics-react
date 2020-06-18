@@ -12,6 +12,18 @@ interface EventCardProps {
   address: string;
 }
 
+const useEventCardStyles = makeStyles({
+  root: {
+    display: "inline-block",
+    boxShadow: "none",
+    width: "20rem",
+    height: "10rem",
+  },
+  cardContent: {
+    padding: "2em 2em",
+  },
+});
+
 const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
@@ -35,17 +47,5 @@ const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
     </Card>
   );
 };
-
-const useEventCardStyles = makeStyles({
-  root: {
-    display: "inline-block",
-    boxShadow: "none",
-    width: "20rem",
-    height: "10rem",
-  },
-  cardContent: {
-    padding: "2em 2em",
-  },
-});
 
 export default EventCard;
