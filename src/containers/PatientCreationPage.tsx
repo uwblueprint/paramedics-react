@@ -4,6 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import FormField from "../components/EventCreationPage/FormField";
 import CompletePatientButton from "../components/PatientCreationPage/CompletePatientButton";
+import RadioSelector from "../components/common/RadioSelector";
+import TriagePills from "../components/PatientCreationPage/TriagePills";
 
 interface FormFields {
   barcode: string;
@@ -51,21 +53,13 @@ const PatientCreationPage = () => {
             }}
             value={formFields.barcode}
           />
-          <FormField
-            label="Triage:"
-            placeholder=""
-            onChange={(e: any) => {
-              setFormFields({ ...formFields, triage: e.target.value });
-            }}
-            value={formFields.triage}
-          />
-          <FormField
-            label="Gender:"
-            placeholder=""
-            onChange={(e: any) => {
+          <TriagePills />
+          <RadioSelector
+            labels={["Male", "Female"]}
+            currentValue={formFields.gender}
+            handleChange={(e: any) => {
               setFormFields({ ...formFields, gender: e.target.value });
             }}
-            value={formFields.gender}
           />
           <FormField
             label="Age:"
