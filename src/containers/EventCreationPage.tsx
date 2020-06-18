@@ -11,9 +11,12 @@ import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useEventMutation } from "../graphql/mutations/hooks/events";
+import { useMutation } from "@apollo/react-hooks";
+import { ADD_EVENT } from "../graphql/mutations/templates/events";
 
 const EventCreationPage = () => {
   const history = useHistory();
+  const [addEvent] = useMutation(ADD_EVENT);
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -48,22 +51,6 @@ const EventCreationPage = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
 
-  useEventMutation(
-    {
-      name: eventName,
-      eventDate: eventDate || new Date(),
-      createdBy: 1,
-      isActive: true,
-    },
-    complete,
-    setComplete
-  );
-
-  const handleComplete = () => {
-    setComplete(true);
-    history.push("/events");
-  };
-
   const dateParts: {
     year?: string;
     month?: string;
@@ -78,6 +65,27 @@ const EventCreationPage = () => {
         {}
       )
     : {};
+
+  const handleComplete = () => {
+    setComplete(true);
+    addEvent({
+      variables: {
+        name: eventName,
+        eventDate:
+          dateParts.year &&
+          dateParts.month &&
+          dateParts.day &&
+          `${dateParts.year}-${dateParts.month.padStart(
+            2,
+            "0"
+          )}-${dateParts.day.padStart(2, "0")}`,
+        createdBy: 1,
+        isActive: true,
+      },
+    });
+    history.replace("/events");
+  };
+
   const content =
     activeStep === 0 ? (
       <form>
