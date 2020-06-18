@@ -8,12 +8,12 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-    - type: bind
-      source: ./
-      target: /app
-    - '/app/node_modules'
+      - type: bind
+        source: ./
+        target: /app
+      - '/app/node_modules'
     ports:
-    - "3000:3000"
+      - "3000:3000"
     logging:
       driver: "json-file"
       options:
