@@ -1,9 +1,9 @@
 import ApolloClient from "apollo-boost";
 import defaults from "./defaults";
-// import resolvers from "../resolvers";
+import * as Sentry from '@sentry/browser';
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/",
+  uri: process.env.REACT_APP_BACKEND_HOST || "http://localhost:4000/",
   clientState: {
     defaults,
     // resolvers,
