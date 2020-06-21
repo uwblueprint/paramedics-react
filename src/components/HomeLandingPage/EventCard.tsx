@@ -22,6 +22,11 @@ const useEventCardStyles = makeStyles({
   cardContent: {
     padding: "2em 2em",
   },
+  eventTitle: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
 });
 
 const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
@@ -37,7 +42,11 @@ const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
           </Box>
         </Box>
 
-        <Typography color="textPrimary" variant="h4">
+        <Typography
+          color="textPrimary"
+          variant="h4"
+          className={classes.eventTitle}
+        >
           {eventTitle}
         </Typography>
         <Typography color="textSecondary" variant="body1" component="p">
