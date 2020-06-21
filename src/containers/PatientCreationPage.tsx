@@ -55,8 +55,13 @@ const PatientCreationPage = () => {
           />
           <TriagePills
             currentStatus={formFields.triage}
-            handleChange={(e: any) => {
-              setFormFields({ ...formFields, triage: e.target.value });
+            handleChange={(
+              e: React.MouseEvent<HTMLElement>,
+              newTriage: string
+            ) => {
+              console.log("change to ");
+              console.log(newTriage);
+              setFormFields({ ...formFields, triage: newTriage });
             }}
           />
           <RadioSelector

@@ -10,7 +10,7 @@ const TriagePills = ({
   handleChange,
 }: {
   currentStatus: string;
-  handleChange: (e: any) => any;
+  handleChange: (e: React.MouseEvent<HTMLElement>, newTriage: string) => any;
 }) => {
   const classes = useCompletePatientButtonStyles();
   return (
@@ -22,6 +22,9 @@ const TriagePills = ({
         exclusive
         onChange={handleChange}
         aria-label="text alignment"
+        classes={{
+          groupedHorizontal: classes.notFirstPill,
+        }}
       >
         <ToggleButton
           value="red"
@@ -50,7 +53,7 @@ const TriagePills = ({
         </ToggleButton>
 
         <ToggleButton
-          value="White"
+          value="white"
           classes={{
             root: classes.whitepill,
           }}
@@ -95,7 +98,8 @@ const useCompletePatientButtonStyles = makeStyles({
     transform: "translate(0, 1.5px) scale(0.75)",
   },
   redpill: {
-    borderLeft: "10px solid #FF5858",
+    borderLeft: "10px solid #FF5858 !important",
+    width: "6rem",
     borderColor: "#FF5858",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
@@ -106,7 +110,8 @@ const useCompletePatientButtonStyles = makeStyles({
     color: "black",
   },
   greenpill: {
-    borderLeft: "10px solid #60CD39",
+    borderLeft: "10px solid #60CD39 !important",
+    width: "6rem",
     borderColor: "#60CD39",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
@@ -117,7 +122,8 @@ const useCompletePatientButtonStyles = makeStyles({
     color: "black",
   },
   yellowpill: {
-    borderLeft: "10px solid #FFC90A",
+    borderLeft: "10px solid #FFC90A !important",
+    width: "6rem",
     borderColor: "#FFC90A",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
@@ -128,7 +134,8 @@ const useCompletePatientButtonStyles = makeStyles({
     color: "black",
   },
   whitepill: {
-    borderLeft: "10px solid #FFFFFF",
+    borderLeft: "10px solid #FFFFFF !important",
+    width: "6rem",
     borderColor: "#C4C4C4",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
@@ -139,7 +146,8 @@ const useCompletePatientButtonStyles = makeStyles({
     color: "black",
   },
   blackpill: {
-    borderLeft: "10px solid #000000",
+    borderLeft: "10px solid #000000 !important",
+    width: "6rem",
     borderColor: "#000000",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
@@ -148,6 +156,12 @@ const useCompletePatientButtonStyles = makeStyles({
       borderColor: "#000000",
     },
     color: "black",
+  },
+  notFirstPill: {
+    "&:not(:first-child)": {
+      borderLeft: "initial",
+      borderRadius: "4px",
+    },
   },
 });
 
