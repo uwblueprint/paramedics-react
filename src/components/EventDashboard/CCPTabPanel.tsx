@@ -13,7 +13,6 @@ import { GET_ALL_CCPS } from '../../graphql/queries/templates/ccps';
 
 const useStyles = makeStyles({
   root: {
-    background: Colors.BackgroundGray,
     paddingLeft: '56px',
     paddingRight: '56px',
   },

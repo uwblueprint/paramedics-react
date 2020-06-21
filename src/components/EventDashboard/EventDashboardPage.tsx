@@ -2,11 +2,12 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import MenuAppBar from '../common/MenuAppBar';
 import { Colors } from '../../styles/Constants';
-import { Typography, Container, Tabs, Tab } from '@material-ui/core';
+import { Typography, Container, Tabs, Tab, makeStyles } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_EVENT_INFO } from '../../graphql/queries/templates/events';
 import { RouteComponentProps } from 'react-router';
 import CCPTabPanel from './CCPTabPanel';
+import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 
 type TParams = { eventId: string };
 
@@ -21,6 +22,20 @@ interface TabPanelProps {
     index: any;
     value: TabOptions;
 }  
+
+const useStyles = makeStyles({
+    root: {
+        minHeight: '100vh',
+        background: Colors.BackgroundGray,
+    },
+    container: {
+        background: Colors.White,
+        padding: '32px 56px 0 56px'
+    },
+    tabs: {
+        background: Colors.White
+    }
+  });
 
 const TabPanel = (props: TabPanelProps) => {
     const { children, value, index, ...other } = props;
@@ -37,7 +52,8 @@ const TabPanel = (props: TabPanelProps) => {
 }
 
 const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
-    var eventId = match.params.eventId
+    const classes = useStyles();
+    const eventId = match.params.eventId
     // TO DO: error handling when eventId does not exist in database
     const { loading, error, data: eventInfo } = useQuery(GET_EVENT_INFO, {
         variables: { eventId },
@@ -54,12 +70,16 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
     };
 
     return ( 
-        <Box minHeight="100vh" display="flex" flexDirection="column">
+        <Box className={classes.root}>
             <MenuAppBar pageTitle="Directory" />
-            <Container color={Colors.White}>
+            <Container className={classes.container}>
                 <Typography variant="h3">{event.name}</Typography>
+                <Typography style={{ fontSize: '18px', color: Colors.SecondaryGray, display: 'flex', alignItems: 'center' }}>
+                    <CalendarTodayOutlinedIcon style={{ fontSize: '18px', paddingRight: '10px' }} />
+                    {event.eventDate}
+                </Typography>
             </Container>
-            <Tabs value={tab} onChange={handleChange}>
+            <Tabs className={classes.tabs} value={tab} onChange={handleChange}>
                 <Tab label="CCP" id={`tab-${TabOptions.CCP}`} />
                 <Tab label="Hospital" id={`tab-${TabOptions.Hospital}`} />
                 <Tab label="Ambulance" id={`tab-${TabOptions.Ambulance}`} />
