@@ -5,6 +5,12 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 
+const useCardOptionsStyles = makeStyles({
+  iconButtonRoot: {
+    padding: "unset",
+  },
+});
+
 const CardOptions = () => {
   const classes = useCardOptionsStyles();
 
@@ -40,9 +46,4 @@ const CardOptions = () => {
   );
 };
 
-const useCardOptionsStyles = makeStyles({
-  iconButtonRoot: {
-    padding: "unset",
-  },
-});
 export default CardOptions;

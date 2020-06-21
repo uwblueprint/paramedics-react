@@ -1,6 +1,6 @@
 .landing-wrapper {
   background-color: #f0f0f0;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .landing-top-bar {
@@ -12,6 +12,9 @@
   padding: 3em 3em 0em 3em;
   background-color: white;
 }
+.landing-body {
+  padding: 3em 3em 0em 3em;
+}
 
 .user-icon {
   display: flex;
@@ -22,7 +25,7 @@
   margin-right: 0.5em;
 }
 .add-event-container {
-  position: absolute;
+  position: fixed;
   right: 4rem;
   bottom: 4rem;
 }
