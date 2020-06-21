@@ -5,7 +5,7 @@ import "../styles/App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
 import HomeLandingPage from "./HomeLandingPage";
 import EventCreationPage from "./EventCreationPage";
-import { EventDashboardPage } from "../components/EventDashboard/EventDashboardPage";
+import EventDashboardPage from "../components/EventDashboard/EventDashboardPage";
 
 function App() {
   return (
