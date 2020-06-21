@@ -11,11 +11,26 @@ import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useMutation } from "@apollo/react-hooks";
+import { useQuery } from "react-apollo";
 import { ADD_EVENT } from "../graphql/mutations/templates/events";
+import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
 
 const EventCreationPage = () => {
   const history = useHistory();
-  const [addEvent] = useMutation(ADD_EVENT);
+
+  const { data } = useQuery(GET_ALL_EVENTS);
+  const events: Array<EventType> = data ? data.events : [];
+
+  const [addEvent] = useMutation(ADD_EVENT,
+    {
+      update(cache, { data: { addEvent } }) {
+        cache.writeQuery({
+          query: GET_ALL_EVENTS,
+          data: { events: events.concat([addEvent]) },
+        });
+      }
+    }
+  );
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -78,7 +93,7 @@ const EventCreationPage = () => {
           )}-${dateParts.day.padStart(2, "0")}`,
         createdBy: 1,
         isActive: true,
-      },
+      }
     });
     history.replace("/events");
   };
