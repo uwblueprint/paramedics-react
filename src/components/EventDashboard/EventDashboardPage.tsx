@@ -74,7 +74,7 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
             <MenuAppBar pageTitle="Directory" />
             <Container className={classes.container}>
                 <Typography variant="h3">{event.name}</Typography>
-                <Typography style={{ fontSize: '18px', color: Colors.SecondaryGray, display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" style={{ color: Colors.SecondaryGray, display: 'flex', alignItems: 'center' }}>
                     <CalendarTodayOutlinedIcon style={{ fontSize: '18px', paddingRight: '10px' }} />
                     {event.eventDate}
                 </Typography>
