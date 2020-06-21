@@ -9,6 +9,8 @@ import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/react-hooks";
 import client from "./graphql/apollo/client";
 
+import * as Sentry from '@sentry/browser';
+
 ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
@@ -22,3 +24,9 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+Sentry.init({
+  dsn: process.env.REACT_APP_DSN,
+  maxBreadcrumbs: 50,
+  debug: true,
+})

@@ -2,13 +2,11 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.122.1/containers/docker-existing-docker-compose
 // If you want to run as a non-root user in the container, see .devcontainer/docker-compose.yml.
 {
-	"name": "Paramedics React Docker Container",
+	"name": "Paramedics React",
 
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
-	"dockerComposeFile": [
-		"../docker-compose-dev.yaml"
-	],
+	"dockerComposeFile": ["../docker-compose-dev.yaml"],
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
