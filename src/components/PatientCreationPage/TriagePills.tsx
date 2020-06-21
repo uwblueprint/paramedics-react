@@ -5,29 +5,66 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
-const TriagePills = () => {
+const TriagePills = ({
+  currentStatus,
+  handleChange,
+}: {
+  currentStatus: string;
+  handleChange: (e: any) => any;
+}) => {
   const classes = useCompletePatientButtonStyles();
   return (
     <Container className={classes.root}>
       <Typography className={classes.label}>Triage</Typography>
 
       <ToggleButtonGroup
-        value={"red"}
+        value={currentStatus}
         exclusive
-        onChange={""}
+        onChange={handleChange}
         aria-label="text alignment"
       >
         <ToggleButton
-          variant="outlined"
-          color="primary"
           value="red"
-          disableRipple
-          disableElevation
           classes={{
-            root: classes.pill,
+            root: classes.redpill,
           }}
         >
           Red
+        </ToggleButton>
+        <ToggleButton
+          value="green"
+          classes={{
+            root: classes.greenpill,
+          }}
+        >
+          Green
+        </ToggleButton>
+
+        <ToggleButton
+          value="yellow"
+          classes={{
+            root: classes.yellowpill,
+          }}
+        >
+          Yellow
+        </ToggleButton>
+
+        <ToggleButton
+          value="White"
+          classes={{
+            root: classes.whitepill,
+          }}
+        >
+          White
+        </ToggleButton>
+
+        <ToggleButton
+          value="black"
+          classes={{
+            root: classes.blackpill,
+          }}
+        >
+          Black
         </ToggleButton>
       </ToggleButtonGroup>
     </Container>
@@ -57,13 +94,58 @@ const useCompletePatientButtonStyles = makeStyles({
     display: "inline-block",
     transform: "translate(0, 1.5px) scale(0.75)",
   },
-  pill: {
+  redpill: {
     borderLeft: "10px solid #FF5858",
     borderColor: "#FF5858",
     background: "rgba(255, 255, 255, 0.75)",
+    marginRight: "20px",
     "&:hover": {
       borderLeft: "10px solid #FF5858",
       borderColor: "#FF5858",
+    },
+    color: "black",
+  },
+  greenpill: {
+    borderLeft: "10px solid #60CD39",
+    borderColor: "#60CD39",
+    background: "rgba(255, 255, 255, 0.75)",
+    marginRight: "20px",
+    "&:hover": {
+      borderLeft: "10px solid #60CD39",
+      borderColor: "#60CD39",
+    },
+    color: "black",
+  },
+  yellowpill: {
+    borderLeft: "10px solid #FFC90A",
+    borderColor: "#FFC90A",
+    background: "rgba(255, 255, 255, 0.75)",
+    marginRight: "20px",
+    "&:hover": {
+      borderLeft: "10px solid #FFC90A",
+      borderColor: "#FFC90A",
+    },
+    color: "black",
+  },
+  whitepill: {
+    borderLeft: "10px solid #FFFFFF",
+    borderColor: "#C4C4C4",
+    background: "rgba(255, 255, 255, 0.75)",
+    marginRight: "20px",
+    "&:hover": {
+      borderLeft: "10px solid #FFFFFF",
+      borderColor: "#C4C4C4",
+    },
+    color: "black",
+  },
+  blackpill: {
+    borderLeft: "10px solid #000000",
+    borderColor: "#000000",
+    background: "rgba(255, 255, 255, 0.75)",
+    marginRight: "20px",
+    "&:hover": {
+      borderLeft: "10px solid #000000",
+      borderColor: "#000000",
     },
     color: "black",
   },

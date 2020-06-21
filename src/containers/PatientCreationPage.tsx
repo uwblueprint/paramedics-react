@@ -18,7 +18,7 @@ interface FormFields {
 const PatientCreationPage = () => {
   const [formFields, setFormFields] = useState<FormFields>({
     barcode: "",
-    triage: "",
+    triage: "red",
     gender: "",
     age: null,
     notes: "",
@@ -53,7 +53,12 @@ const PatientCreationPage = () => {
             }}
             value={formFields.barcode}
           />
-          <TriagePills />
+          <TriagePills
+            currentStatus={formFields.triage}
+            handleChange={(e: any) => {
+              setFormFields({ ...formFields, triage: e.target.value });
+            }}
+          />
           <RadioSelector
             labels={["Male", "Female"]}
             currentValue={formFields.gender}
