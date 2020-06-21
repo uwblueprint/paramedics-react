@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import "../styles/EventCreationPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -9,12 +10,30 @@ import BackButton from "../components/EventCreationPage/BackButton";
 import FormField from "../components/EventCreationPage/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
-import { useEventMutation } from "../graphql/mutations/hooks/events";
+import { useMutation } from "@apollo/react-hooks";
+import { useQuery } from "react-apollo";
+import { ADD_EVENT } from "../graphql/mutations/templates/events";
+import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
 
 const EventCreationPage = () => {
+  const history = useHistory();
+
+  const { data } = useQuery(GET_ALL_EVENTS);
+  const events: Array<EventType> = data ? data.events : [];
+
+  const [addEvent] = useMutation(ADD_EVENT,
+    {
+      update(cache, { data: { addEvent } }) {
+        cache.writeQuery({
+          query: GET_ALL_EVENTS,
+          data: { events: events.concat([addEvent]) },
+        });
+      }
+    }
+  );
+
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
-  const [complete, setComplete] = useState(false);
 
   const [eventName, setEventName] = useState<string>("");
   const [eventDate, setEventDate] = useState<Date | null>(null);
@@ -45,22 +64,6 @@ const EventCreationPage = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
 
-  useEventMutation(
-    {
-      name: eventName,
-      eventDate: eventDate || new Date(),
-      createdBy: 1,
-      isActive: true,
-    },
-    complete,
-    setComplete
-  );
-
-  const handleComplete = () => {
-    setComplete(true);
-    window.location.href = "/events/";
-  };
-
   const dateParts: {
     year?: string;
     month?: string;
@@ -75,6 +78,26 @@ const EventCreationPage = () => {
         {}
       )
       : {};
+
+  const handleComplete = () => {
+    addEvent({
+      variables: {
+        name: eventName,
+        eventDate:
+          dateParts.year &&
+          dateParts.month &&
+          dateParts.day &&
+          `${dateParts.year}-${dateParts.month.padStart(
+            2,
+            "0"
+          )}-${dateParts.day.padStart(2, "0")}`,
+        createdBy: 1,
+        isActive: true,
+      }
+    });
+    history.replace("/events");
+  };
+
   const content =
     activeStep === 0 ? (
       <form>
@@ -93,7 +116,7 @@ const EventCreationPage = () => {
               ? `${dateParts.year}:${dateParts.month}:${dateParts.day}`
               : ""
           }
-          handleClick={handleOpenDateModal}
+          handleFocus={handleOpenDateModal}
         />
       </form>
     ) : (
@@ -118,7 +141,11 @@ const EventCreationPage = () => {
               variant="outlined"
               color="primary"
               onClick={handleOpenCancelModal}
-              style={{ minWidth: "18rem", minHeight: "2.5rem", fontSize: "18px" }}
+              style={{
+                minWidth: "18rem",
+                minHeight: "2.5rem",
+                fontSize: "18px",
+              }}
             >
               Cancel
             </Button>
@@ -143,6 +170,7 @@ const EventCreationPage = () => {
             <NextButton
               handleClick={activeStep < 1 ? handleNext : handleComplete}
               disabled={eventName === "" || eventDate === null}
+              buttonText={activeStep < 1 ? "Next" : "Create"}
             />
           </div>
         }

@@ -16,7 +16,7 @@ export function useEventMutation(
   complete: boolean,
   setComplete: (val: boolean) => any
 ) {
-  const [addEvent, { data }] = useMutation(ADD_EVENT);
+  const [addEvent] = useMutation(ADD_EVENT);
   const dateParts: {
     year?: string;
     month?: string;

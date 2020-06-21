@@ -4,6 +4,13 @@ import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 
+const useEventButtonStyles = makeStyles({
+  root: {
+    borderRadius: "3rem",
+    minWidth: "15rem",
+  },
+});
+
 const AddEventButton = () => {
   const classes = useEventButtonStyles();
   return (
@@ -21,12 +28,5 @@ const AddEventButton = () => {
     </Button>
   );
 };
-
-const useEventButtonStyles = makeStyles({
-  root: {
-    borderRadius: "3rem",
-    minWidth: "15rem",
-  },
-});
 
 export default AddEventButton;

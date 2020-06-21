@@ -1,36 +1,6 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import MobileStepper from "@material-ui/core/MobileStepper";
-
-export default function Stepper({
-  activeStep,
-  nextButton,
-  backButton,
-}: {
-  activeStep: number;
-  nextButton: React.ReactNode;
-  backButton?: React.ReactNode;
-}) {
-  const classes = useStepperStyles();
-  const theme = useTheme();
-
-  return (
-    <MobileStepper
-      variant="dots"
-      steps={2}
-      position="static"
-      activeStep={activeStep}
-      classes={{
-        root: classes.root,
-        dots: classes.dots,
-        dot: classes.dot,
-        dotActive: classes.dotActive,
-      }}
-      nextButton={nextButton}
-      backButton={backButton}
-    />
-  );
-}
 
 const useStepperStyles = makeStyles({
   root: {
@@ -53,3 +23,32 @@ const useStepperStyles = makeStyles({
     backgroundColor: "#05162F",
   },
 });
+
+export default function Stepper({
+  activeStep,
+  nextButton,
+  backButton,
+}: {
+  activeStep: number;
+  nextButton: React.ReactNode;
+  backButton?: React.ReactNode;
+}) {
+  const classes = useStepperStyles();
+
+  return (
+    <MobileStepper
+      variant="dots"
+      steps={2}
+      position="static"
+      activeStep={activeStep}
+      classes={{
+        root: classes.root,
+        dots: classes.dots,
+        dot: classes.dot,
+        dotActive: classes.dotActive,
+      }}
+      nextButton={nextButton}
+      backButton={backButton}
+    />
+  );
+}
