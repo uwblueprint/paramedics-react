@@ -8,10 +8,11 @@ import { GET_EVENT_INFO } from '../../graphql/queries/templates/events';
 import { RouteComponentProps } from 'react-router';
 import CCPTabPanel from './CCPTabPanel';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
+import ResourceTabPanel from './ResourceTabPanel';
 
 type TParams = { eventId: string };
 
-enum TabOptions {
+export enum TabOptions {
     CCP = 0,
     Hospital = 1,
     Ambulance = 2
@@ -55,7 +56,7 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
     const classes = useStyles();
     const eventId = match.params.eventId
     // TO DO: error handling when eventId does not exist in database
-    const { loading, error, data: eventInfo } = useQuery(GET_EVENT_INFO, {
+    const { loading, data: eventInfo } = useQuery(GET_EVENT_INFO, {
         variables: { eventId },
     });
 
@@ -86,6 +87,12 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
             </Tabs>
             <TabPanel value={tab} index={TabOptions.CCP}>
                 <CCPTabPanel eventId={eventId}/>
+            </TabPanel>
+            <TabPanel value={tab} index={TabOptions.Hospital}>
+                <ResourceTabPanel eventId={eventId} type={TabOptions.Hospital} hospitals={event.hospitals} />
+            </TabPanel>
+            <TabPanel value={tab} index={TabOptions.Ambulance}>
+                <ResourceTabPanel eventId={eventId} type={TabOptions.Ambulance} hospitals={event.ambulances} />
             </TabPanel>
         </Box>
     )
