@@ -6,6 +6,7 @@ import FormField from "../components/EventCreationPage/FormField";
 import CompletePatientButton from "../components/PatientCreationPage/CompletePatientButton";
 import RadioSelector from "../components/common/RadioSelector";
 import TriagePills from "../components/PatientCreationPage/TriagePills";
+import { usePatientMutation } from "../graphql/mutations/hooks/patients"
 
 interface FormFields {
   barcode: string;
@@ -23,6 +24,19 @@ const PatientCreationPage = () => {
     age: null,
     notes: "",
   });
+
+  // Need to set up complete state and setComplete handler
+  // Need to also import enum and incorporate into triage pills
+  usePatientMutation ({
+    gender: formFields.gender,
+    barcodeValue: formFields.barcode,
+    age: formFields.age,
+    notes: formFields.notes,
+    triageLevel: formFields.triage,
+  }
+  complete, 
+  setComplete)
+  
   return (
     <div className="landing-wrapper">
       <div className="event-creation-top-section">

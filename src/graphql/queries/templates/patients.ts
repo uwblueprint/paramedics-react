@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
+import { CCPType } from "../templates/collectionPoints";
 
-enum triageLevel {
+export enum triageLevel {
   GREEN,
   YELLOW,
   RED,
@@ -8,7 +9,7 @@ enum triageLevel {
   WHITE,
 }
 
-enum status {
+export enum status {
   ON_SITE,
   RELEASED,
   TRANSPORTED,
@@ -20,7 +21,7 @@ export interface PatientType {
   age: number;
   runNumber: number;
   barcodeValue: number;
-  collectionPointId: number; // We need to make this a collection point type
+  collectionPointId: CCPType;
   status: status;
   triageCategory: number;
   triageLevel: triageLevel;
@@ -36,7 +37,11 @@ export const FETCH_ALL_PATIENTS = gql`
       age
       runNumber
       barcodeValue
-      collectionPointId
+      collectionPointId {
+        id
+        name
+        eventId
+      }
       triageLevel
       triageStatus
       notes
