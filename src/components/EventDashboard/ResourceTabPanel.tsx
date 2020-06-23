@@ -112,11 +112,11 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
                   }
                   </TableCell>
                   <TableCell align="right">
-                      {isActive ? 
-                        <Button color="secondary"><Remove className={classes.buttonIcon}/>Exclude</Button> : 
-                        <Button color="secondary"><Add className={classes.buttonIcon}/>Include</Button>
-                      }
-                    </TableCell>
+                    {isActive ? 
+                      <Button color="secondary"><Remove className={classes.buttonIcon}/>Exclude</Button> : 
+                      <Button color="secondary"><Add className={classes.buttonIcon}/>Include</Button>
+                    }
+                  </TableCell>
               </TableRow>
               )
             })}            
