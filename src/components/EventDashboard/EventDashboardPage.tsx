@@ -92,7 +92,7 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
                 <ResourceTabPanel eventId={eventId} type={TabOptions.Hospital} hospitals={event.hospitals} />
             </TabPanel>
             <TabPanel value={tab} index={TabOptions.Ambulance}>
-                <ResourceTabPanel eventId={eventId} type={TabOptions.Ambulance} hospitals={event.ambulances} />
+                <ResourceTabPanel eventId={eventId} type={TabOptions.Ambulance} ambulances={event.ambulances} />
             </TabPanel>
         </Box>
     )

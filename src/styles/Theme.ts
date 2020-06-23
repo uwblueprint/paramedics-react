@@ -47,7 +47,8 @@ export const theme = createMuiTheme({
     button: {
       fontSize: '18px',
       letterSpacing: '1.25px',
-      lineHeight: '24px'
+      lineHeight: '24px',
+      textTransform: 'uppercase'
     },
   },
 });

@@ -9,6 +9,11 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/core/styles";
 import { Colors } from '../../styles/Constants';
 import { TabOptions } from './EventDashboardPage';
+import { useQuery } from '@apollo/react-hooks';
+import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
+import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
+import { Typography } from '@material-ui/core';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 const useStyles = makeStyles({
   root: {
@@ -17,6 +22,16 @@ const useStyles = makeStyles({
   },
   tableContainer: {
     background: Colors.White
+  },
+  active: {
+    color: Colors.ActiveGreen
+  },
+  activeIcon: {
+    fontSize: '12px',
+    marginRight: '8px'
+  },
+  inactive: {
+    color: Colors.InactiveGrey
   }
 });
 
@@ -40,6 +55,12 @@ interface Ambulance {
 const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: ResourceTabPanelProps) => {
   const classes = useStyles();
 
+  const query = type === TabOptions.Hospital ? GET_ALL_HOSPITALS : GET_ALL_AMBULANCES;
+
+  const { data } = useQuery(query);
+
+  const rows = data ? ( data.hospitals || data.ambulances ) : [];
+
   return (
     <Box className={classes.root}>
       <TableContainer className={classes.tableContainer}>
@@ -51,20 +72,30 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
             </TableRow>
           </TableHead>
           <TableBody>
-            {type === TabOptions.Hospital && hospitals.map((row:Hospital) => (
+            {type === TabOptions.Hospital && rows.map((row:Hospital) => (
               <TableRow key={row.name}>
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
-                <TableCell align="right">-</TableCell>
+                <TableCell align="right">
+                  {(hospitals.filter(h => h.id === row.id).length > 0) ? 
+                    <Typography variant="button" className={classes.active}><FiberManualRecordIcon className={classes.activeIcon}/>Active</Typography> : 
+                    <Typography variant="button" className={classes.inactive}>Inactive</Typography>
+                  }
+                </TableCell>
               </TableRow>
             ))}
-            {type === TabOptions.Ambulance && ambulances.map((row:Ambulance) => (
+            {type === TabOptions.Ambulance && rows.map((row:Ambulance) => (
               <TableRow key={row.vehicleNumber}>
                 <TableCell component="th" scope="row">
                   {row.vehicleNumber}
                 </TableCell>
-                <TableCell align="right">-</TableCell>
+                <TableCell align="right">
+                  {(ambulances.filter(a => a.id === row.id).length > 0) ? 
+                    <Typography variant="button" className={classes.active}><FiberManualRecordIcon className={classes.activeIcon}/>Active</Typography> : 
+                    <Typography variant="button" className={classes.inactive}>Inactive</Typography>
+                  }
+                  </TableCell>
               </TableRow>
             ))}            
           </TableBody>
