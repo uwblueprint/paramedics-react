@@ -18,8 +18,7 @@ import { FiberManualRecord, Add, Remove } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   root: {
-    paddingLeft: '56px',
-    paddingRight: '56px',
+    padding: '0 56px 56px 56px'
   },
   tableContainer: {
     background: Colors.White,
