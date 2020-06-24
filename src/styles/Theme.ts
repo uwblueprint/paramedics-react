@@ -58,4 +58,18 @@ export const theme = createMuiTheme({
       textTransform: 'uppercase'
     },
   },
+  overrides: {
+    MuiTableCell: {
+      root: {
+        borderBottom: `1px solid ${Colors.BorderLightGray}`,
+      },
+    },
+    MuiTableRow: {
+      root : {
+        'tbody &:last-child td, tbody &:last-child th': {
+          borderBottom: 0,
+        },
+      },
+    },
+  },
 });

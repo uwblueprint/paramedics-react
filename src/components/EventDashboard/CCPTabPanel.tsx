@@ -16,8 +16,10 @@ const useStyles = makeStyles({
     padding: '56px'
   },
   tableContainer: {
-    background: Colors.White
-  }
+    background: Colors.White,
+    border: `1px solid ${Colors.BorderLightGray}`,
+    borderRadius: '4px',
+  },
 });
 
 interface CCP {
