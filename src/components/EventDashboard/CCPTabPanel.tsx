@@ -10,6 +10,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Colors } from '../../styles/Constants';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_ALL_CCPS } from '../../graphql/queries/templates/ccps';
+import { Button } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   root: {
@@ -19,6 +21,17 @@ const useStyles = makeStyles({
     background: Colors.White,
     border: `1px solid ${Colors.BorderLightGray}`,
     borderRadius: '4px',
+  },
+  addButton: {
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+    borderRadius: '2000px',
+    position: 'fixed',
+    bottom: '56px',
+    right: '56px',
+    padding: '12px 26px'
+  },
+  buttonIcon: {
+    marginRight: '13px'
   },
 });
 
@@ -57,6 +70,9 @@ const CCPTabPanel = ({eventId}: {eventId: string}) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button className={classes.addButton} variant="contained" color="secondary">
+          <Add className={classes.buttonIcon}/>Add CCP
+        </Button>
     </Box>
   )
 }

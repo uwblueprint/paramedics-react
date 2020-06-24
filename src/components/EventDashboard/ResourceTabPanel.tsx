@@ -51,6 +51,14 @@ const useStyles = makeStyles({
   },
   toolbar: {
     padding: '0 0 0 4px'
+  },
+  addButton: {
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+    borderRadius: '2000px',
+    position: 'fixed',
+    bottom: '56px',
+    right: '56px',
+    padding: '12px 26px'
   }
 });
 
@@ -304,7 +312,7 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
   });
 
   return (
-    <div className={classes.root}>
+    <Box className={classes.root}>
         <EnhancedTableToolbar 
           numSelected={selected.length}
           onSelectAllClick={handleSelectAllClick}
@@ -324,7 +332,10 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
             </TableBody>
           </Table>
         </TableContainer>
-    </div>
+        <Button className={classes.addButton} variant="contained" color="secondary">
+          <Add className={classes.buttonIcon}/>{`Add ${type === TabOptions.Hospital ? 'Hospital' : 'Ambulance'}`}
+        </Button>
+    </Box>
   );
 }
 
