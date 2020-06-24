@@ -18,36 +18,43 @@ export const theme = createMuiTheme({
       fontSize: '48px',
       letterSpacing: 0,
       lineHeight: '72px',
+      fontWeight: 'normal'
     },
     h4: {
       fontSize: '34px',
       letterSpacing: '0.25px',
-      lineHeight: '51px'
+      lineHeight: '51px',
+      fontWeight: 'normal'
     },
     h5: {
       fontSize: '24px',
       letterSpacing: 0,
-      lineHeight: '36px'
+      lineHeight: '36px',
+      fontWeight: 'normal'
     },
     h6: {
       fontSize: '20px',
       letterSpacing: '0.25px',
-      lineHeight: '30px'
+      lineHeight: '30px',
+      fontWeight: 500
     },
     body1: {
       fontSize: '18px',
       letterSpacing: '0.5px',
-      lineHeight: '24px'
+      lineHeight: '24px',
+      fontWeight: 500
     },
     body2: {
       fontSize: '18px',
       letterSpacing: '0.5px',
-      lineHeight: '24px'
+      lineHeight: '24px',
+      fontWeight: 'normal'
     },
     button: {
       fontSize: '18px',
       letterSpacing: '1.25px',
       lineHeight: '24px',
+      fontWeight: 500,
       textTransform: 'uppercase'
     },
   },
