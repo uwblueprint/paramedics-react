@@ -188,13 +188,12 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         checked={rowCount > 0 && numSelected === rowCount}
         onChange={onSelectAllClick}
       />
+      <Typography variant="body1" color="secondary">Select all</Typography>
       {numSelected > 0 && (
-        <Typography variant="body2" component="div">
-          {numSelected} selected
-        </Typography>
-      )}
-      {numSelected > 0 && (
-        <Box display="flex" justifyContent="flex-end" flexGrow={1}>
+        <Box display="flex" justifyContent="flex-end" alignItems="center" flexGrow={1}>
+          <Typography variant="body2" component="div" style={{ marginRight: '16px' }}>
+            {numSelected} selected
+          </Typography>
           <Button color="secondary"><Remove className={classes.buttonIcon}/>Exclude</Button>
           <Button color="secondary"><Add className={classes.buttonIcon}/>Include</Button>
         </Box>
