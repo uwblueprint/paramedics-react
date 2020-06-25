@@ -1,10 +1,7 @@
 import { useMutation } from "@apollo/react-hooks";
 import { ADD_PATIENT } from "../templates/patients";
-import {
-  CCPType,
-  triageLevel,
-  status,
-} from "../../queries/templates/collectionPoints";
+import { CCPType } from "../../queries/templates/collectionPoints";
+import { triageLevel, status } from "../../queries/templates/patients";
 
 export function usePatientMutation(
   {
@@ -33,10 +30,10 @@ export function usePatientMutation(
   complete: boolean,
   setComplete: (val: boolean) => any
 ) {
-  const [addEvent, { data }] = useMutation(ADD_PATIENT);
+  const [addPatient, { data }] = useMutation(ADD_PATIENT);
 
   if (complete) {
-    addEvent({
+    addPatient({
       variables: {
         gender,
         age,
