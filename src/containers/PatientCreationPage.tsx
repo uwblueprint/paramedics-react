@@ -6,37 +6,75 @@ import FormField from "../components/EventCreationPage/FormField";
 import CompletePatientButton from "../components/PatientCreationPage/CompletePatientButton";
 import RadioSelector from "../components/common/RadioSelector";
 import TriagePills from "../components/PatientCreationPage/TriagePills";
-import { usePatientMutation } from "../graphql/mutations/hooks/patients"
+import StatusPills from "../components/PatientCreationPage/StatusPills";
+import { useMutation } from "@apollo/react-hooks";
+import { useQuery } from "react-apollo";
+import { usePatientMutation } from "../graphql/mutations/hooks/patients";
+import {
+  triageLevel,
+  status,
+  PatientType,
+  GET_ALL_PATIENTS,
+} from "../graphql/queries/templates/patients";
+import { ADD_PATIENT } from "../graphql/mutations/templates/patients";
+import { CCPType } from "../graphql/queries/templates/collectionPoints";
 
 interface FormFields {
-  barcode: string;
+  barcodeValue: string;
   triage: string; //TODO: change to enum
-  gender: string; //TOOD: change to enum
+  gender: string;
   age: number | null;
   notes: string;
+  runNumber?: number | null;
+  collectionPointId?: CCPType | null;
+  status: status | string | null;
+  triageCategory?: number | null;
 }
 
 const PatientCreationPage = () => {
+  const { data } = useQuery(GET_ALL_PATIENTS);
+  const patient: Array<PatientType> = data ? data.patients : [];
+
+  // const [addPatient] = useMutation(ADD_PATIENT, {
+  //   update(cache, { data: { addPatient } }) {
+  //     cache.writeQuery({
+  //       query: GET_ALL_PATIENTS,
+  //       data: { patients: patients.concat([addPatient]) },
+  //     });
+  //   },
+  // });
+
+  // const handleComplete = () => {
+  //   addPatient({
+  //   variables: {
+  //     formFields.gender,
+  //     formFields.age,
+  //     formFields.runNumber,
+  //     formFields.barcodeValue,
+  //     formFields.collectionPointId,
+  //     formFields.status,
+  //     formFields.triageCategory,
+  //     formFields.triageLevel,
+  //     formFields.notes,
+  //     formFields.transportTime,
+  //   },
+  // });
+  //
+  // };
+
   const [formFields, setFormFields] = useState<FormFields>({
-    barcode: "",
+    barcodeValue: "",
     triage: "red",
     gender: "",
     age: null,
     notes: "",
+    status: null,
+    runNumber: null,
   });
 
   // Need to set up complete state and setComplete handler
   // Need to also import enum and incorporate into triage pills
-  usePatientMutation ({
-    gender: formFields.gender,
-    barcodeValue: formFields.barcode,
-    age: formFields.age,
-    notes: formFields.notes,
-    triageLevel: formFields.triage,
-  }
-  complete, 
-  setComplete)
-  
+
   return (
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
@@ -63,9 +101,18 @@ const PatientCreationPage = () => {
             label="Barcode:"
             placeholder="Enter code"
             onChange={(e: any) => {
-              setFormFields({ ...formFields, barcode: e.target.value });
+              setFormFields({ ...formFields, barcodeValue: e.target.value });
             }}
-            value={formFields.barcode}
+            value={formFields.barcodeValue}
+          />
+          <StatusPills
+            currentStatus={formFields.status}
+            handleChange={(
+              e: React.MouseEvent<HTMLElement>,
+              newStatus: string
+            ) => {
+              setFormFields({ ...formFields, status: newStatus });
+            }}
           />
           <TriagePills
             currentStatus={formFields.triage}
@@ -73,8 +120,6 @@ const PatientCreationPage = () => {
               e: React.MouseEvent<HTMLElement>,
               newTriage: string
             ) => {
-              console.log("change to ");
-              console.log(newTriage);
               setFormFields({ ...formFields, triage: newTriage });
             }}
           />
