@@ -15,7 +15,7 @@ const TriagePills = ({
   const classes = useCompletePatientButtonStyles();
   return (
     <Container className={classes.root}>
-      <Typography className={classes.label}>Triage</Typography>
+      <Typography className={classes.label}>Triage:</Typography>
 
       <ToggleButtonGroup
         value={currentStatus}
@@ -23,7 +23,7 @@ const TriagePills = ({
         onChange={handleChange}
         aria-label="text alignment"
         classes={{
-          groupedHorizontal: classes.notFirstPill,
+          groupedHorizontal: classes.buttonGroup,
         }}
       >
         <ToggleButton
@@ -134,13 +134,13 @@ const useCompletePatientButtonStyles = makeStyles({
     color: "black",
   },
   whitepill: {
-    borderLeft: "10px solid #FFFFFF !important",
+    borderLeft: "10px solid #CECECE !important",
     width: "6rem",
     borderColor: "#C4C4C4",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "10px solid #FFFFFF",
+      borderLeft: "10px solid #CECECE",
       borderColor: "#C4C4C4",
     },
     color: "black",
@@ -157,9 +157,12 @@ const useCompletePatientButtonStyles = makeStyles({
     },
     color: "black",
   },
-  notFirstPill: {
+  buttonGroup: {
     "&:not(:first-child)": {
       borderLeft: "initial",
+      borderRadius: "4px",
+    },
+    "&:not(:last-child)": {
       borderRadius: "4px",
     },
   },
