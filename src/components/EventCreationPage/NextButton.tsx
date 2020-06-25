@@ -2,31 +2,6 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-const NextButton = ({
-  handleClick,
-  disabled,
-}: {
-  handleClick: () => any | null;
-  disabled: boolean;
-}) => {
-  const classes = useEventButtonStyles();
-  console.log(disabled);
-  return (
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={handleClick}
-      classes={{
-        root: classes.root,
-        disabled: classes.disabled,
-      }}
-      disabled={disabled}
-    >
-      Next
-    </Button>
-  );
-};
-
 const useEventButtonStyles = makeStyles({
   root: {
     minWidth: "15rem",
@@ -38,5 +13,31 @@ const useEventButtonStyles = makeStyles({
     "pointer-events": "all !important",
   },
 });
+
+const NextButton = ({
+  handleClick,
+  disabled,
+  buttonText,
+}: {
+  handleClick: () => any | null;
+  disabled: boolean;
+  buttonText: string;
+}) => {
+  const classes = useEventButtonStyles();
+  return (
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={handleClick}
+      classes={{
+        root: classes.root,
+        disabled: classes.disabled,
+      }}
+      disabled={disabled}
+    >
+      {buttonText}
+    </Button>
+  );
+};
 
 export default NextButton;

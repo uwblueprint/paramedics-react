@@ -48,16 +48,11 @@ const HomeLandingPage = () => {
         />
       </div>
       <div className="landing-body">
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          alignItems="center"
-          spacing={3}
-        >
+        <Grid container direction="row" alignItems="center" spacing={3}>
           {events.map((event: EventType) => (
             <Grid item>
               <EventCard
+                key={event.name}
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"
