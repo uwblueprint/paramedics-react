@@ -29,38 +29,22 @@ interface FormFields {
   collectionPointId?: CCPType | null;
   status: status | null;
   triageCategory?: number | null;
+  triageLevel?: number | null;
+  transportTime?: number | null;
 }
 
 const PatientCreationPage = () => {
   const { data } = useQuery(GET_ALL_PATIENTS);
-  const patient: Array<PatientType> = data ? data.patients : [];
+  const patients: Array<PatientType> = data ? data.patients : [];
 
-  // const [addPatient] = useMutation(ADD_PATIENT, {
-  //   update(cache, { data: { addPatient } }) {
-  //     cache.writeQuery({
-  //       query: GET_ALL_PATIENTS,
-  //       data: { patients: patients.concat([addPatient]) },
-  //     });
-  //   },
-  // });
-
-  // const handleComplete = () => {
-  //   addPatient({
-  //   variables: {
-  //     formFields.gender,
-  //     formFields.age,
-  //     formFields.runNumber,
-  //     formFields.barcodeValue,
-  //     formFields.collectionPointId,
-  //     formFields.status,
-  //     formFields.triageCategory,
-  //     formFields.triageLevel,
-  //     formFields.notes,
-  //     formFields.transportTime,
-  //   },
-  // });
-  //
-  // };
+  const [addPatient] = useMutation(ADD_PATIENT, {
+    update(cache, { data: { addPatient } }) {
+      cache.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: { patients: patients.concat([addPatient]) },
+      });
+    },
+  });
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
@@ -71,10 +55,31 @@ const PatientCreationPage = () => {
     notes: "",
     status: null,
     runNumber: null,
+    collectionPointId: {
+      id: "7",
+      name: "Checkpoint 0",
+      eventId: { name: "St. Patricks", eventDate: "2020-06-09" },
+    },
   });
 
+  const handleComplete = () => {
+    addPatient({
+      variables: {
+        gender: formFields.gender,
+        age: formFields.age,
+        runNumber: formFields.runNumber,
+        barcodeValue: formFields.barcodeValue,
+        collectionPointId: formFields.collectionPointId,
+        status: formFields.status,
+        triageCategory: formFields.triageCategory,
+        triageLevel: formFields.triageLevel,
+        notes: formFields.notes,
+        transportTime: formFields.transportTime,
+      },
+    });
+  };
+
   // Need to set up complete state and setComplete handler
-  // Need to also import enum and incorporate into triage pills
 
   return (
     <div className="landing-wrapper">
@@ -148,7 +153,7 @@ const PatientCreationPage = () => {
             value={formFields.notes}
           />
         </form>
-        <CompletePatientButton />
+        <CompletePatientButton handleClick={handleComplete} />
       </div>
     </div>
   );

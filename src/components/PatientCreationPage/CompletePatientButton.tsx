@@ -4,7 +4,11 @@ import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 
-const CompletePatientButton = () => {
+const CompletePatientButton = ({
+  handleClick,
+}: {
+  handleClick: () => any | null;
+}) => {
   const classes = useCompletePatientButtonStyles();
   return (
     <Button
