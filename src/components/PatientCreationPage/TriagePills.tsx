@@ -4,13 +4,17 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import { triageLevel } from "../../graphql/queries/templates/patients";
 
 const TriagePills = ({
   currentStatus,
   handleChange,
 }: {
-  currentStatus: string;
-  handleChange: (e: React.MouseEvent<HTMLElement>, newTriage: string) => any;
+  currentStatus: triageLevel;
+  handleChange: (
+    e: React.MouseEvent<HTMLElement>,
+    newTriage: triageLevel
+  ) => any;
 }) => {
   const classes = useCompletePatientButtonStyles();
   return (
@@ -27,7 +31,7 @@ const TriagePills = ({
         }}
       >
         <ToggleButton
-          value="red"
+          value={triageLevel.RED}
           classes={{
             root: classes.redpill,
           }}
@@ -35,7 +39,7 @@ const TriagePills = ({
           Red
         </ToggleButton>
         <ToggleButton
-          value="green"
+          value={triageLevel.GREEN}
           classes={{
             root: classes.greenpill,
           }}
@@ -44,7 +48,7 @@ const TriagePills = ({
         </ToggleButton>
 
         <ToggleButton
-          value="yellow"
+          value={triageLevel.YELLOW}
           classes={{
             root: classes.yellowpill,
           }}
@@ -53,7 +57,7 @@ const TriagePills = ({
         </ToggleButton>
 
         <ToggleButton
-          value="white"
+          value={triageLevel.WHITE}
           classes={{
             root: classes.whitepill,
           }}
@@ -62,7 +66,7 @@ const TriagePills = ({
         </ToggleButton>
 
         <ToggleButton
-          value="black"
+          value={triageLevel.BLACK}
           classes={{
             root: classes.blackpill,
           }}

@@ -21,13 +21,13 @@ import { CCPType } from "../graphql/queries/templates/collectionPoints";
 
 interface FormFields {
   barcodeValue: string;
-  triage: string; //TODO: change to enum
+  triage: triageLevel; //TODO: change to enum
   gender: string;
   age: number | null;
   notes: string;
   runNumber?: number | null;
   collectionPointId?: CCPType | null;
-  status: status | string | null;
+  status: status | null;
   triageCategory?: number | null;
 }
 
@@ -62,9 +62,10 @@ const PatientCreationPage = () => {
   //
   // };
 
+  // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: "",
-    triage: "red",
+    triage: triageLevel.RED,
     gender: "",
     age: null,
     notes: "",
@@ -109,7 +110,7 @@ const PatientCreationPage = () => {
             currentStatus={formFields.status}
             handleChange={(
               e: React.MouseEvent<HTMLElement>,
-              newStatus: string
+              newStatus: status
             ) => {
               setFormFields({ ...formFields, status: newStatus });
             }}
@@ -118,7 +119,7 @@ const PatientCreationPage = () => {
             currentStatus={formFields.triage}
             handleChange={(
               e: React.MouseEvent<HTMLElement>,
-              newTriage: string
+              newTriage: triageLevel
             ) => {
               setFormFields({ ...formFields, triage: newTriage });
             }}

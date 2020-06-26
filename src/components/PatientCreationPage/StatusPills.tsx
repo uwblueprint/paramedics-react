@@ -10,11 +10,16 @@ const StatusPills = ({
   currentStatus,
   handleChange,
 }: {
-  currentStatus: status | string | null;
-  handleChange: (e: React.MouseEvent<HTMLElement>, newTriage: string) => any;
+  currentStatus: status | null;
+  handleChange: (e: React.MouseEvent<HTMLElement>, newStatus: status) => any;
 }) => {
   const classes = useCompletePatientButtonStyles();
-  const statuses = ["Transport", "Release", "Omit", "Delete"];
+  //const statuses = ["Transport", "Release", "Omit", "Delete"];
+  const statuses = [
+    { val: status.ON_SITE, description: "On Site" },
+    { val: status.RELEASED, description: "Released" },
+    { val: status.TRANSPORTED, description: "Transport" },
+  ];
   return (
     <Container className={classes.root}>
       <Typography className={classes.label}>Status:</Typography>
@@ -30,12 +35,12 @@ const StatusPills = ({
       >
         {statuses.map((status) => (
           <ToggleButton
-            value={status}
+            value={status.val}
             classes={{
               root: classes.statusPill,
             }}
           >
-            {status}
+            {status.description}
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
