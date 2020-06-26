@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import EventCard from "../components/HomeLandingPage/EventCard";
 import AddEventButton from "../components/HomeLandingPage/AddEventButton";
+import Grid from "@material-ui/core/Grid";
 import { useAllEvents } from "../graphql/queries/hooks/events";
 import { useQuery } from "react-apollo";
 import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
@@ -46,15 +47,22 @@ const HomeLandingPage = () => {
           tabLabels={tabLabels}
         />
       </div>
-      {events.map((event: EventType) => (
-        <EventCard
-          date={event.eventDate}
-          eventTitle={event.name}
-          address="N/A"
-        />
-      ))}
-      <div className="add-event-container">
-        <AddEventButton />
+      <div className="landing-body">
+        <Grid container direction="row" alignItems="center" spacing={3}>
+          {events.map((event: EventType) => (
+            <Grid item>
+              <EventCard
+                key={event.name}
+                date={event.eventDate}
+                eventTitle={event.name}
+                address="N/A"
+              />
+            </Grid>
+          ))}
+        </Grid>
+        <div className="add-event-container">
+          <AddEventButton />
+        </div>
       </div>
     </div>
   );

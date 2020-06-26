@@ -12,6 +12,23 @@ interface EventCardProps {
   address: string;
 }
 
+const useEventCardStyles = makeStyles({
+  root: {
+    display: "inline-block",
+    boxShadow: "none",
+    width: "20rem",
+    height: "10rem",
+  },
+  cardContent: {
+    padding: "2em 2em",
+  },
+  eventTitle: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+});
+
 const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
@@ -25,7 +42,11 @@ const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
           </Box>
         </Box>
 
-        <Typography color="textPrimary" variant="h4">
+        <Typography
+          color="textPrimary"
+          variant="h4"
+          className={classes.eventTitle}
+        >
           {eventTitle}
         </Typography>
         <Typography color="textSecondary" variant="body1" component="p">
@@ -35,17 +56,5 @@ const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
     </Card>
   );
 };
-
-const useEventCardStyles = makeStyles({
-  root: {
-    display: "inline-block",
-    boxShadow: "none",
-    width: "20rem",
-    margin: "4rem 3rem",
-  },
-  cardContent: {
-    padding: "1em 2em",
-  },
-});
 
 export default EventCard;
