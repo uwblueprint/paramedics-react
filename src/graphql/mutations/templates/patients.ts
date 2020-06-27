@@ -42,3 +42,48 @@ export const ADD_PATIENT = gql`
     }
   }
 `;
+
+export const EDIT_PATIENT = gql`
+  mutation updatePatient(
+    $id: String
+    $gender: String
+    $age: Int
+    $runNumber: Int
+    $barcodeValue: Int
+    $collectionPointId: ID!
+    $status: status
+    $triageCategory: Int
+    $triageLevel: triageLevel
+    $notes: String
+    $transportTime: DateTime
+  ) {
+    updatePatient(
+      id: $id
+      gender: $gender
+      age: $age
+      runNumber: $runNumber
+      barcodeValue: $barcodeValue
+      collectionPointId: $collectionPointId
+      status: $status
+      triageCategory: $triageCategory
+      triageLevel: $triageLevel
+      notes: $notes
+      transportTime: $transportTime
+    ) {
+      id
+      gender
+      age
+      runNumber
+      barcodeValue
+      collectionPointId {
+        id
+        name
+        eventId
+      }
+      triageLevel
+      triageStatus
+      notes
+      transportTime
+    }
+  }
+`;

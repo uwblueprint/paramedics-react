@@ -9,7 +9,6 @@ import TriagePills from "../components/PatientCreationPage/TriagePills";
 import StatusPills from "../components/PatientCreationPage/StatusPills";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-import { usePatientMutation } from "../graphql/mutations/hooks/patients";
 import {
   triageLevel,
   status,
