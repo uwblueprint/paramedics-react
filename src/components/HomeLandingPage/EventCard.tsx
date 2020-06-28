@@ -10,6 +10,7 @@ interface EventCardProps {
   date: Date;
   eventTitle: string;
   address: string;
+  onClick: () => void;
 }
 
 const useEventCardStyles = makeStyles({
@@ -18,6 +19,7 @@ const useEventCardStyles = makeStyles({
     boxShadow: "none",
     width: "20rem",
     height: "10rem",
+    cursor: "pointer"
   },
   cardContent: {
     padding: "2em 2em",
@@ -29,10 +31,10 @@ const useEventCardStyles = makeStyles({
   },
 });
 
-const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
+const EventCard = ({ date, eventTitle, address, onClick }: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={onClick}>
       <CardContent className={classes.cardContent}>
         <Box display="flex">
           <Typography color="textSecondary">{date}</Typography>

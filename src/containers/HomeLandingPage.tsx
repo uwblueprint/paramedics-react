@@ -1,5 +1,6 @@
 import MenuTabs from "../components/common/MenuTabs";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import "../styles/HomeLandingPage.css";
 import Typography from "@material-ui/core/Typography";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -11,6 +12,7 @@ import { useQuery } from "react-apollo";
 import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
 
 const HomeLandingPage = () => {
+  const history = useHistory();
   const [selectedTab, setTab] = useState(0);
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTab(newValue);
@@ -24,6 +26,10 @@ const HomeLandingPage = () => {
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
   const events: Array<EventType> = data ? data.events : [];
+  
+  const handleEventCardClick = (eventId: string) => {
+    history.replace(`/events/${eventId}`)
+  }
 
   return (
     <div className="landing-wrapper">
@@ -56,6 +62,7 @@ const HomeLandingPage = () => {
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"
+                onClick={() => handleEventCardClick(event.id)}
               />
             </Grid>
           ))}
