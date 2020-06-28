@@ -1,16 +1,16 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { Colors } from './Constants'
+import { Colours } from './Constants'
 
 export const theme = createMuiTheme({
   palette: {
     primary: {
-      main: Colors.Primary
+      main: Colours.Primary
     },
     secondary: {
-      main: Colors.Secondary
+      main: Colours.Secondary
     },
     error: {
-      main: Colors.Danger
+      main: Colours.Danger
     }
   },
   typography: {
@@ -61,7 +61,7 @@ export const theme = createMuiTheme({
   overrides: {
     MuiTableCell: {
       root: {
-        borderBottom: `1px solid ${Colors.BorderLightGray}`,
+        borderBottom: `1px solid ${Colours.BorderLightGray}`,
       },
     },
     // Remove bottom border on last row of tables to avoid duplicating borders
