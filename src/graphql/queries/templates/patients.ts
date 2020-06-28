@@ -40,7 +40,10 @@ export const FETCH_ALL_PATIENTS = gql`
       collectionPointId {
         id
         name
-        eventId
+        eventId {
+          name
+          eventDate
+        }
       }
       triageLevel
       triageStatus
@@ -57,7 +60,14 @@ export const GET_ALL_PATIENTS = gql`
       gender
       age
       barcodeValue
-      collectionPointId
+      collectionPointId {
+        id
+        name
+        eventId {
+          name
+          eventDate
+        }
+      }
       triageLevel
       notes
       transportTime

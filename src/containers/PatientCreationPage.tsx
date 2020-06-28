@@ -57,7 +57,7 @@ const PatientCreationPage = () => {
     collectionPointId: {
       id: "7",
       name: "Checkpoint 0",
-      eventId: { name: "St. Patricks", eventDate: "2020-06-09" },
+      eventId: { name: "St. Patricks", eventDate: new Date("2020-06-09") },
     },
   });
 
