@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import { TabOptions } from './EventDashboardPage';
-import { Colors } from '../../styles/Constants';
+import { Colours } from '../../styles/Constants';
 import { useQuery } from 'react-apollo';
 import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
@@ -22,19 +22,19 @@ const useStyles = makeStyles({
     padding: '0 56px 145px 56px'
   },
   tableContainer: {
-    background: Colors.White,
-    border: `1px solid ${Colors.BorderLightGray}`,
+    background: Colours.White,
+    border: `1px solid ${Colours.BorderLightGray}`,
     borderRadius: '4px'
   },
   active: {
-    color: Colors.ActiveGreen
+    color: Colours.ActiveGreen
   },
   activeIcon: {
     fontSize: '12px',
     marginRight: '8px'
   },
   inactive: {
-    color: Colors.InactiveGrey
+    color: Colours.InactiveGrey
   },
   buttonIcon: {
     marginRight: '13px'
