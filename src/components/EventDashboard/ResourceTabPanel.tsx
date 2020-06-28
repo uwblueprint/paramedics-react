@@ -15,6 +15,7 @@ import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
 import { Box, Typography, Button, Checkbox } from '@material-ui/core';
 import { FiberManualRecord, Add, Remove } from '@material-ui/icons';
+import { Order, stableSort, getComparator } from '../../utils/sort';
 
 const useStyles = makeStyles({
   root: {
@@ -85,37 +86,6 @@ interface HospitalData extends Hospital {
 
 interface AmbulanceData extends Ambulance {
   isActive: boolean;
-}
-
-const descendingComparator = (a, b, orderBy) => {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-const getComparator = (
-  order: Order,
-  orderBy,
-) => {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
 }
 
 interface HeadCell {
