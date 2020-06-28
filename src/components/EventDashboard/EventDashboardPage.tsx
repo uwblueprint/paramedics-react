@@ -32,7 +32,8 @@ const useStyles = makeStyles({
     },
     container: {
         background: Colors.White,
-        padding: '32px 56px 0 56px'
+        padding: '32px 56px 0 56px',
+        maxWidth: 'none',
     },
     tabs: {
         background: Colors.White
