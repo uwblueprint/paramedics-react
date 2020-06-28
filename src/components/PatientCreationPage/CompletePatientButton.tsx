@@ -14,6 +14,7 @@ const CompletePatientButton = ({
     <Button
       component={NavLink}
       to="/"
+      onClick={handleClick}
       variant="contained"
       color="primary"
       classes={{

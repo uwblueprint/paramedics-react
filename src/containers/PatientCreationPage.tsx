@@ -16,16 +16,16 @@ import {
   GET_ALL_PATIENTS,
 } from "../graphql/queries/templates/patients";
 import { ADD_PATIENT } from "../graphql/mutations/templates/patients";
-import { CCPType } from "../graphql/queries/templates/collectionPoints";
+import { assertNonNullType } from "graphql";
 
 interface FormFields {
-  barcodeValue: string;
+  barcodeValue: number | null;
   triage: triageLevel; //TODO: change to enum
   gender: string;
   age: number | null;
   notes: string;
   runNumber?: number | null;
-  collectionPointId?: CCPType | null;
+  collectionPointId?: number;
   status: status | null;
   triageCategory?: number | null;
   triageLevel?: number | null;
@@ -45,23 +45,20 @@ const PatientCreationPage = () => {
     },
   });
 
-  // We need the CCP passed in!
+  // We need the CCP passed as prop!
   const [formFields, setFormFields] = useState<FormFields>({
-    barcodeValue: "",
+    barcodeValue: null,
     triage: triageLevel.RED,
     gender: "",
     age: null,
     notes: "",
     status: null,
     runNumber: null,
-    collectionPointId: {
-      id: "7",
-      name: "Checkpoint 0",
-      eventId: { name: "St. Patricks", eventDate: new Date("2020-06-09") },
-    },
+    collectionPointId: 7, // Make sure this is passed in
   });
 
   const handleComplete = () => {
+    console.log(formFields.barcodeValue);
     addPatient({
       variables: {
         gender: formFields.gender,
@@ -73,7 +70,7 @@ const PatientCreationPage = () => {
         triageCategory: formFields.triageCategory,
         triageLevel: formFields.triageLevel,
         notes: formFields.notes,
-        transportTime: formFields.transportTime,
+        transportTime: new Date(),
       },
     });
   };
@@ -106,7 +103,10 @@ const PatientCreationPage = () => {
             label="Barcode:"
             placeholder="Enter code"
             onChange={(e: any) => {
-              setFormFields({ ...formFields, barcodeValue: e.target.value });
+              setFormFields({
+                ...formFields,
+                barcodeValue: parseInt(e.target.value),
+              });
             }}
             value={formFields.barcodeValue}
           />
@@ -139,9 +139,9 @@ const PatientCreationPage = () => {
             label="Age:"
             placeholder="Enter age"
             onChange={(e: any) => {
-              setFormFields({ ...formFields, age: e.target.value });
+              setFormFields({ ...formFields, age: parseInt(e.target.value) });
             }}
-            value={formFields.age ? formFields.age.toString() : ""}
+            value={formFields.age ? formFields.age : ""}
           />
           <FormField
             label="Notes:"
