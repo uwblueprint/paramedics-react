@@ -19,7 +19,7 @@ import { Order, stableSort, getComparator } from '../../utils/sort';
 
 const useStyles = makeStyles({
   root: {
-    padding: '0 56px 56px 56px'
+    padding: '0 56px 145px 56px'
   },
   tableContainer: {
     background: Colors.White,
