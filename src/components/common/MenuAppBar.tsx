@@ -7,8 +7,19 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Divider from '@material-ui/core/Divider';
+import { useQuery } from '@apollo/react-hooks';
+import { GET_ALL_CCPS } from '../../graphql/queries/templates/ccps';
+import { GET_EVENT_INFO } from '../../graphql/queries/templates/events';
+import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
+import WebOutlinedIcon from '@material-ui/icons/WebOutlined';
 
 interface MenuAppBarProps {
+  eventId: string;
   pageTitle: string;
 }
 
@@ -30,10 +41,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function MenuAppBar(props: MenuAppBarProps) {
-  const { pageTitle } = props;
+  const { pageTitle, eventId } = props;
   const classes = useStyles();
-
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const { loading: ccpLoading, error, data:ccpInfo } = useQuery(GET_ALL_CCPS);
+  const { loading: eventLoading, data: eventInfo } = useQuery(GET_EVENT_INFO, {
+      variables: { eventId },
+  });
+  if (ccpLoading || eventLoading) return null;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -54,13 +69,38 @@ export default function MenuAppBar(props: MenuAppBarProps) {
       </AppBar>
       <Drawer anchor="left" open={isMenuOpen} onClose={toggleMenu}>
         <div
-        className={classes.list}
-        role="presentation"
-        onClick={toggleMenu}
-        onKeyDown={toggleMenu}
-      >
+          className={classes.list}
+          role="presentation"
+          onClick={toggleMenu}
+          onKeyDown={toggleMenu}
+        >
         <List>
-
+          <ListItem button key={ eventInfo.event.name }>
+            <ListItemText primary={ eventInfo.event.name } />
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem button key={ pageTitle }>
+            <ListItemIcon><WebOutlinedIcon /></ListItemIcon>
+            <ListItemText primary={ pageTitle } />
+          </ListItem>
+      </List>
+      <Divider />
+        <List
+         subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            CCP
+          </ListSubheader>
+        }
+        >
+          
+          {ccpInfo.collectionPoints.map((ccp) => (
+            <ListItem button key={ccp.name}>
+              <ListItemIcon><RoomOutlinedIcon /></ListItemIcon>
+              <ListItemText primary={ccp.name} />
+            </ListItem>
+          ))}
         </List>
       </div>
       </Drawer>
