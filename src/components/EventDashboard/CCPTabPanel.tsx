@@ -7,7 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from '../../styles/Constants';
+import { Colours } from '../../styles/Constants';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_ALL_CCPS } from '../../graphql/queries/templates/ccps';
 import { Button } from '@material-ui/core';
@@ -18,8 +18,8 @@ const useStyles = makeStyles({
     padding: '56px 56px 145px 56px'
   },
   tableContainer: {
-    background: Colors.White,
-    border: `1px solid ${Colors.BorderLightGray}`,
+    background: Colours.White,
+    border: `1px solid ${Colours.BorderLightGray}`,
     borderRadius: '4px',
   },
   addButton: {

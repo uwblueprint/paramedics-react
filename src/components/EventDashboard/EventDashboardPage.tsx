@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
 import MenuAppBar from '../common/MenuAppBar';
-import { Colors } from '../../styles/Constants';
+import { Colours } from '../../styles/Constants';
 import { Typography, Container, Tabs, Tab, makeStyles } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_EVENT_INFO } from '../../graphql/queries/templates/events';
@@ -28,15 +28,15 @@ interface TabPanelProps {
 const useStyles = makeStyles({
     root: {
         minHeight: '100vh',
-        background: Colors.BackgroundGray,
+        background: Colours.BackgroundGray,
     },
     container: {
-        background: Colors.White,
+        background: Colours.White,
         padding: '32px 56px 0 56px',
         maxWidth: 'none',
     },
     tabs: {
-        background: Colors.White
+        background: Colours.White
     }
   });
 
@@ -80,7 +80,7 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
             />
             <Container className={classes.container}>
                 <Typography variant="h3">{event.name}</Typography>
-                <Typography variant="body1" style={{ color: Colors.SecondaryGray, display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" style={{ color: Colours.SecondaryGray, display: 'flex', alignItems: 'center' }}>
                     <CalendarTodayOutlinedIcon style={{ fontSize: '18px', paddingRight: '10px' }} />
                     {formatDate(event.eventDate)}
                 </Typography>
