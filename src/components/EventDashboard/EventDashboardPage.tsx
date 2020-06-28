@@ -9,6 +9,7 @@ import { RouteComponentProps } from 'react-router';
 import CCPTabPanel from './CCPTabPanel';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import ResourceTabPanel from './ResourceTabPanel';
+import { formatDate } from '../../utils/format'
 
 type TParams = { eventId: string };
 
@@ -80,7 +81,7 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
                 <Typography variant="h3">{event.name}</Typography>
                 <Typography variant="body1" style={{ color: Colors.SecondaryGray, display: 'flex', alignItems: 'center' }}>
                     <CalendarTodayOutlinedIcon style={{ fontSize: '18px', paddingRight: '10px' }} />
-                    {event.eventDate}
+                    {formatDate(event.eventDate)}
                 </Typography>
             </Container>
             <Tabs className={classes.tabs} value={tab} onChange={handleChange}>
@@ -95,7 +96,7 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
                 <ResourceTabPanel eventId={eventId} type={TabOptions.Hospital} hospitals={event.hospitals} />
             </TabPanel>
             <TabPanel value={tab} index={TabOptions.Ambulance}>
-                <ResourceTabPanel eventId={eventId} type={TabOptions.Ambulance} hospitals={event.ambulances} />
+                <ResourceTabPanel eventId={eventId} type={TabOptions.Ambulance} ambulances={event.ambulances} />
             </TabPanel>
         </Box>
     )

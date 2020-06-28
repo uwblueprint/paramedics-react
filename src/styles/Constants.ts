@@ -12,5 +12,7 @@ export enum Colors {
   DarkGray = '#202020',
   BorderLightGray = '#C4C4C4',
   DisabledBackground = '#C9C9C9',
-  DisabledText = '#5C5C5C'
+  DisabledText = '#5C5C5C',
+  ActiveGreen = '#43B00F',
+  InactiveGrey = '#888888'
 }
