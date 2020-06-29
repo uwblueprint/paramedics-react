@@ -2,39 +2,39 @@ import gql from "graphql-tag";
 import { GraphQLEnumType } from "graphql";
 import { CCPType } from "../templates/collectionPoints";
 
-export const trialTriageLevel = new GraphQLEnumType({
-  name: "triageLevel",
-  values: {
-    GREEN: {
-      value: 0,
-    },
-    YELLOW: {
-      value: 1,
-    },
-    RED: {
-      value: 2,
-    },
-    BLACK: {
-      value: 3,
-    },
-    WHITE: {
-      value: 4,
-    },
-  },
-});
+// export const trialTriageLevel = new GraphQLEnumType({
+//   name: "triageLevel",
+//   values: {
+//     GREEN: {
+//       value: 0,
+//     },
+//     YELLOW: {
+//       value: 1,
+//     },
+//     RED: {
+//       value: 2,
+//     },
+//     BLACK: {
+//       value: 3,
+//     },
+//     WHITE: {
+//       value: 4,
+//     },
+//   },
+// });
 
 export enum triageLevel {
-  GREEN,
-  YELLOW,
-  RED,
-  BLACK,
-  WHITE,
+  GREEN = "GREEN",
+  YELLOW = "YELLOW",
+  RED = "RED",
+  BLACK = "BLACK",
+  WHITE = "WHITE",
 }
 
 export enum status {
-  ON_SITE,
-  RELEASED,
-  TRANSPORTED,
+  ON_SITE = "ON_SITE",
+  RELEASED = "RELEASED",
+  TRANSPORTED = "TRANSPORTED",
 }
 
 export interface PatientType {

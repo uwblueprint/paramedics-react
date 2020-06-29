@@ -68,7 +68,7 @@ const PatientCreationPage = () => {
         collectionPointId: formFields.collectionPointId,
         status: formFields.status,
         triageCategory: formFields.triageCategory,
-        triageLevel: formFields.triageLevel,
+        triageLevel: formFields.triage,
         notes: formFields.notes,
         transportTime: new Date(),
       },
