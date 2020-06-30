@@ -9,12 +9,16 @@ import { triageLevel } from "../../graphql/queries/templates/patients";
 const TriagePills = ({
   currentStatus,
   handleChange,
+  error,
+  helperText,
 }: {
   currentStatus: triageLevel;
   handleChange: (
     e: React.MouseEvent<HTMLElement>,
     newTriage: triageLevel
   ) => any;
+  error?: boolean;
+  helperText?: string;
 }) => {
   const classes = useCompletePatientButtonStyles();
   return (

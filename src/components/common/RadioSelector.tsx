@@ -10,10 +10,14 @@ const RadioSelector = ({
   labels,
   currentValue,
   handleChange,
+  error,
+  helperText,
 }: {
   labels: Array<string>;
   currentValue: string;
   handleChange: (e: any) => any;
+  error?: boolean;
+  helperText?: string;
 }) => {
   const classes = useRadioStyles();
 

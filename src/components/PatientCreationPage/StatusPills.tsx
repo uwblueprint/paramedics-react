@@ -9,9 +9,13 @@ import { status } from "../../graphql/queries/templates/patients";
 const StatusPills = ({
   currentStatus,
   handleChange,
+  error,
+  helperText,
 }: {
   currentStatus: status | null;
   handleChange: (e: React.MouseEvent<HTMLElement>, newStatus: status) => any;
+  error?: boolean;
+  helperText?: string;
 }) => {
   const classes = useCompletePatientButtonStyles();
   //const statuses = ["Transport", "Release", "Omit", "Delete"];
@@ -39,6 +43,7 @@ const StatusPills = ({
             classes={{
               root: classes.statusPill,
             }}
+            key={status.toString()}
           >
             {status.description}
           </ToggleButton>
