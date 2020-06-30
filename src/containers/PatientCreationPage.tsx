@@ -20,7 +20,7 @@ import { assertNonNullType } from "graphql";
 
 interface FormFields {
   barcodeValue: number | null;
-  triage: triageLevel; //TODO: change to enum
+  triage: triageLevel | null; //TODO: change to enum
   gender: string;
   age: number | null;
   notes: string;
@@ -48,7 +48,7 @@ const PatientCreationPage = () => {
   // We need the CCP passed as prop!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: null,
-    triage: triageLevel.RED,
+    triage: null,
     gender: "",
     age: null,
     notes: "",
