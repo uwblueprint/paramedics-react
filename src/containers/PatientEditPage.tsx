@@ -13,7 +13,7 @@ import {
   triageLevel,
   status,
   PatientType,
-  GET_ALL_PATIENTS,
+  FETCH_ALL_PATIENTS,
 } from "../graphql/queries/templates/patients";
 import { ADD_PATIENT } from "../graphql/mutations/templates/patients";
 import { CCPType } from "../graphql/queries/templates/collectionPoints";
@@ -32,14 +32,16 @@ interface FormFields {
   transportTime?: number | null;
 }
 
-const PatientCreationPage = () => {
-  const { data } = useQuery(GET_ALL_PATIENTS);
+const PatientEditPage = ({ match: { params } }: { match: { params: any } }) => {
+  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
+  console.log("JASON: data");
+  console.log(data, loading, error);
   const patients: Array<PatientType> = data ? data.patients : [];
 
   const [addPatient] = useMutation(ADD_PATIENT, {
     update(cache, { data: { addPatient } }) {
       cache.writeQuery({
-        query: GET_ALL_PATIENTS,
+        query: FETCH_ALL_PATIENTS,
         data: { patients: patients.concat([addPatient]) },
       });
     },
@@ -199,4 +201,4 @@ const PatientCreationPage = () => {
   );
 };
 
-export default PatientCreationPage;
+export default PatientEditPage;
