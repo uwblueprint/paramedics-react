@@ -46,7 +46,7 @@ export const FETCH_ALL_PATIENTS = gql`
         }
       }
       triageLevel
-      triageStatus
+      status
       notes
       transportTime
     }
