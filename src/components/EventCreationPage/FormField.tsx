@@ -44,7 +44,7 @@ const FormField = ({
   label: string;
   placeholder: string;
   onChange: (e: any) => any;
-  value: string;
+  value: string | number | null;
   handleFocus?: () => any;
   error?: boolean;
 }) => {

@@ -12,7 +12,7 @@ const TriagePills = ({
   error,
   helperText,
 }: {
-  currentStatus: triageLevel;
+  currentStatus: triageLevel | null;
   handleChange: (
     e: React.MouseEvent<HTMLElement>,
     newTriage: triageLevel
@@ -106,61 +106,64 @@ const useCompletePatientButtonStyles = makeStyles({
     transform: "translate(0, 1.5px) scale(0.75)",
   },
   redpill: {
-    borderLeft: "10px solid #FF5858 !important",
+    borderLeft: "0.75rem solid #FF5858 !important",
     width: "6rem",
     borderColor: "#FF5858",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "10px solid #FF5858",
+      borderLeft: "0.75rem solid #FF5858",
       borderColor: "#FF5858",
     },
     color: "black",
   },
   greenpill: {
-    borderLeft: "10px solid #60CD39 !important",
+    borderLeft: "0.75rem solid #60CD39 !important",
     width: "6rem",
     borderColor: "#60CD39",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "10px solid #60CD39",
+      borderLeft: "0.75rem solid #60CD39",
       borderColor: "#60CD39",
     },
     color: "black",
   },
   yellowpill: {
-    borderLeft: "10px solid #FFC90A !important",
+    borderLeft: "0.75rem solid #FFC90A !important",
     width: "6rem",
     borderColor: "#FFC90A",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "10px solid #FFC90A",
+      borderLeft: "0.75rem solid #FFC90A",
       borderColor: "#FFC90A",
+    },
+    "&:active": {
+      background: "#FFC90A",
     },
     color: "black",
   },
   whitepill: {
-    borderLeft: "10px solid #CECECE !important",
+    borderLeft: "0.75rem solid #CECECE !important",
     width: "6rem",
     borderColor: "#C4C4C4",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "10px solid #CECECE",
+      borderLeft: "0.75rem solid #CECECE",
       borderColor: "#C4C4C4",
     },
     color: "black",
   },
   blackpill: {
-    borderLeft: "10px solid #000000 !important",
+    borderLeft: "0.75rem solid #000000 !important",
     width: "6rem",
     borderColor: "#000000",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "10px solid #000000",
+      borderLeft: "0.75rem solid #000000",
       borderColor: "#000000",
     },
     color: "black",

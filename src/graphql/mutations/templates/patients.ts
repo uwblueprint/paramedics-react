@@ -33,10 +33,13 @@ export const ADD_PATIENT = gql`
       collectionPointId {
         id
         name
-        eventId
+        eventId {
+          id
+          name
+        }
       }
       triageLevel
-      triageStatus
+      status
       notes
       transportTime
     }
