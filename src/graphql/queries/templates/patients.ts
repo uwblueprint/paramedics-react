@@ -29,6 +29,32 @@ export interface PatientType {
   transportTime: Date;
 }
 
+export const GET_PATIENT_BY_ID = (id: string) => {
+  return gql`
+    query {
+      patient(id: ${id}) {
+        id
+        gender
+        age
+        runNumber
+        barcodeValue
+        collectionPointId {
+          id
+          name
+          eventId {
+            name
+            eventDate
+          }
+        }
+        triageLevel
+        status
+        notes
+        transportTime
+      }
+    }
+  `;
+};
+
 export const FETCH_ALL_PATIENTS = gql`
   query {
     patients {

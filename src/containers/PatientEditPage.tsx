@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/EventCreationPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -13,7 +13,7 @@ import {
   triageLevel,
   status,
   PatientType,
-  FETCH_ALL_PATIENTS,
+  GET_PATIENT_BY_ID,
 } from "../graphql/queries/templates/patients";
 import { ADD_PATIENT } from "../graphql/mutations/templates/patients";
 import { CCPType } from "../graphql/queries/templates/collectionPoints";
@@ -32,21 +32,17 @@ interface FormFields {
   transportTime?: number | null;
 }
 
-const PatientEditPage = ({ match: { params } }: { match: { params: any } }) => {
-  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
-  console.log("JASON: data");
-  console.log(data, loading, error);
-  const patients: Array<PatientType> = data ? data.patients : [];
+const PatientEditPage = ({
+  match: {
+    params: { id },
+  },
+}: {
+  match: { params: { id: string } };
+}) => {
+  const { data, loading } = useQuery(GET_PATIENT_BY_ID(id));
+  const patients: Array<PatientType> = data ? data.patient : [];
 
-  const [addPatient] = useMutation(ADD_PATIENT, {
-    update(cache, { data: { addPatient } }) {
-      cache.writeQuery({
-        query: FETCH_ALL_PATIENTS,
-        data: { patients: patients.concat([addPatient]) },
-      });
-    },
-  });
-  console.log(addPatient);
+  console.log(data);
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
@@ -63,6 +59,35 @@ const PatientEditPage = ({ match: { params } }: { match: { params: any } }) => {
       eventId: { name: "St. Patricks", eventDate: new Date("2020-06-09") },
     },
   });
+
+  useEffect(() => {
+    if (!loading) {
+      const {
+        barcodeValue,
+        triageLevel,
+        gender,
+        age,
+        notes,
+        status,
+      }: {
+        barcodeValue: string;
+        triageLevel: triageLevel;
+        gender: string;
+        age: number;
+        notes: string;
+        status: status;
+      } = data.patient;
+      setFormFields({
+        ...formFields,
+        barcodeValue,
+        triage: triageLevel,
+        gender,
+        age,
+        notes,
+        status,
+      });
+    }
+  }, [data]);
 
   const [errors, setErrors] = useState({
     barcodeValue: false,
@@ -95,24 +120,10 @@ const PatientEditPage = ({ match: { params } }: { match: { params: any } }) => {
 
     // if (error) return;
 
-    addPatient({
-      variables: {
-        gender: formFields.gender,
-        age: formFields.age,
-        runNumber: formFields.runNumber,
-        barcodeValue: formFields.barcodeValue,
-        collectionPointId: formFields.collectionPointId,
-        status: formFields.status,
-        triageCategory: formFields.triageCategory,
-        triageLevel: formFields.triageLevel,
-        notes: formFields.notes,
-        transportTime: formFields.transportTime,
-      },
-    });
+    //TODO: add edit patient mutation
   };
 
   // Need to set up complete state and setComplete handler
-  console.log(errors);
   return (
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
