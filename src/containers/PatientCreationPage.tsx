@@ -138,7 +138,9 @@ const PatientCreationPage = () => {
                 barcodeValue: parseInt(e.target.value),
               });
             }}
-            value={formFields.barcodeValue}
+            value={
+              formFields.barcodeValue ? formFields.barcodeValue.toString() : ""
+            }
             error={errors.barcodeValue}
             helperText={errors.barcodeValue ? "This is a mandatory field" : ""}
           />

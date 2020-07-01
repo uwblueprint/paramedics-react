@@ -15,7 +15,10 @@ import {
   PatientType,
   GET_PATIENT_BY_ID,
 } from "../graphql/queries/templates/patients";
-import { ADD_PATIENT } from "../graphql/mutations/templates/patients";
+import {
+  ADD_PATIENT,
+  EDIT_PATIENT,
+} from "../graphql/mutations/templates/patients";
 import { CCPType } from "../graphql/queries/templates/collectionPoints";
 
 interface FormFields {
@@ -25,7 +28,7 @@ interface FormFields {
   age: number | null;
   notes: string;
   runNumber?: number | null;
-  collectionPointId?: CCPType | null;
+  collectionPointId?: number;
   status: status | null;
   triageCategory?: number | null;
   triageLevel?: number | null;
@@ -53,11 +56,7 @@ const PatientEditPage = ({
     notes: "",
     status: null,
     runNumber: null,
-    collectionPointId: {
-      id: "7",
-      name: "Checkpoint 0",
-      eventId: { name: "St. Patricks", eventDate: new Date("2020-06-09") },
-    },
+    collectionPointId: 3,
   });
 
   useEffect(() => {
@@ -103,6 +102,8 @@ const PatientEditPage = ({
     transportTime: false,
   });
 
+  const [editPatient] = useMutation(EDIT_PATIENT);
+
   const handleComplete = () => {
     // Validate that fields are filled in
     let error = false;
@@ -120,7 +121,23 @@ const PatientEditPage = ({
 
     // if (error) return;
 
-    //TODO: add edit patient mutation
+    editPatient({
+      variables: {
+        id,
+        gender: formFields.gender,
+        age: formFields.age ? parseInt(formFields.age.toString(), 10) : -1,
+        runNumber: formFields.runNumber,
+        barcodeValue: formFields.barcodeValue
+          ? parseInt(formFields.barcodeValue.toString(), 10)
+          : -1,
+        collectionPointId: formFields.collectionPointId,
+        status: formFields.status,
+        triageCategory: formFields.triageCategory,
+        triageLevel: formFields.triage,
+        notes: formFields.notes,
+        transportTime: new Date(),
+      },
+    });
   };
 
   // Need to set up complete state and setComplete handler
@@ -128,7 +145,7 @@ const PatientEditPage = ({
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
-          <Typography variant="h3">Add a new patient</Typography>
+          <Typography variant="h3">Edit patient</Typography>
           <div className="user-icon">
             <Button
               variant="outlined"

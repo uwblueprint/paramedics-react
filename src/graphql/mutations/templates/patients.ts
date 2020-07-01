@@ -48,7 +48,7 @@ export const ADD_PATIENT = gql`
 
 export const EDIT_PATIENT = gql`
   mutation updatePatient(
-    $id: String
+    $id: ID!
     $gender: String
     $age: Int
     $runNumber: Int
@@ -81,10 +81,13 @@ export const EDIT_PATIENT = gql`
       collectionPointId {
         id
         name
-        eventId
+        eventId {
+          id
+          name
+        }
       }
       triageLevel
-      triageStatus
+      status
       notes
       transportTime
     }
