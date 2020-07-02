@@ -14,6 +14,7 @@ import {
   status,
   PatientType,
   GET_PATIENT_BY_ID,
+  GET_ALL_PATIENTS,
 } from "../graphql/queries/templates/patients";
 import {
   ADD_PATIENT,
@@ -23,7 +24,7 @@ import { CCPType } from "../graphql/queries/templates/collectionPoints";
 
 interface FormFields {
   barcodeValue: string;
-  triage: triageLevel;
+  triage: triageLevel | null;
   gender: string;
   age: number | null;
   notes: string;
@@ -35,30 +36,33 @@ interface FormFields {
   transportTime?: number | null;
 }
 
-const PatientEditPage = ({
+const PatientProfilePage = ({
   match: {
-    params: { id },
+    params: { mode, ccpId, patientId },
   },
 }: {
-  match: { params: { id: string } };
+  match: { params: { mode: string; patientId?: string; ccpId: string } };
 }) => {
-  const { data, loading } = useQuery(GET_PATIENT_BY_ID(id));
+  const { data, loading, error } = useQuery(
+    mode === "edit" && patientId
+      ? GET_PATIENT_BY_ID(patientId)
+      : GET_ALL_PATIENTS
+  );
   const patients: Array<PatientType> = data ? data.patient : [];
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: "",
-    triage: triageLevel.RED,
+    triage: null,
     gender: "",
     age: null,
     notes: "",
     status: null,
     runNumber: null,
-    collectionPointId: 3,
   });
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && mode === "edit") {
       const {
         barcodeValue,
         triageLevel,
@@ -66,6 +70,7 @@ const PatientEditPage = ({
         age,
         notes,
         status,
+        runNumber,
       }: {
         barcodeValue: string;
         triageLevel: triageLevel;
@@ -73,6 +78,7 @@ const PatientEditPage = ({
         age: number;
         notes: string;
         status: status;
+        runNumber: number | null;
       } = data.patient;
       setFormFields({
         ...formFields,
@@ -82,30 +88,60 @@ const PatientEditPage = ({
         age,
         notes,
         status,
+        runNumber,
       });
     }
   }, [data]);
 
+  const [addPatient] = useMutation(ADD_PATIENT, {
+    update(cache, { data: { addPatient } }) {
+      cache.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: { patients: patients.concat([addPatient]) },
+      });
+    },
+  });
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleComplete = () => {
-    editPatient({
-      variables: {
-        id,
-        gender: formFields.gender,
-        age: formFields.age ? parseInt(formFields.age.toString(), 10) : -1,
-        runNumber: formFields.runNumber,
-        barcodeValue: formFields.barcodeValue
-          ? parseInt(formFields.barcodeValue.toString(), 10)
-          : -1,
-        collectionPointId: formFields.collectionPointId,
-        status: formFields.status,
-        triageCategory: formFields.triageCategory,
-        triageLevel: formFields.triage,
-        notes: formFields.notes,
-        transportTime: new Date(),
-      },
-    });
+    if (mode === "new") {
+      addPatient({
+        variables: {
+          gender: formFields.gender,
+          age: formFields.age ? parseInt(formFields.age.toString()) : -1,
+          runNumber: formFields.runNumber,
+          barcodeValue: formFields.barcodeValue
+            ? parseInt(formFields.barcodeValue.toString())
+            : -1,
+          collectionPointId: ccpId,
+          status: formFields.status,
+          triageCategory: formFields.triageCategory,
+          triageLevel: formFields.triage,
+          notes: formFields.notes,
+          transportTime: new Date(),
+        },
+      });
+    } else if (mode === "edit") {
+      editPatient({
+        variables: {
+          id: patientId,
+          gender: formFields.gender,
+          age: formFields.age ? parseInt(formFields.age.toString(), 10) : -1,
+          runNumber: formFields.runNumber
+            ? parseInt(formFields.runNumber.toString(), 10)
+            : -1,
+          barcodeValue: formFields.barcodeValue
+            ? parseInt(formFields.barcodeValue.toString(), 10)
+            : -1,
+          collectionPointId: ccpId,
+          status: formFields.status,
+          triageCategory: formFields.triageCategory,
+          triageLevel: formFields.triage,
+          notes: formFields.notes,
+          transportTime: new Date(),
+        },
+      });
+    }
   };
 
   // Need to set up complete state and setComplete handler
@@ -113,7 +149,9 @@ const PatientEditPage = ({
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
-          <Typography variant="h3">Edit patient</Typography>
+          <Typography variant="h3">
+            {mode === "new" ? "Add a patient" : "Edit patient"}
+          </Typography>
           <div className="user-icon">
             <Button
               variant="outlined"
@@ -148,6 +186,18 @@ const PatientEditPage = ({
               setFormFields({ ...formFields, status: newStatus });
             }}
           />
+          {mode === "edit" && (
+            <FormField
+              label="Run Number:"
+              placeholder="Enter run number"
+              onChange={(e: any) => {
+                setFormFields({ ...formFields, runNumber: e.target.value });
+              }}
+              value={
+                formFields.runNumber ? formFields.runNumber.toString() : ""
+              }
+            />
+          )}
           <TriagePills
             currentStatus={formFields.triage}
             handleChange={(
@@ -190,4 +240,4 @@ const PatientEditPage = ({
   );
 };
 
-export default PatientEditPage;
+export default PatientProfilePage;

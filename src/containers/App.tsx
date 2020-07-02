@@ -4,8 +4,7 @@ import "../styles/App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
 import HomeLandingPage from "./HomeLandingPage";
 import EventCreationPage from "./EventCreationPage";
-import PatientCreationPage from "./PatientCreationPage";
-import PatientEditPage from "./PatientEditPage";
+import PatientProfilePage from "./PatientProfilePage";
 
 function App() {
   return (
@@ -14,10 +13,13 @@ function App() {
         <Switch>
           <Route exact path="/events" component={HomeLandingPage} />
           <Route exact path="/events/new" component={EventCreationPage} />
-          <Route exact path="/patients/new" component={PatientCreationPage} />
-          <Route exact path="/patients/:id/edit" component={PatientEditPage} />
+          <Route
+            exact
+            path="/patients/:mode/:ccpId/:patientId?"
+            component={PatientProfilePage}
+          />
           <Route path="/">
-            <Redirect to="/patients/new" />
+            <Redirect to="/patients/" />
           </Route>
         </Switch>
       </div>
