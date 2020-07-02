@@ -39,22 +39,17 @@ const FormField = ({
   onChange,
   value,
   handleFocus,
-  error,
-  helperText,
 }: {
   label: string;
   placeholder: string;
   onChange: (e: any) => any;
   value: string;
   handleFocus?: () => any;
-  error?: boolean;
-  helperText?: string;
 }) => {
   const classes = useTextFieldStyles();
 
   return (
     <TextField
-      error={error}
       label={label}
       placeholder={placeholder}
       InputLabelProps={{
@@ -65,7 +60,6 @@ const FormField = ({
       onChange={onChange}
       value={value}
       onFocus={handleFocus}
-      helperText={helperText}
     />
   );
 };

@@ -45,8 +45,6 @@ const PatientEditPage = ({
   const { data, loading } = useQuery(GET_PATIENT_BY_ID(id));
   const patients: Array<PatientType> = data ? data.patient : [];
 
-  console.log(data);
-
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: "",
@@ -88,39 +86,9 @@ const PatientEditPage = ({
     }
   }, [data]);
 
-  const [errors, setErrors] = useState({
-    barcodeValue: false,
-    triage: false,
-    gender: false,
-    age: false,
-    notes: false,
-    runNumber: false,
-    collectionPointId: false,
-    status: false,
-    triageCategory: false,
-    triageLevel: false,
-    transportTime: false,
-  });
-
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleComplete = () => {
-    // Validate that fields are filled in
-    let error = false;
-    // console.log("AAAAAA");
-    // console.log("formFields", formFields);
-    Object.entries(formFields).forEach((field) => {
-      if (field[1] === "" || field[1] === null) {
-        // Empty field
-        setErrors({ ...errors, [field[0]]: true });
-        error = true;
-      } else {
-        setErrors({ ...errors, [field[0]]: false });
-      }
-    });
-
-    // if (error) return;
-
     editPatient({
       variables: {
         id,
@@ -170,8 +138,6 @@ const PatientEditPage = ({
               setFormFields({ ...formFields, barcodeValue: e.target.value });
             }}
             value={formFields.barcodeValue}
-            error={errors.barcodeValue}
-            helperText={errors.barcodeValue ? "This is a mandatory field" : ""}
           />
           <StatusPills
             currentStatus={formFields.status}
@@ -181,8 +147,6 @@ const PatientEditPage = ({
             ) => {
               setFormFields({ ...formFields, status: newStatus });
             }}
-            error={errors.status}
-            helperText={errors.status ? "This is a mandatory field" : ""}
           />
           <TriagePills
             currentStatus={formFields.triage}
@@ -192,8 +156,6 @@ const PatientEditPage = ({
             ) => {
               setFormFields({ ...formFields, triage: newTriage });
             }}
-            error={errors.triage}
-            helperText={errors.triage ? "This is a mandatory field" : ""}
           />
           <RadioSelector
             labels={["Male", "Female"]}
@@ -201,8 +163,6 @@ const PatientEditPage = ({
             handleChange={(e: any) => {
               setFormFields({ ...formFields, gender: e.target.value });
             }}
-            error={errors.gender}
-            helperText={errors.gender ? "This is a mandatory field" : ""}
           />
           <FormField
             label="Age:"
@@ -211,8 +171,6 @@ const PatientEditPage = ({
               setFormFields({ ...formFields, age: e.target.value });
             }}
             value={formFields.age ? formFields.age.toString() : ""}
-            error={errors.age}
-            helperText={errors.age ? "This is a mandatory field" : ""}
           />
           <FormField
             label="Notes:"
@@ -223,7 +181,10 @@ const PatientEditPage = ({
             value={formFields.notes}
           />
         </form>
-        <CompletePatientButton handleClick={handleComplete} />
+        <CompletePatientButton
+          handleClick={handleComplete}
+          // disableButton={true}
+        />
       </div>
     </div>
   );

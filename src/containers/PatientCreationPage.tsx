@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/EventCreationPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -44,7 +44,6 @@ const PatientCreationPage = () => {
       });
     },
   });
-  console.log(addPatient);
 
   // We need the CCP passed as prop!
   const [formFields, setFormFields] = useState<FormFields>({
@@ -54,48 +53,16 @@ const PatientCreationPage = () => {
     age: null,
     notes: "",
     status: null,
-    runNumber: null,
-    collectionPointId: 7, // Make sure this is passed in
   });
 
-  const [errors, setErrors] = useState({
-    barcodeValue: false,
-    triage: false,
-    gender: false,
-    age: false,
-    notes: false,
-    runNumber: false,
-    collectionPointId: false,
-    status: false,
-    triageCategory: false,
-    triageLevel: false,
-    transportTime: false,
-  });
-
-  const handleComplete = () => {
-    // Validate that fields are filled in
-    let error = false;
-    // console.log("AAAAAA");
-    // console.log("formFields", formFields);
-    Object.entries(formFields).forEach((field) => {
-      if (field[1] === "" || field[1] === null) {
-        // Empty field
-        setErrors({ ...errors, [field[0]]: true });
-        error = true;
-      } else {
-        setErrors({ ...errors, [field[0]]: false });
-      }
-    });
-
-    // if (error) return;
-
+  const handleComplete = async () => {
     addPatient({
       variables: {
         gender: formFields.gender,
-        age: formFields.age,
+        age: formFields.age ? parseInt(formFields.age.toString()) : -1,
         runNumber: formFields.runNumber,
-        barcodeValue: formFields.barcodeValue,
-        collectionPointId: formFields.collectionPointId,
+        barcodeValue: formFields.age ? parseInt(formFields.age.toString()) : -1,
+        collectionPointId: 2,
         status: formFields.status,
         triageCategory: formFields.triageCategory,
         triageLevel: formFields.triage,
@@ -104,9 +71,17 @@ const PatientCreationPage = () => {
       },
     });
   };
+  const validateFormFields = () => {
+    let isValid = true;
+    Object.entries(formFields).forEach((field) => {
+      if (field[1] === "" || field[1] === null) {
+        isValid = false;
+      }
+    });
+    return isValid;
+  };
 
   // Need to set up complete state and setComplete handler
-  console.log(errors);
   return (
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
@@ -135,14 +110,12 @@ const PatientCreationPage = () => {
             onChange={(e: any) => {
               setFormFields({
                 ...formFields,
-                barcodeValue: parseInt(e.target.value),
+                barcodeValue: e.target.value,
               });
             }}
             value={
               formFields.barcodeValue ? formFields.barcodeValue.toString() : ""
             }
-            error={errors.barcodeValue}
-            helperText={errors.barcodeValue ? "This is a mandatory field" : ""}
           />
           <StatusPills
             currentStatus={formFields.status}
@@ -152,8 +125,6 @@ const PatientCreationPage = () => {
             ) => {
               setFormFields({ ...formFields, status: newStatus });
             }}
-            error={errors.status}
-            helperText={errors.status ? "This is a mandatory field" : ""}
           />
           <TriagePills
             currentStatus={formFields.triage}
@@ -163,8 +134,6 @@ const PatientCreationPage = () => {
             ) => {
               setFormFields({ ...formFields, triage: newTriage });
             }}
-            error={errors.triage}
-            helperText={errors.triage ? "This is a mandatory field" : ""}
           />
           <RadioSelector
             labels={["Male", "Female"]}
@@ -172,18 +141,14 @@ const PatientCreationPage = () => {
             handleChange={(e: any) => {
               setFormFields({ ...formFields, gender: e.target.value });
             }}
-            error={errors.gender}
-            helperText={errors.gender ? "This is a mandatory field" : ""}
           />
           <FormField
             label="Age:"
             placeholder="Enter age"
             onChange={(e: any) => {
-              setFormFields({ ...formFields, age: parseInt(e.target.value) });
+              setFormFields({ ...formFields, age: e.target.value });
             }}
             value={formFields.age ? formFields.age.toString() : ""}
-            error={errors.age}
-            helperText={errors.age ? "This is a mandatory field" : ""}
           />
           <FormField
             label="Notes:"
@@ -194,7 +159,10 @@ const PatientCreationPage = () => {
             value={formFields.notes}
           />
         </form>
-        <CompletePatientButton handleClick={handleComplete} />
+        <CompletePatientButton
+          handleClick={handleComplete}
+          // disableButton={!validateFormFields()}
+        />
       </div>
     </div>
   );
