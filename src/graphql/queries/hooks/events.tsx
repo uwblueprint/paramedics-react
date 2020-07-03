@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 
-import { FETCH_ALL_EVENTS } from "../templates/events";
 import { useApolloClient } from "react-apollo";
+import { FETCH_ALL_EVENTS } from "../templates/events";
 
 export function useAllEvents() {
   const { data } = useQuery(FETCH_ALL_EVENTS);
