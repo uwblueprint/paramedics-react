@@ -23,7 +23,7 @@ const RadioSelector = ({
 
   return (
     <Container className={classes.root}>
-      <Typography className={classes.label}>Gender</Typography>
+      <Typography className={classes.label}>Gender:</Typography>
       <RadioGroup
         row
         aria-label="position"
@@ -36,7 +36,7 @@ const RadioSelector = ({
         {labels.map((label) => (
           <FormControlLabel
             value={label}
-            control={<Radio color="primary" />}
+            control={<Radio color="secondary" />}
             label={label}
             labelPlacement="end"
           />

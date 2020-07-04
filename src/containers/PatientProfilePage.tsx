@@ -20,7 +20,6 @@ import {
   ADD_PATIENT,
   EDIT_PATIENT,
 } from "../graphql/mutations/templates/patients";
-import { CCPType } from "../graphql/queries/templates/collectionPoints";
 
 interface FormFields {
   barcodeValue: string;
@@ -54,10 +53,10 @@ const PatientProfilePage = ({
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: "",
     triage: null,
-    gender: "",
+    gender: "Male",
     age: null,
     notes: "",
-    status: null,
+    status: status.ON_SITE,
     runNumber: null,
   });
 
@@ -144,7 +143,6 @@ const PatientProfilePage = ({
     }
   };
 
-  // Need to set up complete state and setComplete handler
   return (
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
@@ -155,7 +153,7 @@ const PatientProfilePage = ({
           <div className="user-icon">
             <Button
               variant="outlined"
-              color="primary"
+              color="secondary"
               style={{
                 minWidth: "18rem",
                 minHeight: "2.5rem",
@@ -171,7 +169,7 @@ const PatientProfilePage = ({
         <form>
           <FormField
             label="Barcode:"
-            placeholder="Enter code"
+            placeholder="Enter barcode"
             onChange={(e: any) => {
               setFormFields({ ...formFields, barcodeValue: e.target.value });
             }}
@@ -233,7 +231,9 @@ const PatientProfilePage = ({
         </form>
         <CompletePatientButton
           handleClick={handleComplete}
-          // disableButton={true}
+          disableButton={
+            formFields.barcodeValue && formFields.triage ? false : true
+          }
         />
       </div>
     </div>

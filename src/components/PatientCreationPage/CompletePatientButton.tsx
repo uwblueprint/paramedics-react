@@ -6,10 +6,10 @@ import { NavLink } from "react-router-dom";
 
 const CompletePatientButton = ({
   handleClick,
-}: // disableButton,
-{
+  disableButton,
+}: {
   handleClick: () => any | null;
-  // disableButton: boolean;
+  disableButton: boolean;
 }) => {
   const classes = useCompletePatientButtonStyles();
   return (
@@ -18,11 +18,11 @@ const CompletePatientButton = ({
       to="/"
       onClick={handleClick}
       variant="contained"
-      color="primary"
+      color="secondary"
       classes={{
         root: classes.root,
       }}
-      // disabled={disableButton}
+      disabled={disableButton}
     >
       Complete
     </Button>
