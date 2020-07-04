@@ -1,0 +1,32 @@
+.event-creation-top-section {
+  padding: 3em 3em 0em 3em;
+  background-color: white;
+  border-bottom: 1px solid #c4c4c4;
+}
+
+.resource-add-wrapper {
+  background-color: white;
+}
+
+.top-bar-link {
+  margin-bottom: 1em;
+}
+
+.caption {
+  margin-top: 1em;
+}
+
+.done-container {
+  position: absolute;
+  right: 2rem;
+  bottom: 4rem;
+}
+.cancel-container {
+  position: absolute;
+  left: 2rem;
+  bottom: 4rem;
+}
+
+.event-form {
+  padding: 30px;
+}

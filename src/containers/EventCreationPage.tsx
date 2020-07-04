@@ -7,7 +7,7 @@ import CancelModal from "../components/EventCreationPage/CancelModal";
 import Map from "../components/EventCreationPage/Map";
 import NextButton from "../components/EventCreationPage/NextButton";
 import BackButton from "../components/EventCreationPage/BackButton";
-import FormField from "../components/EventCreationPage/FormField";
+import FormField from "../components/common/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useMutation } from "@apollo/react-hooks";

@@ -35,13 +35,15 @@ const useTextFieldStyles = makeStyles({
 
 const FormField = ({
   label,
+  required,
   placeholder,
   onChange,
   value,
   handleFocus,
 }: {
   label: string;
-  placeholder: string;
+  required?: boolean;
+  placeholder?: string;
   onChange: (e: any) => any;
   value: string;
   handleFocus?: () => any;
@@ -51,6 +53,7 @@ const FormField = ({
   return (
     <TextField
       label={label}
+      required={required}
       placeholder={placeholder}
       InputLabelProps={{
         shrink: true,
