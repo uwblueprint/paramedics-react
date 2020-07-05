@@ -15,11 +15,8 @@ import {
   PatientType,
   GET_PATIENT_BY_ID,
   GET_ALL_PATIENTS,
-} from "../graphql/queries/templates/patients";
-import {
-  ADD_PATIENT,
-  EDIT_PATIENT,
-} from "../graphql/mutations/templates/patients";
+} from "../graphql/queries/patients";
+import { ADD_PATIENT, EDIT_PATIENT } from "../graphql/mutations/patients";
 
 interface FormFields {
   barcodeValue: string;

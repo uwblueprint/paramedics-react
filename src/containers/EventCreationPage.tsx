@@ -12,8 +12,8 @@ import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-import { ADD_EVENT } from "../graphql/mutations/templates/events";
-import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
+import { ADD_EVENT } from "../graphql/mutations/events";
+import { EventType, GET_ALL_EVENTS } from "../graphql/queries/events";
 
 const EventCreationPage = () => {
   const history = useHistory();
@@ -21,16 +21,14 @@ const EventCreationPage = () => {
   const { data } = useQuery(GET_ALL_EVENTS);
   const events: Array<EventType> = data ? data.events : [];
 
-  const [addEvent] = useMutation(ADD_EVENT,
-    {
-      update(cache, { data: { addEvent } }) {
-        cache.writeQuery({
-          query: GET_ALL_EVENTS,
-          data: { events: events.concat([addEvent]) },
-        });
-      }
-    }
-  );
+  const [addEvent] = useMutation(ADD_EVENT, {
+    update(cache, { data: { addEvent } }) {
+      cache.writeQuery({
+        query: GET_ALL_EVENTS,
+        data: { events: events.concat([addEvent]) },
+      });
+    },
+  });
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -70,14 +68,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-      : {};
+    : {};
 
   const handleComplete = () => {
     addEvent({
@@ -93,7 +91,7 @@ const EventCreationPage = () => {
           )}-${dateParts.day.padStart(2, "0")}`,
         createdBy: 1,
         isActive: true,
-      }
+      },
     });
     history.replace("/events");
   };
@@ -120,16 +118,16 @@ const EventCreationPage = () => {
         />
       </form>
     ) : (
-        <form>
-          <FormField
-            label="Event Location:"
-            placeholder="Enter Location Here"
-            onChange={handleLocationChange}
-            value={eventLocation}
-          />
-          <Map />
-        </form>
-      );
+      <form>
+        <FormField
+          label="Event Location:"
+          placeholder="Enter Location Here"
+          onChange={handleLocationChange}
+          value={eventLocation}
+        />
+        <Map />
+      </form>
+    );
 
   return (
     <div className="landing-wrapper">

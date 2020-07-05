@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { CCPType } from "../templates/collectionPoints";
+import { CCPType } from "../queries/collectionPoints";
 
 export enum triageLevel {
   GREEN = "GREEN",

@@ -4,7 +4,7 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { status } from "../../graphql/queries/templates/patients";
+import { status } from "../../graphql/queries/patients";
 
 const StatusPills = ({
   currentStatus,
@@ -18,7 +18,6 @@ const StatusPills = ({
   helperText?: string;
 }) => {
   const classes = useCompletePatientButtonStyles();
-  //const statuses = ["Transport", "Release", "Omit", "Delete"];
   const statuses = [
     { val: status.ON_SITE, description: "On Site" },
     { val: status.RELEASED, description: "Released" },

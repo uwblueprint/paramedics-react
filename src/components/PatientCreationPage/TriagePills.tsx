@@ -4,7 +4,7 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { triageLevel } from "../../graphql/queries/templates/patients";
+import { triageLevel } from "../../graphql/queries/patients";
 import { Colours } from "../../styles/Constants";
 
 const TriagePills = ({
