@@ -1,6 +1,7 @@
 import React from "react";
 import { Colours } from "../../styles/Constants";
 import {
+  Card,
   Typography,
   Box,
   makeStyles,
@@ -12,7 +13,9 @@ import {
   TableSortLabel,
   Toolbar,
   Button,
+  Modal,
 } from "@material-ui/core";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { FilterIcon } from "../common/FilterIcon";
 import {
   Patient,
@@ -115,11 +118,20 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] = React.useState<string>("transportTime");
+  const [openDetails, setOpenDetails] = React.useState(false);
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+  };
+
+  const handleOpenDetails = () => {
+    setOpenDetails(true);
+  };
+
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
   };
 
   const tableRows = stableSort(patients, getComparator(order, orderBy)).map(
@@ -160,7 +172,7 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
       };
 
       return (
-        <TableRow hover key={patient.id}>
+        <TableRow hover key={patient.id} onClick={handleOpenDetails}>
           <TableCell
             style={{
               borderLeft: `8px solid ${
@@ -182,6 +194,14 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           <TableCell align="right">
             {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
           </TableCell>
+          <TableCell>
+            <Button>
+              <MoreHorizIcon />
+            </Button>
+          </TableCell>
+          <Modal open={openDetails} onClose={handleCloseDetails}>
+            <Card variant="outlined"></Card>
+          </Modal>
         </TableRow>
       );
     }

@@ -24,6 +24,7 @@ export interface Patient {
   gender: string;
   age: number;
   transportTime: Date;
+  notes: string;
 }
 
 export const FETCH_ALL_PATIENTS = gql`
@@ -39,6 +40,7 @@ export const FETCH_ALL_PATIENTS = gql`
       gender
       age
       transportTime
+      notes
     }
   }
 `;
@@ -56,6 +58,7 @@ export const GET_ALL_PATIENTS = gql`
       gender
       age
       transportTime
+      notes
     }
   }
 `;
