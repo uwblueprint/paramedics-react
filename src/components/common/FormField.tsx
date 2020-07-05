@@ -9,6 +9,7 @@ const useTextFieldStyles = makeStyles({
     borderRadius: "10px",
     backgroundColor: "#FFFFFF",
     padding: "20px",
+    marginTop: "0px",
     marginBottom: "10px",
     height: "120px",
     width: "100%",
