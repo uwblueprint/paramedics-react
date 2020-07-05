@@ -38,44 +38,49 @@ const TriagePills = ({
           value={triageLevel.RED}
           classes={{
             root: classes.redpill,
+            selected: classes.selectedRedPill,
           }}
         >
-          Red
+          <Typography variant="body2">Red</Typography>
         </ToggleButton>
         <ToggleButton
           value={triageLevel.GREEN}
           classes={{
             root: classes.greenpill,
+            selected: classes.selectedGreenPill,
           }}
         >
-          Green
+          <Typography variant="body2">Green</Typography>
         </ToggleButton>
 
         <ToggleButton
           value={triageLevel.YELLOW}
           classes={{
             root: classes.yellowpill,
+            selected: classes.selectedYellowPill,
           }}
         >
-          Yellow
+          <Typography variant="body2">Yellow</Typography>
         </ToggleButton>
 
         <ToggleButton
           value={triageLevel.WHITE}
           classes={{
             root: classes.whitepill,
+            selected: classes.selectedWhitePill,
           }}
         >
-          White
+          <Typography variant="body2">White</Typography>
         </ToggleButton>
 
         <ToggleButton
           value={triageLevel.BLACK}
           classes={{
             root: classes.blackpill,
+            selected: classes.selectedBlackPill,
           }}
         >
-          Black
+          <Typography variant="body2">Black</Typography>
         </ToggleButton>
       </ToggleButtonGroup>
     </Container>
@@ -117,6 +122,10 @@ const useCompletePatientButtonStyles = makeStyles({
     },
     color: "black",
   },
+  selectedRedPill: {
+    color: "black !important",
+    backgroundColor: "#FFE4E4 !important",
+  },
   greenpill: {
     borderLeft: "0.75rem solid #60CD39 !important",
     width: "6rem",
@@ -128,6 +137,10 @@ const useCompletePatientButtonStyles = makeStyles({
       borderColor: "#60CD39",
     },
     color: "black",
+  },
+  selectedGreenPill: {
+    color: "black !important",
+    backgroundColor: "#60CD39 !important",
   },
   yellowpill: {
     borderLeft: "0.75rem solid #FFC90A !important",
@@ -144,6 +157,10 @@ const useCompletePatientButtonStyles = makeStyles({
     },
     color: "black",
   },
+  selectedYellowPill: {
+    color: "black !important",
+    backgroundColor: "#FFC90A !important",
+  },
   whitepill: {
     borderLeft: "0.75rem solid #CECECE !important",
     width: "6rem",
@@ -156,6 +173,10 @@ const useCompletePatientButtonStyles = makeStyles({
     },
     color: "black",
   },
+  selectedWhitePill: {
+    color: "black !important",
+    backgroundColor: "#C4C4C4 !important",
+  },
   blackpill: {
     borderLeft: "0.75rem solid #000000 !important",
     width: "6rem",
@@ -167,6 +188,10 @@ const useCompletePatientButtonStyles = makeStyles({
       borderColor: "#000000",
     },
     color: "black",
+  },
+  selectedBlackPill: {
+    color: "black !important",
+    backgroundColor: "#000000 !important",
   },
   buttonGroup: {
     "&:not(:first-child)": {
