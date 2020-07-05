@@ -125,6 +125,7 @@ const useCompletePatientButtonStyles = makeStyles({
   selectedRedPill: {
     color: "black !important",
     backgroundColor: "#FFE4E4 !important",
+    fontWeight: "bold",
   },
   greenpill: {
     borderLeft: "0.75rem solid #60CD39 !important",
@@ -140,7 +141,8 @@ const useCompletePatientButtonStyles = makeStyles({
   },
   selectedGreenPill: {
     color: "black !important",
-    backgroundColor: "#60CD39 !important",
+    backgroundColor: "#D7F3CD !important",
+    fontWeight: "bold",
   },
   yellowpill: {
     borderLeft: "0.75rem solid #FFC90A !important",
@@ -159,7 +161,8 @@ const useCompletePatientButtonStyles = makeStyles({
   },
   selectedYellowPill: {
     color: "black !important",
-    backgroundColor: "#FFC90A !important",
+    backgroundColor: "#FFF2C2 !important",
+    fontWeight: "bold",
   },
   whitepill: {
     borderLeft: "0.75rem solid #CECECE !important",
@@ -175,7 +178,8 @@ const useCompletePatientButtonStyles = makeStyles({
   },
   selectedWhitePill: {
     color: "black !important",
-    backgroundColor: "#C4C4C4 !important",
+    backgroundColor: "#F3F3F3 !important",
+    fontWeight: "bold",
   },
   blackpill: {
     borderLeft: "0.75rem solid #000000 !important",
@@ -191,7 +195,8 @@ const useCompletePatientButtonStyles = makeStyles({
   },
   selectedBlackPill: {
     color: "black !important",
-    backgroundColor: "#000000 !important",
+    backgroundColor: "#BFBFBF !important",
+    fontWeight: "bold",
   },
   buttonGroup: {
     "&:not(:first-child)": {
