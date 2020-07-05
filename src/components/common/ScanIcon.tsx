@@ -17,8 +17,8 @@ export const ScanIcon = ({
     fill="none"
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M3 3H21C22.1 3 23 3.9 23 5V19C23 20.1 22.1 21 21 21H3C1.9 21 1 20.1 1 19V5C1 3.9 1.9 3 3 3ZM2.99998 19.0092H21V4.98919H2.99998V19.0092Z"
       fill={colour}
     />

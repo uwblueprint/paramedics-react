@@ -1,10 +1,10 @@
 import React from "react";
 import { Colours } from "../../styles/Constants";
 import {
-  Card,
   Typography,
   Box,
   makeStyles,
+  TableContainer,
   Table,
   TableHead,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableSortLabel,
   Toolbar,
   Button,
-  Modal,
+  Dialog,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { FilterIcon } from "../common/FilterIcon";
@@ -53,6 +53,12 @@ const useStyles = makeStyles({
   },
   icon: {
     marginRight: "10px",
+  },
+  detailsDialog: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
 });
 
@@ -168,47 +174,67 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         [Status.ON_SITE]: "On Site",
         [Status.TRANSPORTED]: "Transported",
         [Status.RELEASED]: "Released",
-        // [Status.OMITTED]: "Omitted/Deleted"
       };
 
+      const detailsDialogBody = (
+        <>
+          {/* <Card variant="outlined" className={classes.detailsDialog}> */}
+          <Typography>Barcode Number:</Typography>
+          <Typography>Triage:</Typography>
+          {/* </Card> */}
+        </>
+      );
+
       return (
-        <TableRow hover key={patient.id} onClick={handleOpenDetails}>
-          <TableCell
-            style={{
-              borderLeft: `8px solid ${
-                triageLevels[patient.triageLevel].colour
-              }`,
+        <>
+          <TableRow hover key={patient.id} onClick={handleOpenDetails}>
+            <TableCell
+              style={{
+                borderLeft: `8px solid ${
+                  triageLevels[patient.triageLevel].colour
+                }`,
+              }}
+            >
+              {triageLevels[patient.triageLevel].label}
+            </TableCell>
+            <TableCell>{patient.barcodeValue}</TableCell>
+            <TableCell>{patient.gender}</TableCell>
+            <TableCell>{patient.age}</TableCell>
+            <TableCell>{statusLabels[patient.status]}</TableCell>
+            {/* <TableCell>{patient.hospital}</TableCell> */}
+            {/* Add overflow tooltip? */}
+            <TableCell className={classes.hospitalName}>
+              Hospital Name Placeholder
+            </TableCell>
+            <TableCell align="right">
+              {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
+            </TableCell>
+            <TableCell>
+              <Button>
+                <MoreHorizIcon />
+              </Button>
+            </TableCell>
+          </TableRow>
+          <Dialog
+            key={`${patient.id}-dialog`}
+            open={openDetails}
+            onClose={handleCloseDetails}
+            PaperProps={{
+              style: {
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              },
             }}
           >
-            {triageLevels[patient.triageLevel].label}
-          </TableCell>
-          <TableCell>{patient.barcodeValue}</TableCell>
-          <TableCell>{patient.gender}</TableCell>
-          <TableCell>{patient.age}</TableCell>
-          <TableCell>{statusLabels[patient.status]}</TableCell>
-          {/* <TableCell>{patient.hospital}</TableCell> */}
-          {/* Add overflow tooltip? */}
-          <TableCell className={classes.hospitalName}>
-            Hospital Name Placeholder
-          </TableCell>
-          <TableCell align="right">
-            {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
-          </TableCell>
-          <TableCell>
-            <Button>
-              <MoreHorizIcon />
-            </Button>
-          </TableCell>
-          <Modal open={openDetails} onClose={handleCloseDetails}>
-            <Card variant="outlined"></Card>
-          </Modal>
-        </TableRow>
+            {detailsDialogBody}
+          </Dialog>
+        </>
       );
     }
   );
 
   return (
-    <>
+    <TableContainer>
       <Toolbar>
         <Button color="secondary">
           <FilterIcon colour={Colours.Secondary} classes={classes.icon} />
@@ -224,6 +250,6 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         />
         <TableBody>{tableRows}</TableBody>
       </Table>
-    </>
+    </TableContainer>
   );
 };
