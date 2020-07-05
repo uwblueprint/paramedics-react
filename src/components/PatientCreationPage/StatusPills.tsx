@@ -43,7 +43,7 @@ const StatusPills = ({
             classes={{
               root: classes.statusPill,
             }}
-            key={status.toString()}
+            key={status.description}
           >
             <Typography variant="body2">{status.description}</Typography>
           </ToggleButton>

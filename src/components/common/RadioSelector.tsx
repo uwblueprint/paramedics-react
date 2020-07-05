@@ -28,7 +28,6 @@ const RadioSelector = ({
         row
         aria-label="position"
         name="position"
-        defaultValue="top"
         value={currentValue}
         onChange={handleChange}
         className={classes.radioGroup}
@@ -39,6 +38,7 @@ const RadioSelector = ({
             control={<Radio color="secondary" />}
             label={label}
             labelPlacement="end"
+            key={label}
           />
         ))}
       </RadioGroup>
