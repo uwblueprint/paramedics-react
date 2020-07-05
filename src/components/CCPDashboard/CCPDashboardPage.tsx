@@ -14,12 +14,8 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  Button,
 } from "@material-ui/core";
-import {
-  AddLocationOutlined,
-  AirportShuttleOutlined,
-  ArrowForwardOutlined,
-} from "@material-ui/icons";
 import { RouteComponentProps } from "react-router";
 import { useQuery } from "@apollo/react-hooks";
 import { useAllPatients } from "../../graphql/queries/hooks/patients";
@@ -29,6 +25,9 @@ import {
   TriageLevel,
   Status,
 } from "../../graphql/queries/templates/patients";
+import { TriageTag } from "./TriageTag";
+import { PatientInfoTable } from "./PatientInfoTable";
+import { ScanIcon } from "../common/ScanIcon";
 
 type TParams = { eventId: string; ccpId: string };
 
@@ -43,15 +42,7 @@ interface TabPanelProps {
   value: TabOptions;
 }
 
-interface TriageTagProps {
-  colour: Colours;
-  triageLevel: TriageLevel;
-  label: string;
-  count: number;
-}
-
-interface TableRow {
-  icon: React.ReactChild;
+interface TableRowData {
   category: string;
   count: number;
   ratio: number;
@@ -80,7 +71,7 @@ const useStyles = makeStyles({
     marginRight: "24px",
     height: "100%",
   },
-  tableCard: {
+  categoryTableCard: {
     display: "flex",
     alignItems: "center",
     paddingRight: "44px",
@@ -98,20 +89,19 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   icon: {
-    marginRight: "12px",
+    marginRight: "9px",
   },
-});
-
-const useTriageTagStyles = makeStyles({
-  root: {
-    boxSizing: "border-box",
-    backgroundColor: Colours.BackgroundGray,
-    borderRadius: "0 8px 8px 0",
-    height: "96px",
-    width: "88px",
-    marginRight: "25px",
-    "&:last-child": { marginRight: 0 },
-    padding: "16px",
+  patientTableCard: {
+    marginTop: "24px",
+    marginBottom: "145px",
+  },
+  scanButton: {
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+    borderRadius: "2000px",
+    position: "fixed",
+    bottom: "56px",
+    right: "56px",
+    padding: "12px 26px",
   },
 });
 
@@ -126,20 +116,6 @@ const TabPanel = (props: TabPanelProps) => {
     >
       {children}
     </div>
-  );
-};
-
-const TriageTag = (props: TriageTagProps) => {
-  const classes = useTriageTagStyles();
-  const { colour, triageLevel, count, label } = props;
-
-  return (
-    <Box className={classes.root} style={{ borderLeft: `8px solid ${colour}` }}>
-      <Typography variant="body2" color="textSecondary">
-        {label}
-      </Typography>
-      <Typography variant="h4">{count}</Typography>
-    </Box>
   );
 };
 
@@ -164,43 +140,25 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   };
 
   const createCategoryData = (
-    icon: React.ReactChild,
     category: string,
     status: Status
-  ): TableRow => {
+  ): TableRowData => {
     const count = patients.filter(
       (patient: Patient) => patient.status === status
     ).length;
     const ratio = (count / patients.length) * 100;
     return {
-      icon,
       category,
       count,
       ratio,
     };
   };
 
-  const categoryTableRows: TableRow[] = [
-    createCategoryData(
-      <AddLocationOutlined className={classes.icon} />,
-      "On Scene",
-      Status.ON_SITE
-    ),
-    createCategoryData(
-      <AirportShuttleOutlined className={classes.icon} />,
-      "Transported",
-      Status.TRANSPORTED
-    ),
-    createCategoryData(
-      <ArrowForwardOutlined className={classes.icon} />,
-      "Released",
-      Status.RELEASED
-    ),
-    createCategoryData(
-      <AddLocationOutlined className={classes.icon} />,
-      "Omitted/Deleted",
-      Status.RELEASED
-    ),
+  const categoryTableRows: TableRowData[] = [
+    createCategoryData("On Scene", Status.ON_SITE),
+    createCategoryData("Transported", Status.TRANSPORTED),
+    createCategoryData("Released", Status.RELEASED),
+    createCategoryData("Omitted/Deleted", Status.RELEASED),
   ];
 
   const triageLevels = [
@@ -285,7 +243,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           </Grid>
         </Grid>
         <Grid item className={classes.fullHeightGridItem}>
-          <Card variant="outlined" className={classes.tableCard}>
+          <Card variant="outlined" className={classes.categoryTableCard}>
             <Typography variant="body1">
               <Table>
                 <TableHead>
@@ -307,7 +265,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                {categoryTableRows.map((row: TableRow, index) => (
+                {categoryTableRows.map((row: TableRowData, index) => (
                   <TableRow key={row.category}>
                     <TableCell
                       className={clsx({
@@ -319,7 +277,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
                       component="th"
                       scope="row"
                     >
-                      {row.icon}
                       <Typography variant="body2" color="textPrimary">
                         {row.category}
                       </Typography>
@@ -341,7 +298,18 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
             </Typography>
           </Card>
         </Grid>
+        <Card variant="outlined" className={classes.patientTableCard}>
+          <PatientInfoTable patients={patients} />
+        </Card>
       </Grid>
+      <Button
+        className={classes.scanButton}
+        variant="contained"
+        color="secondary"
+      >
+        <ScanIcon colour={Colours.White} classes={classes.icon} />
+        Scan Patient
+      </Button>
     </Box>
   );
 };
