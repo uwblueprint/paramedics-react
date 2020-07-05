@@ -45,7 +45,7 @@ const FormField = ({
   required?: boolean;
   placeholder?: string;
   onChange: (e: any) => any;
-  value: string;
+  value: string | number | null;
   handleFocus?: () => any;
 }) => {
   const classes = useTextFieldStyles();
