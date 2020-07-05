@@ -37,6 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
     fullList: {
       width: 'auto',
     },
+    event: {
+      paddingTop: '111px',
+    },
+    active: {
+      backgroundColor: "red"
+    }
   }),
 );
 
@@ -75,15 +81,19 @@ export default function MenuAppBar(props: MenuAppBarProps) {
           onKeyDown={toggleMenu}
         >
         <List>
-          <ListItem button key={ eventInfo.event.name }>
-            <ListItemText primary={ eventInfo.event.name } />
+          <ListItem button key={ eventInfo.event.name } classes={{ selected: classes.active }}>
+            <Typography style={{ fontWeight: "bold" }}  className={ classes.event }>
+            { eventInfo.event.name }
+            </Typography>
           </ListItem>
         </List>
         <Divider />
         <List>
           <ListItem button key={ pageTitle }>
             <ListItemIcon><WebOutlinedIcon /></ListItemIcon>
-            <ListItemText primary={ pageTitle } />
+            <Typography >
+              { pageTitle }
+            </Typography>
           </ListItem>
       </List>
       <Divider />
@@ -98,7 +108,9 @@ export default function MenuAppBar(props: MenuAppBarProps) {
           {ccpInfo.collectionPoints.map((ccp) => (
             <ListItem button key={ccp.name}>
               <ListItemIcon><RoomOutlinedIcon /></ListItemIcon>
-              <ListItemText primary={ccp.name} />
+              <Typography >
+                { ccp.name }
+            </Typography>
             </ListItem>
           ))}
         </List>
