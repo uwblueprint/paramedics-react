@@ -5,6 +5,7 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { triageLevel } from "../../graphql/queries/templates/patients";
+import { Colours } from "../../styles/Constants";
 
 const TriagePills = ({
   currentStatus,
@@ -111,91 +112,88 @@ const useCompletePatientButtonStyles = makeStyles({
     transform: "translate(0, 1.5px) scale(0.75)",
   },
   redpill: {
-    borderLeft: "0.75rem solid #FF5858 !important",
+    borderLeft: `0.75rem solid ${Colours.TriageRed}!important`,
     width: "6rem",
-    borderColor: "#FF5858",
+    borderColor: `${Colours.TriageRed}`,
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "0.75rem solid #FF5858",
-      borderColor: "#FF5858",
+      borderLeft: `0.75rem solid ${Colours.TriageRed}`,
+      borderColor: `${Colours.TriageRed}`,
     },
     color: "black",
   },
   selectedRedPill: {
     color: "black !important",
-    backgroundColor: "#FFE4E4 !important",
+    backgroundColor: `${Colours.TriageSelectedRed} !important`,
     fontWeight: "bold",
   },
   greenpill: {
-    borderLeft: "0.75rem solid #60CD39 !important",
+    borderLeft: `0.75rem solid ${Colours.TriageGreen} !important`,
     width: "6rem",
-    borderColor: "#60CD39",
+    borderColor: `${Colours.TriageGreen}`,
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "0.75rem solid #60CD39",
-      borderColor: "#60CD39",
+      borderLeft: `0.75rem solid ${Colours.TriageGreen}`,
+      borderColor: `${Colours.TriageGreen}`,
     },
     color: "black",
   },
   selectedGreenPill: {
     color: "black !important",
-    backgroundColor: "#D7F3CD !important",
+    backgroundColor: `${Colours.TriageSelectedGreen} !important`,
     fontWeight: "bold",
   },
   yellowpill: {
-    borderLeft: "0.75rem solid #FFC90A !important",
+    borderLeft: `0.75rem solid ${Colours.TriageYellow} !important`,
     width: "6rem",
-    borderColor: "#FFC90A",
+    borderColor: `${Colours.TriageYellow}`,
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "0.75rem solid #FFC90A",
-      borderColor: "#FFC90A",
-    },
-    "&:active": {
-      background: "#FFC90A",
+      borderLeft: `0.75rem solid ${Colours.TriageYellow}`,
+      borderColor: `${Colours.TriageYellow}`,
     },
     color: "black",
   },
   selectedYellowPill: {
     color: "black !important",
-    backgroundColor: "#FFF2C2 !important",
+    backgroundColor: `${Colours.TriageSelectedYellow} !important`,
     fontWeight: "bold",
   },
   whitepill: {
-    borderLeft: "0.75rem solid #CECECE !important",
+    borderLeft: `0.75rem solid ${Colours.TriageWhite} !important`,
     width: "6rem",
     borderColor: "#C4C4C4",
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "0.75rem solid #CECECE",
+      borderLeft: `0.75rem solid ${Colours.TriageWhite}`,
       borderColor: "#C4C4C4",
     },
     color: "black",
   },
   selectedWhitePill: {
     color: "black !important",
-    backgroundColor: "#F3F3F3 !important",
+    backgroundColor: `${Colours.TriageSelectedWhite} !important`,
     fontWeight: "bold",
   },
   blackpill: {
-    borderLeft: "0.75rem solid #000000 !important",
+    borderLeft: `0.75rem solid ${Colours.TriageBlack} !important`,
     width: "6rem",
-    borderColor: "#000000",
+    borderColor: `${Colours.TriageBlack}`,
     background: "rgba(255, 255, 255, 0.75)",
     marginRight: "20px",
     "&:hover": {
-      borderLeft: "0.75rem solid #000000",
-      borderColor: "#000000",
+      borderLeft: `0.75rem solid ${Colours.TriageBlack}`,
+      borderColor: `${Colours.TriageBlack}`,
     },
     color: "black",
   },
   selectedBlackPill: {
     color: "black !important",
-    backgroundColor: "#BFBFBF !important",
+    backgroundColor: `${Colours.TriageSelectedBlack} !important`,
     fontWeight: "bold",
   },
   buttonGroup: {
