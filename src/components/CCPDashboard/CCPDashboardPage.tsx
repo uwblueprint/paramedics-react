@@ -146,7 +146,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     const count = patients.filter(
       (patient: Patient) => patient.status === status
     ).length;
-    const ratio = (count / patients.length) * 100;
+    const ratio = Math.round((count / patients.length) * 100);
     return {
       category,
       count,

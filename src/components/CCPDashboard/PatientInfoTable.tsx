@@ -22,17 +22,6 @@ import {
 import { Order, stableSort, getComparator } from "../../utils/sort";
 import moment from "moment";
 
-interface TableRowData {
-  id: string;
-  triageLevel: TriageLevel;
-  barcodeValue: number;
-  gender: string;
-  age: number;
-  status: Status;
-  hospital?: string;
-  transportTime: string;
-}
-
 const useStyles = makeStyles({
   root: {
     padding: "0 56px 145px 56px",
@@ -124,7 +113,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 
 export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>("asc");
+  const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] = React.useState<string>("transportTime");
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
