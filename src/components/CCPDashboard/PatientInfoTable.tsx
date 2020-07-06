@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import { Colours } from "../../styles/Constants";
 import {
   Typography,
@@ -14,6 +15,7 @@ import {
   Toolbar,
   Button,
   Dialog,
+  DialogContent,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { FilterIcon } from "../common/FilterIcon";
@@ -23,7 +25,7 @@ import {
   Status,
 } from "../../graphql/queries/templates/patients";
 import { Order, stableSort, getComparator } from "../../utils/sort";
-import moment from "moment";
+import { PatientDetailsDialog } from "./PatientDetailsDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -53,12 +55,6 @@ const useStyles = makeStyles({
   },
   icon: {
     marginRight: "10px",
-  },
-  detailsDialog: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
   },
 });
 
@@ -125,6 +121,7 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] = React.useState<string>("transportTime");
   const [openDetails, setOpenDetails] = React.useState(false);
+  const [selectedPatient, setSelectedPatient] = React.useState(null);
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === "asc";
@@ -132,7 +129,8 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
     setOrderBy(property);
   };
 
-  const handleOpenDetails = () => {
+  const handleOpenDetails = (patient) => {
+    setSelectedPatient(patient);
     setOpenDetails(true);
   };
 
@@ -176,59 +174,38 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         [Status.RELEASED]: "Released",
       };
 
-      const detailsDialogBody = (
-        <>
-          {/* <Card variant="outlined" className={classes.detailsDialog}> */}
-          <Typography>Barcode Number:</Typography>
-          <Typography>Triage:</Typography>
-          {/* </Card> */}
-        </>
-      );
-
       return (
-        <>
-          <TableRow hover key={patient.id} onClick={handleOpenDetails}>
-            <TableCell
-              style={{
-                borderLeft: `8px solid ${
-                  triageLevels[patient.triageLevel].colour
-                }`,
-              }}
-            >
-              {triageLevels[patient.triageLevel].label}
-            </TableCell>
-            <TableCell>{patient.barcodeValue}</TableCell>
-            <TableCell>{patient.gender}</TableCell>
-            <TableCell>{patient.age}</TableCell>
-            <TableCell>{statusLabels[patient.status]}</TableCell>
-            {/* <TableCell>{patient.hospital}</TableCell> */}
-            {/* Add overflow tooltip? */}
-            <TableCell className={classes.hospitalName}>
-              Hospital Name Placeholder
-            </TableCell>
-            <TableCell align="right">
-              {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
-            </TableCell>
-            <TableCell>
-              <Button>
-                <MoreHorizIcon />
-              </Button>
-            </TableCell>
-          </TableRow>
-          <Dialog
-            key={`${patient.id}-dialog`}
-            open={openDetails}
-            onClose={handleCloseDetails}
-            PaperProps={{
-              style: {
-                backgroundColor: "transparent",
-                boxShadow: "none",
-              },
+        <TableRow
+          hover
+          key={patient.id}
+          onClick={() => handleOpenDetails(patient)}
+        >
+          <TableCell
+            style={{
+              borderLeft: `8px solid ${
+                triageLevels[patient.triageLevel].colour
+              }`,
             }}
           >
-            {detailsDialogBody}
-          </Dialog>
-        </>
+            {triageLevels[patient.triageLevel].label}
+          </TableCell>
+          <TableCell>{patient.barcodeValue}</TableCell>
+          <TableCell>{patient.gender}</TableCell>
+          <TableCell>{patient.age}</TableCell>
+          <TableCell>{statusLabels[patient.status]}</TableCell>
+          {/* Add overflow tooltip? */}
+          <TableCell className={classes.hospitalName}>
+            Hospital Name Placeholder
+          </TableCell>
+          <TableCell align="right">
+            {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
+          </TableCell>
+          <TableCell>
+            <Button>
+              <MoreHorizIcon />
+            </Button>
+          </TableCell>
+        </TableRow>
       );
     }
   );
@@ -250,6 +227,15 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         />
         <TableBody>{tableRows}</TableBody>
       </Table>
+      {selectedPatient && (
+        <Dialog
+          // key={`${patient.id}-dialog`}
+          open={openDetails}
+          onClose={handleCloseDetails}
+        >
+          <PatientDetailsDialog patient={selectedPatient} />
+        </Dialog>
+      )}
     </TableContainer>
   );
 };

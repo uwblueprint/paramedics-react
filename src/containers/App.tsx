@@ -15,7 +15,7 @@ function App() {
         <Route exact path="/events/new" component={EventCreationPage} />
         <Route
           exact
-          path="/events/:eventId/ccp/:ccpId"
+          path="/events/:eventId/ccps/:ccpId"
           component={CCPDashboardPage}
         />
         <Route path="/">
