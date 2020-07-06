@@ -1,5 +1,5 @@
-import { useMutation } from "@apollo/react-hooks";
-import { ADD_EVENT } from "../templates/events";
+import { useMutation } from '@apollo/react-hooks';
+import { ADD_EVENT } from '../templates/events';
 
 export function useEventMutation(
   {
@@ -40,8 +40,8 @@ export function useEventMutation(
           dateParts.day &&
           `${dateParts.year}-${dateParts.month.padStart(
             2,
-            "0"
-          )}-${dateParts.day.padStart(2, "0")}`,
+            '0'
+          )}-${dateParts.day.padStart(2, '0')}`,
         createdBy,
         isActive,
       },

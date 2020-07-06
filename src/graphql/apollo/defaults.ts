@@ -1,6 +1,6 @@
 const defaults = {
   events: {
-    name: "",
+    name: '',
   },
 };
 

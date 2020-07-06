@@ -1,23 +1,23 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const useTabStyles = makeStyles({
   root: {
-    textTransform: "none",
-    width: "30rem",
+    textTransform: 'none',
+    width: '30rem',
   },
   tabSize: {
-    textTransform: "none",
-    width: "15rem",
-    maxWidth: "15rem",
+    textTransform: 'none',
+    width: '15rem',
+    maxWidth: '15rem',
   },
   indicator: {
-    backgroundColor: "#000000",
-    height: "0.3rem",
+    backgroundColor: '#000000',
+    height: '0.3rem',
   },
   tabTextColor: {
     opacity: 0.4,
@@ -30,7 +30,7 @@ const MenuTabs = ({
   tabLabels,
 }: {
   handleChange: (event: React.ChangeEvent<{}>, newValue: number) => any;
-  currentTab: Number;
+  currentTab: number;
   tabLabels: Array<string>;
 }) => {
   const classes = useTabStyles();

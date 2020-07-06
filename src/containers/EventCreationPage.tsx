@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import "../styles/EventCreationPage.css";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import CancelModal from "../components/EventCreationPage/CancelModal";
-import Map from "../components/EventCreationPage/Map";
-import NextButton from "../components/EventCreationPage/NextButton";
-import BackButton from "../components/EventCreationPage/BackButton";
-import FormField from "../components/EventCreationPage/FormField";
-import Stepper from "../components/EventCreationPage/Stepper";
-import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "react-apollo";
-import { ADD_EVENT } from "../graphql/mutations/templates/events";
-import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import '../styles/EventCreationPage.css';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { useMutation } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
+import CancelModal from '../components/EventCreationPage/CancelModal';
+import Map from '../components/EventCreationPage/Map';
+import NextButton from '../components/EventCreationPage/NextButton';
+import BackButton from '../components/EventCreationPage/BackButton';
+import FormField from '../components/EventCreationPage/FormField';
+import Stepper from '../components/EventCreationPage/Stepper';
+import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
+import { ADD_EVENT } from '../graphql/mutations/templates/events';
+import { EventType, GET_ALL_EVENTS } from '../graphql/queries/templates/events';
 
 const EventCreationPage = () => {
   const history = useHistory();
@@ -21,23 +21,21 @@ const EventCreationPage = () => {
   const { data } = useQuery(GET_ALL_EVENTS);
   const events: Array<EventType> = data ? data.events : [];
 
-  const [addEvent] = useMutation(ADD_EVENT,
-    {
-      update(cache, { data: { addEvent } }) {
-        cache.writeQuery({
-          query: GET_ALL_EVENTS,
-          data: { events: events.concat([addEvent]) },
-        });
-      }
-    }
-  );
+  const [addEvent] = useMutation(ADD_EVENT, {
+    update(cache, { data: { addEvent } }) {
+      cache.writeQuery({
+        query: GET_ALL_EVENTS,
+        data: { events: events.concat([addEvent]) },
+      });
+    },
+  });
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
 
-  const [eventName, setEventName] = useState<string>("");
+  const [eventName, setEventName] = useState<string>('');
   const [eventDate, setEventDate] = useState<Date | null>(null);
-  const [eventLocation, setEventLocation] = useState<string>("");
+  const [eventLocation, setEventLocation] = useState<string>('');
 
   const [activeStep, setActiveStep] = useState<number>(0);
 
@@ -70,14 +68,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-      : {};
+    : {};
 
   const handleComplete = () => {
     addEvent({
@@ -89,13 +87,13 @@ const EventCreationPage = () => {
           dateParts.day &&
           `${dateParts.year}-${dateParts.month.padStart(
             2,
-            "0"
-          )}-${dateParts.day.padStart(2, "0")}`,
+            '0'
+          )}-${dateParts.day.padStart(2, '0')}`,
         createdBy: 1,
         isActive: true,
-      }
+      },
     });
-    history.replace("/events");
+    history.replace('/events');
   };
 
   const content =
@@ -114,22 +112,22 @@ const EventCreationPage = () => {
           value={
             eventDate
               ? `${dateParts.year}:${dateParts.month}:${dateParts.day}`
-              : ""
+              : ''
           }
           handleFocus={handleOpenDateModal}
         />
       </form>
     ) : (
-        <form>
-          <FormField
-            label="Event Location:"
-            placeholder="Enter Location Here"
-            onChange={handleLocationChange}
-            value={eventLocation}
-          />
-          <Map />
-        </form>
-      );
+      <form>
+        <FormField
+          label="Event Location:"
+          placeholder="Enter Location Here"
+          onChange={handleLocationChange}
+          value={eventLocation}
+        />
+        <Map />
+      </form>
+    );
 
   return (
     <div className="landing-wrapper">
@@ -142,9 +140,9 @@ const EventCreationPage = () => {
               color="primary"
               onClick={handleOpenCancelModal}
               style={{
-                minWidth: "18rem",
-                minHeight: "2.5rem",
-                fontSize: "18px",
+                minWidth: '18rem',
+                minHeight: '2.5rem',
+                fontSize: '18px',
               }}
             >
               Cancel
@@ -169,8 +167,8 @@ const EventCreationPage = () => {
           <div className="next-container">
             <NextButton
               handleClick={activeStep < 1 ? handleNext : handleComplete}
-              disabled={eventName === "" || eventDate === null}
-              buttonText={activeStep < 1 ? "Next" : "Create"}
+              disabled={eventName === '' || eventDate === null}
+              buttonText={activeStep < 1 ? 'Next' : 'Create'}
             />
           </div>
         }

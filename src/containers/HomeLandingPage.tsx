@@ -1,14 +1,15 @@
-import MenuTabs from "../components/common/MenuTabs";
-import React, { useState } from "react";
-import "../styles/HomeLandingPage.css";
-import Typography from "@material-ui/core/Typography";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import EventCard from "../components/HomeLandingPage/EventCard";
-import AddEventButton from "../components/HomeLandingPage/AddEventButton";
-import Grid from "@material-ui/core/Grid";
-import { useAllEvents } from "../graphql/queries/hooks/events";
-import { useQuery } from "react-apollo";
-import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
+import React, { useState } from 'react';
+import { useQuery } from 'react-apollo';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
+import MenuTabs from '../components/common/MenuTabs';
+import AddEventButton from '../components/HomeLandingPage/AddEventButton';
+import EventCard from '../components/HomeLandingPage/EventCard';
+import { useAllEvents } from '../graphql/queries/hooks/events';
+import { EventType, GET_ALL_EVENTS } from '../graphql/queries/templates/events';
+import '../styles/HomeLandingPage.css';
 
 const HomeLandingPage = () => {
   const [selectedTab, setTab] = useState(0);
@@ -16,7 +17,7 @@ const HomeLandingPage = () => {
     setTab(newValue);
   };
 
-  const tabLabels = ["Current Events", "Archived Events"];
+  const tabLabels = ['Current Events', 'Archived Events'];
 
   // Fetch events from backend
   useAllEvents();
@@ -34,7 +35,7 @@ const HomeLandingPage = () => {
             <Typography
               variant="h6"
               align="right"
-              style={{ marginRight: "0.5em" }}
+              style={{ marginRight: '0.5em' }}
             >
               Joe Li
             </Typography>

@@ -1,6 +1,6 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import MobileStepper from "@material-ui/core/MobileStepper";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import MobileStepper from '@material-ui/core/MobileStepper';
 
 const useStepperStyles = makeStyles({
   root: {
@@ -9,18 +9,18 @@ const useStepperStyles = makeStyles({
     padding: 0,
   },
   dots: {
-    position: "absolute",
-    left: "4rem",
-    bottom: "4rem",
+    position: 'absolute',
+    left: '4rem',
+    bottom: '4rem',
   },
   dot: {
-    width: "1rem",
-    height: "1rem",
-    backgroundColor: "#FFFFFF",
-    border: "3.6369px solid #05162F",
+    width: '1rem',
+    height: '1rem',
+    backgroundColor: '#FFFFFF',
+    border: '3.6369px solid #05162F',
   },
   dotActive: {
-    backgroundColor: "#05162F",
+    backgroundColor: '#05162F',
   },
 });
 

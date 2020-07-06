@@ -5,15 +5,18 @@
         "project": "./tsconfig.json"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "prettier"
     ],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        "airbnb-typescript"
+        "airbnb-typescript",
+        "prettier"
     ],
     "rules": {
-        "no-console": "error"
+        "no-console": "error",
+        "prettier/prettier": "error"
     }
 }
