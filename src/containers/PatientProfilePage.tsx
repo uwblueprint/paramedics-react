@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import "../styles/EventCreationPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { ValidatorForm } from "react-material-ui-form-validator";
 import FormField from "../components/common/FormField";
 import CompletePatientButton from "../components/PatientCreationPage/CompletePatientButton";
 import RadioSelector from "../components/common/RadioSelector";
@@ -39,6 +41,8 @@ const PatientProfilePage = ({
 }: {
   match: { params: { mode: string; patientId?: string; ccpId: string } };
 }) => {
+  const history = useHistory();
+
   const { data, loading, error } = useQuery(
     mode === "edit" && patientId
       ? GET_PATIENT_BY_ID(patientId)
@@ -100,6 +104,8 @@ const PatientProfilePage = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleComplete = () => {
+    console.log("handleComplete has been called");
+
     if (mode === "new") {
       addPatient({
         variables: {
@@ -138,6 +144,7 @@ const PatientProfilePage = ({
         },
       });
     }
+    history.replace("/");
   };
 
   return (
@@ -163,7 +170,7 @@ const PatientProfilePage = ({
         </div>
       </div>
       <div className="event-form">
-        <form>
+        <ValidatorForm onSubmit={handleComplete}>
           <FormField
             label="Barcode:"
             placeholder="Enter barcode"
@@ -171,6 +178,7 @@ const PatientProfilePage = ({
               setFormFields({ ...formFields, barcodeValue: e.target.value });
             }}
             value={formFields.barcodeValue}
+            isValidated={true}
           />
           <StatusPills
             currentStatus={formFields.status}
@@ -191,6 +199,7 @@ const PatientProfilePage = ({
               value={
                 formFields.runNumber ? formFields.runNumber.toString() : ""
               }
+              isValidated={false}
             />
           )}
           <TriagePills
@@ -199,7 +208,9 @@ const PatientProfilePage = ({
               e: React.MouseEvent<HTMLElement>,
               newTriage: triageLevel
             ) => {
-              setFormFields({ ...formFields, triage: newTriage });
+              if (newTriage !== null) {
+                setFormFields({ ...formFields, triage: newTriage });
+              }
             }}
           />
           <RadioSelector
@@ -216,6 +227,7 @@ const PatientProfilePage = ({
               setFormFields({ ...formFields, age: e.target.value });
             }}
             value={formFields.age ? formFields.age.toString() : ""}
+            isValidated={false}
           />
           <FormField
             label="Notes:"
@@ -224,14 +236,16 @@ const PatientProfilePage = ({
               setFormFields({ ...formFields, notes: e.target.value });
             }}
             value={formFields.notes}
+            isValidated={false}
           />
-        </form>
-        <CompletePatientButton
-          handleClick={handleComplete}
-          disableButton={
-            formFields.barcodeValue && formFields.triage ? false : true
-          }
-        />
+          <CompletePatientButton
+            handleClick={handleComplete}
+            disableButton={
+              // formFields.barcodeValue && formFields.triage ? false : true
+              false
+            }
+          />
+        </ValidatorForm>
       </div>
     </div>
   );

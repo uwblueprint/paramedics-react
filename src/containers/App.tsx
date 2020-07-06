@@ -19,7 +19,7 @@ function App() {
           component={PatientProfilePage}
         />
         <Route path="/">
-          <Redirect to="/events/" />
+          <Redirect to="/patients/new/7" />
         </Route>
       </Switch>
     </ThemeProvider>

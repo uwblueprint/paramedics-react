@@ -1,8 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
-import { NavLink } from "react-router-dom";
 
 const CompletePatientButton = ({
   handleClick,
@@ -14,15 +12,13 @@ const CompletePatientButton = ({
   const classes = useCompletePatientButtonStyles();
   return (
     <Button
-      component={NavLink}
-      to="/"
-      onClick={handleClick}
       variant="contained"
       color="secondary"
       classes={{
         root: classes.root,
       }}
       disabled={disableButton}
+      type="submit"
     >
       Complete
     </Button>

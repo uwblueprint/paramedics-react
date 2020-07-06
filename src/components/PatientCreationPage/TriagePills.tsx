@@ -2,6 +2,7 @@ import React from "react";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import Container from "@material-ui/core/Container";
+import { ValidatorComponent } from "react-material-ui-form-validator";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { triageLevel } from "../../graphql/queries/patients";
@@ -25,7 +26,6 @@ const TriagePills = ({
   return (
     <Container className={classes.root}>
       <Typography className={classes.label}>Triage:</Typography>
-
       <ToggleButtonGroup
         value={currentStatus}
         exclusive
