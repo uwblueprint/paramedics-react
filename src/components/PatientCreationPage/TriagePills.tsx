@@ -22,6 +22,7 @@ const TriagePills = ({
   helperText?: string;
 }) => {
   const classes = useCompletePatientButtonStyles();
+
   return (
     <Container className={classes.root}>
       <Typography className={classes.label}>Triage:</Typography>
@@ -35,54 +36,23 @@ const TriagePills = ({
           groupedHorizontal: classes.buttonGroup,
         }}
       >
-        <ToggleButton
-          value={triageLevel.RED}
-          classes={{
-            root: classes.redpill,
-            selected: classes.selectedRedPill,
-          }}
-        >
-          <Typography variant="body2">Red</Typography>
-        </ToggleButton>
-        <ToggleButton
-          value={triageLevel.GREEN}
-          classes={{
-            root: classes.greenpill,
-            selected: classes.selectedGreenPill,
-          }}
-        >
-          <Typography variant="body2">Green</Typography>
-        </ToggleButton>
-
-        <ToggleButton
-          value={triageLevel.YELLOW}
-          classes={{
-            root: classes.yellowpill,
-            selected: classes.selectedYellowPill,
-          }}
-        >
-          <Typography variant="body2">Yellow</Typography>
-        </ToggleButton>
-
-        <ToggleButton
-          value={triageLevel.WHITE}
-          classes={{
-            root: classes.whitepill,
-            selected: classes.selectedWhitePill,
-          }}
-        >
-          <Typography variant="body2">White</Typography>
-        </ToggleButton>
-
-        <ToggleButton
-          value={triageLevel.BLACK}
-          classes={{
-            root: classes.blackpill,
-            selected: classes.selectedBlackPill,
-          }}
-        >
-          <Typography variant="body2">Black</Typography>
-        </ToggleButton>
+        {Object.keys(triageLevel).map((level) => (
+          <ToggleButton
+            value={level}
+            key={level}
+            classes={{
+              root: classes[`${level.toLowerCase()}pill`],
+              selected:
+                classes[
+                  `selected${
+                    level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()
+                  }Pill`
+                ],
+            }}
+          >
+            <Typography variant="body2">{level}</Typography>
+          </ToggleButton>
+        ))}
       </ToggleButtonGroup>
     </Container>
   );
