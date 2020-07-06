@@ -1,22 +1,21 @@
 {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "project": "./tsconfig.json"
-    },
-    "plugins": [
-        "@typescript-eslint",
-        "prettier"
-    ],
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "airbnb-typescript",
-        "prettier"
-    ],
-    "rules": {
-        "no-console": "error",
-        "prettier/prettier": "error"
-    }
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": "error",
+    "prettier/prettier": "error",
+    "@typescript-eslint/indent": "off",
+    "react/jsx-wrap-multilines": "off"
+  }
 }

@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_EVENT } from '../templates/events';
 
-export function useEventMutation(
+export default function useEventMutation(
   {
     name,
     eventDate,

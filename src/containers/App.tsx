@@ -1,10 +1,10 @@
 import React from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { theme } from '../styles/Theme';
-import '../styles/App.css';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import HomeLandingPage from './HomeLandingPage';
 import EventCreationPage from './EventCreationPage';
+import { theme } from '../styles/Theme';
+import '../styles/App.css';
 
 function App() {
   return (
