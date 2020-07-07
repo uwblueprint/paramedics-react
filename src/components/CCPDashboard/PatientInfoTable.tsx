@@ -15,7 +15,7 @@ import {
   Toolbar,
   Button,
   Dialog,
-  DialogContent,
+  DialogActions,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { FilterIcon } from "../common/FilterIcon";
@@ -26,6 +26,7 @@ import {
 } from "../../graphql/queries/templates/patients";
 import { Order, stableSort, getComparator } from "../../utils/sort";
 import { PatientDetailsDialog } from "./PatientDetailsDialog";
+import { capitalize } from "../../utils/format";
 
 const useStyles = makeStyles({
   root: {
@@ -55,6 +56,10 @@ const useStyles = makeStyles({
   },
   icon: {
     marginRight: "10px",
+  },
+  editButton: {
+    marginRight: "14px",
+    marginBottom: "12px",
   },
 });
 
@@ -228,12 +233,30 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         <TableBody>{tableRows}</TableBody>
       </Table>
       {selectedPatient && (
-        <Dialog
-          // key={`${patient.id}-dialog`}
-          open={openDetails}
-          onClose={handleCloseDetails}
-        >
-          <PatientDetailsDialog patient={selectedPatient} />
+        <Dialog open={openDetails} onClose={handleCloseDetails}>
+          <PatientDetailsDialog
+            patient={(selectedPatient as unknown) as Patient}
+            onClose={handleCloseDetails}
+          />
+          <DialogActions
+            style={{
+              borderLeft: `16px solid ${
+                Colours[
+                  `Triage${capitalize(
+                    ((selectedPatient as unknown) as Patient).triageLevel
+                  )}`
+                ]
+              }`,
+            }}
+          >
+            <Button
+              onClick={() => {}}
+              color="secondary"
+              className={classes.editButton}
+            >
+              Edit
+            </Button>
+          </DialogActions>
         </Dialog>
       )}
     </TableContainer>

@@ -24,6 +24,7 @@ export interface Patient {
   gender: string;
   age: number;
   transportTime: Date;
+  runNumber: number;
   notes: string;
 }
 
@@ -33,6 +34,7 @@ export const FETCH_ALL_PATIENTS = gql`
       id
       collectionPointId {
         id
+        name
       }
       triageLevel
       status
@@ -40,6 +42,7 @@ export const FETCH_ALL_PATIENTS = gql`
       gender
       age
       transportTime
+      runNumber
       notes
     }
   }
@@ -51,6 +54,7 @@ export const GET_ALL_PATIENTS = gql`
       id
       collectionPointId {
         id
+        name
       }
       triageLevel
       status
@@ -58,6 +62,7 @@ export const GET_ALL_PATIENTS = gql`
       gender
       age
       transportTime
+      runNumber
       notes
     }
   }

@@ -18,4 +18,6 @@ export enum Colours {
   TriageRed = "#FF5858",
   TriageYellow = "#FFC90A",
   TriageGreen = "#60CD39",
+  TriageWhite = "#FFFFFF",
+  TriageBlack = "#000000",
 }
