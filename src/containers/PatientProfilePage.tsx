@@ -53,7 +53,7 @@ const PatientProfilePage = ({
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: "",
-    triage: null,
+    triage: triageLevel.RED,
     gender: "Male",
     age: null,
     notes: "",
@@ -104,8 +104,6 @@ const PatientProfilePage = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleComplete = () => {
-    console.log("handleComplete has been called");
-
     if (mode === "new") {
       addPatient({
         variables: {
@@ -238,13 +236,7 @@ const PatientProfilePage = ({
             value={formFields.notes}
             isValidated={false}
           />
-          <CompletePatientButton
-            handleClick={handleComplete}
-            disableButton={
-              // formFields.barcodeValue && formFields.triage ? false : true
-              false
-            }
-          />
+          <CompletePatientButton handleClick={handleComplete} />
         </ValidatorForm>
       </div>
     </div>

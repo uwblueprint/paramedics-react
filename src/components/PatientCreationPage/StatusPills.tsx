@@ -9,19 +9,16 @@ import { status } from "../../graphql/queries/patients";
 const StatusPills = ({
   currentStatus,
   handleChange,
-  error,
-  helperText,
 }: {
   currentStatus: status | null;
   handleChange: (e: React.MouseEvent<HTMLElement>, newStatus: status) => any;
-  error?: boolean;
-  helperText?: string;
 }) => {
   const classes = useCompletePatientButtonStyles();
   const statuses = [
     { val: status.ON_SITE, description: "On Site" },
     { val: status.RELEASED, description: "Released" },
     { val: status.TRANSPORTED, description: "Transport" },
+    { val: status.DELETED, description: "Deleted" },
   ];
   return (
     <Container className={classes.root}>

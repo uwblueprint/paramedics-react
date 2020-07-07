@@ -4,10 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const CompletePatientButton = ({
   handleClick,
-  disableButton,
 }: {
   handleClick: () => any | null;
-  disableButton: boolean;
 }) => {
   const classes = useCompletePatientButtonStyles();
   return (
@@ -17,7 +15,6 @@ const CompletePatientButton = ({
       classes={{
         root: classes.root,
       }}
-      disabled={disableButton}
       type="submit"
     >
       Complete

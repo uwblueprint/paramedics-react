@@ -13,6 +13,7 @@ export enum status {
   ON_SITE = "ON_SITE",
   RELEASED = "RELEASED",
   TRANSPORTED = "TRANSPORTED",
+  DELETED = "DELETED",
 }
 
 export interface PatientType {
