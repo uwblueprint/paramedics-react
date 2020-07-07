@@ -53,7 +53,7 @@ const PatientProfilePage = ({
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: "",
-    triage: triageLevel.RED,
+    triage: triageLevel.GREEN,
     gender: "Male",
     age: null,
     notes: "",
