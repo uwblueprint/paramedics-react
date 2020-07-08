@@ -41,17 +41,34 @@ const FormField = ({
   onChange,
   value,
   handleFocus,
-  isValidated,
+  isRequired,
 }: {
   label: string;
   placeholder: string;
   onChange: (e: any) => any;
   value: string;
   handleFocus?: () => any;
-  isValidated: boolean;
+  isRequired: boolean;
 }) => {
   const classes = useTextFieldStyles();
-  if (isValidated) {
+  if (label === "Age:") {
+    return (
+      <TextValidator
+        label={label}
+        placeholder={placeholder}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        className={classes.root}
+        margin="normal"
+        onChange={onChange}
+        value={value}
+        onFocus={handleFocus}
+        validators={["minNumber:1", "matchRegexp:^[0-9]*$"]}
+        errorMessages={["Invalid age"]}
+      />
+    );
+  } else if (isRequired) {
     return (
       <TextValidator
         label={label}
