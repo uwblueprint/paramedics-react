@@ -38,6 +38,7 @@ const StatusPills = ({
             value={status.val}
             classes={{
               root: classes.statusPill,
+              selected: classes.selectedPill,
             }}
             key={status.description}
           >
@@ -73,10 +74,15 @@ const useCompletePatientButtonStyles = makeStyles({
     transform: "translate(0, 1.5px) scale(0.75)",
   },
   statusPill: {
-    color: "#3f51b5",
-    border: "#3f51b5 solid 1px",
+    color: "#2E5584",
+    border: "#2E5584 solid 1px",
     marginRight: "20px",
     borderRadius: "4px",
+  },
+  selectedPill: {
+    backgroundColor: "#C6D7EB !important",
+    color: "#2E5584 !important",
+    fontWeight: "bold",
   },
   buttonGroup: {
     "&:not(:first-child)": {
