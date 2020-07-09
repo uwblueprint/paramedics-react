@@ -2,8 +2,6 @@ import React from "react";
 import moment from "moment";
 import { Colours } from "../../styles/Constants";
 import {
-  Typography,
-  Box,
   makeStyles,
   TableContainer,
   Table,
@@ -48,8 +46,8 @@ const useStyles = makeStyles({
     top: 20,
     width: 1,
   },
-  hospitalName: {
-    width: "200px",
+  tableCell: {
+    maxWidth: "150px",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -60,6 +58,9 @@ const useStyles = makeStyles({
   editButton: {
     marginRight: "14px",
     marginBottom: "12px",
+  },
+  detailsDialog: {
+    width: "662px",
   },
 });
 
@@ -186,6 +187,7 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           onClick={() => handleOpenDetails(patient)}
         >
           <TableCell
+            className={classes.tableCell}
             style={{
               borderLeft: `8px solid ${
                 triageLevels[patient.triageLevel].colour
@@ -194,15 +196,19 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           >
             {triageLevels[patient.triageLevel].label}
           </TableCell>
-          <TableCell>{patient.barcodeValue}</TableCell>
-          <TableCell>{patient.gender}</TableCell>
-          <TableCell>{patient.age}</TableCell>
-          <TableCell>{statusLabels[patient.status]}</TableCell>
+          <TableCell className={classes.tableCell}>
+            {patient.barcodeValue}
+          </TableCell>
+          <TableCell className={classes.tableCell}>{patient.gender}</TableCell>
+          <TableCell className={classes.tableCell}>{patient.age}</TableCell>
+          <TableCell className={classes.tableCell}>
+            {statusLabels[patient.status]}
+          </TableCell>
           {/* Add overflow tooltip? */}
-          <TableCell className={classes.hospitalName}>
+          <TableCell className={classes.tableCell}>
             Hospital Name Placeholder
           </TableCell>
-          <TableCell align="right">
+          <TableCell align="right" className={classes.tableCell}>
             {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
           </TableCell>
           <TableCell>
@@ -233,7 +239,11 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         <TableBody>{tableRows}</TableBody>
       </Table>
       {selectedPatient && (
-        <Dialog open={openDetails} onClose={handleCloseDetails}>
+        <Dialog
+          open={openDetails}
+          onClose={handleCloseDetails}
+          PaperProps={{ className: classes.detailsDialog }}
+        >
           <PatientDetailsDialog
             patient={(selectedPatient as unknown) as Patient}
             onClose={handleCloseDetails}

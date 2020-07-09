@@ -15,9 +15,6 @@ const useStyles = makeStyles({
   label: {
     marginRight: "16px",
   },
-  detailsDialog: {
-    width: "662px",
-  },
   closeButton: {
     position: "absolute",
     top: "6px",
@@ -57,7 +54,6 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
 
   return (
     <DialogContent
-      className={classes.detailsDialog}
       style={{
         borderLeft: `16px solid ${
           Colours[`Triage${capitalize(patient.triageLevel)}`]
