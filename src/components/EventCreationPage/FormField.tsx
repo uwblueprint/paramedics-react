@@ -33,7 +33,13 @@ const useTextFieldStyles = makeStyles({
   },
 });
 
-const FormField = ({
+const FormField: React.FC<{
+  label: string;
+  placeholder: string;
+  onChange: () => React.MouseEvent<HTMLElement>;
+  value: string;
+  handleFocus?: () => React.MouseEvent<HTMLElement>;
+}> = ({
   label,
   placeholder,
   onChange,
@@ -42,9 +48,9 @@ const FormField = ({
 }: {
   label: string;
   placeholder: string;
-  onChange: (e: any) => any;
+  onChange: () => React.MouseEvent<HTMLElement>;
   value: string;
-  handleFocus?: () => any;
+  handleFocus?: () => React.MouseEvent<HTMLElement>;
 }) => {
   const classes = useTextFieldStyles();
 

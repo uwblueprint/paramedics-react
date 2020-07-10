@@ -10,7 +10,13 @@ const useEventButtonStyles = makeStyles({
   },
 });
 
-const BackButton = ({ handleClick }: { handleClick: () => any | null }) => {
+const BackButton: React.FC<{
+  handleClick: () => React.MouseEvent<HTMLElement> | null;
+}> = ({
+  handleClick,
+}: {
+  handleClick: () => React.MouseEvent<HTMLElement> | null;
+}) => {
   const classes = useEventButtonStyles();
   return (
     <Button
