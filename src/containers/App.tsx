@@ -6,7 +6,7 @@ import EventCreationPage from './EventCreationPage';
 import { theme } from '../styles/Theme';
 import '../styles/App.css';
 
-function App() {
+function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <Switch>

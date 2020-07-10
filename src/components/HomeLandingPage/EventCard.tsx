@@ -12,6 +12,8 @@ interface EventCardProps {
   address: string;
 }
 
+type EventCard = ({ date, eventTitle, address }: EventCardProps) => JSX.Element;
+
 const useEventCardStyles = makeStyles({
   root: {
     display: 'inline-block',
@@ -29,7 +31,11 @@ const useEventCardStyles = makeStyles({
   },
 });
 
-const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
+const EventCard: EventCard = ({
+  date,
+  eventTitle,
+  address,
+}: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
     <Card className={classes.root}>

@@ -24,7 +24,11 @@ const useStepperStyles = makeStyles({
   },
 });
 
-export default function Stepper({
+const Stepper: React.FC<{
+  activeStep: number;
+  nextButton: React.ReactNode;
+  backButton?: React.ReactNode;
+}> = ({
   activeStep,
   nextButton,
   backButton,
@@ -32,7 +36,7 @@ export default function Stepper({
   activeStep: number;
   nextButton: React.ReactNode;
   backButton?: React.ReactNode;
-}) {
+}) => {
   const classes = useStepperStyles();
 
   return (
@@ -51,4 +55,6 @@ export default function Stepper({
       backButton={backButton}
     />
   );
-}
+};
+
+export default Stepper;

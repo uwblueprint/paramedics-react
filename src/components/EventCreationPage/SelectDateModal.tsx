@@ -57,7 +57,12 @@ const datePickerTheme = createMuiTheme({
   },
 });
 
-const SelectDateModal = ({
+const SelectDateModal: React.FC<{
+  open: boolean;
+  handleClose: () => React.MouseEvent<HTMLElement>;
+  eventDate: Date | null;
+  setEventDate: (date: any) => void;
+}> = ({
   open,
   handleClose,
   eventDate,
