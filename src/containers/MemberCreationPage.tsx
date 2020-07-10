@@ -6,6 +6,7 @@ import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
+import RadioSelector from "../components/common/RadioSelector";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 // import { ADD_USER } from "../graphql/mutations/templates/users";
@@ -85,6 +86,11 @@ const MemberCreationPage = () => {
                         required
                         onChange={handleEmailChange}
                         value={email}
+                    />
+                    <RadioSelector
+                      labels={["Admin", "CCP Supervisor", "Dispatch"]}
+                      currentValue={role}
+                      handleChange={handleRoleChange}
                     />
                 </form>
               <div className="caption">

@@ -15,9 +15,12 @@ function App() {
       <Switch>
         <Route exact path="/events" component={HomeLandingPage} />
         <Route exact path="/events/new" component={EventCreationPage} />
-        <Route exact path="/management/hospitals/new" component={HospitalCreationPage} />
-        <Route exact path="/management/ambulances/new" component={AmbulanceCreationPage} />
-        <Route exact path="/management/members/new" component={MemberCreationPage} />
+        <Route exact path="/manage/hospitals/new" component={HospitalCreationPage} />
+        {/* <Route exact path="/manage/hospitals/:mode/:hospitalId?" component={HospitalCreationPage} /> */}
+        <Route exact path="/manage/ambulances/new" component={AmbulanceCreationPage} />
+        {/* <Route exact path="/manage/ambulances/:mode/:ambulanceId?" component={AmbulanceCreationPage} /> */}
+        <Route exact path="/manage/members/new" component={MemberCreationPage} />
+        {/* <Route exact path="/manage/members/:mode/:userId?" component={MemberCreationPage} /> */}
         <Route path="/">
           <Redirect to="/events" />
         </Route>
