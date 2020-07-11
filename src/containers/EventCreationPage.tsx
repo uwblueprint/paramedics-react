@@ -7,7 +7,7 @@ import CancelModal from "../components/EventCreationPage/CancelModal";
 import Map from "../components/EventCreationPage/Map";
 import NextButton from "../components/EventCreationPage/NextButton";
 import BackButton from "../components/EventCreationPage/BackButton";
-import FormField from "../components/EventCreationPage/FormField";
+import FormField from "../components/common/FormField";
 import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useMutation } from "@apollo/react-hooks";
@@ -104,6 +104,7 @@ const EventCreationPage = () => {
           placeholder="Event Name Here"
           onChange={handleNameChange}
           value={eventName}
+          isValidated={false}
         />
         <FormField
           label="Date of Event:"
@@ -115,6 +116,7 @@ const EventCreationPage = () => {
               : ""
           }
           handleFocus={handleOpenDateModal}
+          isValidated={false}
         />
       </form>
     ) : (
@@ -124,6 +126,7 @@ const EventCreationPage = () => {
           placeholder="Enter Location Here"
           onChange={handleLocationChange}
           value={eventLocation}
+          isValidated={false}
         />
         <Map />
       </form>

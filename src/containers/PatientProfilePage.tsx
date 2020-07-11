@@ -176,7 +176,9 @@ const PatientProfilePage = ({
               setFormFields({ ...formFields, barcodeValue: e.target.value });
             }}
             value={formFields.barcodeValue}
-            isRequired={true}
+            isValidated={true}
+            validators={["required"]}
+            errorMessages={["This is a mandatory field"]}
           />
           <StatusPills
             currentStatus={formFields.status}
@@ -197,7 +199,7 @@ const PatientProfilePage = ({
               value={
                 formFields.runNumber ? formFields.runNumber.toString() : ""
               }
-              isRequired={false}
+              isValidated={false}
             />
           )}
           <TriagePills
@@ -225,7 +227,9 @@ const PatientProfilePage = ({
               setFormFields({ ...formFields, age: e.target.value });
             }}
             value={formFields.age ? formFields.age.toString() : ""}
-            isRequired={false}
+            isValidated={true}
+            validators={["minNumber:1", "matchRegexp:^[0-9]*$"]}
+            errorMessages={["Invalid age"]}
           />
           <FormField
             label="Notes:"
@@ -234,7 +238,7 @@ const PatientProfilePage = ({
               setFormFields({ ...formFields, notes: e.target.value });
             }}
             value={formFields.notes}
-            isRequired={false}
+            isValidated={false}
           />
           <CompletePatientButton handleClick={handleComplete} />
         </ValidatorForm>
