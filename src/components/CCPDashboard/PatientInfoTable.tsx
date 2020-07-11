@@ -54,7 +54,7 @@ const useStyles = makeStyles({
     width: 1,
   },
   tableCell: {
-    maxWidth: "150px",
+    maxWidth: "190px",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
