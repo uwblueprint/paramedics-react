@@ -20,6 +20,7 @@ import {
   Typography,
   Checkbox,
   IconButton,
+  Chip,
 } from "@material-ui/core";
 import { Close, MoreHoriz } from "@material-ui/icons";
 import { FilterIcon } from "../common/FilterIcon";
@@ -85,6 +86,18 @@ const useStyles = makeStyles({
     position: "absolute",
     top: "6px",
     right: "6px",
+  },
+  filterChipsContainer: {
+    padding: "0 16px",
+  },
+  filterChip: {
+    color: Colours.Black,
+    fontSize: "16px",
+    marginRight: "12px",
+  },
+  deleteChipIcon: {
+    color: Colours.Black,
+    fontSize: 9,
   },
 });
 
@@ -225,7 +238,6 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const initialFilters = {
     triage: triageFilters,
     status: statusFilters,
-    // hospital: {},
   };
   const [selectedFilters, setSelectedFilters] = React.useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = React.useState(initialFilters);
@@ -315,6 +327,15 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const handleApplyFilters = () => {
     closePopover();
     setAppliedFilters(selectedFilters);
+  };
+
+  const removeFilter = (filterKey, category) => {
+    const updatedFilters = {
+      ...appliedFilters,
+      [category]: { ...appliedFilters[category], [filterKey]: false },
+    };
+    setAppliedFilters(updatedFilters);
+    setSelectedFilters(updatedFilters);
   };
 
   const handleCheckboxChange = (
@@ -487,6 +508,42 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
             </Button>
           </Box>
         </Popover>
+        <Box className={classes.filterChipsContainer}>
+          {Object.values(appliedFilters.triage)
+            .filter((filter) => filter.selected === true)
+            .map((filter) => (
+              <Chip
+                key={filter.label}
+                label={filter.label}
+                variant="outlined"
+                color="secondary"
+                onDelete={() =>
+                  removeFilter(filter.label, FilterCategory.Triage)
+                }
+                deleteIcon={
+                  <Close fontSize="small" className={classes.deleteChipIcon} />
+                }
+                className={classes.filterChip}
+              />
+            ))}
+          {Object.values(appliedFilters.status)
+            .filter((filter) => filter.selected === true)
+            .map((filter) => (
+              <Chip
+                key={filter.label}
+                label={filter.label}
+                variant="outlined"
+                color="secondary"
+                onDelete={() =>
+                  removeFilter(filter.label, FilterCategory.Status)
+                }
+                deleteIcon={
+                  <Close fontSize="small" className={classes.deleteChipIcon} />
+                }
+                className={classes.filterChip}
+              />
+            ))}
+        </Box>
       </Toolbar>
       <Table>
         <EnhancedTableHead

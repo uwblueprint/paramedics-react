@@ -182,7 +182,6 @@ export const PatientOverview = (props: PatientOverviewProps) => {
                     <TriageTag
                       key={level.triageLevel}
                       colour={level.colour}
-                      triageLevel={level.triageLevel}
                       label={level.label}
                       count={count}
                     />

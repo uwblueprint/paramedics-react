@@ -1,17 +1,9 @@
-import React from 'react';
+import React from "react";
+import { Box, Typography, makeStyles } from "@material-ui/core";
 import { Colours } from "../../styles/Constants";
-import {
-  Box,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
-import {
-  TriageLevel,
-} from "../../graphql/queries/templates/patients";
 
 interface TriageTagProps {
   colour: Colours;
-  triageLevel: TriageLevel;
   label: string;
   count: number;
 }
@@ -31,7 +23,7 @@ const useTriageTagStyles = makeStyles({
 
 export const TriageTag = (props: TriageTagProps) => {
   const classes = useTriageTagStyles();
-  const { colour, triageLevel, count, label } = props;
+  const { colour, count, label } = props;
 
   return (
     <Box className={classes.root} style={{ borderLeft: `8px solid ${colour}` }}>

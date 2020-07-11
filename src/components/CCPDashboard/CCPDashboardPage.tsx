@@ -1,7 +1,7 @@
 import React from "react";
 import MenuAppBar from "../common/MenuAppBar";
 import { Colours } from "../../styles/Constants";
-import { Box, Tabs, Tab, makeStyles, Card, Button } from "@material-ui/core";
+import { Box, Tabs, Tab, makeStyles, Button } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { useAllPatients } from "../../graphql/queries/hooks/patients";
 import { PatientOverview } from "./PatientOverview";
