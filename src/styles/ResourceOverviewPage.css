@@ -1,0 +1,16 @@
+.title-bar {
+    display: block;
+    height: 56px;
+    background: #284D7A;
+    color: white;
+    padding-left: 73.5px;
+}
+
+.landing-top-section {
+    padding-top: 0px;
+}
+
+.landing-top-bar {
+    padding-bottom: 19px;
+}
+

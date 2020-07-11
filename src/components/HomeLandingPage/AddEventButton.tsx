@@ -18,7 +18,7 @@ const AddEventButton = () => {
       component={NavLink}
       to="/events/new"
       variant="contained"
-      color="primary"
+      color="secondary"
       startIcon={<AddIcon />}
       classes={{
         root: classes.root,

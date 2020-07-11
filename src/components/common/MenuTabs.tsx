@@ -8,7 +8,6 @@ import Tab from "@material-ui/core/Tab";
 const useTabStyles = makeStyles({
   root: {
     textTransform: "none",
-    width: "30rem",
   },
   tabSize: {
     textTransform: "none",
