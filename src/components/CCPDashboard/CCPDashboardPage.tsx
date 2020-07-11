@@ -32,6 +32,7 @@ const useStyles = makeStyles({
   },
   tabs: {
     background: Colours.White,
+    padding: "0 56px",
   },
   fullHeightGridItem: {
     display: "flex",
