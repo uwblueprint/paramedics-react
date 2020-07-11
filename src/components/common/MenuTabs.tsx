@@ -24,7 +24,11 @@ const useTabStyles = makeStyles({
   },
 });
 
-const MenuTabs = ({
+const MenuTabs: React.FC<{
+  handleChange: (event: React.ChangeEvent<{}>, newValue: number) => any;
+  currentTab: number;
+  tabLabels: Array<string>;
+}> = ({
   handleChange,
   currentTab,
   tabLabels,
