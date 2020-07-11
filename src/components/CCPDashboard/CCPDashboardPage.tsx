@@ -1,5 +1,4 @@
 import React from "react";
-import MenuAppBar from "../common/MenuAppBar";
 import { Colours } from "../../styles/Constants";
 import { Box, Tabs, Tab, makeStyles, Button } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
@@ -107,7 +106,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   return (
     <Box className={classes.root}>
-      <MenuAppBar pageTitle="Directory" eventId={eventId} />
+      {/* <MenuAppBar pageTitle="Directory" eventId={eventId} /> */}
       <Tabs className={classes.tabs} value={tab} onChange={handleChange}>
         <Tab
           label="Patient Overview"
