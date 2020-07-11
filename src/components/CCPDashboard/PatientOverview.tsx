@@ -23,6 +23,7 @@ import {
 } from "../../graphql/queries/templates/patients";
 import { TriageTag } from "./TriageTag";
 import { PatientInfoTable } from "./PatientInfoTable";
+import { ScanPatientButton } from "./ScanPatientButton";
 import LoadingState from "../common/LoadingState";
 
 interface PatientOverviewProps {
@@ -84,7 +85,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { eventId, ccpId } = props;
+  const { ccpId } = props;
 
   // Should switch to fetching patients from cache
   const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
@@ -258,6 +259,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
         <Card variant="outlined" className={classes.patientTableCard}>
           <PatientInfoTable patients={patients} />
         </Card>
+        <ScanPatientButton />
       </Grid>
     );
   }

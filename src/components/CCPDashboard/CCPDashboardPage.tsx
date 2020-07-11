@@ -1,10 +1,9 @@
 import React from "react";
 import { Colours } from "../../styles/Constants";
-import { Box, Tabs, Tab, makeStyles, Button } from "@material-ui/core";
+import { Box, Tabs, Tab, makeStyles } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { useAllPatients } from "../../graphql/queries/hooks/patients";
 import { PatientOverview } from "./PatientOverview";
-import { ScanIcon } from "../common/ScanIcon";
 
 type TParams = { eventId: string; ccpId: string };
 
@@ -60,21 +59,6 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
   },
-  icon: {
-    marginRight: "9px",
-  },
-  patientTableCard: {
-    marginTop: "24px",
-    marginBottom: "145px",
-  },
-  scanButton: {
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-    borderRadius: "2000px",
-    position: "fixed",
-    bottom: "56px",
-    right: "56px",
-    padding: "12px 26px",
-  },
 });
 
 const TabPanel = (props: TabPanelProps) => {
@@ -106,7 +90,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   return (
     <Box className={classes.root}>
-      {/* <MenuAppBar pageTitle="Directory" eventId={eventId} /> */}
       <Tabs className={classes.tabs} value={tab} onChange={handleChange}>
         <Tab
           label="Patient Overview"
@@ -118,15 +101,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         <PatientOverview eventId={eventId} ccpId={ccpId} />
       </TabPanel>
       <TabPanel value={tab} index={TabOptions.Hospital}></TabPanel>
-
-      <Button
-        className={classes.scanButton}
-        variant="contained"
-        color="secondary"
-      >
-        <ScanIcon colour={Colours.White} classes={classes.icon} />
-        Scan Patient
-      </Button>
     </Box>
   );
 };

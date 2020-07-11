@@ -297,7 +297,7 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
     }
 
     setFilteredPatients(statusFilteredPatients);
-  }, [appliedFilters]);
+  }, [appliedFilters, patients]);
 
   React.useEffect(() => {
     filterPatients();
