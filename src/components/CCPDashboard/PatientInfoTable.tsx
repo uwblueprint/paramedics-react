@@ -271,7 +271,8 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
     let triageFilteredPatients: Patient[] = [];
     let statusFilteredPatients: Patient[] = [];
 
-    // apply selected and confirmed filters
+    // Apply selected and confirmed filters
+    // If no filters are selected for a given category, the patients are not filtered by that category
     if (appliedTriageFilters.length > 0) {
       for (let i = 0; i < appliedTriageFilters.length; i++) {
         triageFilteredPatients.push(
