@@ -6,6 +6,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import HomeLandingPage from "./HomeLandingPage";
 import EventCreationPage from "./EventCreationPage";
 import CCPDashboardPage from "../components/CCPDashboard/CCPDashboardPage";
+import PatientProfilePage from "./PatientProfilePage";
 
 function App() {
   return (
@@ -17,6 +18,11 @@ function App() {
           exact
           path="/events/:eventId/ccps/:ccpId"
           component={CCPDashboardPage}
+        />
+        <Route
+          exact
+          path="/patients/:mode/:ccpId/:patientId?"
+          component={PatientProfilePage}
         />
         <Route path="/">
           <Redirect to="/events" />
