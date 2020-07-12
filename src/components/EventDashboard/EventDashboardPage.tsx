@@ -8,6 +8,7 @@ import { GET_EVENT_INFO } from '../../graphql/queries/templates/events';
 import { RouteComponentProps } from 'react-router';
 import CCPTabPanel from './CCPTabPanel';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import ResourceTabPanel from './ResourceTabPanel';
 import { formatDate } from '../../utils/format'
 
@@ -81,6 +82,8 @@ const EventDashboardPage = ({match}: RouteComponentProps<TParams>) => {
             <Container className={classes.container}>
                 <Typography variant="h3">{event.name}</Typography>
                 <Typography variant="body1" style={{ color: Colours.SecondaryGray, display: 'flex', alignItems: 'center' }}>
+                    <LocationOnOutlinedIcon style={{ fontSize: '18px', paddingRight: '10px' }} />
+                    <Typography variant="body1" style={{ paddingRight: '52px' }} >Ezra Street l1j3j4, Waterloo Canada</Typography>
                     <CalendarTodayOutlinedIcon style={{ fontSize: '18px', paddingRight: '10px' }} />
                     {formatDate(event.eventDate)}
                 </Typography>

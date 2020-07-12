@@ -16,6 +16,11 @@ import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
 import { Box, Typography, Button, Checkbox } from '@material-ui/core';
 import { FiberManualRecord, Add, Remove } from '@material-ui/icons';
 import { Order, stableSort, getComparator } from '../../utils/sort';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles({
   root: {
@@ -153,11 +158,21 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   rowCount: number;
+  type: TabOptions.Hospital | TabOptions.Ambulance;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, onSelectAllClick, rowCount } = props;
+  const { numSelected, onSelectAllClick, rowCount, type } = props;
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Toolbar className={classes.toolbar} disableGutters>
@@ -172,8 +187,29 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           <Typography variant="body2" component="div" style={{ marginRight: '16px' }}>
             {numSelected} selected
           </Typography>
-          <Button color="secondary"><Remove className={classes.buttonIcon}/>Exclude</Button>
-          <Button color="secondary"><Add className={classes.buttonIcon}/>Include</Button>
+          <Button color="secondary" onClick={handleClickOpen} ><Remove className={classes.buttonIcon} />Exclude</Button>
+          <Button color="secondary" onClick={handleClickOpen}><Add className={classes.buttonIcon} />Include</Button>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Include {type === TabOptions.Hospital ? 'Hospitals' : 'Ambulances'}?</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure you want to include the following {type === TabOptions.Hospital ? 'hospital' : 'ambulance'}(s)?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleClose} color="primary" autoFocus>
+                Confirm
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       )}
     </Toolbar>
@@ -287,6 +323,7 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
           numSelected={selected.length}
           onSelectAllClick={handleSelectAllClick}
           rowCount={rows.length}
+          type={type}
         />
         <TableContainer className={classes.tableContainer}>
           <Table>
