@@ -20,7 +20,7 @@ import {
   Patient,
   TriageLevel,
   Status,
-} from "../../graphql/queries/templates/patients";
+} from "../../graphql/queries/patients";
 import { TriageTag } from "./TriageTag";
 import { PatientInfoTable } from "./PatientInfoTable";
 import { ScanPatientButton } from "./ScanPatientButton";
@@ -91,7 +91,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
   const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
   const allPatients: Array<Patient> = data ? data.patients : [];
   const patients = allPatients.filter(
-    (patient: Patient) => patient.collectionPointId.id == parseInt(ccpId)
+    (patient: Patient) => patient.collectionPointId.id === ccpId
   );
 
   const createCategoryData = (

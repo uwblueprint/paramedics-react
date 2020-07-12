@@ -24,11 +24,7 @@ import {
 } from "@material-ui/core";
 import { Close, MoreHoriz } from "@material-ui/icons";
 import { FilterIcon } from "../common/FilterIcon";
-import {
-  Patient,
-  TriageLevel,
-  Status,
-} from "../../graphql/queries/templates/patients";
+import { Patient, TriageLevel, Status } from "../../graphql/queries/patients";
 import { Order, stableSort, getComparator } from "../../utils/sort";
 import { PatientDetailsDialog } from "./PatientDetailsDialog";
 import { capitalize } from "../../utils/format";

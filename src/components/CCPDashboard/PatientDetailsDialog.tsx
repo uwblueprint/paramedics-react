@@ -8,7 +8,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
-import { Patient } from "../../graphql/queries/templates/patients";
+import { Patient } from "../../graphql/queries/patients";
 import { capitalize } from "../../utils/format";
 
 const useStyles = makeStyles({
