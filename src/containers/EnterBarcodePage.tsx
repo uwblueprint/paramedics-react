@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/HomeLandingPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import FormField from "../components/EventCreationPage/FormField";
+import FormField from "../components/common/FormField";
 
 const EnterBarcodePage = ({
   match: {
@@ -44,6 +44,7 @@ const EnterBarcodePage = ({
             placeholder="Enter barcode here"
             onChange={(e: any) => setCurrentBarcode(e.target.value)}
             value={currentBarcode}
+            isValidated={false}
           />
         </form>
       </div>
