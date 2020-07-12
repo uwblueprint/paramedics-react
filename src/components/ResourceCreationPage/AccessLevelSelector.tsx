@@ -5,22 +5,21 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import Typography from "@material-ui/core/Typography";
+import { accessLevel } from "../../graphql/queries/users";
 
-const RadioSelector = ({
-  labels,
+const AccessLevelSelector = ({
   currentValue,
   handleChange,
-  error,
-  helperText,
 }: {
-  labels: Array<string>;
   currentValue: string;
   handleChange: (e: any) => any;
-  error?: boolean;
-  helperText?: string;
 }) => {
   const classes = useRadioStyles();
-
+  const accessLevels = [
+    { val: accessLevel.ADMIN, label: "Admin" },
+    { val: accessLevel.SUPERVISOR, label: "CCP Supervisor" },
+    { val: accessLevel.COMMANDER, label: "Dispatch" }
+  ];
   return (
     <Container className={classes.root}>
       <Typography className={classes.label}>Role: *</Typography>
@@ -32,13 +31,13 @@ const RadioSelector = ({
         onChange={handleChange}
         className={classes.radioGroup}
       >
-        {labels.map((label) => (
+        {accessLevels.map((accessLevel) => (
           <FormControlLabel
-            value={label}
+            value={accessLevel.val}
             control={<Radio color="secondary" />}
-            label={label}
+            label={accessLevel.label}
             labelPlacement="end"
-            key={label}
+            key={accessLevel.label}
           />
         ))}
       </RadioGroup>
@@ -82,4 +81,4 @@ const useRadioStyles = makeStyles({
   },
 });
 
-export default RadioSelector;
+export default AccessLevelSelector;

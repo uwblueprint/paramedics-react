@@ -6,17 +6,29 @@ import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
+import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { LocalHospitalOutlined } from "@material-ui/icons";
 // import { ADD_HOSPITAL, EDIT_HOSPITAL } from "../graphql/mutations/hospitals";
-// import { HospitalType, GET_ALL_HOSPITALS } from "../graphql/queries/hospitals";
+// import { HospitalType, GET_ALL_HOSPITALS, GET_HOSPITAL_BY_ID } from "../graphql/queries/hospitals";
 
-const HospitalCreationPage = () => {
+const HospitalCreationPage = ({
+  match: {
+    params: { mode, ambulanceId },
+  },
+}: {
+  match: { params: { mode: string; hospitalId?: string; } };
+}) => {
   // const history = useHistory();
 
-  // const { data } = useQuery(GET_ALL_HOSPITALS);
-  // const ambulances: Array<HospitalType> = data ? data.hospitals : [];
+  // const { data, loading, error } = useQuery(
+  //   mode === "edit" && hospitalId
+  //     ? GET_HOSPITAL_BY_ID(hospitalId)
+  //     : GET_ALL_HOSPITALS
+  // );
+
+  // const hospitals: Array<HospitalType> = data ? data.hospitals : [];
 
   // const [addHospital] = useMutation(ADD_HOSPITAL,
   //   {
@@ -32,6 +44,17 @@ const HospitalCreationPage = () => {
   // const [editHospital] = useMutation(EDIT_HOSPITAL);
 
   const [hospitalName, setHospitalName] = useState<string>("");
+
+  // useEffect(() => {
+  //   if (!loading && mode === "edit") {
+  //     const {
+  //       name
+  //     }: {
+  //       name: string;
+  //     } = data.hospital;
+  //     setHospitalName(name);
+  //   }
+  // }, [data]);
 
   const handleNameChange = (e: any) => {
     setHospitalName(e.target.value);
@@ -67,10 +90,12 @@ const HospitalCreationPage = () => {
             to="/manage/hospitals"
           >
             &#60; Back
-        </Link>
+          </Link>
         </div>
         <div className="landing-top-bar">
-          <Typography variant="h3">Add a new hospital</Typography>
+          <Typography variant="h4">
+            {mode === "new" ? "Add a new hospital" : "Edit Hospital"}
+          </Typography>
         </div>
       </div>
       <div className="event-form">
@@ -83,7 +108,7 @@ const HospitalCreationPage = () => {
           />
         </form>
         <div className="caption">
-          <Typography variant="caption" style={{ color: "#676767" }}>*Denotes a required field</Typography>
+          <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>*Denotes a required field</Typography>
         </div>
       </div>
       <div className="done-container">

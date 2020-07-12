@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "../styles/ResourceCreationPage.css";
 import Typography from "@material-ui/core/Typography";
@@ -6,15 +6,26 @@ import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
+import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-// import { ADD_AMBULANCE, EDIT_AMBULANCE } from "../graphql/mutations/ambulances";
-// import { AmbulanceType, GET_ALL_AMBULANCES } from "../graphql/queries/ambulances";
+import { ADD_AMBULANCE, EDIT_AMBULANCE } from "../graphql/mutations/ambulances";
+// import { AmbulanceType, GET_ALL_AMBULANCES, GET_AMBULANCE_BY_ID} from "../graphql/queries/ambulances";
 
-const AmbulanceCreationPage = () => {
+const AmbulanceCreationPage = ({
+  match: {
+    params: { mode, ambulanceId },
+  },
+}: {
+  match: { params: { mode: string; ambulanceId?: string; } };
+}) => {
   // const history = useHistory();
+  // const { data, loading, error } = useQuery(
+  //   mode === "edit" && ambulanceId
+  //     ? GET_AMBULANCE_BY_ID(ambulanceId)
+  //     : GET_ALL_AMBULANCES
+  // );
 
-  // const { data } = useQuery(GET_ALL_AMBULANCES);
   // const ambulances: Array<AmbulanceType> = data ? data.ambulances : [];
 
   // const [addAmbulance] = useMutation(ADD_AMBULANCE,
@@ -31,6 +42,17 @@ const AmbulanceCreationPage = () => {
   // const [editAmbulance] = useMutation(EDIT_AMBULANCE);
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<number>(0);
+
+  // useEffect(() => {
+  //   if (!loading && mode === "edit") {
+  //     const {
+  //       vehicleNumber
+  //     }: {
+  //       vehicleNumber: number;
+  //     } = data.ambulance;
+  //     setAmbulanceNumber(vehicleNumber);
+  //   }
+  // }, [data]);
 
   const handleNumberChange = (e: any) => {
     setAmbulanceNumber(e.target.value);
@@ -69,7 +91,9 @@ const AmbulanceCreationPage = () => {
         </Link>
         </div>
         <div className="landing-top-bar">
-          <Typography variant="h3">Add a new ambulance</Typography>
+          <Typography variant="h4">
+            {mode === "new" ? "Add a new ambulance" : "Edit Ambulance"}
+          </Typography>
         </div>
       </div>
       <div className="event-form">
@@ -82,7 +106,7 @@ const AmbulanceCreationPage = () => {
           />
         </form>
         <div className="caption">
-          <Typography variant="caption" style={{ color: "#676767" }}>*Denotes a required field</Typography>
+          <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>*Denotes a required field</Typography>
         </div>
       </div>
       <div className="done-container">
