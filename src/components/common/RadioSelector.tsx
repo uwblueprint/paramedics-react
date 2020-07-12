@@ -53,6 +53,7 @@ const useRadioStyles = makeStyles({
     borderRadius: "10px",
     backgroundColor: "#FFFFFF",
     padding: "0",
+    marginTop: "16px",
     marginBottom: "10px",
     maxHeight: "15vh",
     width: "100%",

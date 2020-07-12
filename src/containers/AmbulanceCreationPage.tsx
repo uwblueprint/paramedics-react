@@ -8,8 +8,8 @@ import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-// import { ADD_AMBULANCE } from "../graphql/mutations/templates/ambulances";
-// import { AmbulanceType, GET_ALL_AMBULANCES } from "../graphql/queries/templates/ambulances";
+// import { ADD_AMBULANCE, EDIT_AMBULANCE } from "../graphql/mutations/ambulances";
+// import { AmbulanceType, GET_ALL_AMBULANCES } from "../graphql/queries/ambulances";
 
 const AmbulanceCreationPage = () => {
   // const history = useHistory();
@@ -27,6 +27,8 @@ const AmbulanceCreationPage = () => {
   //     }
   //   }
   // );
+  
+  // const [editAmbulance] = useMutation(EDIT_AMBULANCE);
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<number>(0);
 
@@ -45,7 +47,7 @@ const AmbulanceCreationPage = () => {
 
   return (
     <div className="resource-add-wrapper">
-      <div className="event-creation-top-section">
+      <div className="resource-creation-top-section">
         <div className="top-bar-link">
           <Link
             component={NavLink}
@@ -80,8 +82,8 @@ const AmbulanceCreationPage = () => {
           disabled={ambulanceNumber === 0}
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }
@@ -96,8 +98,8 @@ const AmbulanceCreationPage = () => {
           to="/management/ambulances"
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }

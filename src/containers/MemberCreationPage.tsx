@@ -7,10 +7,11 @@ import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
 import RadioSelector from "../components/common/RadioSelector";
+import { Colours } from '../styles/Constants';
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-// import { ADD_USER } from "../graphql/mutations/templates/users";
-// import { UserType, GET_ALL_USERS } from "../graphql/queries/templates/users";
+// import { ADD_USER, EDIT_USER } from "../graphql/mutations/users";
+// import { UserType, GET_ALL_USERS } from "../graphql/queries/users";
 
 const MemberCreationPage = () => {
     // const history = useHistory();
@@ -28,6 +29,8 @@ const MemberCreationPage = () => {
     //     }
     //   }
     // );
+
+    // const [editUser] = useMutation(EDIT_USER);
 
     const [memberName, setMemberName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -62,7 +65,7 @@ const MemberCreationPage = () => {
 
     return (
         <div className="resource-add-wrapper">
-            <div className="event-creation-top-section">
+            <div className="resource-creation-top-section">
                 <Link
                     component={NavLink}
                     to="/management/members"
@@ -102,11 +105,11 @@ const MemberCreationPage = () => {
           color="primary"
           variant="contained"
           onClick={handleComplete}
-          disabled={memberName === "" || email === "" }
+          disabled={memberName === "" || email === "" || !role}
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }
@@ -121,8 +124,8 @@ const MemberCreationPage = () => {
           to="/management/hospitals"
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }

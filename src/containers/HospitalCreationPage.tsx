@@ -8,8 +8,8 @@ import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-// import { ADD_HOSPITAL } from "../graphql/mutations/templates/hospitals";
-// import { HospitalType, GET_ALL_HOSPITALS } from "../graphql/queries/templates/hospitals";
+// import { ADD_HOSPITAL, EDIT_HOSPITAL } from "../graphql/mutations/hospitals";
+// import { HospitalType, GET_ALL_HOSPITALS } from "../graphql/queries/hospitals";
 
 const HospitalCreationPage = () => {
   // const history = useHistory();
@@ -28,6 +28,8 @@ const HospitalCreationPage = () => {
   //   }
   // );
 
+  // const [editHospital] = useMutation(EDIT_HOSPITAL);
+
   const [hospitalName, setHospitalName] = useState<string>("");
 
   const handleNameChange = (e: any) => {
@@ -45,7 +47,7 @@ const HospitalCreationPage = () => {
 
   return (
     <div className="resource-add-wrapper">
-      <div className="event-creation-top-section">
+      <div className="resource-creation-top-section">
         <div className="top-bar-link">
           <Link
             component={NavLink}
@@ -80,8 +82,8 @@ const HospitalCreationPage = () => {
           disabled={hospitalName === ""}
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }
@@ -96,8 +98,8 @@ const HospitalCreationPage = () => {
           to="/management/hospitals"
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }
