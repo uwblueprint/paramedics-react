@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import MenuTabs from "../components/common/MenuTabs";
+import ResourceMenuTabs from "../components/common/resourceMenuTabs";
 import "../styles/HomeLandingPage.css";
 import "../styles/ResourceOverviewPage.css";
+import TeamMemberOverviewPage from "./TeamMemberOverviewPage";
+import HospitalOverviewPage from "./HospitalOverviewPage";
+import AmbulanceOverviewPage from "./AmbulanceOverviewPage";
 import Typography from "@material-ui/core/Typography";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import EventCard from "../components/HomeLandingPage/EventCard";
-import AddEventButton from "../components/HomeLandingPage/AddEventButton";
-import Grid from "@material-ui/core/Grid";
+import RefreshIcon from '@material-ui/icons/Refresh';
+import { IconButton } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Colours } from '../styles/Constants';
+import { useHistory } from "react-router-dom";
+import { withStyles } from '@material-ui/core/styles';
 
  const ResourceOverviewPage: React.FC = () => {
 
@@ -15,23 +20,64 @@ import Grid from "@material-ui/core/Grid";
     setTab(newValue);
   };
 
+
+
+  const BackButton = withStyles({
+
+    root: {
+      marginRight: 33.5,
+      padding: 0,
+    }
+
+  })(IconButton)
+
+  const RefreshButton = withStyles({
+
+    root: {
+      marginLeft: "77%",
+      padding: 0,
+    }
+    
+  })(IconButton)
+
   const tabLabels = ["Team Members", "Hospitals", "Ambulances"];
+
+  var overview;
+
+  const history = useHistory();
+
+
+  if (tabLabels[selectedTab] === "Team Members") {
+    overview = <TeamMemberOverviewPage/>;
+  } else if (tabLabels[selectedTab] === "Hospitals") {
+    overview = <HospitalOverviewPage/>;
+  } else if (tabLabels[selectedTab] === "Ambulances") {
+    overview = <AmbulanceOverviewPage/>
+  }
 
 return (
 
         <div className="landing-wrapper"> 
-        <div className="title-bar">
-          <Typography variant="h5">Resource Management</Typography>
-        </div>
-          <div className="landing-top-section">
-              <div className="landing-top-bar">
+        <span className="title-bar">
+          <BackButton>
+            <ArrowBackIcon style={{color: Colours.White}}/>
+          </BackButton>
+          <Typography variant="h6">Resource Management</Typography>
+  
+          <RefreshButton>
+            <RefreshIcon onClick={() => {window.location.reload();}}style={{color: Colours.White}}/>
+          </RefreshButton>
+        </span>
+          <div className="landing-top-section-resource">
+              <div className="landing-top-bar-resource">
               </div>
-              <MenuTabs
+              <ResourceMenuTabs
                 handleChange={handleChange}
                 currentTab={selectedTab}
                 tabLabels={tabLabels}
               />
           </div>
+          {overview}
     </div> 
 
 )

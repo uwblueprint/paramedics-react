@@ -1,16 +1,33 @@
 .title-bar {
-    display: block;
-    height: 56px;
+    display: flex;
+    align-items: center;
+    height: 24px;
     background: #284D7A;
     color: white;
-    padding-left: 73.5px;
+    padding-left: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
 
-.landing-top-section {
-    padding-top: 0px;
+.member-wrapper {
+    background-color: #f0f0f0;
+    padding: 56px;
+    min-height: 100vh;
 }
 
-.landing-top-bar {
-    padding-bottom: 19px;
+.landing-top-section-resource {
+    padding: 0em 3em 0em 3em;
+    background-color: white;
+    border-bottom: 1px solid #C4C4C4;
+    color: #000000;
+}
+
+.landing-top-bar-resource {
+    display: flex;
+    padding-bottom: 16px;
+}
+
+.hamburger-menu-btn {
+    background-image: url();
 }
 
