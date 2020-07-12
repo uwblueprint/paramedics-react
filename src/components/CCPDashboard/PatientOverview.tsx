@@ -101,7 +101,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
     const count = patients.filter(
       (patient: Patient) => patient.status === status
     ).length;
-    const ratio = Math.round((count / patients.length) * 100);
+    const ratio = Math.round((count / patients.length) * 100) || 0;
     return {
       category,
       count,

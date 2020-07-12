@@ -5,7 +5,10 @@ import { RouteComponentProps } from "react-router";
 import { useAllPatients } from "../../graphql/queries/hooks/patients";
 import { PatientOverview } from "./PatientOverview";
 
-type TParams = { eventId: string; ccpId: string };
+interface TParams {
+  eventId: string;
+  ccpId: string;
+}
 
 export enum TabOptions {
   PatientOverview = 0,
@@ -90,7 +93,12 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   return (
     <Box className={classes.root}>
-      <Tabs className={classes.tabs} value={tab} onChange={handleChange}>
+      <Tabs
+        className={classes.tabs}
+        value={tab}
+        onChange={handleChange}
+        textColor="secondary"
+      >
         <Tab
           label="Patient Overview"
           id={`tab-${TabOptions.PatientOverview}`}

@@ -81,5 +81,8 @@ export const theme = createMuiTheme({
         borderColor: Colours.BorderLightGray,
       },
     },
+    MuiTab: {
+      wrapper: { textTransform: "none" },
+    },
   },
 });

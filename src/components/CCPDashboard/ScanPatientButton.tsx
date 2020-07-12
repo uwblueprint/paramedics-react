@@ -7,10 +7,6 @@ const useStyles = makeStyles({
   icon: {
     marginRight: "9px",
   },
-  patientTableCard: {
-    marginTop: "24px",
-    marginBottom: "145px",
-  },
   scanButton: {
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
     borderRadius: "2000px",

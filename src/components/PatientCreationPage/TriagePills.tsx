@@ -2,7 +2,6 @@ import React from "react";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import Container from "@material-ui/core/Container";
-import { ValidatorComponent } from "react-material-ui-form-validator";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { TriageLevel } from "../../graphql/queries/patients";
