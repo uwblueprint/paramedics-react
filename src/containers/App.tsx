@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from "@material-ui/core/styles";
 import { theme } from "../styles/Theme";
 import "../styles/App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -8,6 +8,7 @@ import EventCreationPage from "./EventCreationPage";
 import HospitalCreationPage from "./HospitalCreationPage";
 import AmbulanceCreationPage from "./AmbulanceCreationPage";
 import MemberCreationPage from "./MemberCreationPage";
+import PatientProfilePage from "./PatientProfilePage";
 
 function App() {
   return (
@@ -18,6 +19,11 @@ function App() {
         <Route exact path="/manage/hospitals/:mode/:hospitalId?" component={HospitalCreationPage} />
         <Route exact path="/manage/ambulances/:mode/:ambulanceId?" component={AmbulanceCreationPage} />
         <Route exact path="/manage/members/:mode/:userId?" component={MemberCreationPage} />
+        <Route
+          exact
+          path="/patients/:mode/:ccpId/:patientId?"
+          component={PatientProfilePage}
+        />
         <Route path="/">
           <Redirect to="/events" />
         </Route>
