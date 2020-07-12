@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { IconButton } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddMemberButton from "../components/HomeLandingPage/AddMemberButton";
+import AddResourceButton from "../components/ResourceOverviewPage/AddResourceButton";
 
 
 
@@ -128,7 +128,7 @@ return (
             </Table>
         </TableContainer>
         <div className="add-event-container">
-          <AddMemberButton />
+          <AddResourceButton label="Add Team Member" />
         </div>
     </div>
 )

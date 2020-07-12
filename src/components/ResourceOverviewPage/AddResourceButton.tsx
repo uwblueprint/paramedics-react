@@ -4,15 +4,20 @@ import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 
-const useEventButtonStyles = makeStyles({
+
+interface ButtonType {
+    label: string
+}
+
+const useButtonStyles = makeStyles({
   root: {
     borderRadius: "3rem",
     minWidth: "15rem",
   },
 });
 
-const AddMemberButton = () => {
-  const classes = useEventButtonStyles();
+const AddResourceButton = ({label}: ButtonType) => {
+  const classes = useButtonStyles();
   return (
     <Button
       component={NavLink}
@@ -24,9 +29,9 @@ const AddMemberButton = () => {
         root: classes.root,
       }}
     >
-      Add Team Member
+        {label}
     </Button>
   );
 };
 
-export default AddMemberButton;
+export default AddResourceButton;

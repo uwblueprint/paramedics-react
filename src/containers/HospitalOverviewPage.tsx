@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { IconButton } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddHospitalButton from "../components/HomeLandingPage/AddHospitalButton";
+import AddResourceButton from "../components/ResourceOverviewPage/AddResourceButton";
 
 
 const HospitalOverviewPage: React.FC = () => {
@@ -111,7 +111,7 @@ return (
             </Table>
         </TableContainer>
         <div className="add-event-container">
-          <AddHospitalButton />
+            <AddResourceButton label="Add Hospital"/>
         </div>
     </div>
 )

@@ -1,7 +1,12 @@
-.event-creation-top-section {
-  padding: 3em 3em 0em 3em;
+.resource-creation-top-section {
+  margin: 48px 30px 0px 30px;
   background-color: white;
   border-bottom: 1px solid #c4c4c4;
+}
+
+.resource-header {
+  display: flex;
+  padding-bottom: 1em;
 }
 
 .resource-add-wrapper {

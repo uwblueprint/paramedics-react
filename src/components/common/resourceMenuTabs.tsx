@@ -16,6 +16,7 @@ const useTabStyles = makeStyles({
     textTransform: "none",
     width: "15rem",
     maxWidth: "15rem",
+    paddingTop: 0,
   },
   indicator: {
     backgroundColor: Colours.SecondaryHover,

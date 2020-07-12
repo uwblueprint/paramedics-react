@@ -44,8 +44,6 @@ import { withStyles } from '@material-ui/core/styles';
 
   var overview;
 
-  const history = useHistory();
-
 
   if (tabLabels[selectedTab] === "Team Members") {
     overview = <TeamMemberOverviewPage/>;

@@ -12,7 +12,7 @@ import Stepper from "../components/EventCreationPage/Stepper";
 import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-import { ADD_EVENT } from "../graphql/mutations/templates/events";
+import { ADD_EVENT } from "../graphql/mutations/events";
 import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
 
 const EventCreationPage = () => {

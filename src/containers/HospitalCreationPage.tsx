@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "../styles/ResourceCreationPage.css";
 import Typography from "@material-ui/core/Typography";
@@ -6,57 +6,93 @@ import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
+import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
-// import { ADD_HOSPITAL } from "../graphql/mutations/templates/hospitals";
-// import { HospitalType, GET_ALL_HOSPITALS } from "../graphql/queries/templates/hospitals";
+import { ADD_HOSPITAL, EDIT_HOSPITAL } from "../graphql/mutations/hospitals";
+import { HospitalType, GET_ALL_HOSPITALS, GET_HOSPITAL_BY_ID } from "../graphql/queries/hospitals";
 
-const HospitalCreationPage = () => {
-  // const history = useHistory();
+const HospitalCreationPage = ({
+  match: {
+    params: { mode, hospitalId },
+  },
+}: {
+  match: { params: { mode: string; hospitalId?: string; } };
+}) => {
+  const history = useHistory();
 
-  // const { data } = useQuery(GET_ALL_HOSPITALS);
-  // const ambulances: Array<HospitalType> = data ? data.hospitals : [];
+  const { data, loading, error } = useQuery(
+    mode === "edit" && hospitalId
+      ? GET_HOSPITAL_BY_ID(hospitalId)
+      : GET_ALL_HOSPITALS
+  );
 
-  // const [addHospital] = useMutation(ADD_HOSPITAL,
-  //   {
-  //     update(cache, { data: { addHospital } }) {
-  //       cache.writeQuery({
-  //         query: GET_ALL_HOSPITALS,
-  //         data: { hospitals: hospitals.concat([addHospital]) },
-  //       });
-  //     }
-  //   }
-  // );
+  const hospitals: Array<HospitalType> = data ? data.hospitals : [];
+  const [addHospital] = useMutation(ADD_HOSPITAL,
+    {
+      update(cache, { data: { addHospital } }) {
+        cache.writeQuery({
+          query: GET_ALL_HOSPITALS,
+          data: { hospitals: hospitals.concat([addHospital]) },
+        });
+      }
+    }
+  );
+  const [editHospital] = useMutation(EDIT_HOSPITAL);
 
   const [hospitalName, setHospitalName] = useState<string>("");
+
+  useEffect(() => {
+    if (!loading && mode === "edit") {
+      const {
+        name
+      }: {
+        name: string;
+      } = data.hospital;
+      setHospitalName(name);
+    }
+  }, [data]);
 
   const handleNameChange = (e: any) => {
     setHospitalName(e.target.value);
   };
 
   const handleComplete = () => {
-    // addHospital({
-    //   variables: {
-    //     name: hospitalName,
-    //   }
-    // });
-    // history.replace("/management/hospitals");
+    if (mode === "new") {
+      addHospital({
+        variables: {
+          name: hospitalName,
+        }
+      });
+    } else if (mode === "edit") {
+      editHospital({
+        variables: {
+          id: hospitalId,
+          name: hospitalName,
+        }
+      });
+    }
+
+    history.replace("/manage/hospitals");
   };
 
   return (
     <div className="resource-add-wrapper">
-      <div className="event-creation-top-section">
+      <div className="resource-creation-top-section">
         <div className="top-bar-link">
           <Link
+            color="secondary"
+            variant="body2"
             component={NavLink}
-            variant="h6"
-            to="/management/hospitals"
+            to="/manage/hospitals"
           >
             &#60; Back
-        </Link>
+          </Link>
         </div>
-        <div className="landing-top-bar">
-          <Typography variant="h3">Add a new hospital</Typography>
+        <div className="resource-header">
+          <Typography variant="h4">
+            {mode === "new" ? "Add a new hospital" : "Edit Hospital"}
+          </Typography>
         </div>
       </div>
       <div className="event-form">
@@ -69,19 +105,19 @@ const HospitalCreationPage = () => {
           />
         </form>
         <div className="caption">
-          <Typography variant="body2" style={{ color: "#676767" }}>*Denotes a required field</Typography>
+          <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>*Denotes a required field</Typography>
         </div>
       </div>
       <div className="done-container">
         <Button
-          color="primary"
+          color="secondary"
           variant="contained"
           onClick={handleComplete}
           disabled={hospitalName === ""}
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }
@@ -91,13 +127,13 @@ const HospitalCreationPage = () => {
       </div>
       <div className="cancel-container">
         <Button
-          color="primary"
+          color="secondary"
           component={NavLink}
-          to="/management/hospitals"
+          to="/manage/hospitals"
           style={
             {
-              minWidth: "10rem",
-              minHeight: "2.5rem",
+              minWidth: "160px",
+              minHeight: "40px",
               fontSize: "18px",
             }
           }
