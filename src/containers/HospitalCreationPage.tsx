@@ -8,6 +8,7 @@ import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
+import { LocalHospitalOutlined } from "@material-ui/icons";
 // import { ADD_HOSPITAL, EDIT_HOSPITAL } from "../graphql/mutations/hospitals";
 // import { HospitalType, GET_ALL_HOSPITALS } from "../graphql/queries/hospitals";
 
@@ -37,12 +38,22 @@ const HospitalCreationPage = () => {
   };
 
   const handleComplete = () => {
-    // addHospital({
-    //   variables: {
-    //     name: hospitalName,
-    //   }
-    // });
-    // history.replace("/management/hospitals");
+    // if (mode === "new") {
+    //   addHospital({
+    //     variables: {
+    //       name: hospitalName,
+    //     }
+    //   });
+    // } else if (mode === "edit") {
+    //   editHospital({
+    //     variables: {
+    //       id: hospitalId,
+    //       name: hospitalName,
+    //     }
+    //   });
+    // }
+
+    // history.replace("/manage/hospitals");
   };
 
   return (
@@ -50,9 +61,10 @@ const HospitalCreationPage = () => {
       <div className="resource-creation-top-section">
         <div className="top-bar-link">
           <Link
+            color="secondary"
+            variant="body2"
             component={NavLink}
-            variant="h6"
-            to="/management/hospitals"
+            to="/manage/hospitals"
           >
             &#60; Back
         </Link>
@@ -71,7 +83,7 @@ const HospitalCreationPage = () => {
           />
         </form>
         <div className="caption">
-          <Typography variant="body2" style={{ color: "#676767" }}>*Denotes a required field</Typography>
+          <Typography variant="caption" style={{ color: "#676767" }}>*Denotes a required field</Typography>
         </div>
       </div>
       <div className="done-container">
@@ -95,7 +107,7 @@ const HospitalCreationPage = () => {
         <Button
           color="primary"
           component={NavLink}
-          to="/management/hospitals"
+          to="/manage/hospitals"
           style={
             {
               minWidth: "160px",

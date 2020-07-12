@@ -27,7 +27,7 @@ const AmbulanceCreationPage = () => {
   //     }
   //   }
   // );
-  
+
   // const [editAmbulance] = useMutation(EDIT_AMBULANCE);
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<number>(0);
@@ -37,12 +37,22 @@ const AmbulanceCreationPage = () => {
   };
 
   const handleComplete = () => {
-    // addAmbulance({
-    //   variables: {
-    //     vehicleNumber: ambulanceNumber,
-    //   }
-    // });
-    // history.replace("/management/ambulances");
+    // if (mode === "new") {
+    //   addAmbulance({
+    //     variables: {
+    //       vehicleNumber: ambulanceNumber,
+    //     }
+    //   });
+    // } else if (mode === "edit") {
+    //   editAmbulance({
+    //     variables: {
+    //       id: ambulanceId,
+    //       vehicleNumber: ambulanceNumber,
+    //     }
+    //   });
+    // }
+
+    // history.replace("/manage/ambulances");
   };
 
   return (
@@ -50,9 +60,10 @@ const AmbulanceCreationPage = () => {
       <div className="resource-creation-top-section">
         <div className="top-bar-link">
           <Link
+            color="secondary"
+            variant="body2"
             component={NavLink}
-            variant="h6"
-            to="/management/ambulances"
+            to="/manage/ambulances"
           >
             &#60; Back
         </Link>
@@ -71,7 +82,7 @@ const AmbulanceCreationPage = () => {
           />
         </form>
         <div className="caption">
-          <Typography variant="body2" style={{ color: "#676767" }}>*Denotes a required field</Typography>
+          <Typography variant="caption" style={{ color: "#676767" }}>*Denotes a required field</Typography>
         </div>
       </div>
       <div className="done-container">
@@ -95,7 +106,7 @@ const AmbulanceCreationPage = () => {
         <Button
           color="primary"
           component={NavLink}
-          to="/management/ambulances"
+          to="/manage/ambulances"
           style={
             {
               minWidth: "160px",

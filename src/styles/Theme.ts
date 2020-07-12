@@ -57,6 +57,12 @@ export const theme = createMuiTheme({
       fontWeight: 500,
       textTransform: 'uppercase'
     },
+    caption: {
+      fontSize: '16px',
+      letterSpacing: '0.5px',
+      lineHeight: '20px',
+      fontWeight: 'normal'
+    },
   },
   overrides: {
     MuiTableCell: {
