@@ -9,6 +9,7 @@ const useTextFieldStyles = makeStyles({
     borderRadius: "10px",
     backgroundColor: "#FFFFFF",
     padding: "20px",
+    marginTop: "0px",
     marginBottom: "10px",
     height: "120px",
     width: "100%",
@@ -39,15 +40,16 @@ const FormField = ({
   onChange,
   value,
   handleFocus,
+  isRequired,
 }: {
   label: string;
   placeholder: string;
   onChange: (e: any) => any;
   value: string;
   handleFocus?: () => any;
+  isRequired: boolean;
 }) => {
   const classes = useTextFieldStyles();
-
   return (
     <TextField
       label={label}

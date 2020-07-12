@@ -8,7 +8,7 @@ import AddEventButton from "../components/HomeLandingPage/AddEventButton";
 import Grid from "@material-ui/core/Grid";
 import { useAllEvents } from "../graphql/queries/hooks/events";
 import { useQuery } from "react-apollo";
-import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
+import { EventType, GET_ALL_EVENTS } from "../graphql/queries/events";
 
 const HomeLandingPage = () => {
   const [selectedTab, setTab] = useState(0);

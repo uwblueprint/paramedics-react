@@ -7,6 +7,7 @@ import HomeLandingPage from "./HomeLandingPage";
 import EventCreationPage from "./EventCreationPage";
 import ScanPatientPage from "./ScanPatientPage";
 import EnterBarcodePage from "./EnterBarcodePage";
+import PatientProfilePage from "./PatientProfilePage";
 
 function App() {
   return (
@@ -23,6 +24,11 @@ function App() {
           exact
           path="/events/:eventID/ccps/:ccpID/scan/manual/:barcode?"
           component={EnterBarcodePage}
+        />
+        <Route
+          exact
+          path="/patients/:mode/:ccpId/:patientId?"
+          component={PatientProfilePage}
         />
         <Route path="/">
           <Redirect to="/events" />
