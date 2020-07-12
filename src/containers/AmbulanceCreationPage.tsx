@@ -10,7 +10,7 @@ import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_AMBULANCE, EDIT_AMBULANCE } from "../graphql/mutations/ambulances";
-// import { AmbulanceType, GET_ALL_AMBULANCES, GET_AMBULANCE_BY_ID} from "../graphql/queries/ambulances";
+import { AmbulanceType, GET_ALL_AMBULANCES, GET_AMBULANCE_BY_ID } from "../graphql/queries/ambulances";
 
 const AmbulanceCreationPage = ({
   match: {
@@ -19,62 +19,60 @@ const AmbulanceCreationPage = ({
 }: {
   match: { params: { mode: string; ambulanceId?: string; } };
 }) => {
-  // const history = useHistory();
-  // const { data, loading, error } = useQuery(
-  //   mode === "edit" && ambulanceId
-  //     ? GET_AMBULANCE_BY_ID(ambulanceId)
-  //     : GET_ALL_AMBULANCES
-  // );
+  const history = useHistory();
+  const { data, loading, error } = useQuery(
+    mode === "edit" && ambulanceId
+      ? GET_AMBULANCE_BY_ID(ambulanceId)
+      : GET_ALL_AMBULANCES
+  );
 
-  // const ambulances: Array<AmbulanceType> = data ? data.ambulances : [];
-
-  // const [addAmbulance] = useMutation(ADD_AMBULANCE,
-  //   {
-  //     update(cache, { data: { addAmbulance } }) {
-  //       cache.writeQuery({
-  //         query: GET_ALL_AMBULANCES,
-  //         data: { ambulances: ambulances.concat([addAmbulance]) },
-  //       });
-  //     }
-  //   }
-  // );
-
-  // const [editAmbulance] = useMutation(EDIT_AMBULANCE);
+  const ambulances: Array<AmbulanceType> = data ? data.ambulances : [];
+  const [addAmbulance] = useMutation(ADD_AMBULANCE,
+    {
+      update(cache, { data: { addAmbulance } }) {
+        cache.writeQuery({
+          query: GET_ALL_AMBULANCES,
+          data: { ambulances: ambulances.concat([addAmbulance]) },
+        });
+      }
+    }
+  );
+  const [editAmbulance] = useMutation(EDIT_AMBULANCE);
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<number>(0);
 
-  // useEffect(() => {
-  //   if (!loading && mode === "edit") {
-  //     const {
-  //       vehicleNumber
-  //     }: {
-  //       vehicleNumber: number;
-  //     } = data.ambulance;
-  //     setAmbulanceNumber(vehicleNumber);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (!loading && mode === "edit") {
+      const {
+        vehicleNumber
+      }: {
+        vehicleNumber: number;
+      } = data.ambulance;
+      setAmbulanceNumber(vehicleNumber);
+    }
+  }, [data]);
 
   const handleNumberChange = (e: any) => {
     setAmbulanceNumber(e.target.value);
   };
 
   const handleComplete = () => {
-    // if (mode === "new") {
-    //   addAmbulance({
-    //     variables: {
-    //       vehicleNumber: ambulanceNumber,
-    //     }
-    //   });
-    // } else if (mode === "edit") {
-    //   editAmbulance({
-    //     variables: {
-    //       id: ambulanceId,
-    //       vehicleNumber: ambulanceNumber,
-    //     }
-    //   });
-    // }
+    if (mode === "new") {
+      addAmbulance({
+        variables: {
+          vehicleNumber: ambulanceNumber,
+        }
+      });
+    } else if (mode === "edit") {
+      editAmbulance({
+        variables: {
+          id: ambulanceId,
+          vehicleNumber: ambulanceNumber,
+        }
+      });
+    }
 
-    // history.replace("/manage/ambulances");
+    history.replace("/manage/ambulances");
   };
 
   return (
@@ -90,7 +88,7 @@ const AmbulanceCreationPage = ({
             &#60; Back
         </Link>
         </div>
-        <div className="landing-top-bar">
+        <div className="resource-header">
           <Typography variant="h4">
             {mode === "new" ? "Add a new ambulance" : "Edit Ambulance"}
           </Typography>
@@ -111,7 +109,7 @@ const AmbulanceCreationPage = ({
       </div>
       <div className="done-container">
         <Button
-          color="primary"
+          color="secondary"
           variant="contained"
           onClick={handleComplete}
           disabled={ambulanceNumber === 0}
@@ -128,7 +126,7 @@ const AmbulanceCreationPage = ({
       </div>
       <div className="cancel-container">
         <Button
-          color="primary"
+          color="secondary"
           component={NavLink}
           to="/manage/ambulances"
           style={

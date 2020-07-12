@@ -4,6 +4,11 @@
   border-bottom: 1px solid #c4c4c4;
 }
 
+.resource-header {
+  display: flex;
+  padding-bottom: 1em;
+}
+
 .resource-add-wrapper {
   background-color: white;
 }

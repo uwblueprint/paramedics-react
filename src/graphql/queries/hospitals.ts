@@ -1,0 +1,26 @@
+import gql from "graphql-tag";
+
+export interface HospitalType {
+    id: string;
+    name: string;
+}
+
+export const GET_HOSPITAL_BY_ID = (id: string) => {
+    return gql`
+      query {
+        hospital(id: ${id}) {
+          id
+          name
+        }
+      }
+    `;
+};
+
+export const GET_ALL_HOSPITALS = gql`
+  query {
+    hospitals @client {
+      id
+      name
+    }
+  }
+`;
