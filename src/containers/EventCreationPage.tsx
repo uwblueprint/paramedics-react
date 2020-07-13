@@ -9,11 +9,11 @@ import CancelModal from '../components/EventCreationPage/CancelModal';
 import Map from '../components/EventCreationPage/Map';
 import NextButton from '../components/EventCreationPage/NextButton';
 import BackButton from '../components/EventCreationPage/BackButton';
-import FormField from '../components/EventCreationPage/FormField';
+import FormField from '../components/common/FormField';
 import Stepper from '../components/EventCreationPage/Stepper';
 import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
-import ADD_EVENT from '../graphql/mutations/templates/events';
-import { EventType, GET_ALL_EVENTS } from '../graphql/queries/templates/events';
+import ADD_EVENT from '../graphql/mutations/events';
+import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 
 const EventCreationPage = (): JSX.Element => {
   const history = useHistory();
@@ -108,6 +108,7 @@ const EventCreationPage = (): JSX.Element => {
           placeholder="Event Name Here"
           onChange={handleNameChange}
           value={eventName}
+          isValidated={false}
         />
         <FormField
           label="Date of Event:"
@@ -119,6 +120,7 @@ const EventCreationPage = (): JSX.Element => {
               : ''
           }
           handleFocus={handleOpenDateModal}
+          isValidated={false}
         />
       </form>
     ) : (
@@ -128,6 +130,7 @@ const EventCreationPage = (): JSX.Element => {
           placeholder="Enter Location Here"
           onChange={handleLocationChange}
           value={eventLocation}
+          isValidated={false}
         />
         <Map />
       </form>

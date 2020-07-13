@@ -15,6 +15,16 @@ enum Colours {
   DisabledText = '#5C5C5C',
   ActiveGreen = '#43B00F',
   InactiveGrey = '#888888',
+  TriageRed = '#FF5858',
+  TriageSelectedRed = '#FFE4E4',
+  TriageGreen = '#60CD39',
+  TriageSelectedGreen = '#D7F3CD',
+  TriageYellow = '#FFC90A',
+  TriageSelectedYellow = '#FFF2C2',
+  TriageWhite = '#CECECE',
+  TriageSelectedWhite = '#F3F3F3',
+  TriageBlack = '#000000',
+  TriageSelectedBlack = '#BFBFBF',
 }
 
 export default Colours;

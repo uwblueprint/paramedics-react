@@ -8,7 +8,7 @@ import MenuTabs from '../components/common/MenuTabs';
 import AddEventButton from '../components/HomeLandingPage/AddEventButton';
 import EventCard from '../components/HomeLandingPage/EventCard';
 import useAllEvents from '../graphql/queries/hooks/events';
-import { EventType, GET_ALL_EVENTS } from '../graphql/queries/templates/events';
+import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 import '../styles/HomeLandingPage.css';
 
 const HomeLandingPage = (): JSX.Element => {
