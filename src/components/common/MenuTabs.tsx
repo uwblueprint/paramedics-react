@@ -50,7 +50,7 @@ const MenuTabs: React.FC<{
         <Tab
           key={label}
           label={
-            <Typography variant="body1">
+            <Typography component="span" variant="body1">
               <Box fontWeight="fontWeightBold">{label}</Box>
             </Typography>
           }

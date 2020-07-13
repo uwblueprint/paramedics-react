@@ -1,4 +1,4 @@
-import { EventType } from "../queries/events";
+import { EventType } from './events';
 
 export interface CCPType {
   id: string;

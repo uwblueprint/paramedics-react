@@ -7,7 +7,7 @@ import PatientProfilePage from './PatientProfilePage';
 import Theme from '../styles/Theme';
 import '../styles/App.css';
 
-function App(): JSX.Element {
+function App() {
   return (
     <ThemeProvider theme={Theme}>
       <Switch>

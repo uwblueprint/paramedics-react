@@ -3,7 +3,7 @@ const defaults = {
     name: '',
   },
   patients: {
-    gender: "",
+    gender: '',
   },
 };
 

@@ -15,7 +15,7 @@ import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
 import ADD_EVENT from '../graphql/mutations/events';
 import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 
-const EventCreationPage = (): JSX.Element => {
+const EventCreationPage = () => {
   const history = useHistory();
 
   const { data } = useQuery(GET_ALL_EVENTS);

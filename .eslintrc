@@ -27,6 +27,8 @@
     ],
     "@typescript-eslint/indent": "off",
     "react/jsx-wrap-multilines": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "radix": ["error", "as-needed"]
   }
 }

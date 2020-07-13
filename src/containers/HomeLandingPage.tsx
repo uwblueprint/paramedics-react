@@ -11,7 +11,7 @@ import useAllEvents from '../graphql/queries/hooks/events';
 import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 import '../styles/HomeLandingPage.css';
 
-const HomeLandingPage = (): JSX.Element => {
+const HomeLandingPage = () => {
   const [selectedTab, setTab] = useState(0);
   const handleChange = (
     event: React.ChangeEvent<unknown>,
@@ -54,7 +54,7 @@ const HomeLandingPage = (): JSX.Element => {
       <div className="landing-body">
         <Grid container direction="row" alignItems="center" spacing={3}>
           {events.map((event: EventType) => (
-            <Grid item>
+            <Grid item key={event.name}>
               <EventCard
                 key={event.name}
                 date={event.eventDate}
