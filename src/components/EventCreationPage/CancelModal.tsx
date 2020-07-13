@@ -37,14 +37,8 @@ const useModalStyles = makeStyles({
 
 const CancelModal: React.FC<{
   open: boolean;
-  handleClose: () => React.MouseEvent<HTMLElement>;
-}> = ({
-  open,
-  handleClose,
-}: {
-  open: boolean;
-  handleClose: () => React.MouseEvent<HTMLElement>;
-}) => {
+  handleClose: () => void;
+}> = ({ open, handleClose }: { open: boolean; handleClose: () => void }) => {
   const classes = useModalStyles();
   return (
     <Modal open={open} onClose={handleClose}>

@@ -15,19 +15,17 @@ import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
 import { ADD_EVENT } from '../graphql/mutations/templates/events';
 import { EventType, GET_ALL_EVENTS } from '../graphql/queries/templates/events';
 
-type EventCreationPage = () => JSX.Element;
-
-const EventCreationPage = () => {
+const EventCreationPage = (): JSX.Element => {
   const history = useHistory();
 
   const { data } = useQuery(GET_ALL_EVENTS);
   const events: Array<EventType> = data ? data.events : [];
 
   const [addEvent] = useMutation(ADD_EVENT, {
-    update(cache, { data: { addEvent } }) {
+    update(cache, { data: { newEvent } }) {
       cache.writeQuery({
         query: GET_ALL_EVENTS,
-        data: { events: events.concat([addEvent]) },
+        data: { events: events.concat([newEvent]) },
       });
     },
   });
@@ -47,14 +45,17 @@ const EventCreationPage = () => {
   const handleOpenDateModal = () => setOpenDateModal(true);
   const handleCloseDateModal = () => setOpenDateModal(false);
 
-  const handleNameChange = (e: any) => {
-    setEventName(e.target.value);
+  const handleNameChange = (e: React.ChangeEvent<HTMLElement>) => {
+    const target = e.target as HTMLInputElement;
+    setEventName(target.value);
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (e: any) => {
     setEventDate(e.target.value);
   };
-  const handleLocationChange = (e: any) => {
-    setEventLocation(e.target.value);
+  const handleLocationChange = (e: React.ChangeEvent<HTMLElement>) => {
+    const target = e.target as HTMLInputElement;
+    setEventLocation(target.value);
   };
 
   const handleNext = () => {
@@ -62,6 +63,7 @@ const EventCreationPage = () => {
   };
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
+    return null;
   };
 
   const dateParts: {

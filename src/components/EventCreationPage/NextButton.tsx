@@ -15,7 +15,7 @@ const useEventButtonStyles = makeStyles({
 });
 
 const NextButton: React.FC<{
-  handleClick: () => React.MouseEvent<HTMLElement>;
+  handleClick: () => void;
   disabled: boolean;
   buttonText: string;
 }> = ({
@@ -23,7 +23,7 @@ const NextButton: React.FC<{
   disabled,
   buttonText,
 }: {
-  handleClick: () => React.MouseEvent<HTMLElement>;
+  handleClick: () => void;
   disabled: boolean;
   buttonText: string;
 }) => {

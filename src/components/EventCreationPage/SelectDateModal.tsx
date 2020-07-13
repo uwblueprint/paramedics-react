@@ -59,9 +59,9 @@ const datePickerTheme = createMuiTheme({
 
 const SelectDateModal: React.FC<{
   open: boolean;
-  handleClose: () => React.MouseEvent<HTMLElement>;
+  handleClose: () => void;
   eventDate: Date | null;
-  setEventDate: (date: any) => void;
+  setEventDate: (date: Date | null) => void;
 }> = ({
   open,
   handleClose,
@@ -69,12 +69,12 @@ const SelectDateModal: React.FC<{
   setEventDate,
 }: {
   open: boolean;
-  handleClose: () => any;
+  handleClose: () => void;
   eventDate: Date | null;
-  setEventDate: (date: any) => void;
+  setEventDate: (date: Date | null) => void;
 }) => {
   const classes = useModalStyles();
-  const [date, setDate] = useState<any>(eventDate);
+  const [date, setDate] = useState<Date | null>(eventDate);
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
