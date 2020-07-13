@@ -7,13 +7,16 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuTabs from '../components/common/MenuTabs';
 import AddEventButton from '../components/HomeLandingPage/AddEventButton';
 import EventCard from '../components/HomeLandingPage/EventCard';
-import { useAllEvents } from '../graphql/queries/hooks/events';
+import useAllEvents from '../graphql/queries/hooks/events';
 import { EventType, GET_ALL_EVENTS } from '../graphql/queries/templates/events';
 import '../styles/HomeLandingPage.css';
 
-const HomeLandingPage = () => {
+const HomeLandingPage = (): JSX.Element => {
   const [selectedTab, setTab] = useState(0);
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (
+    event: React.ChangeEvent<unknown>,
+    newValue: number
+  ) => {
     setTab(newValue);
   };
 

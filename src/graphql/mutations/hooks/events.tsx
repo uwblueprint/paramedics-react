@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/react-hooks';
-import { ADD_EVENT } from '../templates/events';
+import ADD_EVENT from '../templates/events';
 
 export default function useEventMutation(
   {
