@@ -2,10 +2,9 @@ import React from "react";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import Container from "@material-ui/core/Container";
-import { ValidatorComponent } from "react-material-ui-form-validator";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { triageLevel } from "../../graphql/queries/patients";
+import { TriageLevel } from "../../graphql/queries/patients";
 import { Colours } from "../../styles/Constants";
 
 const TriagePills = ({
@@ -14,10 +13,10 @@ const TriagePills = ({
   error,
   helperText,
 }: {
-  currentStatus: triageLevel | null;
+  currentStatus: TriageLevel | null;
   handleChange: (
     e: React.MouseEvent<HTMLElement>,
-    newTriage: triageLevel
+    newTriage: TriageLevel
   ) => any;
   error?: boolean;
   helperText?: string;
@@ -36,7 +35,7 @@ const TriagePills = ({
           groupedHorizontal: classes.buttonGroup,
         }}
       >
-        {Object.keys(triageLevel).map((level) => (
+        {Object.keys(TriageLevel).map((level) => (
           <ToggleButton
             value={level}
             key={level}

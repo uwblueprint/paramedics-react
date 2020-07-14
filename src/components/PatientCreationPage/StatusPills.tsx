@@ -4,21 +4,21 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { status } from "../../graphql/queries/patients";
+import { Status } from "../../graphql/queries/patients";
 
 const StatusPills = ({
   currentStatus,
   handleChange,
 }: {
-  currentStatus: status | null;
-  handleChange: (e: React.MouseEvent<HTMLElement>, newStatus: status) => any;
+  currentStatus: Status | null;
+  handleChange: (e: React.MouseEvent<HTMLElement>, newStatus: Status) => any;
 }) => {
   const classes = useCompletePatientButtonStyles();
   const statuses = [
-    { val: status.ON_SITE, description: "On Site" },
-    { val: status.RELEASED, description: "Released" },
-    { val: status.TRANSPORTED, description: "Transport" },
-    { val: status.DELETED, description: "Deleted" },
+    { val: Status.ON_SITE, description: "On Site" },
+    { val: Status.RELEASED, description: "Released" },
+    { val: Status.TRANSPORTED, description: "Transport" },
+    { val: Status.DELETED, description: "Deleted" },
   ];
   return (
     <Container className={classes.root}>
