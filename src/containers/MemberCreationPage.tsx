@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "../styles/ResourceCreationPage.css";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
-import { NavLink } from "react-router-dom";
+import BackLink from "../components/ResourceCreationPage/BackLink";
+import CancelButton from "../components/ResourceCreationPage/CancelButton";
+import DoneButton from "../components/ResourceCreationPage/DoneButton";
 import AccessLevelSelector from "../components/ResourceCreationPage/AccessLevelSelector";
 import { Colours } from '../styles/Constants';
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_USER, EDIT_USER } from "../graphql/mutations/users";
 import { UserType, accessLevel, GET_ALL_USERS, GET_USER_BY_ID } from "../graphql/queries/users";
+import { ValidatorForm } from "react-material-ui-form-validator";
 
 const MemberCreationPage = ({
   match: {
@@ -40,7 +41,6 @@ const MemberCreationPage = ({
       }
     }
   );
-
   const [editUser] = useMutation(EDIT_USER);
 
   const [memberName, setMemberName] = useState<string>("");
@@ -108,16 +108,7 @@ const MemberCreationPage = ({
   return (
     <div className="resource-add-wrapper">
       <div className="resource-creation-top-section">
-        <div className="top-bar-link">
-          <Link
-            color="secondary"
-            variant="body2"
-            component={NavLink}
-            to="/manage/members"
-          >
-            &#60; Back
-                </Link>
-        </div>
+        <BackLink to="/manage/members" />
         <div className="resource-header">
           <Typography variant="h4">
             {mode === "new" ? "Add a new team member" : "Edit team member"}
@@ -129,17 +120,21 @@ const MemberCreationPage = ({
           </div>
           : ""}
       </div>
-      <div className="event-form">
-        <form>
+      <ValidatorForm onSubmit={handleComplete}>
+        <div className="event-form">
           <FormField
             label="Team Member Name:"
             required
+            isValidated={false}
             onChange={handleNameChange}
             value={memberName}
           />
           <FormField
             label="Email:"
             required
+            isValidated={true}
+            validators={["required", "isEmail"]}
+            errorMessages={["This is a mandatory field", "Invalid email"]}
             onChange={handleEmailChange}
             value={email}
           />
@@ -147,43 +142,19 @@ const MemberCreationPage = ({
             currentValue={role}
             handleChange={handleRoleChange}
           />
-        </form>
-        <div className="caption">
-          <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>*Denotes a required field</Typography>
+          <div className="caption">
+            <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>*Denotes a required field</Typography>
+          </div>
         </div>
-      </div>
-      <div className="done-container">
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={handleComplete}
-          disabled={memberName === "" || email === ""}
-          style={
-            {
-              minWidth: "160px",
-              minHeight: "40px",
-              fontSize: "18px",
-            }
-          }
-        >
-          Done
-        </Button>
-      </div>
+        <div className="done-container">
+          <DoneButton
+            handleClick={handleComplete}
+            disabled={memberName === "" || email === ""}
+          />
+        </div>
+      </ValidatorForm>
       <div className="cancel-container">
-        <Button
-          color="secondary"
-          component={NavLink}
-          to="/manage/hospitals"
-          style={
-            {
-              minWidth: "160px",
-              minHeight: "40px",
-              fontSize: "18px",
-            }
-          }
-        >
-          Cancel
-        </Button>
+        <CancelButton to="/manage/members" />
       </div>
     </div>
   );

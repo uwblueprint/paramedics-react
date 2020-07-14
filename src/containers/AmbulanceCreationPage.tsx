@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "../styles/ResourceCreationPage.css";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
-import { NavLink } from "react-router-dom";
+import BackLink from "../components/ResourceCreationPage/BackLink";
+import CancelButton from "../components/ResourceCreationPage/CancelButton";
+import DoneButton from "../components/ResourceCreationPage/DoneButton";
 import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
@@ -78,16 +78,7 @@ const AmbulanceCreationPage = ({
   return (
     <div className="resource-add-wrapper">
       <div className="resource-creation-top-section">
-        <div className="top-bar-link">
-          <Link
-            color="secondary"
-            variant="body2"
-            component={NavLink}
-            to="/manage/ambulances"
-          >
-            &#60; Back
-        </Link>
-        </div>
+        <BackLink to="/manage/ambulances" />
         <div className="resource-header">
           <Typography variant="h4">
             {mode === "new" ? "Add a new ambulance" : "Edit Ambulance"}
@@ -99,6 +90,7 @@ const AmbulanceCreationPage = ({
           <FormField
             label="Ambulance Number:"
             required
+            isValidated={false}
             onChange={handleNumberChange}
             value={ambulanceNumber}
           />
@@ -108,37 +100,13 @@ const AmbulanceCreationPage = ({
         </div>
       </div>
       <div className="done-container">
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={handleComplete}
+        <DoneButton
+          handleClick={handleComplete}
           disabled={ambulanceNumber === 0}
-          style={
-            {
-              minWidth: "160px",
-              minHeight: "40px",
-              fontSize: "18px",
-            }
-          }
-        >
-          Done
-        </Button>
+        />
       </div>
       <div className="cancel-container">
-        <Button
-          color="secondary"
-          component={NavLink}
-          to="/manage/ambulances"
-          style={
-            {
-              minWidth: "160px",
-              minHeight: "40px",
-              fontSize: "18px",
-            }
-          }
-        >
-          Cancel
-        </Button>
+        <CancelButton to="/manage/ambulances" />
       </div>
     </div>
   );
