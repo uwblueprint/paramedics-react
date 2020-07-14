@@ -123,7 +123,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     { headerId: "age", label: "Age" },
     { headerId: "status", label: "Status" },
     { headerId: "hospital", label: "Hospital" },
-    { headerId: "transportTime", label: "Time" },
+    { headerId: "transportTime", label: "Last Edited" },
   ];
 
   return (
