@@ -117,7 +117,7 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
               color="textPrimary"
               style={{ marginTop: "24px", marginRight: "16px" }}
             >
-              {patients.length}
+              {filteredPatients.length}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               total patients
