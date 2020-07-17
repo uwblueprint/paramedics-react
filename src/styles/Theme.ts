@@ -12,6 +12,10 @@ export const theme = createMuiTheme({
     error: {
       main: Colours.Danger,
     },
+    text: {
+      primary: Colours.Black,
+      secondary: Colours.SecondaryGray,
+    },
   },
   typography: {
     h3: {
@@ -45,7 +49,7 @@ export const theme = createMuiTheme({
       fontWeight: 500,
     },
     body2: {
-      fontSize: "14px",
+      fontSize: "18px",
       letterSpacing: "0.5px",
       lineHeight: "24px",
       fontWeight: "normal",
@@ -71,6 +75,14 @@ export const theme = createMuiTheme({
           borderBottom: 0,
         },
       },
+    },
+    MuiCard: {
+      root: {
+        borderColor: Colours.BorderLightGray,
+      },
+    },
+    MuiTab: {
+      wrapper: { textTransform: "none" },
     },
   },
 });

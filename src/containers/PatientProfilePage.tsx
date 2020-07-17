@@ -12,9 +12,9 @@ import StatusPills from "../components/PatientCreationPage/StatusPills";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import {
-  triageLevel,
-  status,
-  PatientType,
+  TriageLevel,
+  Status,
+  Patient,
   GET_PATIENT_BY_ID,
   GET_ALL_PATIENTS,
 } from "../graphql/queries/patients";
@@ -22,13 +22,13 @@ import { ADD_PATIENT, EDIT_PATIENT } from "../graphql/mutations/patients";
 
 interface FormFields {
   barcodeValue: string;
-  triage: triageLevel | null;
+  triage: TriageLevel | null;
   gender: string;
   age: number | null;
   notes: string;
   runNumber?: number | null;
   collectionPointId?: number;
-  status: status | null;
+  status: Status | null;
   triageCategory?: number | null;
   triageLevel?: number | null;
   transportTime?: number | null;
@@ -48,16 +48,16 @@ const PatientProfilePage = ({
       ? GET_PATIENT_BY_ID(patientId)
       : GET_ALL_PATIENTS
   );
-  const patients: Array<PatientType> = data ? data.patient : [];
+  const patients: Array<Patient> = data ? data.patient : [];
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: "",
-    triage: triageLevel.GREEN,
+    triage: TriageLevel.GREEN,
     gender: "Male",
     age: null,
     notes: "",
-    status: status.ON_SITE,
+    status: Status.ON_SITE,
     runNumber: null,
   });
 
@@ -73,11 +73,11 @@ const PatientProfilePage = ({
         runNumber,
       }: {
         barcodeValue: string;
-        triageLevel: triageLevel;
+        triageLevel: TriageLevel;
         gender: string;
         age: number;
         notes: string;
-        status: status;
+        status: Status;
         runNumber: number | null;
       } = data.patient;
       setFormFields({
@@ -184,7 +184,7 @@ const PatientProfilePage = ({
             currentStatus={formFields.status}
             handleChange={(
               e: React.MouseEvent<HTMLElement>,
-              newStatus: status
+              newStatus: Status
             ) => {
               setFormFields({ ...formFields, status: newStatus });
             }}
@@ -206,7 +206,7 @@ const PatientProfilePage = ({
             currentStatus={formFields.triage}
             handleChange={(
               e: React.MouseEvent<HTMLElement>,
-              newTriage: triageLevel
+              newTriage: TriageLevel
             ) => {
               if (newTriage !== null) {
                 setFormFields({ ...formFields, triage: newTriage });

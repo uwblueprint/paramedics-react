@@ -7,6 +7,7 @@ import HomeLandingPage from "./HomeLandingPage";
 import EventCreationPage from "./EventCreationPage";
 import ScanPatientPage from "./ScanPatientPage";
 import EnterBarcodePage from "./EnterBarcodePage";
+import CCPDashboardPage from "../components/CCPDashboard/CCPDashboardPage";
 import PatientProfilePage from "./PatientProfilePage";
 
 function App() {
@@ -24,6 +25,11 @@ function App() {
           exact
           path="/events/:eventID/ccps/:ccpID/scan/manual/:barcode?"
           component={EnterBarcodePage}
+        />
+        <Route
+          exact
+          path="/events/:eventId/ccps/:ccpId"
+          component={CCPDashboardPage}
         />
         <Route
           exact
