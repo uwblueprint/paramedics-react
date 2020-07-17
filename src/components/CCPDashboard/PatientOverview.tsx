@@ -2,7 +2,6 @@ import React from "react";
 import clsx from "clsx";
 import { Colours } from "../../styles/Constants";
 import {
-  Box,
   Typography,
   makeStyles,
   Card,
@@ -14,21 +13,16 @@ import {
   TableRow,
   TableCell,
 } from "@material-ui/core";
-import { useQuery } from "@apollo/react-hooks";
-import {
-  FETCH_ALL_PATIENTS,
-  Patient,
-  TriageLevel,
-  Status,
-} from "../../graphql/queries/patients";
-import { TriageTag } from "./TriageTag";
+import { Patient, Status } from "../../graphql/queries/patients";
+import { TotalPatientCard } from "./TotalPatientCard";
+import { TriageCard } from "./TriageCard";
 import { PatientInfoTableWithFilters } from "./PatientInfoTableWithFilters";
 import { ScanPatientButton } from "./ScanPatientButton";
-import LoadingState from "../common/LoadingState";
 
 interface PatientOverviewProps {
   eventId: string;
   ccpId: string;
+  patients: Patient[];
 }
 
 interface TableRowData {
@@ -41,12 +35,6 @@ const useStyles = makeStyles({
   fullHeightGridItem: {
     display: "flex",
     alignSelf: "stretch",
-  },
-  card: {
-    padding: "24px",
-    marginTop: "16px",
-    marginRight: "24px",
-    height: "100%",
   },
   categoryTableCard: {
     display: "flex",
@@ -65,9 +53,6 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
   },
-  icon: {
-    marginRight: "9px",
-  },
   patientTableCard: {
     marginTop: "24px",
     marginBottom: "145px",
@@ -85,14 +70,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { ccpId } = props;
-
-  // Should switch to fetching patients from cache
-  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
-  const allPatients: Array<Patient> = data ? data.patients : [];
-  const patients = allPatients.filter(
-    (patient: Patient) => patient.collectionPointId.id === ccpId
-  );
+  const { patients } = props;
 
   const createCategoryData = (
     category: string,
@@ -116,151 +94,84 @@ export const PatientOverview = (props: PatientOverviewProps) => {
     createCategoryData("Omitted/Deleted", Status.DELETED),
   ];
 
-  const triageLevels = [
-    {
-      colour: Colours.TriageGreen,
-      triageLevel: TriageLevel.GREEN,
-      label: "Green",
-    },
-    {
-      colour: Colours.TriageYellow,
-      triageLevel: TriageLevel.YELLOW,
-      label: "Yellow",
-    },
-    { colour: Colours.TriageRed, triageLevel: TriageLevel.RED, label: "Red" },
-    { colour: Colours.Black, triageLevel: TriageLevel.BLACK, label: "Black" },
-    {
-      colour: Colours.TriageWhite,
-      triageLevel: TriageLevel.WHITE,
-      label: "White",
-    },
-  ];
-
   const noBorderLastRow = (index) =>
     clsx({
       [classes.lightBorder]: true,
       [classes.noBorder]: index === categoryTableRows.length - 1,
     });
 
-  if (loading) {
-    return <LoadingState />;
-  } else {
-    return (
-      <Grid container direction="row" justify="center" alignItems="center">
-        <Grid>
-          <Grid item>
-            <Card variant="outlined" className={classes.card}>
-              <Box display="flex" alignItems="baseline">
-                <Typography
-                  variant="h3"
-                  color="textPrimary"
-                  style={{ marginRight: "16px" }}
-                >
-                  {patients.length}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  total patients
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item>
-            <Card variant="outlined" className={classes.card}>
-              <Typography
-                variant="body1"
-                color="textSecondary"
-                style={{ marginBottom: "16px" }}
-              >
-                CCP triage:
-              </Typography>
-              <Grid container direction="row">
-                {triageLevels.map((level) => {
-                  const count = patients.filter(
-                    (patient: Patient) =>
-                      patient.triageLevel === level.triageLevel
-                  ).length;
-                  return (
-                    <TriageTag
-                      key={level.triageLevel}
-                      colour={level.colour}
-                      label={level.label}
-                      count={count}
-                    />
-                  );
-                })}
-              </Grid>
-            </Card>
-          </Grid>
+  return (
+    <Grid container direction="row" justify="center" alignItems="center">
+      <Grid>
+        <Grid item>
+          <TotalPatientCard numPatients={patients.length} />
         </Grid>
-        <Grid item className={classes.fullHeightGridItem}>
-          <Card variant="outlined" className={classes.categoryTableCard}>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body1" color="textSecondary">
-                        Category
+        <Grid item>
+          <TriageCard patients={patients} />
+        </Grid>
+      </Grid>
+      <Grid item className={classes.fullHeightGridItem}>
+        <Card variant="outlined" className={classes.categoryTableCard}>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Typography variant="body1" color="textSecondary">
+                      Category
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1" color="textSecondary">
+                      Count
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1" color="textSecondary">
+                      Ratio
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {categoryTableRows.map((row: TableRowData, index) => (
+                  <TableRow key={row.category}>
+                    <TableCell
+                      className={clsx({
+                        [classes.cellWithIcon]: true,
+                        [classes.lightBorder]: true,
+                        [classes.noBorder]:
+                          index === categoryTableRows.length - 1,
+                      })}
+                      component="th"
+                      scope="row"
+                    >
+                      <Typography variant="body2" color="textPrimary">
+                        {row.category}
                       </Typography>
                     </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body1" color="textSecondary">
-                        Count
+                    <TableCell className={noBorderLastRow(index)} align="right">
+                      <Typography variant="body1" color="textPrimary">
+                        {row.count}
                       </Typography>
                     </TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body1" color="textSecondary">
-                        Ratio
-                      </Typography>
+                    <TableCell className={noBorderLastRow(index)} align="right">
+                      <Typography
+                        variant="body1"
+                        color="textSecondary"
+                      >{`${row.ratio}%`}</Typography>
                     </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {categoryTableRows.map((row: TableRowData, index) => (
-                    <TableRow key={row.category}>
-                      <TableCell
-                        className={clsx({
-                          [classes.cellWithIcon]: true,
-                          [classes.lightBorder]: true,
-                          [classes.noBorder]:
-                            index === categoryTableRows.length - 1,
-                        })}
-                        component="th"
-                        scope="row"
-                      >
-                        <Typography variant="body2" color="textPrimary">
-                          {row.category}
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        className={noBorderLastRow(index)}
-                        align="right"
-                      >
-                        <Typography variant="body1" color="textPrimary">
-                          {row.count}
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        className={noBorderLastRow(index)}
-                        align="right"
-                      >
-                        <Typography
-                          variant="body1"
-                          color="textSecondary"
-                        >{`${row.ratio}%`}</Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Card>
-        </Grid>
-        <Card variant="outlined" className={classes.patientTableCard}>
-          <PatientInfoTableWithFilters patients={patients} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Card>
-        <ScanPatientButton />
       </Grid>
-    );
-  }
+      <Card variant="outlined" className={classes.patientTableCard}>
+        <PatientInfoTableWithFilters patients={patients} />
+      </Card>
+      <ScanPatientButton />
+    </Grid>
+  );
 };
