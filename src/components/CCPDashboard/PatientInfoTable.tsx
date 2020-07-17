@@ -122,7 +122,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     { headerId: "gender", label: "Gender" },
     { headerId: "age", label: "Age" },
     { headerId: "status", label: "Status" },
-    { headerId: "hospital", label: "Hospital" },
+    { headerId: "hospitalId.name", label: "Hospital" },
     { headerId: "transportTime", label: "Last Edited" },
   ];
 
@@ -231,9 +231,29 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const hospitalFilters: FilterOptionObject = React.useMemo(
+    () =>
+      patients.reduce((allHospitals, patient) => {
+        const { hospitalId } = patient;
+        if (hospitalId) {
+          return {
+            ...allHospitals,
+            [hospitalId.name]: {
+              label: hospitalId.name,
+              value: hospitalId.name,
+              selected: false,
+            },
+          };
+        } else {
+          return allHospitals;
+        }
+      }, {} as FilterOptionObject),
+    [patients]
+  );
   const initialFilters = {
     triage: triageFilters,
     status: statusFilters,
+    hospital: hospitalFilters,
   };
   const [selectedFilters, setSelectedFilters] = React.useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = React.useState(initialFilters);
@@ -263,9 +283,13 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
     const appliedStatusFilters = Object.values(appliedFilters.status).filter(
       (filter: FilterOption) => filter.selected === true
     );
+    const appliedHospitalFilters = Object.values(
+      appliedFilters.hospital
+    ).filter((filter: FilterOption) => filter.selected === true);
 
     let triageFilteredPatients: Patient[] = [];
     let statusFilteredPatients: Patient[] = [];
+    let hospitalFilteredPatients: Patient[] = [];
 
     // Apply selected and confirmed filters
     // If no filters are selected for a given category, the patients are not filtered by that category
@@ -293,7 +317,20 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
       statusFilteredPatients = triageFilteredPatients;
     }
 
-    setFilteredPatients(statusFilteredPatients);
+    if (appliedHospitalFilters.length > 0) {
+      for (let i = 0; i < appliedHospitalFilters.length; i++) {
+        hospitalFilteredPatients.push(
+          ...statusFilteredPatients.filter(
+            (p: Patient) =>
+              p.hospitalId?.name === appliedHospitalFilters[i].value
+          )
+        );
+      }
+    } else {
+      hospitalFilteredPatients = statusFilteredPatients;
+    }
+
+    setFilteredPatients(hospitalFilteredPatients);
   }, [appliedFilters, patients]);
 
   React.useEffect(() => {
@@ -415,7 +452,7 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         </TableCell>
         {/* Add overflow tooltip? */}
         <TableCell className={classes.tableCell}>
-          Hospital Name Placeholder
+          {patient.hospitalId?.name}
         </TableCell>
         <TableCell align="right" className={classes.tableCell}>
           {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
@@ -489,6 +526,11 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
             </Grid>
             <Grid item className={classes.filterCategory}>
               <Typography variant="body1">Hospital</Typography>
+              {Object.entries(hospitalFilters)
+                .sort()
+                .map((hospital) =>
+                  filterOption(hospital[1], FilterCategory.Hospital)
+                )}
             </Grid>
           </Grid>
           <Box display="flex" justifyContent="space-between" marginTop="24px">
@@ -533,6 +575,23 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
                 color="secondary"
                 onDelete={() =>
                   removeFilter(filter.label, FilterCategory.Status)
+                }
+                deleteIcon={
+                  <Close fontSize="small" className={classes.deleteChipIcon} />
+                }
+                className={classes.filterChip}
+              />
+            ))}
+          {Object.values(appliedFilters.hospital)
+            .filter((filter) => filter.selected === true)
+            .map((filter) => (
+              <Chip
+                key={filter.label}
+                label={filter.label}
+                variant="outlined"
+                color="secondary"
+                onDelete={() =>
+                  removeFilter(filter.label, FilterCategory.Hospital)
                 }
                 deleteIcon={
                   <Close fontSize="small" className={classes.deleteChipIcon} />
