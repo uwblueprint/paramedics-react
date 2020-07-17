@@ -12,6 +12,10 @@ const Theme = createMuiTheme({
     error: {
       main: Colours.Danger,
     },
+    text: {
+      primary: Colours.Black,
+      secondary: Colours.SecondaryGray,
+    },
   },
   typography: {
     h3: {
@@ -71,6 +75,14 @@ const Theme = createMuiTheme({
           borderBottom: 0,
         },
       },
+    },
+    MuiCard: {
+      root: {
+        borderColor: Colours.BorderLightGray,
+      },
+    },
+    MuiTab: {
+      wrapper: { textTransform: 'none' },
     },
   },
 });
