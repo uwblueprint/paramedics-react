@@ -8,7 +8,6 @@ const useStyles = makeStyles({
   card: {
     padding: "24px",
     marginTop: "16px",
-    marginRight: "24px",
     height: "100%",
   },
 });
@@ -33,10 +32,16 @@ const triageLevels = [
   },
 ];
 
-export const TriageCard = ({ patients }: { patients: Patient[] }) => {
+export const TriageCard = ({
+  patients,
+  styles,
+}: {
+  patients: Patient[];
+  styles?: object;
+}) => {
   const classes = useStyles();
   return (
-    <Card variant="outlined" className={classes.card}>
+    <Card variant="outlined" className={classes.card} style={styles}>
       <Typography
         variant="body1"
         color="textSecondary"

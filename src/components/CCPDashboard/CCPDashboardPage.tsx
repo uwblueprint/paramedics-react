@@ -23,6 +23,7 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
   value: TabOptions;
+  className?: string;
 }
 
 const useStyles = makeStyles({
@@ -30,10 +31,9 @@ const useStyles = makeStyles({
     minHeight: "100vh",
     background: Colours.BackgroundGray,
   },
-  container: {
-    background: Colours.White,
-    padding: "32px 56px 0 56px",
-    maxWidth: "none",
+  tabPanel: {
+    paddingLeft: "56px",
+    paddingRight: "56px",
   },
   tabs: {
     background: Colours.White,

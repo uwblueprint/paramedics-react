@@ -107,7 +107,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
           <TotalPatientCard numPatients={patients.length} />
         </Grid>
         <Grid item>
-          <TriageCard patients={patients} />
+          <TriageCard patients={patients} styles={{  marginRight: "24px"}} />
         </Grid>
       </Grid>
       <Grid item className={classes.fullHeightGridItem}>
