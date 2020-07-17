@@ -1,4 +1,4 @@
-enum Colours {
+export enum Colours {
   Primary = '#05162F',
   Secondary = '#2E5584',
   SecondaryHover = '#284D7A',
@@ -26,5 +26,3 @@ enum Colours {
   TriageBlack = '#000000',
   TriageSelectedBlack = '#BFBFBF',
 }
-
-export default Colours;

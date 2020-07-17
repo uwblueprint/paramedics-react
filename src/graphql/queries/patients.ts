@@ -16,7 +16,7 @@ export enum Status {
   DELETED = 'DELETED',
 }
 
-export interface PatientType {
+export interface Patient {
   id: string;
   gender: string;
   age: number;

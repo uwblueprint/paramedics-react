@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
-import Theme from '../styles/Theme';
+import { Theme } from '../styles/Theme';
 import '../styles/App.css';
 import HomeLandingPage from './HomeLandingPage';
 import EventCreationPage from './EventCreationPage';

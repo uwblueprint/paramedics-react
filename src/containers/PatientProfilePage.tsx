@@ -14,7 +14,7 @@ import StatusPills from '../components/PatientCreationPage/StatusPills';
 import {
   TriageLevel,
   Status,
-  PatientType,
+  Patient,
   GET_PATIENT_BY_ID,
   GET_ALL_PATIENTS,
 } from '../graphql/queries/patients';
@@ -48,7 +48,7 @@ const PatientProfilePage = ({
       ? GET_PATIENT_BY_ID(patientId)
       : GET_ALL_PATIENTS
   );
-  const patients: Array<PatientType> = data ? data.patient : [];
+  const patients: Array<Patient> = data ? data.patient : [];
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({

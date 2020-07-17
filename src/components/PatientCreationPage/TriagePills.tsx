@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { TriageLevel } from '../../graphql/queries/patients';
-import Colours from '../../styles/Constants';
+import { Colours } from '../../styles/Constants';
 
 const useCompletePatientButtonStyles = makeStyles({
   root: {
@@ -158,9 +158,9 @@ const TriagePills = ({
               root: classes[`${level.toLowerCase()}pill`],
               selected:
                 classes[
-                  `selected${
-                    level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()
-                  }Pill`
+                `selected${
+                level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()
+                }Pill`
                 ],
             }}
           >

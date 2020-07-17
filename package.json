@@ -28,6 +28,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "apollo-boost": "^0.4.9",
+    "clsx": "^1.1.1",
     "date-fns": "^2.14.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.4",

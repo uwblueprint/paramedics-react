@@ -29,6 +29,13 @@
     "react/jsx-wrap-multilines": "off",
     "react/require-default-props": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "radix": ["error", "as-needed"]
+    "radix": ["error", "as-needed"],
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-shadow": "off",
+    "no-plusplus": "off",
+    "react/jsx-curly-newline": "off"
   }
 }
