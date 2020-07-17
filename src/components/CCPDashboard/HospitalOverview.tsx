@@ -126,7 +126,7 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
         </Card>
       </Grid>
       <Grid item>
-        <TriageCard patients={patients} />
+        <TriageCard patients={filteredPatients} />
       </Grid>
       <Card variant="outlined" className={classes.patientTableCard}>
         <PatientInfoTable patients={filteredPatients} />
