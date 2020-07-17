@@ -1,11 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Quagga from "quagga";
+import { useQuery } from "react-apollo";
+import { FETCH_ALL_PATIENTS } from "../../graphql/queries/patients";
 
 import "../../styles/BarcodeScan.css";
+import { CollectionPoint } from "../../graphql/queries/ccp";
 
-const BarcodeScan = () => {
+const BarcodeScan = ({
+  eventID,
+  ccpID,
+}: {
+  eventID: string;
+  ccpID: string;
+}) => {
   const history = useHistory();
+  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
+  const [barcode, setBarcode] = useState<string>("");
+
+  useEffect(() => {
+    if (!loading && barcode !== "") {
+      const selectedPatient = data.patients.filter(
+        (patient) => patient.barcodeValue.toString() === barcode
+      );
+
+      if (selectedPatient.length > 0) {
+        // Found patient
+        const {
+          collectionPointId: { id: patientCCPId },
+          id,
+        } = selectedPatient[0];
+        // Redirect to patient profile
+        history.replace(`/patients/edit/${patientCCPId}/${id}`);
+      } else {
+        // No existing patient
+        history.replace(`/patients/new/${ccpID}`);
+      }
+    }
+  }, [barcode]);
 
   useEffect(() => {
     Quagga.init(
@@ -21,7 +53,7 @@ const BarcodeScan = () => {
           },
         },
         decoder: {
-          readers: ["ean_8_reader"],
+          readers: ["code_128_reader"],
         },
       },
       function (err) {
@@ -29,15 +61,13 @@ const BarcodeScan = () => {
           console.log(err);
           return;
         }
-        console.log("Initialization finished. Ready to start");
         Quagga.start();
       }
     );
     Quagga.onDetected((data) => {
-      console.log(data);
-      const { pathname } = history.location;
-      console.log(`${pathname}/manual/${data.codeResult.code}`);
-      history.replace(`${pathname}/manual/${data.codeResult.code}`);
+      // Check if barcode already exists
+      const { code } = data.codeResult;
+      setBarcode(code);
     });
   }, []);
   return (

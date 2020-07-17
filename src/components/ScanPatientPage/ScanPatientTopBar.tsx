@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, createStyles } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Colours } from "../../styles/Constants";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
 const useScanPatientTopBarStyles = makeStyles((theme) =>
   createStyles({
@@ -27,6 +27,8 @@ const useScanPatientTopBarStyles = makeStyles((theme) =>
 
 const ScanPatientTopBar = () => {
   const classes = useScanPatientTopBarStyles();
+  const history = useHistory();
+  const { pathname } = history.location;
   return (
     <div className={classes.root}>
       <AppBar
@@ -48,7 +50,7 @@ const ScanPatientTopBar = () => {
             color="inherit"
             className={classes.enterCodeText}
             component={NavLink}
-            to="/enterBarcode"
+            to={`${pathname}/manual`}
           >
             <Typography variant="h6">Enter code manually</Typography>
           </Button>

@@ -3,6 +3,7 @@ import "../styles/HomeLandingPage.css";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
+import { NavLink } from "react-router-dom";
 
 const EnterBarcodePage = ({
   match: {
@@ -26,6 +27,8 @@ const EnterBarcodePage = ({
             <Button
               variant="outlined"
               color="secondary"
+              component={NavLink}
+              to="/" //TODO: Redirect to proper place
               style={{
                 minWidth: "18rem",
                 minHeight: "2.5rem",
