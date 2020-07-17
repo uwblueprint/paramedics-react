@@ -22,7 +22,7 @@ import {
   Status,
 } from "../../graphql/queries/patients";
 import { TriageTag } from "./TriageTag";
-import { PatientInfoTable } from "./PatientInfoTable";
+import { PatientInfoTableWithFilters } from "./PatientInfoTableWithFilters";
 import { ScanPatientButton } from "./ScanPatientButton";
 import LoadingState from "../common/LoadingState";
 
@@ -257,7 +257,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
           </Card>
         </Grid>
         <Card variant="outlined" className={classes.patientTableCard}>
-          <PatientInfoTable patients={patients} />
+          <PatientInfoTableWithFilters patients={patients} />
         </Card>
         <ScanPatientButton />
       </Grid>
