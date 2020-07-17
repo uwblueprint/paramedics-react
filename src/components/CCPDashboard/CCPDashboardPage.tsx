@@ -4,7 +4,11 @@ import { Box, Tabs, Tab, makeStyles } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
 import { useAllPatients } from "../../graphql/queries/hooks/patients";
 import { useQuery } from "@apollo/react-hooks";
-import { FETCH_ALL_PATIENTS, Patient } from "../../graphql/queries/patients";
+import {
+  FETCH_ALL_PATIENTS,
+  Patient,
+  Status,
+} from "../../graphql/queries/patients";
 import { PatientOverview } from "./PatientOverview";
 import { HospitalOverview } from "./HospitalOverview";
 import LoadingState from "../common/LoadingState";
@@ -91,8 +95,12 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   // Should switch to fetching patients from cache
   const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
   const allPatients: Array<Patient> = data ? data.patients : [];
-  const patients = allPatients.filter(
-    (patient: Patient) => patient.collectionPointId.id === ccpId
+  const patients = React.useMemo(
+    () =>
+      allPatients.filter(
+        (patient: Patient) => patient.collectionPointId.id === ccpId
+      ),
+    [allPatients, ccpId]
   );
 
   const [tab, setTab] = React.useState(TabOptions.PatientOverview);
@@ -100,6 +108,14 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: TabOptions) => {
     setTab(newValue);
   };
+
+  const transportPatients = React.useMemo(
+    () =>
+      patients.filter(
+        (patient: Patient) => patient.status === Status.TRANSPORTED
+      ),
+    [patients]
+  );
 
   if (loading) {
     return <LoadingState />;
@@ -129,7 +145,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           <HospitalOverview
             eventId={eventId}
             ccpId={ccpId}
-            patients={patients}
+            patients={transportPatients}
           />
         </TabPanel>
       </Box>
