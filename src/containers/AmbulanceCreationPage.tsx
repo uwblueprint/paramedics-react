@@ -60,14 +60,14 @@ const AmbulanceCreationPage = ({
     if (mode === "new") {
       addAmbulance({
         variables: {
-          vehicleNumber: ambulanceNumber,
+          vehicleNumber: parseInt(ambulanceNumber.toString()),
         }
       });
     } else if (mode === "edit") {
       editAmbulance({
         variables: {
           id: ambulanceId,
-          vehicleNumber: ambulanceNumber,
+          vehicleNumber: parseInt(ambulanceNumber.toString()),
         }
       });
     }

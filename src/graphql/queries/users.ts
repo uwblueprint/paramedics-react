@@ -8,8 +8,7 @@ export enum accessLevel {
 
 export interface UserType {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   password: string;
   accessLevel: accessLevel;
@@ -21,8 +20,7 @@ export const GET_USER_BY_ID = (id: string) => {
       query {
         user(id: ${id}) {
           id
-          firstName
-          lastName
+          name
           email
           accessLevel
         }
@@ -34,8 +32,7 @@ export const GET_ALL_USERS = gql`
   query {
     users @client {
       id
-      firstName
-      lastName
+      name
       email
       accessLevel
     }

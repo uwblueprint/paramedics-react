@@ -50,17 +50,15 @@ const MemberCreationPage = ({
   useEffect(() => {
     if (!loading && mode === "edit") {
       const {
-        firstName,
-        lastName,
+        name,
         email,
         accessLevel,
       }: {
-        firstName: string;
-        lastName: string;
+        name: string;
         email: string;
         accessLevel: accessLevel;
       } = data.user;
-      setMemberName(firstName);
+      setMemberName(name);
       setEmail(email);
       setRole(accessLevel);
     }
@@ -82,8 +80,7 @@ const MemberCreationPage = ({
     if (mode === "new") {
       addUser({
         variables: {
-          firstName: memberName,
-          lastName: memberName,
+          name: memberName,
           email,
           password: "password",
           accessLevel: role,
@@ -95,8 +92,7 @@ const MemberCreationPage = ({
       editUser({
         variables: {
           id: userId,
-          firstName: memberName,
-          lastName: memberName,
+          name: memberName,
           email,
           accessLevel: role,
         }
