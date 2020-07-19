@@ -10,7 +10,7 @@ import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_HOSPITAL, EDIT_HOSPITAL } from "../graphql/mutations/hospitals";
-import { HospitalType, GET_ALL_HOSPITALS, GET_HOSPITAL_BY_ID } from "../graphql/queries/hospitals";
+import { Hospital, GET_ALL_HOSPITALS, GET_HOSPITAL_BY_ID } from "../graphql/queries/hospitals";
 
 const HospitalCreationPage = ({
   match: {
@@ -27,7 +27,7 @@ const HospitalCreationPage = ({
       : GET_ALL_HOSPITALS
   );
 
-  const hospitals: Array<HospitalType> = data ? data.hospitals : [];
+  const hospitals: Array<Hospital> = data ? data.hospitals : [];
   const [addHospital] = useMutation(ADD_HOSPITAL,
     {
       update(cache, { data: { addHospital } }) {

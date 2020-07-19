@@ -11,7 +11,7 @@ import { Colours } from '../styles/Constants';
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_USER, EDIT_USER } from "../graphql/mutations/users";
-import { UserType, accessLevel, GET_ALL_USERS, GET_USER_BY_ID } from "../graphql/queries/users";
+import { User, AccessLevel, GET_ALL_USERS, GET_USER_BY_ID } from "../graphql/queries/users";
 import { ValidatorForm } from "react-material-ui-form-validator";
 
 const MemberCreationPage = ({
@@ -29,7 +29,7 @@ const MemberCreationPage = ({
       : GET_ALL_USERS
   );
 
-  const users: Array<UserType> = data ? data.users : [];
+  const users: Array<User> = data ? data.users : [];
 
   const [addUser] = useMutation(ADD_USER,
     {
@@ -45,7 +45,7 @@ const MemberCreationPage = ({
 
   const [memberName, setMemberName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [role, setRole] = useState<accessLevel>(accessLevel.SUPERVISOR);
+  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
 
   useEffect(() => {
     if (!loading && mode === "edit") {
@@ -56,7 +56,7 @@ const MemberCreationPage = ({
       }: {
         name: string;
         email: string;
-        accessLevel: accessLevel;
+        accessLevel: AccessLevel;
       } = data.user;
       setMemberName(name);
       setEmail(email);

@@ -1,17 +1,17 @@
 import gql from "graphql-tag";
 
-export enum accessLevel {
+export enum AccessLevel {
   COMMANDER = "COMMANDER",
   SUPERVISOR = "SUPERVISOR",
   ADMIN = "ADMIN",
 }
 
-export interface UserType {
+export interface User {
   id: string;
   name: string;
   email: string;
   password: string;
-  accessLevel: accessLevel;
+  accessLevel: AccessLevel;
   emergencyContact: string;
 }
 
