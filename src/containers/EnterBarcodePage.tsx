@@ -17,7 +17,8 @@ const EnterBarcodePage = ({
   match: { params: { ccpID: string } };
 }) => {
   const history = useHistory();
-  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
+  const { pathname } = history.location;
+  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>("");
 
   const handleEnterBarcode = () => {
@@ -50,7 +51,7 @@ const EnterBarcodePage = ({
               variant="outlined"
               color="secondary"
               component={NavLink}
-              to="/" //TODO: Redirect to proper place
+              to={pathname.split("/manual")[0]}
               style={{
                 minWidth: "18rem",
                 minHeight: "2.5rem",

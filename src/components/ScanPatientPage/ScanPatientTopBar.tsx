@@ -29,6 +29,7 @@ const ScanPatientTopBar = () => {
   const classes = useScanPatientTopBarStyles();
   const history = useHistory();
   const { pathname } = history.location;
+
   return (
     <div className={classes.root}>
       <AppBar
@@ -42,7 +43,7 @@ const ScanPatientTopBar = () => {
             color="inherit"
             aria-label="menu"
             component={NavLink}
-            to="/" //TODO: Change this to CCP page
+            to={pathname.split("/scan")[0]}
           >
             <ArrowBackIcon />
           </IconButton>

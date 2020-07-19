@@ -5,7 +5,6 @@ import { useQuery } from "react-apollo";
 import { FETCH_ALL_PATIENTS } from "../../graphql/queries/patients";
 
 import "../../styles/BarcodeScan.css";
-import { CollectionPoint } from "../../graphql/queries/ccp";
 
 const BarcodeScan = ({
   eventID,
@@ -15,7 +14,7 @@ const BarcodeScan = ({
   ccpID: string;
 }) => {
   const history = useHistory();
-  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
+  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>("");
 
   useEffect(() => {
