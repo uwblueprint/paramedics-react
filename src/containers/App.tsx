@@ -23,7 +23,7 @@ function App() {
         />
         <Route
           exact
-          path="/events/:eventID/ccps/:ccpID/scan/manual/:barcode?"
+          path="/events/:eventID/ccps/:ccpID/scan/manual"
           component={EnterBarcodePage}
         />
         <Route
