@@ -1,4 +1,4 @@
-const descendingComparator = (a, b, orderBy) => {
+const comparator = (a, b, orderBy: string, descending: boolean) => {
   const maybeNestedOrderBy = orderBy.split(".");
   let aValue;
   let bValue;
@@ -14,28 +14,32 @@ const descendingComparator = (a, b, orderBy) => {
     bValue = b[orderBy];
   }
 
-  // null will sort after everything else when ascending
-  if (aValue === null) {
-    return 1;
+  // equal items sort equally
+  if (a === b) {
+    return 0;
   }
-  if (bValue === null) {
+  // nulls sort after anything else
+  else if (aValue === null) {
     return 1;
-  }
-  if (bValue < aValue) {
+  } else if (bValue === null) {
     return -1;
   }
-  if (bValue > aValue) {
-    return 1;
+  // if descending, highest sorts first
+  else if (descending) {
+    return aValue < bValue ? 1 : -1;
   }
-  return 0;
+  // otherwise, if we're ascending, lowest sorts first
+  else {
+    return aValue < bValue ? -1 : 1;
+  }
 };
 
 export type Order = "asc" | "desc";
 
 export const getComparator = (order: Order, orderBy) => {
   return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+    ? (a, b) => comparator(a, b, orderBy, true)
+    : (a, b) => comparator(a, b, orderBy, false);
 };
 
 export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
