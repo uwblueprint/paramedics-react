@@ -18,7 +18,7 @@ export const GET_AMBULANCE_BY_ID = (id: string) => {
 
 export const GET_ALL_AMBULANCES = gql`
   query {
-    ambulances @client {
+    ambulances {
       id
       vehicleNumber
     }

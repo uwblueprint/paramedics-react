@@ -9,6 +9,7 @@ import EventCreationPage from "./EventCreationPage";
 import HospitalCreationPage from "./HospitalCreationPage";
 import AmbulanceCreationPage from "./AmbulanceCreationPage";
 import MemberCreationPage from "./MemberCreationPage";
+import ResourceSnackbars from "../components/ResourceOverviewPage/ResourceSnackbars";
 
 function App() {
   return (

@@ -2,11 +2,12 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
-import { NavLink } from "react-router-dom";
+import { NavLink, BrowserRouter } from "react-router-dom";
 
 
 interface ButtonType {
     label: string
+    route: string
 }
 
 const useButtonStyles = makeStyles({
@@ -16,12 +17,12 @@ const useButtonStyles = makeStyles({
   },
 });
 
-const AddResourceButton = ({label}: ButtonType) => {
+const AddResourceButton = ({label, route}: ButtonType) => {
   const classes = useButtonStyles();
   return (
     <Button
       component={NavLink}
-      to="/events/new"
+      to={route}
       variant="contained"
       color="secondary"
       startIcon={<AddIcon />}

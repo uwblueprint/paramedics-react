@@ -7,39 +7,41 @@ import Button from "@material-ui/core/Button";
 import FormField from "../components/common/FormField";
 import { NavLink } from "react-router-dom";
 import AccessLevelSelector from "../components/ResourceCreationPage/AccessLevelSelector";
-import { Colours } from '../styles/Constants';
+import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_USER, EDIT_USER } from "../graphql/mutations/users";
-import { UserType, accessLevel, GET_ALL_USERS, GET_USER_BY_ID } from "../graphql/queries/users";
+import {
+  UserType,
+  accessLevel,
+  GET_ALL_USERS,
+  GET_USER_BY_ID,
+} from "../graphql/queries/users";
 
 const MemberCreationPage = ({
   match: {
     params: { mode, userId },
   },
 }: {
-  match: { params: { mode: string; userId?: string; } };
+  match: { params: { mode: string; userId?: string } };
 }) => {
   const history = useHistory();
 
   const { data, loading, error } = useQuery(
-    mode === "edit" && userId
-      ? GET_USER_BY_ID(userId)
-      : GET_ALL_USERS
+    mode === "edit" && userId ? GET_USER_BY_ID(userId) : GET_ALL_USERS
   );
+
 
   const users: Array<UserType> = data ? data.users : [];
 
-  const [addUser] = useMutation(ADD_USER,
-    {
-      update(cache, { data: { addUser } }) {
-        cache.writeQuery({
-          query: GET_ALL_USERS,
-          data: { users: users.concat([addUser]) },
-        });
-      }
-    }
-  );
+  const [addUser] = useMutation(ADD_USER, {
+    update(cache, { data: { addUser } }) {
+      cache.writeQuery({
+        query: GET_ALL_USERS,
+        data: { users: users.concat([addUser]) },
+      });
+    },
+  });
 
   const [editUser] = useMutation(EDIT_USER);
 
@@ -87,10 +89,9 @@ const MemberCreationPage = ({
           email,
           password: "password",
           accessLevel: role,
-          emergencyContact: "1234567890"
-        }
+          emergencyContact: "1234567890",
+        },
       });
-
     } else if (mode === "edit") {
       editUser({
         variables: {
@@ -99,7 +100,7 @@ const MemberCreationPage = ({
           lastName: memberName,
           email,
           accessLevel: role,
-        }
+        },
       });
     }
     history.replace("/manage/members");
@@ -116,18 +117,25 @@ const MemberCreationPage = ({
             to="/manage/members"
           >
             &#60; Back
-                </Link>
+          </Link>
         </div>
         <div className="resource-header">
           <Typography variant="h4">
             {mode === "new" ? "Add a new team member" : "Edit team member"}
           </Typography>
         </div>
-        {mode === "new" ?
+        {mode === "new" ? (
           <div className="top-bar-link">
-            <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>New team members will receive sign up instructions via email.</Typography>
+            <Typography
+              variant="caption"
+              style={{ color: Colours.SecondaryGray }}
+            >
+              New team members will receive sign up instructions via email.
+            </Typography>
           </div>
-          : ""}
+        ) : (
+          ""
+        )}
       </div>
       <div className="event-form">
         <form>
@@ -149,7 +157,12 @@ const MemberCreationPage = ({
           />
         </form>
         <div className="caption">
-          <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>*Denotes a required field</Typography>
+          <Typography
+            variant="caption"
+            style={{ color: Colours.SecondaryGray }}
+          >
+            *Denotes a required field
+          </Typography>
         </div>
       </div>
       <div className="done-container">
@@ -158,13 +171,11 @@ const MemberCreationPage = ({
           variant="contained"
           onClick={handleComplete}
           disabled={memberName === "" || email === ""}
-          style={
-            {
-              minWidth: "160px",
-              minHeight: "40px",
-              fontSize: "18px",
-            }
-          }
+          style={{
+            minWidth: "160px",
+            minHeight: "40px",
+            fontSize: "18px",
+          }}
         >
           Done
         </Button>
@@ -174,13 +185,11 @@ const MemberCreationPage = ({
           color="secondary"
           component={NavLink}
           to="/manage/hospitals"
-          style={
-            {
-              minWidth: "160px",
-              minHeight: "40px",
-              fontSize: "18px",
-            }
-          }
+          style={{
+            minWidth: "160px",
+            minHeight: "40px",
+            fontSize: "18px",
+          }}
         >
           Cancel
         </Button>

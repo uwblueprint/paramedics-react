@@ -32,7 +32,7 @@ export const GET_USER_BY_ID = (id: string) => {
 
 export const GET_ALL_USERS = gql`
   query {
-    users @client {
+    users {
       id
       firstName
       lastName
