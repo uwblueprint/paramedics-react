@@ -1,6 +1,6 @@
-import React from "react";
-import clsx from "clsx";
-import { Colours } from "../../styles/Constants";
+import React from 'react';
+import clsx from 'clsx';
+import { Colours } from '../../styles/Constants';
 import {
   Typography,
   makeStyles,
@@ -12,14 +12,15 @@ import {
   TableBody,
   TableRow,
   TableCell,
-} from "@material-ui/core";
-import { Patient, Status } from "../../graphql/queries/patients";
-import { TotalPatientCard } from "./TotalPatientCard";
-import { TriageCard } from "./TriageCard";
-import { PatientInfoTableWithFilters } from "./PatientInfoTableWithFilters";
-import { ScanPatientButton } from "./ScanPatientButton";
+} from '@material-ui/core';
+import { Patient, Status } from '../../graphql/queries/patients';
+import { TotalPatientCard } from './TotalPatientCard';
+import { TriageCard } from './TriageCard';
+import { PatientInfoTableWithFilters } from './PatientInfoTableWithFilters';
+import { ScanPatientButton } from './ScanPatientButton';
 
 interface PatientOverviewProps {
+  // eslint-disable-next-line react/no-unused-prop-types
   eventId: string;
   ccpId: string;
   patients: Patient[];
@@ -33,15 +34,15 @@ interface TableRowData {
 
 const useStyles = makeStyles({
   fullHeightGridItem: {
-    display: "flex",
-    alignSelf: "stretch",
+    display: 'flex',
+    alignSelf: 'stretch',
   },
   categoryTableCard: {
-    display: "flex",
-    alignItems: "center",
-    paddingRight: "44px",
-    paddingLeft: "44px",
-    marginTop: "16px",
+    display: 'flex',
+    alignItems: 'center',
+    paddingRight: '44px',
+    paddingLeft: '44px',
+    marginTop: '16px',
   },
   lightBorder: {
     borderColor: Colours.BackgroundGray,
@@ -50,20 +51,20 @@ const useStyles = makeStyles({
     border: 0,
   },
   cellWithIcon: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   patientTableCard: {
-    marginTop: "24px",
-    marginBottom: "145px",
+    marginTop: '24px',
+    marginBottom: '145px',
   },
   scanButton: {
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-    borderRadius: "2000px",
-    position: "fixed",
-    bottom: "56px",
-    right: "56px",
-    padding: "12px 26px",
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+    borderRadius: '2000px',
+    position: 'fixed',
+    bottom: '56px',
+    right: '56px',
+    padding: '12px 26px',
   },
 });
 
@@ -88,10 +89,10 @@ export const PatientOverview = (props: PatientOverviewProps) => {
   };
 
   const categoryTableRows: TableRowData[] = [
-    createCategoryData("On Scene", Status.ON_SITE),
-    createCategoryData("Transported", Status.TRANSPORTED),
-    createCategoryData("Released", Status.RELEASED),
-    createCategoryData("Omitted/Deleted", Status.DELETED),
+    createCategoryData('On Scene', Status.ON_SITE),
+    createCategoryData('Transported', Status.TRANSPORTED),
+    createCategoryData('Released', Status.RELEASED),
+    createCategoryData('Omitted/Deleted', Status.DELETED),
   ];
 
   const noBorderLastRow = (index) =>
@@ -107,7 +108,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
           <TotalPatientCard numPatients={patients.length} />
         </Grid>
         <Grid item>
-          <TriageCard patients={patients} styles={{  marginRight: "24px"}} />
+          <TriageCard patients={patients} styles={{ marginRight: '24px' }} />
         </Grid>
       </Grid>
       <Grid item className={classes.fullHeightGridItem}>

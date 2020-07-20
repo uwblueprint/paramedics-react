@@ -1,17 +1,17 @@
-import React from "react";
-import { Colours } from "../../styles/Constants";
-import { Box, Tabs, Tab, makeStyles } from "@material-ui/core";
-import { RouteComponentProps } from "react-router";
-import { useAllPatients } from "../../graphql/queries/hooks/patients";
-import { useQuery } from "@apollo/react-hooks";
+import React from 'react';
+import { Colours } from '../../styles/Constants';
+import { Box, Tabs, Tab, makeStyles } from '@material-ui/core';
+import { RouteComponentProps } from 'react-router';
+import { useAllPatients } from '../../graphql/queries/hooks/patients';
+import { useQuery } from '@apollo/react-hooks';
 import {
   FETCH_ALL_PATIENTS,
   Patient,
   Status,
-} from "../../graphql/queries/patients";
-import { PatientOverview } from "./PatientOverview";
-import { HospitalOverview } from "./HospitalOverview";
-import LoadingState from "../common/LoadingState";
+} from '../../graphql/queries/patients';
+import { PatientOverview } from './PatientOverview';
+import { HospitalOverview } from './HospitalOverview';
+import LoadingState from '../common/LoadingState';
 
 interface TParams {
   eventId: string;
@@ -32,33 +32,33 @@ interface TabPanelProps {
 
 const useStyles = makeStyles({
   root: {
-    minHeight: "100vh",
+    minHeight: '100vh',
     background: Colours.BackgroundGray,
   },
   tabPanel: {
-    paddingLeft: "56px",
-    paddingRight: "56px",
+    paddingLeft: '56px',
+    paddingRight: '56px',
   },
   tabs: {
     background: Colours.White,
-    padding: "0 56px",
+    padding: '0 56px',
   },
   fullHeightGridItem: {
-    display: "flex",
-    alignSelf: "stretch",
+    display: 'flex',
+    alignSelf: 'stretch',
   },
   card: {
-    padding: "24px",
-    marginTop: "16px",
-    marginRight: "24px",
-    height: "100%",
+    padding: '24px',
+    marginTop: '16px',
+    marginRight: '24px',
+    height: '100%',
   },
   categoryTableCard: {
-    display: "flex",
-    alignItems: "center",
-    paddingRight: "44px",
-    paddingLeft: "44px",
-    marginTop: "16px",
+    display: 'flex',
+    alignItems: 'center',
+    paddingRight: '44px',
+    paddingLeft: '44px',
+    marginTop: '16px',
   },
   lightBorder: {
     borderColor: Colours.BackgroundGray,
@@ -67,8 +67,8 @@ const useStyles = makeStyles({
     border: 0,
   },
   cellWithIcon: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
 });
 

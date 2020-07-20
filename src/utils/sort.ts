@@ -1,5 +1,5 @@
 const comparator = (a, b, orderBy: string, descending: boolean) => {
-  const maybeNestedOrderBy = orderBy.split(".");
+  const maybeNestedOrderBy = orderBy.split('.');
   let aValue;
   let bValue;
   if (maybeNestedOrderBy.length === 2) {
@@ -34,10 +34,10 @@ const comparator = (a, b, orderBy: string, descending: boolean) => {
   }
 };
 
-export type Order = "asc" | "desc";
+export type Order = 'asc' | 'desc';
 
 export const getComparator = (order: Order, orderBy) => {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => comparator(a, b, orderBy, true)
     : (a, b) => comparator(a, b, orderBy, false);
 };

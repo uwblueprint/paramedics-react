@@ -1,24 +1,24 @@
-import React from "react";
-import { Colours } from "../../styles/Constants";
+import React from 'react';
 import {
   Typography,
   Box,
   makeStyles,
   DialogContent,
   IconButton,
-} from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import { Patient } from "../../graphql/queries/patients";
-import { capitalize } from "../../utils/format";
+} from '@material-ui/core';
+import { Close } from '@material-ui/icons';
+import { Colours } from '../../styles/Constants';
+import { Patient } from '../../graphql/queries/patients';
+import { capitalize } from '../../utils/format';
 
 const useStyles = makeStyles({
   label: {
-    marginRight: "16px",
+    marginRight: '16px',
   },
   closeButton: {
-    position: "absolute",
-    top: "6px",
-    right: "6px",
+    position: 'absolute',
+    top: '6px',
+    right: '6px',
     color: Colours.Black,
   },
 });
@@ -38,16 +38,16 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
   const { patient, onClose } = props;
   const classes = useStyles();
   const patientDetails: PatientDetail[] = [
-    { label: "Barcode Number", value: patient.barcodeValue },
+    { label: 'Barcode Number', value: patient.barcodeValue },
     {
-      label: "Triage",
+      label: 'Triage',
       value: patient.triageLevel,
       styles: { color: Colours[`Triage${capitalize(patient.triageLevel)}`] },
     },
-    { label: "Run Number", value: patient.runNumber },
-    { label: "Status", value: patient.status },
+    { label: 'Run Number', value: patient.runNumber },
+    { label: 'Status', value: patient.status },
     {
-      label: "Casualty Collection Point",
+      label: 'Casualty Collection Point',
       value: patient.collectionPointId.name,
     },
   ];
@@ -89,7 +89,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
         >
           Gender:
         </Typography>
-        <Typography variant="body2" style={{ marginRight: "56px" }}>
+        <Typography variant="body2" style={{ marginRight: '56px' }}>
           {patient.gender}
         </Typography>
         <Typography

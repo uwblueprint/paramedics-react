@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import "../styles/EventCreationPage.css";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import { ValidatorForm } from "react-material-ui-form-validator";
-import FormField from "../components/common/FormField";
-import CompletePatientButton from "../components/PatientCreationPage/CompletePatientButton";
-import RadioSelector from "../components/common/RadioSelector";
-import TriagePills from "../components/PatientCreationPage/TriagePills";
-import StatusPills from "../components/PatientCreationPage/StatusPills";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "react-apollo";
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import '../styles/EventCreationPage.css';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { ValidatorForm } from 'react-material-ui-form-validator';
+import { useMutation } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
+import FormField from '../components/common/FormField';
+import CompletePatientButton from '../components/PatientCreationPage/CompletePatientButton';
+import RadioSelector from '../components/common/RadioSelector';
+import TriagePills from '../components/PatientCreationPage/TriagePills';
+import StatusPills from '../components/PatientCreationPage/StatusPills';
 import {
   TriageLevel,
   Status,
   Patient,
   GET_PATIENT_BY_ID,
   GET_ALL_PATIENTS,
-} from "../graphql/queries/patients";
-import { ADD_PATIENT, EDIT_PATIENT } from "../graphql/mutations/patients";
+} from '../graphql/queries/patients';
+import { ADD_PATIENT, EDIT_PATIENT } from '../graphql/mutations/patients';
 
 interface FormFields {
   barcodeValue: string;
@@ -30,7 +30,7 @@ interface FormFields {
   collectionPointId?: number;
   status: Status | null;
   triageCategory?: number | null;
-  triageLevel?: number | null;
+  TriageLevel?: number | null;
   transportTime?: number | null;
 }
 
@@ -43,8 +43,8 @@ const PatientProfilePage = ({
 }) => {
   const history = useHistory();
 
-  const { data, loading, error } = useQuery(
-    mode === "edit" && patientId
+  const { data, loading } = useQuery(
+    mode === 'edit' && patientId
       ? GET_PATIENT_BY_ID(patientId)
       : GET_ALL_PATIENTS
   );
@@ -52,17 +52,17 @@ const PatientProfilePage = ({
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
-    barcodeValue: "",
+    barcodeValue: '',
     triage: TriageLevel.GREEN,
-    gender: "Male",
+    gender: 'Male',
     age: null,
-    notes: "",
+    notes: '',
     status: Status.ON_SITE,
     runNumber: null,
   });
 
   useEffect(() => {
-    if (!loading && mode === "edit") {
+    if (!loading && mode === 'edit') {
       const {
         barcodeValue,
         triageLevel,
@@ -94,17 +94,17 @@ const PatientProfilePage = ({
   }, [data]);
 
   const [addPatient] = useMutation(ADD_PATIENT, {
-    update(cache, { data: { addPatient } }) {
+    update(cache, { data: { newPatient } }) {
       cache.writeQuery({
         query: GET_ALL_PATIENTS,
-        data: { patients: patients.concat([addPatient]) },
+        data: { patients: patients.concat([newPatient]) },
       });
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleComplete = () => {
-    if (mode === "new") {
+    if (mode === 'new') {
       addPatient({
         variables: {
           gender: formFields.gender,
@@ -121,17 +121,17 @@ const PatientProfilePage = ({
           transportTime: new Date(),
         },
       });
-    } else if (mode === "edit") {
+    } else if (mode === 'edit') {
       editPatient({
         variables: {
           id: patientId,
           gender: formFields.gender,
-          age: formFields.age ? parseInt(formFields.age.toString(), 10) : -1,
+          age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber
-            ? parseInt(formFields.runNumber.toString(), 10)
+            ? parseInt(formFields.runNumber.toString())
             : -1,
           barcodeValue: formFields.barcodeValue
-            ? parseInt(formFields.barcodeValue.toString(), 10)
+            ? parseInt(formFields.barcodeValue.toString())
             : -1,
           collectionPointId: ccpId,
           status: formFields.status,
@@ -142,7 +142,7 @@ const PatientProfilePage = ({
         },
       });
     }
-    history.replace("/");
+    history.replace('/');
   };
 
   return (
@@ -150,16 +150,16 @@ const PatientProfilePage = ({
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
           <Typography variant="h3">
-            {mode === "new" ? "Add a patient" : "Edit patient"}
+            {mode === 'new' ? 'Add a patient' : 'Edit patient'}
           </Typography>
           <div className="user-icon">
             <Button
               variant="outlined"
               color="secondary"
               style={{
-                minWidth: "18rem",
-                minHeight: "2.5rem",
-                fontSize: "18px",
+                minWidth: '18rem',
+                minHeight: '2.5rem',
+                fontSize: '18px',
               }}
             >
               Cancel
@@ -172,13 +172,16 @@ const PatientProfilePage = ({
           <FormField
             label="Barcode:"
             placeholder="Enter barcode"
-            onChange={(e: any) => {
-              setFormFields({ ...formFields, barcodeValue: e.target.value });
+            onChange={(e: React.ChangeEvent<HTMLElement>) => {
+              setFormFields({
+                ...formFields,
+                barcodeValue: (e.target as HTMLInputElement).value,
+              });
             }}
             value={formFields.barcodeValue}
-            isValidated={true}
-            validators={["required"]}
-            errorMessages={["This is a mandatory field"]}
+            isValidated
+            validators={['required']}
+            errorMessages={['This is a mandatory field']}
           />
           <StatusPills
             currentStatus={formFields.status}
@@ -189,15 +192,18 @@ const PatientProfilePage = ({
               setFormFields({ ...formFields, status: newStatus });
             }}
           />
-          {mode === "edit" && (
+          {mode === 'edit' && (
             <FormField
               label="Run Number:"
               placeholder="Enter run number"
-              onChange={(e: any) => {
-                setFormFields({ ...formFields, runNumber: e.target.value });
+              onChange={(e: React.ChangeEvent<HTMLElement>) => {
+                setFormFields({
+                  ...formFields,
+                  runNumber: parseInt((e.target as HTMLInputElement).value),
+                });
               }}
               value={
-                formFields.runNumber ? formFields.runNumber.toString() : ""
+                formFields.runNumber ? formFields.runNumber.toString() : ''
               }
               isValidated={false}
             />
@@ -214,33 +220,42 @@ const PatientProfilePage = ({
             }}
           />
           <RadioSelector
-            labels={["Male", "Female"]}
+            labels={['Male', 'Female']}
             currentValue={formFields.gender}
-            handleChange={(e: any) => {
-              setFormFields({ ...formFields, gender: e.target.value });
+            handleChange={(e: React.ChangeEvent<HTMLElement>) => {
+              setFormFields({
+                ...formFields,
+                gender: (e.target as HTMLInputElement).value,
+              });
             }}
           />
           <FormField
             label="Age:"
             placeholder="Enter age"
-            onChange={(e: any) => {
-              setFormFields({ ...formFields, age: e.target.value });
+            onChange={(e: React.ChangeEvent<HTMLElement>) => {
+              setFormFields({
+                ...formFields,
+                age: parseInt((e.target as HTMLInputElement).value),
+              });
             }}
-            value={formFields.age ? formFields.age.toString() : ""}
-            isValidated={true}
-            validators={["minNumber:1", "matchRegexp:^[0-9]*$"]}
-            errorMessages={["Invalid age"]}
+            value={formFields.age ? formFields.age.toString() : ''}
+            isValidated
+            validators={['minNumber:1', 'matchRegexp:^[0-9]*$']}
+            errorMessages={['Invalid age']}
           />
           <FormField
             label="Notes:"
             placeholder="Additional details about the patient (eg. wounds, clothes ...)"
-            onChange={(e: any) => {
-              setFormFields({ ...formFields, notes: e.target.value });
+            onChange={(e: React.ChangeEvent<HTMLElement>) => {
+              setFormFields({
+                ...formFields,
+                notes: (e.target as HTMLInputElement).value,
+              });
             }}
             value={formFields.notes}
             isValidated={false}
           />
-          <CompletePatientButton handleClick={handleComplete} />
+          <CompletePatientButton />
         </ValidatorForm>
       </div>
     </div>

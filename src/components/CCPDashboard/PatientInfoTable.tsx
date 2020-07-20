@@ -1,6 +1,6 @@
-import React from "react";
-import moment from "moment";
-import { Colours } from "../../styles/Constants";
+import React from 'react';
+import { Colours } from '../../styles/Constants';
+import moment from 'moment';
 import {
   makeStyles,
   Table,
@@ -12,36 +12,36 @@ import {
   Button,
   Dialog,
   DialogActions,
-} from "@material-ui/core";
-import { MoreHoriz } from "@material-ui/icons";
-import { Patient, TriageLevel, Status } from "../../graphql/queries/patients";
-import { Order, stableSort, getComparator } from "../../utils/sort";
-import { PatientDetailsDialog } from "./PatientDetailsDialog";
-import { capitalize } from "../../utils/format";
+} from '@material-ui/core';
+import { MoreHoriz } from '@material-ui/icons';
+import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
+import { Order, stableSort, getComparator } from '../../utils/sort';
+import { PatientDetailsDialog } from './PatientDetailsDialog';
+import { capitalize } from '../../utils/format';
 
 const useStyles = makeStyles({
   visuallyHidden: {
     border: 0,
-    clip: "rect(0 0 0 0)",
+    clip: 'rect(0 0 0 0)',
     height: 1,
     margin: -1,
-    overflow: "hidden",
+    overflow: 'hidden',
     padding: 0,
-    position: "absolute",
+    position: 'absolute',
     top: 20,
     width: 1,
   },
   tableCell: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   editButton: {
-    marginRight: "14px",
-    marginBottom: "12px",
+    marginRight: '14px',
+    marginBottom: '12px',
   },
   detailsDialog: {
-    width: "662px",
+    width: '662px',
   },
 });
 
@@ -66,13 +66,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   };
 
   const headCells: HeadCell[] = [
-    { headerId: "triageLevel", label: "Triage", width: "78px" },
-    { headerId: "barcodeValue", label: "Barcode", width: "94px" },
-    { headerId: "gender", label: "Gender", width: "72px" },
-    { headerId: "age", label: "Age", width: "34px" },
-    { headerId: "status", label: "Status", width: "104px" },
-    { headerId: "hospitalId.name", label: "Hospital", width: "128px" },
-    { headerId: "transportTime", label: "Last Edited", width: "192px" },
+    { headerId: 'triageLevel', label: 'Triage', width: '78px' },
+    { headerId: 'barcodeValue', label: 'Barcode', width: '94px' },
+    { headerId: 'gender', label: 'Gender', width: '72px' },
+    { headerId: 'age', label: 'Age', width: '34px' },
+    { headerId: 'status', label: 'Status', width: '104px' },
+    { headerId: 'hospitalId.name', label: 'Hospital', width: '128px' },
+    { headerId: 'transportTime', label: 'Last Edited', width: '192px' },
   ];
 
   return (
@@ -85,24 +85,24 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             width={headCell.width}
             style={{
               minWidth: headCell.width,
-              ...(index === 0 && { borderLeft: "16px hidden" }),
+              ...(index === 0 && { borderLeft: '16px hidden' }),
             }}
           >
             <TableSortLabel
               active={orderBy === headCell.headerId}
-              direction={orderBy === headCell.headerId ? order : "asc"}
+              direction={orderBy === headCell.headerId ? order : 'asc'}
               onClick={createSortHandler(headCell.headerId)}
             >
               {headCell.label}
               {orderBy === headCell.headerId ? (
                 <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
               ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell style={{ width: "36px", minWidth: "36px" }}></TableCell>
+        <TableCell style={{ width: '36px', minWidth: '36px' }}></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -110,8 +110,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 
 export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>("desc");
-  const [orderBy, setOrderBy] = React.useState<string>("transportTime");
+  const [order, setOrder] = React.useState<Order>('desc');
+  const [orderBy, setOrderBy] = React.useState<string>('transportTime');
   const [openDetails, setOpenDetails] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
 
@@ -121,8 +121,8 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   };
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
@@ -136,35 +136,35 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         [TriageLevel.GREEN]: {
           colour: Colours.TriageGreen,
           triageLevel: TriageLevel.GREEN,
-          label: "Green",
+          label: 'Green',
         },
         [TriageLevel.YELLOW]: {
           colour: Colours.TriageYellow,
           triageLevel: TriageLevel.YELLOW,
-          label: "Yellow",
+          label: 'Yellow',
         },
         [TriageLevel.RED]: {
           colour: Colours.TriageRed,
           triageLevel: TriageLevel.RED,
-          label: "Red",
+          label: 'Red',
         },
         [TriageLevel.BLACK]: {
           colour: Colours.Black,
           triageLevel: TriageLevel.BLACK,
-          label: "Black",
+          label: 'Black',
         },
         [TriageLevel.WHITE]: {
           colour: Colours.BorderLightGray,
           triageLevel: TriageLevel.WHITE,
-          label: "White",
+          label: 'White',
         },
       };
 
       const statusLabels = {
-        [Status.ON_SITE]: "On Scene",
-        [Status.TRANSPORTED]: "Transported",
-        [Status.RELEASED]: "Released",
-        [Status.DELETED]: "Omitted/Deleted",
+        [Status.ON_SITE]: 'On Scene',
+        [Status.TRANSPORTED]: 'Transported',
+        [Status.RELEASED]: 'Released',
+        [Status.DELETED]: 'Omitted/Deleted',
       };
 
       return (
@@ -176,8 +176,8 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           <TableCell
             className={classes.tableCell}
             style={{
-              width: "78px",
-              maxWidth: "78px",
+              width: '78px',
+              maxWidth: '78px',
               borderLeft: `16px solid ${
                 triageLevels[patient.triageLevel].colour
               }`,
@@ -188,47 +188,47 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           <TableCell
             className={classes.tableCell}
             width="94px"
-            style={{ maxWidth: "94px" }}
+            style={{ maxWidth: '94px' }}
           >
             {patient.barcodeValue}
           </TableCell>
           <TableCell
             className={classes.tableCell}
             width="72px"
-            style={{ maxWidth: "72px" }}
+            style={{ maxWidth: '72px' }}
           >
             {patient.gender}
           </TableCell>
           <TableCell
             className={classes.tableCell}
             width="34px"
-            style={{ maxWidth: "34px" }}
+            style={{ maxWidth: '34px' }}
           >
             {patient.age}
           </TableCell>
           <TableCell
             className={classes.tableCell}
             width="104px"
-            style={{ maxWidth: "104px" }}
+            style={{ maxWidth: '104px' }}
           >
             {statusLabels[patient.status]}
           </TableCell>
           <TableCell
             className={classes.tableCell}
             width="128px"
-            style={{ maxWidth: "128px" }}
+            style={{ maxWidth: '128px' }}
           >
             {patient.hospitalId?.name}
           </TableCell>
           <TableCell
             className={classes.tableCell}
             width="192px"
-            style={{ maxWidth: "192px" }}
+            style={{ maxWidth: '192px' }}
           >
-            {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
+            {moment(patient.transportTime).format('MMM D YYYY, h:mm A')}
           </TableCell>
-          <TableCell width="36px" style={{ maxWidth: "36px" }}>
-            <Button style={{ width: "36px", minWidth: "36px" }}>
+          <TableCell width="36px" style={{ maxWidth: '36px' }}>
+            <Button style={{ width: '36px', minWidth: '36px' }}>
               <MoreHoriz />
             </Button>
           </TableCell>
