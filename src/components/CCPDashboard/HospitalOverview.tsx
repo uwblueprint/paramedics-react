@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   makeStyles,
   Box,
@@ -7,13 +7,13 @@ import {
   Typography,
   Select,
   MenuItem,
-} from "@material-ui/core";
-import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
-import ExpandLessRoundedIcon from "@material-ui/icons/ExpandLessRounded";
-import { Patient } from "../../graphql/queries/patients";
-import { TriageCard } from "./TriageCard";
-import { PatientInfoTable } from "./PatientInfoTable";
-import { ScanPatientButton } from "./ScanPatientButton";
+} from '@material-ui/core';
+import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded';
+import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded';
+import { Patient } from '../../graphql/queries/patients';
+import { TriageCard } from './TriageCard';
+import { PatientInfoTable } from './PatientInfoTable';
+import { ScanPatientButton } from './ScanPatientButton';
 
 interface HospitalOverviewProps {
   eventId: string;
@@ -23,24 +23,24 @@ interface HospitalOverviewProps {
 
 const useStyles = makeStyles({
   card: {
-    padding: "24px",
-    marginTop: "16px",
-    marginRight: "24px",
-    height: "100%",
+    padding: '24px',
+    marginTop: '16px',
+    marginRight: '24px',
+    height: '100%',
   },
   select: {
-    minWidth: "350px",
+    minWidth: '385px',
   },
   menuItem: {
-    boxSizing: "border-box",
-    height: "48px",
+    boxSizing: 'border-box',
+    height: '48px',
   },
   icon: {
-    marginRight: "24px",
+    marginRight: '24px',
   },
   patientTableCard: {
-    marginTop: "24px",
-    marginBottom: "145px",
+    marginTop: '24px',
+    marginBottom: '145px',
   },
 });
 
@@ -49,7 +49,7 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
   const classes = useStyles();
 
   const [selectedHospital, setSelectedHospital] = React.useState<string>(
-    "All Hospitals"
+    'All Hospitals'
   );
   const [filteredPatients, setFilteredPatients] = React.useState<Patient[]>(
     patients
@@ -67,11 +67,11 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
       },
       []
     );
-    return [...Array.from(new Set(allHospitals)), "All Hospitals"].sort();
+    return [...Array.from(new Set(allHospitals)), 'All Hospitals'].sort();
   }, [patients]);
 
   const filterPatients = React.useCallback(() => {
-    if (selectedHospital === "All Hospitals") {
+    if (selectedHospital === 'All Hospitals') {
       setFilteredPatients(patients);
     } else {
       setFilteredPatients(
@@ -123,7 +123,7 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
             <Typography
               variant="h4"
               color="textPrimary"
-              style={{ marginTop: "24px", marginRight: "16px" }}
+              style={{ marginTop: '24px', marginRight: '16px' }}
             >
               {filteredPatients.length}
             </Typography>
