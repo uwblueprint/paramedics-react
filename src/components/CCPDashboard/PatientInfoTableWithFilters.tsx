@@ -19,6 +19,14 @@ import { Patient, TriageLevel, Status } from "../../graphql/queries/patients";
 import { PatientInfoTable } from "./PatientInfoTable";
 
 const useStyles = makeStyles({
+  toolbar: {
+    borderBottom: `1px solid ${Colours.BorderLightGray}`,
+    boxSizing: "border-box",
+    paddingTop: "16px",
+    paddingBottom: "16px",
+    width: "inherit",
+    overflowX: "auto",
+  },
   icon: {
     marginRight: "10px",
   },
@@ -46,7 +54,8 @@ const useStyles = makeStyles({
   filterChip: {
     color: Colours.Black,
     fontSize: "16px",
-    marginRight: "12px",
+    marginRight: "16px",
+    marginBottom: "12px",
   },
   deleteChipIcon: {
     color: Colours.Black,
@@ -291,8 +300,8 @@ export const PatientInfoTableWithFilters = ({
   );
 
   return (
-    <TableContainer>
-      <Toolbar>
+    <>
+      <Toolbar disableGutters className={classes.toolbar}>
         <Button color="secondary" onClick={handleOpenFilters}>
           <FilterIcon colour={Colours.Secondary} classes={classes.icon} />
           Filters
@@ -354,7 +363,7 @@ export const PatientInfoTableWithFilters = ({
             </Button>
           </Box>
         </Popover>
-        <Box className={classes.filterChipsContainer}>
+        <Box className={classes.filterChipsContainer} marginBottom="-12px">
           {Object.values(appliedFilters.triage)
             .filter((filter) => filter.selected === true)
             .map((filter) => (
@@ -408,8 +417,9 @@ export const PatientInfoTableWithFilters = ({
             ))}
         </Box>
       </Toolbar>
-
-      <PatientInfoTable patients={filteredPatients} />
-    </TableContainer>
+      <TableContainer>
+        <PatientInfoTable patients={filteredPatients} />
+      </TableContainer>
+    </>
   );
 };

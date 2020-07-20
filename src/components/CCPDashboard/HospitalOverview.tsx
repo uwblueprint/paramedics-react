@@ -31,6 +31,10 @@ const useStyles = makeStyles({
   select: {
     minWidth: "350px",
   },
+  menuItem: {
+    boxSizing: "border-box",
+    height: "48px",
+  },
   icon: {
     marginRight: "24px",
   },
@@ -106,7 +110,11 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
             onClose={() => setIsSelectOpen(false)}
           >
             {hospitals.map((hospital) => (
-              <MenuItem key={hospital} value={hospital}>
+              <MenuItem
+                key={hospital}
+                value={hospital}
+                className={classes.menuItem}
+              >
                 {hospital}
               </MenuItem>
             ))}

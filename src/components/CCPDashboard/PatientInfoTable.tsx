@@ -32,7 +32,6 @@ const useStyles = makeStyles({
     width: 1,
   },
   tableCell: {
-    maxWidth: "190px",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -49,6 +48,7 @@ const useStyles = makeStyles({
 interface HeadCell {
   headerId: string;
   label: string;
+  width: string;
 }
 
 interface EnhancedTableProps {
@@ -66,13 +66,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   };
 
   const headCells: HeadCell[] = [
-    { headerId: "triageLevel", label: "Triage" },
-    { headerId: "barcodeValue", label: "Barcode" },
-    { headerId: "gender", label: "Gender" },
-    { headerId: "age", label: "Age" },
-    { headerId: "status", label: "Status" },
-    { headerId: "hospitalId.name", label: "Hospital" },
-    { headerId: "transportTime", label: "Last Edited" },
+    { headerId: "triageLevel", label: "Triage", width: "78px" },
+    { headerId: "barcodeValue", label: "Barcode", width: "94px" },
+    { headerId: "gender", label: "Gender", width: "72px" },
+    { headerId: "age", label: "Age", width: "34px" },
+    { headerId: "status", label: "Status", width: "104px" },
+    { headerId: "hospitalId.name", label: "Hospital", width: "128px" },
+    { headerId: "transportTime", label: "Last Edited", width: "192px" },
   ];
 
   return (
@@ -81,8 +81,12 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
         {headCells.map((headCell, index) => (
           <TableCell
             key={headCell.headerId}
-            align={index === headCells.length - 1 ? "right" : "left"}
             sortDirection={orderBy === headCell.headerId ? order : false}
+            width={headCell.width}
+            style={{
+              minWidth: headCell.width,
+              ...(index === 0 && { borderLeft: "16px hidden" }),
+            }}
           >
             <TableSortLabel
               active={orderBy === headCell.headerId}
@@ -98,7 +102,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell></TableCell>
+        <TableCell style={{ width: "36px", minWidth: "36px" }}></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -172,30 +176,59 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           <TableCell
             className={classes.tableCell}
             style={{
-              borderLeft: `8px solid ${
+              width: "78px",
+              maxWidth: "78px",
+              borderLeft: `16px solid ${
                 triageLevels[patient.triageLevel].colour
               }`,
             }}
           >
             {triageLevels[patient.triageLevel].label}
           </TableCell>
-          <TableCell className={classes.tableCell}>
+          <TableCell
+            className={classes.tableCell}
+            width="94px"
+            style={{ maxWidth: "94px" }}
+          >
             {patient.barcodeValue}
           </TableCell>
-          <TableCell className={classes.tableCell}>{patient.gender}</TableCell>
-          <TableCell className={classes.tableCell}>{patient.age}</TableCell>
-          <TableCell className={classes.tableCell}>
+          <TableCell
+            className={classes.tableCell}
+            width="72px"
+            style={{ maxWidth: "72px" }}
+          >
+            {patient.gender}
+          </TableCell>
+          <TableCell
+            className={classes.tableCell}
+            width="34px"
+            style={{ maxWidth: "34px" }}
+          >
+            {patient.age}
+          </TableCell>
+          <TableCell
+            className={classes.tableCell}
+            width="104px"
+            style={{ maxWidth: "104px" }}
+          >
             {statusLabels[patient.status]}
           </TableCell>
-          {/* Add overflow tooltip? */}
-          <TableCell className={classes.tableCell}>
+          <TableCell
+            className={classes.tableCell}
+            width="128px"
+            style={{ maxWidth: "128px" }}
+          >
             {patient.hospitalId?.name}
           </TableCell>
-          <TableCell align="right" className={classes.tableCell}>
+          <TableCell
+            className={classes.tableCell}
+            width="192px"
+            style={{ maxWidth: "192px" }}
+          >
             {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
           </TableCell>
-          <TableCell>
-            <Button>
+          <TableCell width="36px" style={{ maxWidth: "36px" }}>
+            <Button style={{ width: "36px", minWidth: "36px" }}>
               <MoreHoriz />
             </Button>
           </TableCell>

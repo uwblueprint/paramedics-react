@@ -134,14 +134,22 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           />
           <Tab label="Hospital" id={`tab-${TabOptions.Hospital}`} />
         </Tabs>
-        <TabPanel value={tab} index={TabOptions.PatientOverview}>
+        <TabPanel
+          value={tab}
+          index={TabOptions.PatientOverview}
+          className={classes.tabPanel}
+        >
           <PatientOverview
             eventId={eventId}
             ccpId={ccpId}
             patients={patients}
           />
         </TabPanel>
-        <TabPanel value={tab} index={TabOptions.Hospital}>
+        <TabPanel
+          value={tab}
+          index={TabOptions.Hospital}
+          className={classes.tabPanel}
+        >
           <HospitalOverview
             eventId={eventId}
             ccpId={ccpId}
