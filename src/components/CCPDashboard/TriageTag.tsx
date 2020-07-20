@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Typography, makeStyles } from "@material-ui/core";
-import { Colours } from "../../styles/Constants";
+import React from 'react';
+import { Box, Typography, makeStyles } from '@material-ui/core';
+import { Colours } from '../../styles/Constants';
 
 interface TriageTagProps {
   colour: Colours;
@@ -10,14 +10,14 @@ interface TriageTagProps {
 
 const useTriageTagStyles = makeStyles({
   root: {
-    boxSizing: "border-box",
+    boxSizing: 'border-box',
     backgroundColor: Colours.BackgroundGray,
-    borderRadius: "0 8px 8px 0",
-    height: "96px",
-    width: "88px",
-    marginRight: "25px",
-    "&:last-child": { marginRight: 0 },
-    padding: "16px",
+    borderRadius: '0 8px 8px 0',
+    height: '96px',
+    width: '88px',
+    marginRight: '25px',
+    '&:last-child': { marginRight: 0 },
+    padding: '16px',
   },
 });
 

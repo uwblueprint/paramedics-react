@@ -6,18 +6,15 @@ const descendingComparator = (a, b, orderBy) => {
     return 1;
   }
   return 0;
-}
+};
 
 export type Order = 'asc' | 'desc';
 
-export const getComparator = (
-  order: Order,
-  orderBy,
-) => {
+export const getComparator = (order: Order, orderBy) => {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
+};
 
 export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
@@ -27,4 +24,4 @@ export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     return a[1] - b[1];
   });
   return stabilizedThis.map((el) => el[0]);
-} 
+}

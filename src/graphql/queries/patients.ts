@@ -1,19 +1,19 @@
-import gql from "graphql-tag";
-import { CCPType } from "../queries/collectionPoints";
+import gql from 'graphql-tag';
+import { CCPType } from './collectionPoints';
 
 export enum TriageLevel {
-  GREEN = "GREEN",
-  YELLOW = "YELLOW",
-  RED = "RED",
-  BLACK = "BLACK",
-  WHITE = "WHITE",
+  GREEN = 'GREEN',
+  YELLOW = 'YELLOW',
+  RED = 'RED',
+  BLACK = 'BLACK',
+  WHITE = 'WHITE',
 }
 
 export enum Status {
-  ON_SITE = "ON_SITE",
-  RELEASED = "RELEASED",
-  TRANSPORTED = "TRANSPORTED",
-  DELETED = "DELETED",
+  ON_SITE = 'ON_SITE',
+  RELEASED = 'RELEASED',
+  TRANSPORTED = 'TRANSPORTED',
+  DELETED = 'DELETED',
 }
 
 export interface Patient {

@@ -1,6 +1,6 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
-export const ADD_EVENT = gql`
+const ADD_EVENT = gql`
   mutation addEvent(
     $name: String!
     $eventDate: Date!
@@ -18,3 +18,5 @@ export const ADD_EVENT = gql`
     }
   }
 `;
+
+export default ADD_EVENT;

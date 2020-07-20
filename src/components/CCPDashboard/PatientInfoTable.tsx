@@ -1,6 +1,5 @@
-import React from "react";
-import moment from "moment";
-import { Colours } from "../../styles/Constants";
+import React from 'react';
+import moment from 'moment';
 import {
   makeStyles,
   TableContainer,
@@ -21,75 +20,76 @@ import {
   Checkbox,
   IconButton,
   Chip,
-} from "@material-ui/core";
-import { Close, MoreHoriz } from "@material-ui/icons";
-import { FilterIcon } from "../common/FilterIcon";
-import { Patient, TriageLevel, Status } from "../../graphql/queries/patients";
-import { Order, stableSort, getComparator } from "../../utils/sort";
-import { PatientDetailsDialog } from "./PatientDetailsDialog";
-import { capitalize } from "../../utils/format";
+} from '@material-ui/core';
+import { Close, MoreHoriz } from '@material-ui/icons';
+import { Colours } from '../../styles/Constants';
+import { FilterIcon } from '../common/FilterIcon';
+import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
+import { Order, stableSort, getComparator } from '../../utils/sort';
+import { PatientDetailsDialog } from './PatientDetailsDialog';
+import { capitalize } from '../../utils/format';
 
 const useStyles = makeStyles({
   root: {
-    padding: "0 56px 145px 56px",
+    padding: '0 56px 145px 56px',
   },
   tableContainer: {
     background: Colours.White,
     border: `1px solid ${Colours.BorderLightGray}`,
-    borderRadius: "4px",
+    borderRadius: '4px',
   },
   visuallyHidden: {
     border: 0,
-    clip: "rect(0 0 0 0)",
+    clip: 'rect(0 0 0 0)',
     height: 1,
     margin: -1,
-    overflow: "hidden",
+    overflow: 'hidden',
     padding: 0,
-    position: "absolute",
+    position: 'absolute',
     top: 20,
     width: 1,
   },
   tableCell: {
-    maxWidth: "190px",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
+    maxWidth: '190px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   icon: {
-    marginRight: "10px",
+    marginRight: '10px',
   },
   editButton: {
-    marginRight: "14px",
-    marginBottom: "12px",
+    marginRight: '14px',
+    marginBottom: '12px',
   },
   detailsDialog: {
-    width: "662px",
+    width: '662px',
   },
   popover: {
-    padding: "24px",
+    padding: '24px',
   },
   filterOption: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   filterCategory: {
-    marginRight: "58px",
+    marginRight: '58px',
   },
   applyButton: {
-    padding: "12px 16px",
+    padding: '12px 16px',
   },
   closeButton: {
-    position: "absolute",
-    top: "6px",
-    right: "6px",
+    position: 'absolute',
+    top: '6px',
+    right: '6px',
   },
   filterChipsContainer: {
-    padding: "0 16px",
+    padding: '0 16px',
   },
   filterChip: {
     color: Colours.Black,
-    fontSize: "16px",
-    marginRight: "12px",
+    fontSize: '16px',
+    marginRight: '12px',
   },
   deleteChipIcon: {
     color: Colours.Black,
@@ -117,13 +117,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   };
 
   const headCells: HeadCell[] = [
-    { headerId: "triageLevel", label: "Triage" },
-    { headerId: "barcodeValue", label: "Barcode" },
-    { headerId: "gender", label: "Gender" },
-    { headerId: "age", label: "Age" },
-    { headerId: "status", label: "Status" },
-    { headerId: "hospital", label: "Hospital" },
-    { headerId: "transportTime", label: "Last Edited" },
+    { headerId: 'triageLevel', label: 'Triage' },
+    { headerId: 'barcodeValue', label: 'Barcode' },
+    { headerId: 'gender', label: 'Gender' },
+    { headerId: 'age', label: 'Age' },
+    { headerId: 'status', label: 'Status' },
+    { headerId: 'hospital', label: 'Hospital' },
+    { headerId: 'transportTime', label: 'Last Edited' },
   ];
 
   return (
@@ -132,24 +132,24 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
         {headCells.map((headCell, index) => (
           <TableCell
             key={headCell.headerId}
-            align={index === headCells.length - 1 ? "right" : "left"}
+            align={index === headCells.length - 1 ? 'right' : 'left'}
             sortDirection={orderBy === headCell.headerId ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.headerId}
-              direction={orderBy === headCell.headerId ? order : "asc"}
+              direction={orderBy === headCell.headerId ? order : 'asc'}
               onClick={createSortHandler(headCell.headerId)}
             >
               {headCell.label}
               {orderBy === headCell.headerId ? (
                 <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
               ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell></TableCell>
+        <TableCell />
       </TableRow>
     </TableHead>
   );
@@ -166,57 +166,57 @@ interface FilterOptionObject {
 }
 
 enum FilterCategory {
-  Triage = "triage",
-  Status = "status",
-  Hospital = "hospital",
+  Triage = 'triage',
+  Status = 'status',
+  Hospital = 'hospital',
 }
 
 const triageFilters: FilterOptionObject = {
   Green: {
-    label: "Green",
+    label: 'Green',
     value: TriageLevel.GREEN,
     selected: false,
   },
   Yellow: {
-    label: "Yellow",
+    label: 'Yellow',
     value: TriageLevel.YELLOW,
     selected: false,
   },
   Red: {
-    label: "Red",
+    label: 'Red',
     value: TriageLevel.RED,
     selected: false,
   },
   Black: {
-    label: "Black",
+    label: 'Black',
     value: TriageLevel.BLACK,
     selected: false,
   },
   White: {
-    label: "White",
+    label: 'White',
     value: TriageLevel.WHITE,
     selected: false,
   },
 };
 
 const statusFilters: FilterOptionObject = {
-  "On Scene": {
-    label: "On Scene",
+  'On Scene': {
+    label: 'On Scene',
     value: Status.ON_SITE,
     selected: false,
   },
   Transport: {
-    label: "Transport",
+    label: 'Transport',
     value: Status.TRANSPORTED,
     selected: false,
   },
   Release: {
-    label: "Released",
+    label: 'Released',
     value: Status.RELEASED,
     selected: false,
   },
   Omit: {
-    label: "Omit",
+    label: 'Omit',
     value: Status.DELETED,
     selected: false,
   },
@@ -224,8 +224,8 @@ const statusFilters: FilterOptionObject = {
 
 export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>("desc");
-  const [orderBy, setOrderBy] = React.useState<string>("transportTime");
+  const [order, setOrder] = React.useState<Order>('desc');
+  const [orderBy, setOrderBy] = React.useState<string>('transportTime');
   const [openDetails, setOpenDetails] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -240,8 +240,8 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
   const [filteredPatients, setFilteredPatients] = React.useState(patients);
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
@@ -308,13 +308,13 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
     setAnchorEl(null);
   };
 
+  const resetFilters = () => {
+    setSelectedFilters(appliedFilters);
+  };
+
   const handleCloseFilters = () => {
     closePopover();
     resetFilters();
-  };
-
-  const resetFilters = () => {
-    setSelectedFilters(appliedFilters);
   };
 
   const clearFilters = () => {
@@ -360,35 +360,35 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
       [TriageLevel.GREEN]: {
         colour: Colours.TriageGreen,
         triageLevel: TriageLevel.GREEN,
-        label: "Green",
+        label: 'Green',
       },
       [TriageLevel.YELLOW]: {
         colour: Colours.TriageYellow,
         triageLevel: TriageLevel.YELLOW,
-        label: "Yellow",
+        label: 'Yellow',
       },
       [TriageLevel.RED]: {
         colour: Colours.TriageRed,
         triageLevel: TriageLevel.RED,
-        label: "Red",
+        label: 'Red',
       },
       [TriageLevel.BLACK]: {
         colour: Colours.Black,
         triageLevel: TriageLevel.BLACK,
-        label: "Black",
+        label: 'Black',
       },
       [TriageLevel.WHITE]: {
         colour: Colours.BorderLightGray,
         triageLevel: TriageLevel.WHITE,
-        label: "White",
+        label: 'White',
       },
     };
 
     const statusLabels = {
-      [Status.ON_SITE]: "On Scene",
-      [Status.TRANSPORTED]: "Transported",
-      [Status.RELEASED]: "Released",
-      [Status.DELETED]: "Omitted/Deleted",
+      [Status.ON_SITE]: 'On Scene',
+      [Status.TRANSPORTED]: 'Transported',
+      [Status.RELEASED]: 'Released',
+      [Status.DELETED]: 'Omitted/Deleted',
     };
 
     return (
@@ -418,7 +418,7 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           Hospital Name Placeholder
         </TableCell>
         <TableCell align="right" className={classes.tableCell}>
-          {moment(patient.transportTime).format("MMM D YYYY, h:mm A")}
+          {moment(patient.transportTime).format('MMM D YYYY, h:mm A')}
         </TableCell>
         <TableCell>
           <Button>
@@ -458,12 +458,12 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           anchorEl={anchorEl}
           onClose={handleCloseFilters}
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
           transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
+            vertical: 'top',
+            horizontal: 'left',
           }}
           PaperProps={{ className: classes.popover }}
         >

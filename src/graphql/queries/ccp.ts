@@ -1,4 +1,4 @@
-import { EventType } from "./events";
+import { EventType } from './events';
 
 export interface CollectionPoint {
   id: number;

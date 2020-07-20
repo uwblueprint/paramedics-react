@@ -1,9 +1,9 @@
-import React from "react";
-import { Colours } from "../../styles/Constants";
-import { Box, Tabs, Tab, makeStyles } from "@material-ui/core";
-import { RouteComponentProps } from "react-router";
-import { useAllPatients } from "../../graphql/queries/hooks/patients";
-import { PatientOverview } from "./PatientOverview";
+import React from 'react';
+import { Box, Tabs, Tab, makeStyles } from '@material-ui/core';
+import { RouteComponentProps } from 'react-router';
+import { useAllPatients } from '../../graphql/queries/hooks/patients';
+import { PatientOverview } from './PatientOverview';
+import { Colours } from '../../styles/Constants';
 
 interface TParams {
   eventId: string;
@@ -23,34 +23,34 @@ interface TabPanelProps {
 
 const useStyles = makeStyles({
   root: {
-    minHeight: "100vh",
+    minHeight: '100vh',
     background: Colours.BackgroundGray,
   },
   container: {
     background: Colours.White,
-    padding: "32px 56px 0 56px",
-    maxWidth: "none",
+    padding: '32px 56px 0 56px',
+    maxWidth: 'none',
   },
   tabs: {
     background: Colours.White,
-    padding: "0 56px",
+    padding: '0 56px',
   },
   fullHeightGridItem: {
-    display: "flex",
-    alignSelf: "stretch",
+    display: 'flex',
+    alignSelf: 'stretch',
   },
   card: {
-    padding: "24px",
-    marginTop: "16px",
-    marginRight: "24px",
-    height: "100%",
+    padding: '24px',
+    marginTop: '16px',
+    marginRight: '24px',
+    height: '100%',
   },
   categoryTableCard: {
-    display: "flex",
-    alignItems: "center",
-    paddingRight: "44px",
-    paddingLeft: "44px",
-    marginTop: "16px",
+    display: 'flex',
+    alignItems: 'center',
+    paddingRight: '44px',
+    paddingLeft: '44px',
+    marginTop: '16px',
   },
   lightBorder: {
     borderColor: Colours.BackgroundGray,
@@ -59,8 +59,8 @@ const useStyles = makeStyles({
     border: 0,
   },
   cellWithIcon: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
 });
 
@@ -108,7 +108,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       <TabPanel value={tab} index={TabOptions.PatientOverview}>
         <PatientOverview eventId={eventId} ccpId={ccpId} />
       </TabPanel>
-      <TabPanel value={tab} index={TabOptions.Hospital}></TabPanel>
+      <TabPanel value={tab} index={TabOptions.Hospital} />
     </Box>
   );
 };

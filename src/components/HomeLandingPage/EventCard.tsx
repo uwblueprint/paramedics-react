@@ -1,10 +1,10 @@
-import React from "react";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
-import CardOptions from "./CardOptions";
+import React from 'react';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+import CardOptions from './CardOptions';
 
 interface EventCardProps {
   date: Date;
@@ -12,24 +12,30 @@ interface EventCardProps {
   address: string;
 }
 
+type EventCard = ({ date, eventTitle, address }: EventCardProps) => JSX.Element;
+
 const useEventCardStyles = makeStyles({
   root: {
-    display: "inline-block",
-    boxShadow: "none",
-    width: "20rem",
-    height: "10rem",
+    display: 'inline-block',
+    boxShadow: 'none',
+    width: '20rem',
+    height: '10rem',
   },
   cardContent: {
-    padding: "2em 2em",
+    padding: '2em 2em',
   },
   eventTitle: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 });
 
-const EventCard = ({ date, eventTitle, address }: EventCardProps) => {
+const EventCard: EventCard = ({
+  date,
+  eventTitle,
+  address,
+}: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
     <Card className={classes.root}>
