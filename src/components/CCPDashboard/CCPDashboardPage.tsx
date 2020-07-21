@@ -1,9 +1,9 @@
 import React from 'react';
-import { Colours } from '../../styles/Constants';
 import { Box, Tabs, Tab, makeStyles } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
-import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { useQuery } from '@apollo/react-hooks';
+import { useAllPatients } from '../../graphql/queries/hooks/patients';
+import { Colours } from '../../styles/Constants';
 import {
   FETCH_ALL_PATIENTS,
   Patient,
@@ -119,46 +119,41 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   if (loading) {
     return <LoadingState />;
-  } else {
-    return (
-      <Box className={classes.root}>
-        <Tabs
-          className={classes.tabs}
-          value={tab}
-          onChange={handleChange}
-          textColor="secondary"
-        >
-          <Tab
-            label="Patient Overview"
-            id={`tab-${TabOptions.PatientOverview}`}
-          />
-          <Tab label="Hospital" id={`tab-${TabOptions.Hospital}`} />
-        </Tabs>
-        <TabPanel
-          value={tab}
-          index={TabOptions.PatientOverview}
-          className={classes.tabPanel}
-        >
-          <PatientOverview
-            eventId={eventId}
-            ccpId={ccpId}
-            patients={patients}
-          />
-        </TabPanel>
-        <TabPanel
-          value={tab}
-          index={TabOptions.Hospital}
-          className={classes.tabPanel}
-        >
-          <HospitalOverview
-            eventId={eventId}
-            ccpId={ccpId}
-            patients={transportPatients}
-          />
-        </TabPanel>
-      </Box>
-    );
   }
+  return (
+    <Box className={classes.root}>
+      <Tabs
+        className={classes.tabs}
+        value={tab}
+        onChange={handleChange}
+        textColor="secondary"
+      >
+        <Tab
+          label="Patient Overview"
+          id={`tab-${TabOptions.PatientOverview}`}
+        />
+        <Tab label="Hospital" id={`tab-${TabOptions.Hospital}`} />
+      </Tabs>
+      <TabPanel
+        value={tab}
+        index={TabOptions.PatientOverview}
+        className={classes.tabPanel}
+      >
+        <PatientOverview eventId={eventId} ccpId={ccpId} patients={patients} />
+      </TabPanel>
+      <TabPanel
+        value={tab}
+        index={TabOptions.Hospital}
+        className={classes.tabPanel}
+      >
+        <HospitalOverview
+          eventId={eventId}
+          ccpId={ccpId}
+          patients={transportPatients}
+        />
+      </TabPanel>
+    </Box>
+  );
 };
 
 export default CCPDashboardPage;

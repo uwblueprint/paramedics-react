@@ -1,5 +1,4 @@
-import React from "react";
-import { Colours } from "../../styles/Constants";
+import React from 'react';
 import {
   makeStyles,
   TableContainer,
@@ -12,50 +11,51 @@ import {
   Checkbox,
   IconButton,
   Chip,
-} from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import { FilterIcon } from "../common/FilterIcon";
-import { Patient, TriageLevel, Status } from "../../graphql/queries/patients";
-import { PatientInfoTable } from "./PatientInfoTable";
+} from '@material-ui/core';
+import { Close } from '@material-ui/icons';
+import { Colours } from '../../styles/Constants';
+import { FilterIcon } from '../common/FilterIcon';
+import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
+import { PatientInfoTable } from './PatientInfoTable';
 
 const useStyles = makeStyles({
   toolbar: {
     borderBottom: `1px solid ${Colours.BorderLightGray}`,
-    boxSizing: "border-box",
-    paddingTop: "16px",
-    paddingBottom: "16px",
-    width: "inherit",
-    overflowX: "auto",
+    boxSizing: 'border-box',
+    paddingTop: '16px',
+    paddingBottom: '16px',
+    width: 'inherit',
+    overflowX: 'auto',
   },
   icon: {
-    marginRight: "10px",
+    marginRight: '10px',
   },
   popover: {
-    padding: "24px",
+    padding: '24px',
   },
   filterOption: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   filterCategory: {
-    marginRight: "58px",
+    marginRight: '58px',
   },
   applyButton: {
-    padding: "12px 16px",
+    padding: '12px 16px',
   },
   closeButton: {
-    position: "absolute",
-    top: "6px",
-    right: "6px",
+    position: 'absolute',
+    top: '6px',
+    right: '6px',
   },
   filterChipsContainer: {
-    padding: "0 16px",
+    padding: '0 16px',
   },
   filterChip: {
     color: Colours.Black,
-    fontSize: "16px",
-    marginRight: "16px",
-    marginBottom: "12px",
+    fontSize: '16px',
+    marginRight: '16px',
+    marginBottom: '12px',
   },
   deleteChipIcon: {
     color: Colours.Black,
@@ -74,57 +74,57 @@ interface FilterOptionObject {
 }
 
 enum FilterCategory {
-  Triage = "triage",
-  Status = "status",
-  Hospital = "hospital",
+  Triage = 'triage',
+  Status = 'status',
+  Hospital = 'hospital',
 }
 
 const triageFilters: FilterOptionObject = {
   Green: {
-    label: "Green",
+    label: 'Green',
     value: TriageLevel.GREEN,
     selected: false,
   },
   Yellow: {
-    label: "Yellow",
+    label: 'Yellow',
     value: TriageLevel.YELLOW,
     selected: false,
   },
   Red: {
-    label: "Red",
+    label: 'Red',
     value: TriageLevel.RED,
     selected: false,
   },
   Black: {
-    label: "Black",
+    label: 'Black',
     value: TriageLevel.BLACK,
     selected: false,
   },
   White: {
-    label: "White",
+    label: 'White',
     value: TriageLevel.WHITE,
     selected: false,
   },
 };
 
 const statusFilters: FilterOptionObject = {
-  "On Scene": {
-    label: "On Scene",
+  'On Scene': {
+    label: 'On Scene',
     value: Status.ON_SITE,
     selected: false,
   },
   Transport: {
-    label: "Transport",
+    label: 'Transport',
     value: Status.TRANSPORTED,
     selected: false,
   },
   Release: {
-    label: "Released",
+    label: 'Released',
     value: Status.RELEASED,
     selected: false,
   },
   Omit: {
-    label: "Omit",
+    label: 'Omit',
     value: Status.DELETED,
     selected: false,
   },
@@ -152,9 +152,8 @@ export const PatientInfoTableWithFilters = ({
               selected: false,
             },
           };
-        } else {
-          return allHospitals;
         }
+        return allHospitals;
       }, {} as FilterOptionObject),
     [patients]
   );
@@ -238,13 +237,13 @@ export const PatientInfoTableWithFilters = ({
     setAnchorEl(null);
   };
 
+  const resetFilters = () => {
+    setSelectedFilters(appliedFilters);
+  };
+
   const handleCloseFilters = () => {
     closePopover();
     resetFilters();
-  };
-
-  const resetFilters = () => {
-    setSelectedFilters(appliedFilters);
   };
 
   const clearFilters = () => {
@@ -311,12 +310,12 @@ export const PatientInfoTableWithFilters = ({
           anchorEl={anchorEl}
           onClose={handleCloseFilters}
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
           transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
+            vertical: 'top',
+            horizontal: 'left',
           }}
           PaperProps={{ className: classes.popover }}
         >

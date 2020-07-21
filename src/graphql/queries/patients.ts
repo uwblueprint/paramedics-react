@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { CCPType } from '../queries/collectionPoints';
+import { CCPType } from './collectionPoints';
 import { Hospital } from './hospitals';
 
 export enum TriageLevel {

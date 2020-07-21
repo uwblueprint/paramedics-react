@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Colours } from '../../styles/Constants';
 import {
   Typography,
   makeStyles,
@@ -13,6 +12,7 @@ import {
   TableRow,
   TableCell,
 } from '@material-ui/core';
+import { Colours } from '../../styles/Constants';
 import { Patient, Status } from '../../graphql/queries/patients';
 import { TotalPatientCard } from './TotalPatientCard';
 import { TriageCard } from './TriageCard';
@@ -22,6 +22,7 @@ import { ScanPatientButton } from './ScanPatientButton';
 interface PatientOverviewProps {
   // eslint-disable-next-line react/no-unused-prop-types
   eventId: string;
+  // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
 }
@@ -157,10 +158,9 @@ export const PatientOverview = (props: PatientOverviewProps) => {
                       </Typography>
                     </TableCell>
                     <TableCell className={noBorderLastRow(index)} align="right">
-                      <Typography
-                        variant="body1"
-                        color="textSecondary"
-                      >{`${row.ratio}%`}</Typography>
+                      <Typography variant="body1" color="textSecondary">
+                        {`${row.ratio}%`}
+                      </Typography>
                     </TableCell>
                   </TableRow>
                 ))}

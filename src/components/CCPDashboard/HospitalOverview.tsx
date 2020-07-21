@@ -16,7 +16,9 @@ import { PatientInfoTable } from './PatientInfoTable';
 import { ScanPatientButton } from './ScanPatientButton';
 
 interface HospitalOverviewProps {
+  // eslint-disable-next-line react/no-unused-prop-types
   eventId: string;
+  // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
 }

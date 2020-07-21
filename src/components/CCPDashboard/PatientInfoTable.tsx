@@ -1,5 +1,4 @@
 import React from 'react';
-import { Colours } from '../../styles/Constants';
 import moment from 'moment';
 import {
   makeStyles,
@@ -14,6 +13,7 @@ import {
   DialogActions,
 } from '@material-ui/core';
 import { MoreHoriz } from '@material-ui/icons';
+import { Colours } from '../../styles/Constants';
 import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
@@ -102,7 +102,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell style={{ width: '36px', minWidth: '36px' }}></TableCell>
+        <TableCell style={{ width: '36px', minWidth: '36px' }} />
       </TableRow>
     </TableHead>
   );

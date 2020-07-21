@@ -19,19 +19,19 @@ const comparator = (a, b, orderBy: string, descending: boolean) => {
     return 0;
   }
   // nulls sort after anything else
-  else if (aValue === null) {
+  if (aValue === null) {
     return 1;
-  } else if (bValue === null) {
+  }
+  if (bValue === null) {
     return -1;
   }
   // if descending, highest sorts first
-  else if (descending) {
+  if (descending) {
     return aValue < bValue ? 1 : -1;
   }
   // otherwise, if we're ascending, lowest sorts first
-  else {
-    return aValue < bValue ? -1 : 1;
-  }
+
+  return aValue < bValue ? -1 : 1;
 };
 
 export type Order = 'asc' | 'desc';

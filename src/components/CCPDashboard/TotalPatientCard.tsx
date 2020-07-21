@@ -1,12 +1,12 @@
-import React from "react";
-import { Box, Typography, makeStyles, Card } from "@material-ui/core";
+import React from 'react';
+import { Box, Typography, makeStyles, Card } from '@material-ui/core';
 
 const useStyles = makeStyles({
   card: {
-    padding: "24px",
-    marginTop: "16px",
-    marginRight: "24px",
-    height: "100%",
+    padding: '24px',
+    marginTop: '16px',
+    marginRight: '24px',
+    height: '100%',
   },
 });
 
@@ -19,7 +19,7 @@ export const TotalPatientCard = ({ numPatients }: { numPatients: number }) => {
         <Typography
           variant="h3"
           color="textPrimary"
-          style={{ marginRight: "16px" }}
+          style={{ marginRight: '16px' }}
         >
           {numPatients}
         </Typography>

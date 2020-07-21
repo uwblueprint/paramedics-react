@@ -1,14 +1,14 @@
-import React from "react";
-import { Colours } from "../../styles/Constants";
-import { makeStyles, Card, Grid, Typography } from "@material-ui/core";
-import { Patient, TriageLevel } from "../../graphql/queries/patients";
-import { TriageTag } from "./TriageTag";
+import React from 'react';
+import { makeStyles, Card, Grid, Typography } from '@material-ui/core';
+import { Colours } from '../../styles/Constants';
+import { Patient, TriageLevel } from '../../graphql/queries/patients';
+import { TriageTag } from './TriageTag';
 
 const useStyles = makeStyles({
   card: {
-    padding: "24px",
-    marginTop: "16px",
-    height: "100%",
+    padding: '24px',
+    marginTop: '16px',
+    height: '100%',
   },
 });
 
@@ -16,19 +16,19 @@ const triageLevels = [
   {
     colour: Colours.TriageGreen,
     triageLevel: TriageLevel.GREEN,
-    label: "Green",
+    label: 'Green',
   },
   {
     colour: Colours.TriageYellow,
     triageLevel: TriageLevel.YELLOW,
-    label: "Yellow",
+    label: 'Yellow',
   },
-  { colour: Colours.TriageRed, triageLevel: TriageLevel.RED, label: "Red" },
-  { colour: Colours.Black, triageLevel: TriageLevel.BLACK, label: "Black" },
+  { colour: Colours.TriageRed, triageLevel: TriageLevel.RED, label: 'Red' },
+  { colour: Colours.Black, triageLevel: TriageLevel.BLACK, label: 'Black' },
   {
     colour: Colours.TriageWhite,
     triageLevel: TriageLevel.WHITE,
-    label: "White",
+    label: 'White',
   },
 ];
 
@@ -45,7 +45,7 @@ export const TriageCard = ({
       <Typography
         variant="body1"
         color="textSecondary"
-        style={{ marginBottom: "16px" }}
+        style={{ marginBottom: '16px' }}
       >
         CCP triage:
       </Typography>
