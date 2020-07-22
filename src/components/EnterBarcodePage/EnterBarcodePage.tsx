@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-import "../styles/HomeLandingPage.css";
+import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import FormField from "../components/common/FormField";
+import FormField from "../common/FormField";
 import { NavLink } from "react-router-dom";
-import CompleteBarcodeButton from "../components/EnterBarcodePage/CompleteBarcodeButton";
+import CompleteBarcodeButton from "./CompleteBarcodeButton";
 import { useHistory } from "react-router-dom";
 import { useQuery } from "react-apollo";
-import { FETCH_ALL_PATIENTS } from "../graphql/queries/patients";
+import { FETCH_ALL_PATIENTS } from "../../graphql/queries/patients";
 
 const EnterBarcodePage = ({
   match: {
@@ -36,7 +35,7 @@ const EnterBarcodePage = ({
         history.replace(`/patients/edit/${patientCCPId}/${id}`);
       } else {
         // No existing patient
-        history.replace(`/patients/new/${ccpID}`);
+        history.replace(`/patients/new/${ccpID}/${barcode}`);
       }
     }
   };

@@ -5,8 +5,8 @@ import "../styles/App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
 import HomeLandingPage from "./HomeLandingPage";
 import EventCreationPage from "./EventCreationPage";
-import ScanPatientPage from "./ScanPatientPage";
-import EnterBarcodePage from "./EnterBarcodePage";
+import ScanPatientPage from "../components/ScanPatientPage/ScanPatientPage";
+import EnterBarcodePage from "../components/EnterBarcodePage/EnterBarcodePage";
 import CCPDashboardPage from "../components/CCPDashboard/CCPDashboardPage";
 import PatientProfilePage from "./PatientProfilePage";
 
@@ -33,8 +33,13 @@ function App() {
         />
         <Route
           exact
-          path="/patients/:mode/:ccpId/:patientId?"
-          component={PatientProfilePage}
+          path="/patients/edit/:ccpId/:patientId"
+          component={(props) => <PatientProfilePage mode="edit" {...props} />}
+        />
+        <Route
+          exact
+          path="/patients/new/:ccpId/:barcodeValue?"
+          component={(props) => <PatientProfilePage mode="new" {...props} />}
         />
         <Route path="/">
           <Redirect to="/events" />

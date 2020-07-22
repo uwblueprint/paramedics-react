@@ -12,11 +12,11 @@ const BarcodeScan = ({
   ccpID: string;
 }) => {
   const history = useHistory();
-  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
+  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>("");
 
   useEffect(() => {
-    if (!loading && barcode !== "") {
+    if (!loading && barcode !== "" && !error) {
       const selectedPatient = data.patients.filter(
         (patient) => patient.barcodeValue.toString() === barcode
       );
@@ -31,7 +31,7 @@ const BarcodeScan = ({
         history.replace(`/patients/edit/${patientCCPId}/${id}`);
       } else {
         // No existing patient
-        history.replace(`/patients/new/${ccpID}`);
+        history.replace(`/patients/new/${ccpID}/${barcode}`);
       }
     }
   }, [barcode]);
