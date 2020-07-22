@@ -1,14 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-import "./styles/index.css";
-import { ApolloProvider } from "@apollo/react-hooks";
-import * as Sentry from "@sentry/browser";
-import App from "./containers/App";
-import * as serviceWorker from "./serviceWorker";
+import './styles/index.css';
+import { ApolloProvider } from '@apollo/react-hooks';
+import * as Sentry from '@sentry/browser';
+import App from './containers/App';
+import * as serviceWorker from './serviceWorker';
 
-import client from "./graphql/apollo/client";
+import client from './graphql/apollo/client';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -16,7 +16,7 @@ ReactDOM.render(
       <App />
     </ApolloProvider>
   </BrowserRouter>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

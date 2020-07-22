@@ -1,6 +1,6 @@
-import { useQuery } from "@apollo/react-hooks";
-import { useApolloClient } from "react-apollo";
-import { FETCH_ALL_PATIENTS } from "../patients";
+import { useQuery } from '@apollo/react-hooks';
+import { useApolloClient } from 'react-apollo';
+import { FETCH_ALL_PATIENTS } from '../patients';
 
 export function useAllPatients() {
   const { data } = useQuery(FETCH_ALL_PATIENTS);

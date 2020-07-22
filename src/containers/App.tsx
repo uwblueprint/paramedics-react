@@ -1,18 +1,18 @@
-import React from "react";
-import { ThemeProvider } from "@material-ui/core/styles";
-import { theme } from "../styles/Theme";
-import "../styles/App.css";
-import { Switch, Route, Redirect } from "react-router-dom";
-import HomeLandingPage from "./HomeLandingPage";
-import EventCreationPage from "./EventCreationPage";
-import ScanPatientPage from "../components/ScanPatientPage/ScanPatientPage";
-import EnterBarcodePage from "../components/EnterBarcodePage/EnterBarcodePage";
-import CCPDashboardPage from "../components/CCPDashboard/CCPDashboardPage";
-import PatientProfilePage from "./PatientProfilePage";
+import React from 'react';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { Theme } from '../styles/Theme';
+import '../styles/App.css';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import HomeLandingPage from './HomeLandingPage';
+import EventCreationPage from './EventCreationPage';
+import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
+import EnterBarcodePage from '../components/EnterBarcodePage/EnterBarcodePage';
+import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
+import PatientProfilePage from './PatientProfilePage';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <Switch>
         <Route exact path="/events" component={HomeLandingPage} />
         <Route exact path="/events/new" component={EventCreationPage} />
