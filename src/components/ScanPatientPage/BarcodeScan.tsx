@@ -4,8 +4,6 @@ import Quagga from "quagga";
 import { useQuery } from "react-apollo";
 import { FETCH_ALL_PATIENTS } from "../../graphql/queries/patients";
 
-import "../../styles/BarcodeScan.css";
-
 const BarcodeScan = ({
   eventID,
   ccpID,
@@ -71,7 +69,14 @@ const BarcodeScan = ({
   }, []);
   return (
     <div id="barcode-scan">
-      <video src=""></video>
+      {/* Hardcoded styles to make barcode scan full screen */}
+      <video src="" style={{ width: "100%", height: "auto" }}></video>
+      <video
+        src=""
+        className="drawingBuffer"
+        style={{ display: "none" }}
+      ></video>
+      <canvas className="drawingBuffer" style={{ display: "none" }}></canvas>
     </div>
   );
 };
