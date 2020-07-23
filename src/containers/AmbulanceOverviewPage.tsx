@@ -1,22 +1,21 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Colours } from "../styles/Constants";
-import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import { IconButton } from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import AddResourceButton from "../components/ResourceOverviewPage/AddResourceButton";
-import Popper from "@material-ui/core/Popper";
-import { useQuery } from "react-apollo";
-import { useMutation } from "@apollo/react-hooks";
-import { GET_ALL_AMBULANCES } from "../graphql/queries/ambulances";
-import { DELETE_AMBULANCE } from "../graphql/mutations/ambulances";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useQuery } from 'react-apollo';
+import { useMutation } from '@apollo/react-hooks';
+import Popper from '@material-ui/core/Popper';
+import { Typography, IconButton } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
+import { GET_ALL_AMBULANCES } from '../graphql/queries/ambulances';
+import { DELETE_AMBULANCE } from '../graphql/mutations/ambulances';
+import { Colours } from '../styles/Constants';
 
 const pStyles = makeStyles({
   body2: {
@@ -29,19 +28,13 @@ const tableStyles = makeStyles({
   root: {
     backgroundColor: Colours.White,
     marginTop: 24,
-    border: "1px solid #CCCCCC",
-  },
-});
-
-const cellStyles = makeStyles({
-  alignLeft: {
-    display: "flex",
+    border: '1px solid #CCCCCC',
   },
 });
 
 const headerRow = makeStyles({
   root: {
-    color: "black",
+    color: 'black',
     fontWeight: 600,
     fontSize: 14,
     paddingTop: 17,
@@ -53,7 +46,7 @@ const headerRow = makeStyles({
 
 const dataRow = makeStyles({
   root: {
-    color: "black",
+    color: 'black',
     fontWeight: 400,
     fontSize: 14,
     paddingTop: 16.5,
@@ -65,16 +58,16 @@ const dataRow = makeStyles({
 
 const options = makeStyles({
   root: {
-    textAlign: "right",
+    textAlign: 'right',
   },
   menuCell: {
     borderBottom: 0,
   },
   menuHover: {
-    borderRadius: "4px 4px 4px 4px",
+    borderRadius: '4px 4px 4px 4px',
   },
   menuDelete: {
-    color: "#9B2F2F",
+    color: '#9B2F2F',
   },
 });
 
@@ -82,47 +75,45 @@ const AmbulanceOverviewPage: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedAmbulance, selectAmbulance] = React.useState<number>(-1);
 
-  //Writing to cache when deleting user
+  //  Writing to cache when deleting user
   const [deleteAmbulance] = useMutation(DELETE_AMBULANCE, {
-    update(cache, { data: { deleteAmbulance } }) {
+    update(cache) {
       let { ambulances } = cache.readQuery<null | any>({
         query: GET_ALL_AMBULANCES,
       });
 
       setAnchorEl(null);
 
-      let filtered = ambulances.filter(
+      const filtered = ambulances.filter(
         (ambulance) => ambulance.id !== selectedAmbulance
       );
       ambulances = filtered;
       cache.writeQuery({
         query: GET_ALL_AMBULANCES,
-        data: { ambulances: ambulances },
+        data: { ambulances },
       });
     },
   });
 
   const handleClickOptions = (event) => {
-    selectAmbulance(event.currentTarget.getAttribute("data-id"));
+    selectAmbulance(event.currentTarget.getAttribute('data-id'));
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
   const history = useHistory();
-  const handleClickEdit = (event) => {
-    let ambulanceId = selectedAmbulance;
+  const handleClickEdit = () => {
+    const ambulanceId = selectedAmbulance;
     history.replace(`/manage/ambulances/edit/${ambulanceId}`);
   };
 
-  const handleClickDelete = (event) => {
-    {
-      let ambulanceId = selectedAmbulance;
-      deleteAmbulance({ variables: { id: ambulanceId } });
-    }
+  const handleClickDelete = () => {
+    const ambulanceId = selectedAmbulance;
+    deleteAmbulance({ variables: { id: ambulanceId } });
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
-  const { data, loading, error } = useQuery(GET_ALL_AMBULANCES);
+  const id = open ? 'simple-popper' : undefined;
+  const { data, loading } = useQuery(GET_ALL_AMBULANCES);
 
   const classes = pStyles();
   const hRow = headerRow();
@@ -162,7 +153,7 @@ const AmbulanceOverviewPage: React.FC = () => {
               <TableCell classes={{ root: hRow.root }}>
                 Ambulance number
               </TableCell>
-              <TableCell></TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -171,7 +162,7 @@ const AmbulanceOverviewPage: React.FC = () => {
               id={id}
               open={open}
               popperOptions={{
-                modifiers: { offset: { enabled: true, offset: "-69.5,0" } },
+                modifiers: { offset: { enabled: true, offset: '-69.5,0' } },
               }}
               anchorEl={anchorEl}
             >

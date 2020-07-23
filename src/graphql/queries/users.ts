@@ -1,9 +1,9 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export enum AccessLevel {
-  COMMANDER = "COMMANDER",
-  SUPERVISOR = "SUPERVISOR",
-  ADMIN = "ADMIN",
+  COMMANDER = 'COMMANDER',
+  SUPERVISOR = 'SUPERVISOR',
+  ADMIN = 'ADMIN',
 }
 
 export interface User {
@@ -38,4 +38,3 @@ export const GET_ALL_USERS = gql`
     }
   }
 `;
-

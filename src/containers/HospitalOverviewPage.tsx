@@ -1,22 +1,21 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Colours } from "../styles/Constants";
-import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import { IconButton } from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import AddResourceButton from "../components/ResourceOverviewPage/AddResourceButton";
-import Popper from "@material-ui/core/Popper";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "react-apollo";
-import { GET_ALL_HOSPITALS } from "../graphql/queries/hospitals";
-import { DELETE_HOSPITAL } from "../graphql/mutations/hospitals";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Typography, IconButton } from '@material-ui/core';
+import Popper from '@material-ui/core/Popper';
+import { useMutation } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
+import { GET_ALL_HOSPITALS } from '../graphql/queries/hospitals';
+import { DELETE_HOSPITAL } from '../graphql/mutations/hospitals';
+import { Colours } from '../styles/Constants';
 
 const pStyles = makeStyles({
   body2: {
@@ -29,19 +28,13 @@ const tableStyles = makeStyles({
   root: {
     backgroundColor: Colours.White,
     marginTop: 24,
-    border: "1px solid #CCCCCC",
-  },
-});
-
-const cellStyles = makeStyles({
-  alignLeft: {
-    display: "flex",
+    border: '1px solid #CCCCCC',
   },
 });
 
 const headerRow = makeStyles({
   root: {
-    color: "black",
+    color: 'black',
     fontWeight: 600,
     fontSize: 14,
     paddingTop: 17,
@@ -53,7 +46,7 @@ const headerRow = makeStyles({
 
 const dataRow = makeStyles({
   root: {
-    color: "black",
+    color: 'black',
     fontWeight: 400,
     fontSize: 14,
     paddingTop: 16.5,
@@ -65,31 +58,26 @@ const dataRow = makeStyles({
 
 const options = makeStyles({
   root: {
-    textAlign: "right",
+    textAlign: 'right',
   },
   menuCell: {
     borderBottom: 0,
   },
   menuHover: {
-    borderRadius: "4px 4px 4px 4px",
+    borderRadius: '4px 4px 4px 4px',
   },
   menuDelete: {
-    color: "#9B2F2F",
+    color: '#9B2F2F',
   },
 });
 
 const HospitalOverviewPage: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedHospital, selectHospital] = React.useState<number>(-1);
-  const [hospitalState, setHospitals] = React.useState([]);
 
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const { data, loading, error } = useQuery(GET_ALL_HOSPITALS);
+  const { data, loading } = useQuery(GET_ALL_HOSPITALS);
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
+  const id = open ? 'simple-popper' : undefined;
 
   const classes = pStyles();
   const hRow = headerRow();
@@ -97,41 +85,40 @@ const HospitalOverviewPage: React.FC = () => {
   const dRow = dataRow();
   const optionBtn = options();
 
-  //Writing to cache when deleting user
+  //  Writing to cache when deleting user
   const [deleteHospital] = useMutation(DELETE_HOSPITAL, {
-    update(cache, { data: { deleteHospital } }) {
+    update(cache) {
       let { hospitals } = cache.readQuery<null | any>({
         query: GET_ALL_HOSPITALS,
       });
 
       setAnchorEl(null);
 
-      let filtered = hospitals.filter(
-        (hospital) => hospital.id !== selectedHospital);
+      const filtered = hospitals.filter(
+        (hospital) => hospital.id !== selectedHospital
+      );
       hospitals = filtered;
       cache.writeQuery({
         query: GET_ALL_HOSPITALS,
-        data: { hospitals: hospitals },
+        data: { hospitals },
       });
     },
   });
 
   const handleClickOptions = (event) => {
-    selectHospital(event.currentTarget.getAttribute("data-id"));
+    selectHospital(event.currentTarget.getAttribute('data-id'));
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
   const history = useHistory();
-  const handleClickEdit = (event) => {
-    let hospitalId = selectedHospital;
+  const handleClickEdit = () => {
+    const hospitalId = selectedHospital;
     history.replace(`/manage/hospitals/edit/${hospitalId}`);
   };
 
-  const handleClickDelete = (event) => {
-    {
-      let hospitalId = selectedHospital;
-      deleteHospital({ variables: { id: hospitalId } });
-    }
+  const handleClickDelete = () => {
+    const hospitalId = selectedHospital;
+    deleteHospital({ variables: { id: hospitalId } });
   };
 
   let cells;
@@ -162,7 +149,7 @@ const HospitalOverviewPage: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell classes={{ root: hRow.root }}>Hospital Name</TableCell>
-              <TableCell></TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -171,7 +158,7 @@ const HospitalOverviewPage: React.FC = () => {
               id={id}
               open={open}
               popperOptions={{
-                modifiers: { offset: { enabled: true, offset: "-69.5,0" } },
+                modifiers: { offset: { enabled: true, offset: '-69.5,0' } },
               }}
               anchorEl={anchorEl}
             >

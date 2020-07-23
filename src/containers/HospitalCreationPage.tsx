@@ -1,51 +1,53 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import "../styles/ResourceCreationPage.css";
-import Typography from "@material-ui/core/Typography";
-import FormField from "../components/common/FormField";
-import BackLink from "../components/ResourceCreationPage/BackLink";
-import CancelButton from "../components/ResourceCreationPage/CancelButton";
-import DoneButton from "../components/ResourceCreationPage/DoneButton";
-import { Colours } from "../styles/Constants";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "react-apollo";
-import { ADD_HOSPITAL, EDIT_HOSPITAL } from "../graphql/mutations/hospitals";
-import { Hospital, GET_ALL_HOSPITALS, GET_HOSPITAL_BY_ID } from "../graphql/queries/hospitals";
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import '../styles/ResourceCreationPage.css';
+import Typography from '@material-ui/core/Typography';
+import { useMutation } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
+import FormField from '../components/common/FormField';
+import BackLink from '../components/ResourceCreationPage/BackLink';
+import CancelButton from '../components/ResourceCreationPage/CancelButton';
+import DoneButton from '../components/ResourceCreationPage/DoneButton';
+import { Colours } from '../styles/Constants';
+import { ADD_HOSPITAL, EDIT_HOSPITAL } from '../graphql/mutations/hospitals';
+import {
+  Hospital,
+  GET_ALL_HOSPITALS,
+  GET_HOSPITAL_BY_ID,
+} from '../graphql/queries/hospitals';
 
 const HospitalCreationPage = ({
   match: {
     params: { mode, hospitalId },
   },
 }: {
-  match: { params: { mode: string; hospitalId?: string; } };
+  match: { params: { mode: string; hospitalId?: string } };
 }) => {
   const history = useHistory();
 
-  const { data, loading, error } = useQuery(
-    mode === "edit" && hospitalId
+  const { data, loading } = useQuery(
+    mode === 'edit' && hospitalId
       ? GET_HOSPITAL_BY_ID(hospitalId)
       : GET_ALL_HOSPITALS
   );
 
   const hospitals: Array<Hospital> = data ? data.hospitals : [];
-  const [addHospital] = useMutation(ADD_HOSPITAL,
-    {
-      update(cache, { data: { addHospital } }) {
-        cache.writeQuery({
-          query: GET_ALL_HOSPITALS,
-          data: { hospitals: hospitals.concat([addHospital]) },
-        });
-      }
-    }
-  );
+  const [addHospital] = useMutation(ADD_HOSPITAL, {
+    update(cache, { data: { addHospital } }) {
+      cache.writeQuery({
+        query: GET_ALL_HOSPITALS,
+        data: { hospitals: hospitals.concat([addHospital]) },
+      });
+    },
+  });
   const [editHospital] = useMutation(EDIT_HOSPITAL);
 
-  const [hospitalName, setHospitalName] = useState<string>("");
+  const [hospitalName, setHospitalName] = useState<string>('');
 
   useEffect(() => {
-    if (!loading && mode === "edit") {
+    if (!loading && mode === 'edit') {
       const {
-        name
+        name,
       }: {
         name: string;
       } = data.hospital;
@@ -58,22 +60,22 @@ const HospitalCreationPage = ({
   };
 
   const handleComplete = () => {
-    if (mode === "new") {
+    if (mode === 'new') {
       addHospital({
         variables: {
           name: hospitalName,
-        }
+        },
       });
-    } else if (mode === "edit") {
+    } else if (mode === 'edit') {
       editHospital({
         variables: {
           id: hospitalId,
           name: hospitalName,
-        }
+        },
       });
     }
 
-    history.replace("/manage/hospitals");
+    history.replace('/manage/hospitals');
   };
 
   return (
@@ -82,7 +84,7 @@ const HospitalCreationPage = ({
         <BackLink to="/manage/hospitals" />
         <div className="resource-header">
           <Typography variant="h4">
-            {mode === "new" ? "Add a new hospital" : "Edit Hospital"}
+            {mode === 'new' ? 'Add a new hospital' : 'Edit Hospital'}
           </Typography>
         </div>
       </div>
@@ -97,13 +99,18 @@ const HospitalCreationPage = ({
           />
         </form>
         <div className="caption">
-          <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>*Denotes a required field</Typography>
+          <Typography
+            variant="caption"
+            style={{ color: Colours.SecondaryGray }}
+          >
+            *Denotes a required field
+          </Typography>
         </div>
       </div>
       <div className="done-container">
         <DoneButton
           handleClick={handleComplete}
-          disabled={hospitalName === ""}
+          disabled={hospitalName === ''}
         />
       </div>
       <div className="cancel-container">

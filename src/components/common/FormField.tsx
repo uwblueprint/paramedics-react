@@ -37,9 +37,10 @@ const useTextFieldStyles = makeStyles({
 
 const FormField: React.FC<{
   label: string;
-  placeholder: string;
+  required?: boolean;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLElement>) => void;
-  value: string;
+  value: string | number | null;
   handleFocus?: () => void;
   isValidated: boolean;
   validators?: Array<string>;
@@ -57,7 +58,7 @@ const FormField: React.FC<{
 }: {
   label: string;
   required?: boolean;
-  placeholder: string;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLElement>) => void;
   value: string | number | null;
   handleFocus?: () => void;
@@ -65,29 +66,11 @@ const FormField: React.FC<{
   validators?: Array<string>;
   errorMessages?: Array<string>;
 }) => {
-    const classes = useTextFieldStyles();
-    if (isValidated) {
-      return (
-        <TextValidator
-          label={label}
-          placeholder={placeholder}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          className={classes.root}
-          margin="normal"
-          onChange={onChange}
-          value={value}
-          onFocus={handleFocus}
-          validators={validators}
-          errorMessages={errorMessages}
-        />
-      );
-    }
+  const classes = useTextFieldStyles();
+  if (isValidated) {
     return (
-      <TextField
+      <TextValidator
         label={label}
-        required={required}
         placeholder={placeholder}
         InputLabelProps={{
           shrink: true,
@@ -97,8 +80,26 @@ const FormField: React.FC<{
         onChange={onChange}
         value={value}
         onFocus={handleFocus}
+        validators={validators}
+        errorMessages={errorMessages}
       />
     );
-  };
+  }
+  return (
+    <TextField
+      label={label}
+      required={required}
+      placeholder={placeholder}
+      InputLabelProps={{
+        shrink: true,
+      }}
+      className={classes.root}
+      margin="normal"
+      onChange={onChange}
+      value={value}
+      onFocus={handleFocus}
+    />
+  );
+};
 
 export default FormField;

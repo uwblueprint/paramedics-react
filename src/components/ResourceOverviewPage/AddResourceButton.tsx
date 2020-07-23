@@ -1,23 +1,22 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import { makeStyles } from "@material-ui/core/styles";
-import { NavLink, BrowserRouter } from "react-router-dom";
-
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
 
 interface ButtonType {
-    label: string
-    route: string
+  label: string;
+  route: string;
 }
 
 const useButtonStyles = makeStyles({
   root: {
-    borderRadius: "3rem",
-    minWidth: "15rem",
+    borderRadius: '3rem',
+    minWidth: '15rem',
   },
 });
 
-const AddResourceButton = ({label, route}: ButtonType) => {
+const AddResourceButton = ({ label, route }: ButtonType) => {
   const classes = useButtonStyles();
   return (
     <Button
@@ -30,7 +29,7 @@ const AddResourceButton = ({label, route}: ButtonType) => {
         root: classes.root,
       }}
     >
-        {label}
+      {label}
     </Button>
   );
 };

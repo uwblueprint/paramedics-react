@@ -18,10 +18,7 @@ export const EDIT_HOSPITAL = gql`
 `;
 
 export const DELETE_HOSPITAL = gql`
-
-mutation deleteHospital($id: ID!) {
-  deleteHospital(id: $id) 
-  
-}
-
+  mutation deleteHospital($id: ID!) {
+    deleteHospital(id: $id)
+  }
 `;
