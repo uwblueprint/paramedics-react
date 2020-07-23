@@ -1,17 +1,19 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import { makeStyles } from "@material-ui/core/styles";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
+
+type AddEventButton = () => JSX.Element;
 
 const useEventButtonStyles = makeStyles({
   root: {
-    borderRadius: "3rem",
-    minWidth: "15rem",
+    borderRadius: '3rem',
+    minWidth: '15rem',
   },
 });
 
-const AddEventButton = () => {
+const AddEventButton: AddEventButton = () => {
   const classes = useEventButtonStyles();
   return (
     <Button

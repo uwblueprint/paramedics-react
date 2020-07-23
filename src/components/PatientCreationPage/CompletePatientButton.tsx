@@ -1,12 +1,16 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 
-const CompletePatientButton = ({
-  handleClick,
-}: {
-  handleClick: () => any | null;
-}) => {
+const useCompletePatientButtonStyles = makeStyles({
+  root: {
+    borderRadius: '3rem',
+    minWidth: '15rem',
+    float: 'right',
+  },
+});
+
+const CompletePatientButton = () => {
   const classes = useCompletePatientButtonStyles();
   return (
     <Button
@@ -21,13 +25,5 @@ const CompletePatientButton = ({
     </Button>
   );
 };
-
-const useCompletePatientButtonStyles = makeStyles({
-  root: {
-    borderRadius: "3rem",
-    minWidth: "15rem",
-    float: "right",
-  },
-});
 
 export default CompletePatientButton;

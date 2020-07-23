@@ -1,0 +1,41 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": "error",
+    "prettier/prettier": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "@typescript-eslint/indent": "off",
+    "react/jsx-wrap-multilines": "off",
+    "react/require-default-props": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "radix": ["error", "as-needed"],
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-shadow": "off",
+    "no-plusplus": "off",
+    "react/jsx-curly-newline": "off"
+  }
+}

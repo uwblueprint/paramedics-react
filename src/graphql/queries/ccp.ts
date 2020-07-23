@@ -1,7 +1,7 @@
 import { EventType } from './events';
 
-export interface CCPType {
-  id: string;
+export interface CollectionPoint {
+  id: number;
   name: string;
   eventId: EventType;
 }

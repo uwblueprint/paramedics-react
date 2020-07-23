@@ -1,7 +1,7 @@
-import { createMuiTheme } from "@material-ui/core/styles";
-import { Colours } from "./Constants";
+import { createMuiTheme } from '@material-ui/core/styles';
+import { Colours } from './Constants';
 
-export const theme = createMuiTheme({
+export const Theme = createMuiTheme({
   palette: {
     primary: {
       main: Colours.Primary,
@@ -12,50 +12,54 @@ export const theme = createMuiTheme({
     error: {
       main: Colours.Danger,
     },
+    text: {
+      primary: Colours.Black,
+      secondary: Colours.SecondaryGray,
+    },
   },
   typography: {
     h3: {
-      fontSize: "48px",
+      fontSize: '48px',
       letterSpacing: 0,
-      lineHeight: "72px",
-      fontWeight: "normal",
+      lineHeight: '72px',
+      fontWeight: 'normal',
     },
     h4: {
-      fontSize: "34px",
-      letterSpacing: "0.25px",
-      lineHeight: "51px",
-      fontWeight: "normal",
+      fontSize: '34px',
+      letterSpacing: '0.25px',
+      lineHeight: '51px',
+      fontWeight: 'normal',
     },
     h5: {
-      fontSize: "24px",
+      fontSize: '24px',
       letterSpacing: 0,
-      lineHeight: "36px",
-      fontWeight: "normal",
+      lineHeight: '36px',
+      fontWeight: 'normal',
     },
     h6: {
-      fontSize: "20px",
-      letterSpacing: "0.25px",
-      lineHeight: "30px",
+      fontSize: '20px',
+      letterSpacing: '0.25px',
+      lineHeight: '30px',
       fontWeight: 500,
     },
     body1: {
-      fontSize: "18px",
-      letterSpacing: "0.5px",
-      lineHeight: "24px",
+      fontSize: '18px',
+      letterSpacing: '0.5px',
+      lineHeight: '24px',
       fontWeight: 500,
     },
     body2: {
-      fontSize: "14px",
-      letterSpacing: "0.5px",
-      lineHeight: "24px",
-      fontWeight: "normal",
+      fontSize: '18px',
+      letterSpacing: '0.5px',
+      lineHeight: '24px',
+      fontWeight: 'normal',
     },
     button: {
-      fontSize: "18px",
-      letterSpacing: "1.25px",
-      lineHeight: "24px",
+      fontSize: '18px',
+      letterSpacing: '1.25px',
+      lineHeight: '24px',
       fontWeight: 500,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     caption: {
       fontSize: '16px',
@@ -73,10 +77,18 @@ export const theme = createMuiTheme({
     // Remove bottom border on last row of tables to avoid duplicating borders
     MuiTableRow: {
       root: {
-        "tbody &:last-child td, tbody &:last-child th": {
+        'tbody &:last-child td, tbody &:last-child th': {
           borderBottom: 0,
         },
       },
+    },
+    MuiCard: {
+      root: {
+        borderColor: Colours.BorderLightGray,
+      },
+    },
+    MuiTab: {
+      wrapper: { textTransform: 'none' },
     },
   },
 });

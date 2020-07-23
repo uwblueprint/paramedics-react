@@ -1,9 +1,9 @@
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from '@apollo/react-hooks';
 
-import { useApolloClient } from "react-apollo";
-import { FETCH_ALL_EVENTS } from "../events";
+import { useApolloClient } from 'react-apollo';
+import { FETCH_ALL_EVENTS } from '../events';
 
-export function useAllEvents() {
+const useAllEvents = (): void => {
   const { data } = useQuery(FETCH_ALL_EVENTS);
   const client = useApolloClient();
 
@@ -15,4 +15,6 @@ export function useAllEvents() {
       },
     });
   }
-}
+};
+
+export default useAllEvents;

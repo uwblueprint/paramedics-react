@@ -1,31 +1,31 @@
-import gql from "graphql-tag";
-import { CCPType } from "../queries/collectionPoints";
+import gql from 'graphql-tag';
+import { CCPType } from './collectionPoints';
 
-export enum triageLevel {
-  GREEN = "GREEN",
-  YELLOW = "YELLOW",
-  RED = "RED",
-  BLACK = "BLACK",
-  WHITE = "WHITE",
+export enum TriageLevel {
+  GREEN = 'GREEN',
+  YELLOW = 'YELLOW',
+  RED = 'RED',
+  BLACK = 'BLACK',
+  WHITE = 'WHITE',
 }
 
-export enum status {
-  ON_SITE = "ON_SITE",
-  RELEASED = "RELEASED",
-  TRANSPORTED = "TRANSPORTED",
-  DELETED = "DELETED",
+export enum Status {
+  ON_SITE = 'ON_SITE',
+  RELEASED = 'RELEASED',
+  TRANSPORTED = 'TRANSPORTED',
+  DELETED = 'DELETED',
 }
 
-export interface PatientType {
+export interface Patient {
   id: string;
   gender: string;
   age: number;
   runNumber: number;
   barcodeValue: number;
   collectionPointId: CCPType;
-  status: status;
+  status: Status;
   triageCategory: number;
-  triageLevel: triageLevel;
+  triageLevel: TriageLevel;
   notes: string;
   transportTime: Date;
 }
