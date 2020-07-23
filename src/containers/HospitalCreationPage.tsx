@@ -74,14 +74,13 @@ const HospitalCreationPage = ({
         },
       });
     }
-
-    history.replace('/manage/hospitals');
+    history.replace('/manage');
   };
 
   return (
     <div className="resource-add-wrapper">
       <div className="resource-creation-top-section">
-        <BackLink to="/manage/hospitals" />
+        <BackLink to="/manage" />
         <div className="resource-header">
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new hospital' : 'Edit Hospital'}
@@ -114,7 +113,7 @@ const HospitalCreationPage = ({
         />
       </div>
       <div className="cancel-container">
-        <CancelButton to="/manage/hospitals" />
+        <CancelButton to="/manage" />
       </div>
     </div>
   );

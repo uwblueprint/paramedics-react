@@ -74,13 +74,13 @@ const AmbulanceCreationPage = ({
       });
     }
 
-    history.replace('/manage/ambulances');
+    history.replace('/manage');
   };
 
   return (
     <div className="resource-add-wrapper">
       <div className="resource-creation-top-section">
-        <BackLink to="/manage/ambulances" />
+        <BackLink to="/manage" />
         <div className="resource-header">
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new ambulance' : 'Edit Ambulance'}
@@ -113,7 +113,7 @@ const AmbulanceCreationPage = ({
         />
       </div>
       <div className="cancel-container">
-        <CancelButton to="/manage/ambulances" />
+        <CancelButton to="/manage" />
       </div>
     </div>
   );

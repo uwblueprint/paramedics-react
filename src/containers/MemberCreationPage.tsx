@@ -98,13 +98,13 @@ const MemberCreationPage = ({
         },
       });
     }
-    history.replace('/manage/members');
+    history.replace('/manage');
   };
 
   return (
     <div className="resource-add-wrapper">
       <div className="resource-creation-top-section">
-        <BackLink to="/manage/members" />
+        <BackLink to="/manage" />
         <div className="resource-header">
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new team member' : 'Edit team member'}
@@ -163,7 +163,7 @@ const MemberCreationPage = ({
         </div>
       </ValidatorForm>
       <div className="cancel-container">
-        <CancelButton to="/manage/members" />
+        <CancelButton to="/manage" />
       </div>
     </div>
   );
