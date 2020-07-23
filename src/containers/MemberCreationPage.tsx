@@ -35,10 +35,10 @@ const MemberCreationPage = ({
   const users: Array<User> = data ? data.users : [];
 
   const [addUser] = useMutation(ADD_USER, {
-    update(cache, { data: { addUser } }) {
+    update(cache, { data: { newUser } }) {
       cache.writeQuery({
         query: GET_ALL_USERS,
-        data: { users: users.concat([addUser]) },
+        data: { users: users.concat([newUser]) },
       });
     },
   });
@@ -120,8 +120,8 @@ const MemberCreationPage = ({
             </Typography>
           </div>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </div>
       <ValidatorForm onSubmit={handleComplete}>
         <div className="event-form">

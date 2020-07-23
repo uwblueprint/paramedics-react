@@ -33,10 +33,10 @@ const HospitalCreationPage = ({
 
   const hospitals: Array<Hospital> = data ? data.hospitals : [];
   const [addHospital] = useMutation(ADD_HOSPITAL, {
-    update(cache, { data: { addHospital } }) {
+    update(cache, { data: { newHospital } }) {
       cache.writeQuery({
         query: GET_ALL_HOSPITALS,
-        data: { hospitals: hospitals.concat([addHospital]) },
+        data: { hospitals: hospitals.concat([newHospital]) },
       });
     },
   });
