@@ -6,7 +6,7 @@
 
 .resource-header {
   display: flex;
-  padding-bottom: 1em;
+  padding: 16px 0px;
 }
 
 .resource-add-wrapper {

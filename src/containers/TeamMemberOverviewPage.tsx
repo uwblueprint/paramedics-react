@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Colours } from "../styles/Constants";
 import { Typography } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,7 +14,10 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import AddResourceButton from "../components/ResourceOverviewPage/AddResourceButton";
 import Popper from "@material-ui/core/Popper";
 import { useQuery } from "react-apollo";
-import { GET_ALL_USERS } from "../graphql/queries/users";
+import { useMutation } from "@apollo/react-hooks";
+import { GET_ALL_USERS, accessLevel } from "../graphql/queries/users";
+import { DELETE_USER } from "../graphql/mutations/users";
+
 const pStyles = makeStyles({
   body2: {
     marginTop: 18,
@@ -74,19 +78,60 @@ const options = makeStyles({
   },
 });
 
-const TeamMemberOverviewPage: React.FC = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+interface Member {
+  firstName: string;
+  email: string;
+  accessLevel: accessLevel;
+  id: string;
+}
 
-  const handleClick = (event) => {
+const TeamMemberOverviewPage: React.FC = () => {
+  const { data, loading, error } = useQuery(GET_ALL_USERS);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedMember, selectMember] = React.useState<number>(-1);
+
+  //Writing to cache when deleting user
+  const [deleteUser] = useMutation(
+    DELETE_USER,
+    {
+      update(cache, { data: { deleteUser } }) {
+        let { users } = cache.readQuery<Member[] | null | any>({
+          query: GET_ALL_USERS,
+        });
+
+        setAnchorEl(null);
+
+        let filtered = users.filter((user) => user.id !== selectedMember);
+        users = filtered;
+        cache.writeQuery({
+          query: GET_ALL_USERS,
+          data: { users: users },
+        });
+      },
+    }
+  );
+
+
+  const handleClickOptions = (event) => {
+    selectMember(event.currentTarget.getAttribute("data-id"));
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const { data, loading, error } = useQuery(GET_ALL_USERS);
+  const history = useHistory();
+  const handleClickEdit = (event) => {
+    let memberId = selectedMember;
+    history.replace(`/manage/members/edit/${memberId}`);
+  };
 
-  console.log(data);
-
-  const open = Boolean(anchorEl);
+  let open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
+
+  const handleClickDelete = (event) => {
+    {
+      let memberId = selectedMember;
+      deleteUser({ variables: { id: memberId } });
+    }
+  };
 
   const classes = pStyles();
   const hRow = headerRow();
@@ -95,8 +140,8 @@ const TeamMemberOverviewPage: React.FC = () => {
   const optionBtn = options();
 
   let cells;
-  
-  if (loading === false) {
+
+  if (loading === false && data && data !== undefined) {
     cells = data.users.map((member) => {
       return (
         <TableRow>
@@ -108,7 +153,7 @@ const TeamMemberOverviewPage: React.FC = () => {
             {member.accessLevel}
           </TableCell>
           <TableCell classes={{ root: optionBtn.root }}>
-            <IconButton onClick={handleClick}>
+            <IconButton data-id={member.id} onClick={handleClickOptions}>
               <MoreHorizIcon style={{ color: Colours.Black }} />
             </IconButton>
           </TableCell>
@@ -136,16 +181,27 @@ const TeamMemberOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-            <Popper id={id} open={open} anchorEl={anchorEl}>
+            <Popper
+              id={id}
+              open={open}
+              popperOptions={{
+                modifiers: { offset: { enabled: true, offset: "-69.5,0" } },
+              }}
+              anchorEl={anchorEl}
+            >
               <div>
                 <Table className="table-popper">
                   <TableBody>
-                    <TableRow hover classes={{ hover: optionBtn.menuHover }}>
+                    <TableRow
+                      hover
+                      classes={{ hover: optionBtn.menuHover }}
+                      onClick={handleClickEdit}
+                    >
                       <TableCell classes={{ root: optionBtn.menuCell }}>
                         <Typography variant="body2">Edit</Typography>
                       </TableCell>
                     </TableRow>
-                    <TableRow hover>
+                    <TableRow hover onClick={handleClickDelete}>
                       <TableCell classes={{ root: optionBtn.menuDelete }}>
                         <Typography variant="body2">Delete</Typography>
                       </TableCell>

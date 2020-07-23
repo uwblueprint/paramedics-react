@@ -13,7 +13,7 @@ import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_EVENT } from "../graphql/mutations/events";
-import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
+import { EventType, GET_ALL_EVENTS } from "../graphql/queries/events";
 
 const EventCreationPage = () => {
   const history = useHistory();
@@ -21,16 +21,14 @@ const EventCreationPage = () => {
   const { data } = useQuery(GET_ALL_EVENTS);
   const events: Array<EventType> = data ? data.events : [];
 
-  const [addEvent] = useMutation(ADD_EVENT,
-    {
-      update(cache, { data: { addEvent } }) {
-        cache.writeQuery({
-          query: GET_ALL_EVENTS,
-          data: { events: events.concat([addEvent]) },
-        });
-      }
-    }
-  );
+  const [addEvent] = useMutation(ADD_EVENT, {
+    update(cache, { data: { addEvent } }) {
+      cache.writeQuery({
+        query: GET_ALL_EVENTS,
+        data: { events: events.concat([addEvent]) },
+      });
+    },
+  });
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -93,7 +91,7 @@ const EventCreationPage = () => {
           )}-${dateParts.day.padStart(2, "0")}`,
         createdBy: 1,
         isActive: true,
-      }
+      },
     });
     history.replace("/events");
   };
@@ -106,6 +104,7 @@ const EventCreationPage = () => {
           placeholder="Event Name Here"
           onChange={handleNameChange}
           value={eventName}
+          isValidated={false}
         />
         <FormField
           label="Date of Event:"
@@ -117,6 +116,7 @@ const EventCreationPage = () => {
               : ""
           }
           handleFocus={handleOpenDateModal}
+          isValidated={false}
         />
       </form>
     ) : (
@@ -126,6 +126,7 @@ const EventCreationPage = () => {
             placeholder="Enter Location Here"
             onChange={handleLocationChange}
             value={eventLocation}
+            isValidated={false}
           />
           <Map />
         </form>

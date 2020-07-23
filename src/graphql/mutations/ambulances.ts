@@ -16,3 +16,9 @@ export const EDIT_AMBULANCE = gql`
     }
   }
 `;
+
+export const DELETE_AMBULANCE = gql`
+  mutation deleteAmbulance($id: ID!) {
+    deleteAmbulance(id: $id)
+  }
+`;

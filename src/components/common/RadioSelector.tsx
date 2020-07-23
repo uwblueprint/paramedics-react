@@ -1,28 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import Typography from "@material-ui/core/Typography";
-import { accessLevel } from "../../graphql/queries/users";
 
-const AccessLevelSelector = ({
+const RadioSelector = ({
+  labels,
   currentValue,
   handleChange,
+  error,
+  helperText,
 }: {
+  labels: Array<string>;
   currentValue: string;
   handleChange: (e: any) => any;
+  error?: boolean;
+  helperText?: string;
 }) => {
   const classes = useRadioStyles();
-  const accessLevels = [
-    { val: accessLevel.ADMIN, label: "Admin" },
-    { val: accessLevel.SUPERVISOR, label: "CCP Supervisor" },
-    { val: accessLevel.COMMANDER, label: "Dispatch" }
-  ];
+
   return (
     <Container className={classes.root}>
-      <Typography className={classes.label}>Role: *</Typography>
+      <Typography className={classes.label}>Gender:</Typography>
       <RadioGroup
         row
         aria-label="position"
@@ -31,13 +32,13 @@ const AccessLevelSelector = ({
         onChange={handleChange}
         className={classes.radioGroup}
       >
-        {accessLevels.map((accessLevel) => (
+        {labels.map((label) => (
           <FormControlLabel
-            value={accessLevel.val}
+            value={label}
             control={<Radio color="secondary" />}
-            label={accessLevel.label}
+            label={label}
             labelPlacement="end"
-            key={accessLevel.label}
+            key={label}
           />
         ))}
       </RadioGroup>
@@ -52,7 +53,6 @@ const useRadioStyles = makeStyles({
     borderRadius: "10px",
     backgroundColor: "#FFFFFF",
     padding: "0",
-    marginTop: "16px",
     marginBottom: "10px",
     maxHeight: "15vh",
     width: "100%",
@@ -81,4 +81,4 @@ const useRadioStyles = makeStyles({
   },
 });
 
-export default AccessLevelSelector;
+export default RadioSelector;

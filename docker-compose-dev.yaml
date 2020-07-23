@@ -18,5 +18,7 @@ services:
       driver: "json-file"
       options:
         max-size: 100m
+    env_file:
+      - paramedics-react.env
     # For some reason, this is needed for container to work
     tty: true
