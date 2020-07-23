@@ -79,7 +79,7 @@ const options = makeStyles({
 });
 
 interface Member {
-  firstName: string;
+  name: string;
   email: string;
   accessLevel: accessLevel;
   id: string;

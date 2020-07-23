@@ -32,7 +32,7 @@ export const GET_ALL_USERS = gql`
   query {
     users {
       id
-      firstName
+      name
       email
       accessLevel
     }
