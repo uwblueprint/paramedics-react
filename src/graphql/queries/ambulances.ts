@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export interface AmbulanceType {
+export interface Ambulance {
   id: string;
   vehicleNumber: number;
 }

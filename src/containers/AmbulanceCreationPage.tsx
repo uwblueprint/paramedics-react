@@ -10,7 +10,7 @@ import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_AMBULANCE, EDIT_AMBULANCE } from "../graphql/mutations/ambulances";
-import { AmbulanceType, GET_ALL_AMBULANCES, GET_AMBULANCE_BY_ID } from "../graphql/queries/ambulances";
+import { Ambulance, GET_ALL_AMBULANCES, GET_AMBULANCE_BY_ID } from "../graphql/queries/ambulances";
 
 const AmbulanceCreationPage = ({
   match: {
@@ -26,7 +26,7 @@ const AmbulanceCreationPage = ({
       : GET_ALL_AMBULANCES
   );
 
-  const ambulances: Array<AmbulanceType> = data ? data.ambulances : [];
+  const ambulances: Array<Ambulance> = data ? data.ambulances : [];
   const [addAmbulance] = useMutation(ADD_AMBULANCE,
     {
       update(cache, { data: { addAmbulance } }) {

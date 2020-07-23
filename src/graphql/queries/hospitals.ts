@@ -1,12 +1,12 @@
 import gql from "graphql-tag";
 
-export interface HospitalType {
-    id: string;
-    name: string;
+export interface Hospital {
+  id: string;
+  name: string;
 }
 
 export const GET_HOSPITAL_BY_ID = (id: string) => {
-    return gql`
+  return gql`
       query {
         hospital(id: ${id}) {
           id
