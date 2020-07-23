@@ -151,7 +151,7 @@ const AmbulanceOverviewPage: React.FC = () => {
 
   return (
     <div className="member-wrapper">
-      <Typography variant="h5">Ambulance overview</Typography>
+      <Typography variant="h5">Ambulance Overview</Typography>
       <Typography variant="body2" classes={{ body2: classes.body2 }}>
         A list of all ambulances that can be added to an event.
       </Typography>

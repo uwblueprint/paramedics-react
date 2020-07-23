@@ -27,10 +27,7 @@ const MemberCreationPage = ({
     mode === "edit" && userId ? GET_USER_BY_ID(userId) : GET_ALL_USERS
   );
 
-
-
-  const users: Array<UserType> = data ? data.users : [];
-
+  const users: Array<User> = data ? data.users : [];
 
   const [addUser] = useMutation(ADD_USER,
     {

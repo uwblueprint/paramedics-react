@@ -15,7 +15,7 @@ import AddResourceButton from "../components/ResourceOverviewPage/AddResourceBut
 import Popper from "@material-ui/core/Popper";
 import { useQuery } from "react-apollo";
 import { useMutation } from "@apollo/react-hooks";
-import { GET_ALL_USERS, accessLevel } from "../graphql/queries/users";
+import { GET_ALL_USERS, AccessLevel } from "../graphql/queries/users";
 import { DELETE_USER } from "../graphql/mutations/users";
 
 const pStyles = makeStyles({
@@ -81,7 +81,7 @@ const options = makeStyles({
 interface Member {
   name: string;
   email: string;
-  accessLevel: accessLevel;
+  accessLevel: AccessLevel;
   id: string;
 }
 
@@ -146,7 +146,7 @@ const TeamMemberOverviewPage: React.FC = () => {
       return (
         <TableRow>
           <TableCell classes={{ root: dRow.root }}>
-            {member.firstName}
+            {member.name}
           </TableCell>
           <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
           <TableCell classes={{ root: dRow.root }}>
