@@ -2,21 +2,27 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
-import { NavLink } from "react-router-dom";
+import { NavLink, BrowserRouter } from "react-router-dom";
 
-const useEventButtonStyles = makeStyles({
+
+interface ButtonType {
+    label: string
+    route: string
+}
+
+const useButtonStyles = makeStyles({
   root: {
     borderRadius: "3rem",
     minWidth: "15rem",
   },
 });
 
-const AddEventButton = () => {
-  const classes = useEventButtonStyles();
+const AddResourceButton = ({label, route}: ButtonType) => {
+  const classes = useButtonStyles();
   return (
     <Button
       component={NavLink}
-      to="/events/new"
+      to={route}
       variant="contained"
       color="secondary"
       startIcon={<AddIcon />}
@@ -24,9 +30,9 @@ const AddEventButton = () => {
         root: classes.root,
       }}
     >
-      Add New Event
+        {label}
     </Button>
   );
 };
 
-export default AddEventButton;
+export default AddResourceButton;

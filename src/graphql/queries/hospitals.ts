@@ -18,7 +18,7 @@ export const GET_HOSPITAL_BY_ID = (id: string) => {
 
 export const GET_ALL_HOSPITALS = gql`
   query {
-    hospitals @client {
+    hospitals {
       id
       name
     }

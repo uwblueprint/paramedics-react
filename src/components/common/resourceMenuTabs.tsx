@@ -3,7 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Tabs from "@material-ui/core/Tabs";
+import { Colours } from '../../styles/Constants';
 import Tab from "@material-ui/core/Tab";
+
+
 
 const useTabStyles = makeStyles({
   root: {
@@ -13,17 +16,22 @@ const useTabStyles = makeStyles({
     textTransform: "none",
     width: "15rem",
     maxWidth: "15rem",
+    paddingTop: 0,
   },
   indicator: {
-    backgroundColor: "#000000",
+    backgroundColor: Colours.SecondaryHover,
     height: "0.3rem",
   },
   tabTextColor: {
     opacity: 0.4,
   },
+  selected: {
+    color: Colours.SecondaryHover,
+    fontWeight: 600,
+  },
 });
 
-const MenuTabs = ({
+const ResourceMenuTabs = ({
   handleChange,
   currentTab,
   tabLabels,
@@ -46,12 +54,13 @@ const MenuTabs = ({
           key={label}
           label={
             <Typography variant="body1">
-              <Box fontWeight="fontWeightBold">{label}</Box>
+              <Box fontWeight="">{label}</Box>
             </Typography>
           }
           classes={{
             root: classes.tabSize,
             textColorInherit: classes.tabTextColor,
+            selected: classes.selected
           }}
         />
       ))}
@@ -59,4 +68,4 @@ const MenuTabs = ({
   );
 };
 
-export default MenuTabs;
+export default ResourceMenuTabs;

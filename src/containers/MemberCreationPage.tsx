@@ -7,7 +7,7 @@ import BackLink from "../components/ResourceCreationPage/BackLink";
 import CancelButton from "../components/ResourceCreationPage/CancelButton";
 import DoneButton from "../components/ResourceCreationPage/DoneButton";
 import AccessLevelSelector from "../components/ResourceCreationPage/AccessLevelSelector";
-import { Colours } from '../styles/Constants';
+import { Colours } from "../styles/Constants";
 import { useMutation } from "@apollo/react-hooks";
 import { useQuery } from "react-apollo";
 import { ADD_USER, EDIT_USER } from "../graphql/mutations/users";
@@ -19,17 +19,18 @@ const MemberCreationPage = ({
     params: { mode, userId },
   },
 }: {
-  match: { params: { mode: string; userId?: string; } };
+  match: { params: { mode: string; userId?: string } };
 }) => {
   const history = useHistory();
 
   const { data, loading, error } = useQuery(
-    mode === "edit" && userId
-      ? GET_USER_BY_ID(userId)
-      : GET_ALL_USERS
+    mode === "edit" && userId ? GET_USER_BY_ID(userId) : GET_ALL_USERS
   );
 
-  const users: Array<User> = data ? data.users : [];
+
+
+  const users: Array<UserType> = data ? data.users : [];
+
 
   const [addUser] = useMutation(ADD_USER,
     {
@@ -84,10 +85,9 @@ const MemberCreationPage = ({
           email,
           password: "password",
           accessLevel: role,
-          emergencyContact: "1234567890"
-        }
+          emergencyContact: "1234567890",
+        },
       });
-
     } else if (mode === "edit") {
       editUser({
         variables: {
@@ -95,7 +95,7 @@ const MemberCreationPage = ({
           name: memberName,
           email,
           accessLevel: role,
-        }
+        },
       });
     }
     history.replace("/manage/members");
@@ -110,11 +110,18 @@ const MemberCreationPage = ({
             {mode === "new" ? "Add a new team member" : "Edit team member"}
           </Typography>
         </div>
-        {mode === "new" ?
+        {mode === "new" ? (
           <div className="top-bar-link">
-            <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>New team members will receive sign up instructions via email.</Typography>
+            <Typography
+              variant="caption"
+              style={{ color: Colours.SecondaryGray }}
+            >
+              New team members will receive sign up instructions via email.
+            </Typography>
           </div>
-          : ""}
+        ) : (
+            ""
+          )}
       </div>
       <ValidatorForm onSubmit={handleComplete}>
         <div className="event-form">

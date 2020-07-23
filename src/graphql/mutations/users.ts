@@ -20,3 +20,12 @@ mutation updateUser($id: ID!, $name: String, $email: String, $accessLevel: acces
     }
   }
 `;
+
+export const DELETE_USER = gql`
+
+  mutation deleteUser($id: ID!) {
+    deleteUser(id: $id) 
+    
+  }
+
+`;
