@@ -4,13 +4,7 @@ import Quagga from 'quagga';
 import { useQuery } from 'react-apollo';
 import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
 
-const BarcodeScan = ({
-  eventID,
-  ccpID,
-}: {
-  eventID: string;
-  ccpID: string;
-}) => {
+const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
   const history = useHistory();
   const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>('');
@@ -18,7 +12,8 @@ const BarcodeScan = ({
   useEffect(() => {
     if (!loading && barcode !== '' && !error) {
       const selectedPatient = data.patients.filter(
-        (patient) => patient.barcodeValue.toString() === barcode
+        (patient) =>
+          patient.barcodeValue && patient.barcodeValue.toString() === barcode
       );
 
       if (selectedPatient.length > 0) {
@@ -55,7 +50,7 @@ const BarcodeScan = ({
       },
       function (err) {
         if (err) {
-          console.log(err);
+          // console.log(err);
           return;
         }
         Quagga.start();
@@ -65,6 +60,8 @@ const BarcodeScan = ({
       // Check if barcode already exists
       const { code } = data.codeResult;
       setBarcode(code);
+      Quagga.offDetected();
+      Quagga.stop();
     });
   }, []);
   return (

@@ -1,14 +1,16 @@
 import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Theme } from '../styles/Theme';
-import '../styles/App.css';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import HomeLandingPage from './HomeLandingPage';
 import EventCreationPage from './EventCreationPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcodePage/EnterBarcodePage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
 import PatientProfilePage from './PatientProfilePage';
+
+import '../styles/App.css';
 
 function App() {
   return (

@@ -38,6 +38,7 @@ const EnterBarcodePage = ({
         history.replace(`/patients/new/${ccpID}/${barcode}`);
       }
     }
+    history.replace(`/patients/new/${ccpID}/${barcode}`);
   };
 
   return (

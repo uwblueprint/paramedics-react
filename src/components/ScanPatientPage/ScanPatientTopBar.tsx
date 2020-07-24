@@ -1,4 +1,6 @@
 import React from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -6,10 +8,10 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, createStyles } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { NavLink, useHistory } from 'react-router-dom';
+import Quagga from 'quagga';
 import { Colours } from '../../styles/Constants';
 
-const useScanPatientTopBarStyles = makeStyles((theme) =>
+const useScanPatientTopBarStyles = makeStyles(() =>
   createStyles({
     root: {
       flexGrow: 1,
@@ -52,6 +54,10 @@ const ScanPatientTopBar = () => {
             className={classes.enterCodeText}
             component={NavLink}
             to={`${pathname}/manual`}
+            onClick={() => {
+              Quagga.offDetected();
+              Quagga.stop();
+            }}
           >
             <Typography variant="h6">Enter code manually</Typography>
           </Button>
