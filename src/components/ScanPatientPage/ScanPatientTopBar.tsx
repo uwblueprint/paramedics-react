@@ -1,13 +1,13 @@
-import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles, createStyles } from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import { Colours } from "../../styles/Constants";
-import { NavLink, useHistory } from "react-router-dom";
+import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, createStyles } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { NavLink, useHistory } from 'react-router-dom';
+import { Colours } from '../../styles/Constants';
 
 const useScanPatientTopBarStyles = makeStyles((theme) =>
   createStyles({
@@ -16,8 +16,8 @@ const useScanPatientTopBarStyles = makeStyles((theme) =>
     },
 
     enterCodeText: {
-      marginLeft: "auto",
-      textTransform: "none",
+      marginLeft: 'auto',
+      textTransform: 'none',
     },
     topBar: {
       backgroundColor: Colours.SecondaryHover,
@@ -43,7 +43,7 @@ const ScanPatientTopBar = () => {
             color="inherit"
             aria-label="menu"
             component={NavLink}
-            to={pathname.split("/scan")[0]}
+            to={pathname.split('/scan')[0]}
           >
             <ArrowBackIcon />
           </IconButton>

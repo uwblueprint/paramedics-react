@@ -100,7 +100,7 @@ const PatientProfilePage = ({
     }
   }, [data]);
   useEffect(() => {
-    if (mode === "new" && barcodeValue) {
+    if (mode === 'new' && barcodeValue) {
       setFormFields({ ...formFields, barcodeValue });
     }
   }, []);

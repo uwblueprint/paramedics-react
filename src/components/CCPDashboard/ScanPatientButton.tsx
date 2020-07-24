@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
+import { NavLink, useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
 import { ScanIcon } from '../common/ScanIcon';
-import { NavLink, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
   icon: {

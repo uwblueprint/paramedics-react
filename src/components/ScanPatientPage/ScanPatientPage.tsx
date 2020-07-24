@@ -1,6 +1,6 @@
-import React from "react";
-import ScanPatientTopBar from "./ScanPatientTopBar";
-import BarcodeScan from "./BarcodeScan";
+import React from 'react';
+import ScanPatientTopBar from './ScanPatientTopBar';
+import BarcodeScan from './BarcodeScan';
 
 const ScanPatientPage = ({
   match: {

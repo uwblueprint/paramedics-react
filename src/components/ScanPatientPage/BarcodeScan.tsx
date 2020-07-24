@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import Quagga from "quagga";
-import { useQuery } from "react-apollo";
-import { FETCH_ALL_PATIENTS } from "../../graphql/queries/patients";
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import Quagga from 'quagga';
+import { useQuery } from 'react-apollo';
+import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const BarcodeScan = ({
   eventID,
@@ -13,10 +13,10 @@ const BarcodeScan = ({
 }) => {
   const history = useHistory();
   const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
-  const [barcode, setBarcode] = useState<string>("");
+  const [barcode, setBarcode] = useState<string>('');
 
   useEffect(() => {
-    if (!loading && barcode !== "" && !error) {
+    if (!loading && barcode !== '' && !error) {
       const selectedPatient = data.patients.filter(
         (patient) => patient.barcodeValue.toString() === barcode
       );
@@ -40,17 +40,17 @@ const BarcodeScan = ({
     Quagga.init(
       {
         inputStream: {
-          name: "Live",
-          type: "LiveStream",
-          target: document.querySelector("#barcode-scan"),
+          name: 'Live',
+          type: 'LiveStream',
+          target: document.querySelector('#barcode-scan'),
           constraints: {
             width: window.innerWidth,
             height: window.innerHeight,
-            facing: "environment", // or user
+            facing: 'environment', // or user
           },
         },
         decoder: {
-          readers: ["code_128_reader"],
+          readers: ['code_128_reader'],
         },
       },
       function (err) {
@@ -70,13 +70,9 @@ const BarcodeScan = ({
   return (
     <div id="barcode-scan">
       {/* Hardcoded styles to make barcode scan full screen */}
-      <video src="" style={{ width: "100%", height: "auto" }}></video>
-      <video
-        src=""
-        className="drawingBuffer"
-        style={{ display: "none" }}
-      ></video>
-      <canvas className="drawingBuffer" style={{ display: "none" }}></canvas>
+      <video src="" style={{ width: '100%', height: 'auto' }} />
+      <video src="" className="drawingBuffer" style={{ display: 'none' }} />
+      <canvas className="drawingBuffer" style={{ display: 'none' }} />
     </div>
   );
 };

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import FormField from "../common/FormField";
-import { NavLink } from "react-router-dom";
-import CompleteBarcodeButton from "./CompleteBarcodeButton";
-import { useHistory } from "react-router-dom";
-import { useQuery } from "react-apollo";
-import { FETCH_ALL_PATIENTS } from "../../graphql/queries/patients";
+import React, { useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { NavLink, useHistory } from 'react-router-dom';
+import { useQuery } from 'react-apollo';
+import CompleteBarcodeButton from './CompleteBarcodeButton';
+
+import FormField from '../common/FormField';
+import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const EnterBarcodePage = ({
   match: {
@@ -18,7 +18,7 @@ const EnterBarcodePage = ({
   const history = useHistory();
   const { pathname } = history.location;
   const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
-  const [barcode, setBarcode] = useState<string>("");
+  const [barcode, setBarcode] = useState<string>('');
 
   const handleEnterBarcode = () => {
     if (!loading && data) {
@@ -50,11 +50,11 @@ const EnterBarcodePage = ({
               variant="outlined"
               color="secondary"
               component={NavLink}
-              to={pathname.split("/manual")[0]}
+              to={pathname.split('/manual')[0]}
               style={{
-                minWidth: "18rem",
-                minHeight: "2.5rem",
-                fontSize: "18px",
+                minWidth: '18rem',
+                minHeight: '2.5rem',
+                fontSize: '18px',
               }}
             >
               Cancel
