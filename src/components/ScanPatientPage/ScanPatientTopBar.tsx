@@ -54,10 +54,6 @@ const ScanPatientTopBar = () => {
             className={classes.enterCodeText}
             component={NavLink}
             to={`${pathname}/manual`}
-            onClick={() => {
-              Quagga.offDetected();
-              Quagga.stop();
-            }}
           >
             <Typography variant="h6">Enter code manually</Typography>
           </Button>

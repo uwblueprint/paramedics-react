@@ -60,9 +60,11 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
       // Check if barcode already exists
       const { code } = data.codeResult;
       setBarcode(code);
+    });
+    return () => {
       Quagga.offDetected();
       Quagga.stop();
-    });
+    };
   }, []);
   return (
     <div id="barcode-scan">
