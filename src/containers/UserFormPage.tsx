@@ -6,10 +6,10 @@ import '../styles/ResourceCreationPage.css';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import Typography from '@material-ui/core/Typography';
 import FormField from '../components/common/FormField';
-import BackLink from '../components/ResourceCreationPage/BackLink';
-import CancelButton from '../components/ResourceCreationPage/CancelButton';
-import DoneButton from '../components/ResourceCreationPage/DoneButton';
-import AccessLevelSelector from '../components/ResourceCreationPage/AccessLevelSelector';
+import BackLink from '../components/ResourceFormPage/BackLink';
+import CancelButton from '../components/ResourceFormPage/CancelButton';
+import DoneButton from '../components/ResourceFormPage/DoneButton';
+import AccessLevelSelector from '../components/ResourceFormPage/AccessLevelSelector';
 import { Colours } from '../styles/Constants';
 import { ADD_USER, EDIT_USER } from '../graphql/mutations/users';
 import {
@@ -19,7 +19,7 @@ import {
   GET_USER_BY_ID,
 } from '../graphql/queries/users';
 
-const MemberCreationPage = ({
+const UserFormPage = ({
   match: {
     params: { mode, userId },
   },
@@ -135,8 +135,7 @@ const MemberCreationPage = ({
           <FormField
             label="Email:"
             required
-            // eslint-disable-next-line react/jsx-boolean-value
-            isValidated={true}
+            isValidated
             validators={['required', 'isEmail']}
             errorMessages={['This is a mandatory field', 'Invalid email']}
             onChange={handleEmailChange}
@@ -169,4 +168,4 @@ const MemberCreationPage = ({
   );
 };
 
-export default MemberCreationPage;
+export default UserFormPage;

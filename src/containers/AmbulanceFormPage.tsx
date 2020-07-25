@@ -1,79 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import '../styles/ResourceCreationPage.css';
 import Typography from '@material-ui/core/Typography';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import FormField from '../components/common/FormField';
-import BackLink from '../components/ResourceCreationPage/BackLink';
-import CancelButton from '../components/ResourceCreationPage/CancelButton';
-import DoneButton from '../components/ResourceCreationPage/DoneButton';
-import { Colours } from '../styles/Constants';
-import { ADD_HOSPITAL, EDIT_HOSPITAL } from '../graphql/mutations/hospitals';
+import { ADD_AMBULANCE, EDIT_AMBULANCE } from '../graphql/mutations/ambulances';
 import {
-  Hospital,
-  GET_ALL_HOSPITALS,
-  GET_HOSPITAL_BY_ID,
-} from '../graphql/queries/hospitals';
+  Ambulance,
+  GET_ALL_AMBULANCES,
+  GET_AMBULANCE_BY_ID,
+} from '../graphql/queries/ambulances';
+import '../styles/ResourceCreationPage.css';
+import FormField from '../components/common/FormField';
+import BackLink from '../components/ResourceFormPage/BackLink';
+import CancelButton from '../components/ResourceFormPage/CancelButton';
+import DoneButton from '../components/ResourceFormPage/DoneButton';
+import { Colours } from '../styles/Constants';
 
-const HospitalCreationPage = ({
+const AmbulanceFormPage = ({
   match: {
-    params: { mode, hospitalId },
+    params: { mode, ambulanceId },
   },
 }: {
-  match: { params: { mode: string; hospitalId?: string } };
+  match: { params: { mode: string; ambulanceId?: string } };
 }) => {
   const history = useHistory();
-
   const { data, loading } = useQuery(
-    mode === 'edit' && hospitalId
-      ? GET_HOSPITAL_BY_ID(hospitalId)
-      : GET_ALL_HOSPITALS
+    mode === 'edit' && ambulanceId
+      ? GET_AMBULANCE_BY_ID(ambulanceId)
+      : GET_ALL_AMBULANCES
   );
 
-  const hospitals: Array<Hospital> = data ? data.hospitals : [];
-  const [addHospital] = useMutation(ADD_HOSPITAL, {
-    update(cache, { data: { newHospital } }) {
+  const ambulances: Array<Ambulance> = data ? data.ambulances : [];
+  const [addAmbulance] = useMutation(ADD_AMBULANCE, {
+    update(cache, { data: { newAmbulance } }) {
       cache.writeQuery({
-        query: GET_ALL_HOSPITALS,
-        data: { hospitals: hospitals.concat([newHospital]) },
+        query: GET_ALL_AMBULANCES,
+        data: { ambulances: ambulances.concat([newAmbulance]) },
       });
     },
   });
-  const [editHospital] = useMutation(EDIT_HOSPITAL);
+  const [editAmbulance] = useMutation(EDIT_AMBULANCE);
 
-  const [hospitalName, setHospitalName] = useState<string>('');
+  const [ambulanceNumber, setAmbulanceNumber] = useState<number>(0);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
-        name,
+        vehicleNumber,
       }: {
-        name: string;
-      } = data.hospital;
-      setHospitalName(name);
+        vehicleNumber: number;
+      } = data.ambulance;
+      setAmbulanceNumber(vehicleNumber);
     }
   }, [data]);
 
-  const handleNameChange = (e: any) => {
-    setHospitalName(e.target.value);
+  const handleNumberChange = (e: any) => {
+    setAmbulanceNumber(e.target.value);
   };
 
   const handleComplete = () => {
     if (mode === 'new') {
-      addHospital({
+      addAmbulance({
         variables: {
-          name: hospitalName,
+          vehicleNumber: parseInt(ambulanceNumber.toString()),
         },
       });
     } else if (mode === 'edit') {
-      editHospital({
+      editAmbulance({
         variables: {
-          id: hospitalId,
-          name: hospitalName,
+          id: ambulanceId,
+          vehicleNumber: parseInt(ambulanceNumber.toString()),
         },
       });
     }
+
     history.replace('/manage');
   };
 
@@ -83,18 +83,18 @@ const HospitalCreationPage = ({
         <BackLink to="/manage" />
         <div className="resource-header">
           <Typography variant="h4">
-            {mode === 'new' ? 'Add a new hospital' : 'Edit Hospital'}
+            {mode === 'new' ? 'Add a new ambulance' : 'Edit Ambulance'}
           </Typography>
         </div>
       </div>
       <div className="event-form">
         <form>
           <FormField
-            label="Hospital Name:"
+            label="Ambulance Number:"
             required
             isValidated={false}
-            onChange={handleNameChange}
-            value={hospitalName}
+            onChange={handleNumberChange}
+            value={ambulanceNumber}
           />
         </form>
         <div className="caption">
@@ -109,7 +109,7 @@ const HospitalCreationPage = ({
       <div className="done-container">
         <DoneButton
           handleClick={handleComplete}
-          disabled={hospitalName === ''}
+          disabled={ambulanceNumber === 0}
         />
       </div>
       <div className="cancel-container">
@@ -119,4 +119,4 @@ const HospitalCreationPage = ({
   );
 };
 
-export default HospitalCreationPage;
+export default AmbulanceFormPage;

@@ -8,9 +8,9 @@ import EventCreationPage from './EventCreationPage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
 import PatientProfilePage from './PatientProfilePage';
 import ResourceOverviewPage from './ResourceOverviewPage';
-import HospitalCreationPage from "./HospitalCreationPage";
-import AmbulanceCreationPage from "./AmbulanceCreationPage";
-import MemberCreationPage from "./MemberCreationPage";
+import HospitalFormPage from "./HospitalFormPage";
+import AmbulanceFormPage from "./AmbulanceFormPage";
+import MemberFormPage from "./UserFormPage";
 
 function App() {
   return (
@@ -19,9 +19,9 @@ function App() {
         <Route exact path="/events" component={HomeLandingPage} />
         <Route exact path="/events/new" component={EventCreationPage} />
         <Route exact path="/manage/" component={ResourceOverviewPage} />
-        <Route exact path="/manage/hospitals/:mode/:hospitalId?" component={HospitalCreationPage} />
-        <Route exact path="/manage/ambulances/:mode/:ambulanceId?" component={AmbulanceCreationPage} />
-        <Route exact path="/manage/members/:mode/:userId?" component={MemberCreationPage} />
+        <Route exact path="/manage/hospitals/:mode/:hospitalId?" component={HospitalFormPage} />
+        <Route exact path="/manage/ambulances/:mode/:ambulanceId?" component={AmbulanceFormPage} />
+        <Route exact path="/manage/members/:mode/:userId?" component={MemberFormPage} />
         <Route
           exact
           path="/events/:eventId/ccps/:ccpId"
