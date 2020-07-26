@@ -45,7 +45,7 @@ const HomeLandingPage = () => {
             >
               Joe Li
             </Typography>
-            <AccountCircleIcon fontSize="large" color="primary" />
+            <AccountCircleIcon fontSize="large" color="secondary" />
           </div>
         </div>
         <MenuTabs
