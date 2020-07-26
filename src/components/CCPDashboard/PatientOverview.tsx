@@ -16,7 +16,7 @@ import {
 import { useQuery } from '@apollo/react-hooks';
 import { Colours } from '../../styles/Constants';
 import {
-  FETCH_ALL_PATIENTS,
+  GET_PATIENTS_BY_CCP,
   Patient,
   TriageLevel,
   Status,
@@ -89,11 +89,8 @@ export const PatientOverview = (props: PatientOverviewProps) => {
   const { ccpId } = props;
 
   // Should switch to fetching patients from cache
-  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
-  const allPatients: Array<Patient> = data ? data.patients : [];
-  const patients = allPatients.filter(
-    (patient: Patient) => patient.collectionPointId.id === ccpId
-  );
+  const { data, loading } = useQuery(GET_PATIENTS_BY_CCP(ccpId));
+  const patients: Array<Patient> = data ? data.patients : [];
 
   const createCategoryData = (
     category: string,

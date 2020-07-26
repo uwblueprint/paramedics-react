@@ -101,3 +101,29 @@ export const GET_ALL_PATIENTS = gql`
     }
   }
 `;
+
+export const GET_PATIENTS_BY_CCP = (ccpID: string) => {
+  return gql` 
+  query {
+    patientsByCCPId(collectionPointId: ${ccpID}) {
+      id
+      gender
+      age
+      runNumber
+      barcodeValue
+      collectionPointId {
+        id
+        name
+        eventId {
+          name
+          eventDate
+        }
+      }
+      triageLevel
+      status
+      notes
+      transportTime
+    }
+  }
+`;
+};
