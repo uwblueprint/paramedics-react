@@ -3,18 +3,18 @@ import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import { ADD_AMBULANCE, EDIT_AMBULANCE } from '../graphql/mutations/ambulances';
+import { ADD_AMBULANCE, EDIT_AMBULANCE } from '../../graphql/mutations/ambulances';
 import {
   Ambulance,
   GET_ALL_AMBULANCES,
   GET_AMBULANCE_BY_ID,
-} from '../graphql/queries/ambulances';
-import '../styles/ResourceCreationPage.css';
-import FormField from '../components/common/FormField';
-import BackLink from '../components/ResourceFormPage/BackLink';
-import CancelButton from '../components/ResourceFormPage/CancelButton';
-import DoneButton from '../components/ResourceFormPage/DoneButton';
-import { Colours } from '../styles/Constants';
+} from '../../graphql/queries/ambulances';
+import '../../styles/ResourceCreationPage.css';
+import FormField from '../common/FormField';
+import BackLink from './BackLink';
+import CancelButton from './CancelButton';
+import DoneButton from './DoneButton';
+import { Colours } from '../../styles/Constants';
 
 const AmbulanceFormPage = ({
   match: {

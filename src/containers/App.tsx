@@ -8,9 +8,9 @@ import EventCreationPage from './EventCreationPage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
 import PatientProfilePage from './PatientProfilePage';
 import ResourceOverviewPage from './ResourceOverviewPage';
-import HospitalFormPage from "./HospitalFormPage";
-import AmbulanceFormPage from "./AmbulanceFormPage";
-import MemberFormPage from "./UserFormPage";
+import HospitalFormPage from "../components/ResourceFormPage/HospitalFormPage";
+import AmbulanceFormPage from "../components/ResourceFormPage/AmbulanceFormPage";
+import MemberFormPage from "../components/ResourceFormPage/UserFormPage";
 
 function App() {
   return (

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import '../styles/ResourceCreationPage.css';
+import '../../styles/ResourceCreationPage.css';
 import Typography from '@material-ui/core/Typography';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import FormField from '../components/common/FormField';
-import BackLink from '../components/ResourceFormPage/BackLink';
-import CancelButton from '../components/ResourceFormPage/CancelButton';
-import DoneButton from '../components/ResourceFormPage/DoneButton';
-import { Colours } from '../styles/Constants';
-import { ADD_HOSPITAL, EDIT_HOSPITAL } from '../graphql/mutations/hospitals';
+import FormField from '../common/FormField';
+import BackLink from './BackLink';
+import CancelButton from './CancelButton';
+import DoneButton from './DoneButton';
+import { Colours } from '../../styles/Constants';
+import { ADD_HOSPITAL, EDIT_HOSPITAL } from '../../graphql/mutations/hospitals';
 import {
   Hospital,
   GET_ALL_HOSPITALS,
   GET_HOSPITAL_BY_ID,
-} from '../graphql/queries/hospitals';
+} from '../../graphql/queries/hospitals';
 
 const HospitalFormPage = ({
   match: {

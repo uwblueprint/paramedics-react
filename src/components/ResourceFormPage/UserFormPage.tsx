@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import '../styles/ResourceCreationPage.css';
+import '../../styles/ResourceCreationPage.css';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import Typography from '@material-ui/core/Typography';
-import FormField from '../components/common/FormField';
-import BackLink from '../components/ResourceFormPage/BackLink';
-import CancelButton from '../components/ResourceFormPage/CancelButton';
-import DoneButton from '../components/ResourceFormPage/DoneButton';
-import AccessLevelSelector from '../components/ResourceFormPage/AccessLevelSelector';
-import { Colours } from '../styles/Constants';
-import { ADD_USER, EDIT_USER } from '../graphql/mutations/users';
+import FormField from '../common/FormField';
+import BackLink from './BackLink';
+import CancelButton from './CancelButton';
+import DoneButton from './DoneButton';
+import AccessLevelSelector from './AccessLevelSelector';
+import { Colours } from '../../styles/Constants';
+import { ADD_USER, EDIT_USER } from '../../graphql/mutations/users';
 import {
   User,
   AccessLevel,
   GET_ALL_USERS,
   GET_USER_BY_ID,
-} from '../graphql/queries/users';
+} from '../../graphql/queries/users';
 
 const UserFormPage = ({
   match: {
@@ -32,12 +32,6 @@ const UserFormPage = ({
     mode === 'edit' && userId ? GET_USER_BY_ID(userId) : GET_ALL_USERS
   );
 
-  const [editUser] = useMutation(EDIT_USER);
-
-  const [memberName, setMemberName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
-
   const users: Array<User> = data ? data.users : [];
 
   const [addUser] = useMutation(ADD_USER, {
@@ -48,6 +42,11 @@ const UserFormPage = ({
       });
     },
   });
+  const [editUser] = useMutation(EDIT_USER);
+
+  const [memberName, setMemberName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -121,8 +120,8 @@ const UserFormPage = ({
             </Typography>
           </div>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </div>
       <ValidatorForm onSubmit={handleComplete}>
         <div className="event-form">
