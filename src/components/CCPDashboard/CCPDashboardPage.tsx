@@ -18,7 +18,7 @@ interface TParams {
   ccpId: string;
 }
 
-export enum TabOptions {
+export enum CCPDashboardTabOptions {
   PatientOverview = 0,
   Hospital = 1,
 }
@@ -26,7 +26,7 @@ export enum TabOptions {
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
-  value: TabOptions;
+  value: CCPDashboardTabOptions;
   className?: string;
 }
 
@@ -103,9 +103,12 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [allPatients, ccpId]
   );
 
-  const [tab, setTab] = React.useState(TabOptions.PatientOverview);
+  const [tab, setTab] = React.useState(CCPDashboardTabOptions.PatientOverview);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: TabOptions) => {
+  const handleChange = (
+    event: React.ChangeEvent<{}>,
+    newValue: CCPDashboardTabOptions
+  ) => {
     setTab(newValue);
   };
 
@@ -130,20 +133,20 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       >
         <Tab
           label="Patient Overview"
-          id={`tab-${TabOptions.PatientOverview}`}
+          id={`tab-${CCPDashboardTabOptions.PatientOverview}`}
         />
-        <Tab label="Hospital" id={`tab-${TabOptions.Hospital}`} />
+        <Tab label="Hospital" id={`tab-${CCPDashboardTabOptions.Hospital}`} />
       </Tabs>
       <TabPanel
         value={tab}
-        index={TabOptions.PatientOverview}
+        index={CCPDashboardTabOptions.PatientOverview}
         className={classes.tabPanel}
       >
         <PatientOverview eventId={eventId} ccpId={ccpId} patients={patients} />
       </TabPanel>
       <TabPanel
         value={tab}
-        index={TabOptions.Hospital}
+        index={CCPDashboardTabOptions.Hospital}
         className={classes.tabPanel}
       >
         <HospitalOverview

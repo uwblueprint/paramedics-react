@@ -17,6 +17,7 @@ import { Colours } from '../../styles/Constants';
 import { FilterIcon } from '../common/FilterIcon';
 import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { PatientInfoTable } from './PatientInfoTable';
+import { CCPDashboardTabOptions } from './CCPDashboardPage';
 
 const useStyles = makeStyles({
   toolbar: {
@@ -417,7 +418,10 @@ export const PatientInfoTableWithFilters = ({
         </Box>
       </Toolbar>
       <TableContainer>
-        <PatientInfoTable patients={filteredPatients} />
+        <PatientInfoTable
+          patients={filteredPatients}
+          type={CCPDashboardTabOptions.PatientOverview}
+        />
       </TableContainer>
     </>
   );

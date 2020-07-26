@@ -14,6 +14,7 @@ import { Patient } from '../../graphql/queries/patients';
 import { TriageCard } from './TriageCard';
 import { PatientInfoTable } from './PatientInfoTable';
 import { ScanPatientButton } from './ScanPatientButton';
+import { CCPDashboardTabOptions } from './CCPDashboardPage';
 
 interface HospitalOverviewProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -139,7 +140,10 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
         <TriageCard patients={filteredPatients} />
       </Grid>
       <Card variant="outlined" className={classes.patientTableCard}>
-        <PatientInfoTable patients={filteredPatients} />
+        <PatientInfoTable
+          patients={filteredPatients}
+          type={CCPDashboardTabOptions.Hospital}
+        />
       </Card>
       <ScanPatientButton />
     </Grid>

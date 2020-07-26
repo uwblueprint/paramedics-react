@@ -9,6 +9,7 @@ import {
   TableCell,
   TableSortLabel,
   Button,
+  IconButton,
   Dialog,
   DialogActions,
 } from '@material-ui/core';
@@ -17,6 +18,7 @@ import { Colours } from '../../styles/Constants';
 import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
+import { CCPDashboardTabOptions } from './CCPDashboardPage';
 import { capitalize } from '../../utils/format';
 
 const useStyles = makeStyles({
@@ -56,10 +58,11 @@ interface EnhancedTableProps {
   onRequestSort: (event: React.MouseEvent, property: string) => void;
   order: Order;
   orderBy: string;
+  type: CCPDashboardTabOptions;
 }
 
 const EnhancedTableHead = (props: EnhancedTableProps) => {
-  const { classes, order, orderBy, onRequestSort } = props;
+  const { classes, order, orderBy, onRequestSort, type } = props;
 
   const createSortHandler = (property: string) => (event: React.MouseEvent) => {
     onRequestSort(event, property);
@@ -71,8 +74,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     { headerId: 'gender', label: 'Gender', width: '72px' },
     { headerId: 'age', label: 'Age', width: '34px' },
     { headerId: 'status', label: 'Status', width: '104px' },
-    { headerId: 'hospitalId.name', label: 'Hospital', width: '128px' },
-    { headerId: 'transportTime', label: 'Last Edited', width: '192px' },
+    ...(type === CCPDashboardTabOptions.PatientOverview
+      ? [{ headerId: 'hospitalId.name', label: 'Hospital', width: '128px' }]
+      : []),
+    ...(type === CCPDashboardTabOptions.Hospital
+      ? [{ headerId: 'runNumber', label: 'Run Number', width: '128px' }]
+      : []),
+    { headerId: 'updatedAt', label: 'Last Edited', width: '192px' },
   ];
 
   return (
@@ -108,10 +116,16 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   );
 };
 
-export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
+export const PatientInfoTable = ({
+  patients,
+  type,
+}: {
+  patients: Patient[];
+  type: CCPDashboardTabOptions;
+}) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
-  const [orderBy, setOrderBy] = React.useState<string>('transportTime');
+  const [orderBy, setOrderBy] = React.useState<string>('updatedAt');
   const [openDetails, setOpenDetails] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
 
@@ -213,24 +227,35 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
           >
             {statusLabels[patient.status]}
           </TableCell>
-          <TableCell
-            className={classes.tableCell}
-            width="128px"
-            style={{ maxWidth: '128px' }}
-          >
-            {patient.hospitalId?.name}
-          </TableCell>
+          {type === CCPDashboardTabOptions.PatientOverview && (
+            <TableCell
+              className={classes.tableCell}
+              width="128px"
+              style={{ maxWidth: '128px' }}
+            >
+              {patient.hospitalId?.name}
+            </TableCell>
+          )}
+          {type === CCPDashboardTabOptions.Hospital && (
+            <TableCell
+              className={classes.tableCell}
+              width="128px"
+              style={{ maxWidth: '128px' }}
+            >
+              {patient.runNumber}
+            </TableCell>
+          )}
           <TableCell
             className={classes.tableCell}
             width="192px"
             style={{ maxWidth: '192px' }}
           >
-            {moment(patient.transportTime).format('MMM D YYYY, h:mm A')}
+            {moment(patient.updatedAt).format('MMM D YYYY, h:mm A')}
           </TableCell>
-          <TableCell width="36px" style={{ maxWidth: '36px' }}>
-            <Button style={{ width: '36px', minWidth: '36px' }}>
+          <TableCell width="48px" style={{ maxWidth: '48px' }}>
+            <IconButton color="inherit">
               <MoreHoriz />
-            </Button>
+            </IconButton>
           </TableCell>
         </TableRow>
       );
@@ -244,6 +269,7 @@ export const PatientInfoTable = ({ patients }: { patients: Patient[] }) => {
         order={order}
         orderBy={orderBy}
         onRequestSort={handleRequestSort}
+        type={type}
       />
       <TableBody>{tableRows}</TableBody>
       {selectedPatient && (

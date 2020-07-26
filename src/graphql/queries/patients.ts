@@ -28,7 +28,8 @@ export interface Patient {
   triageCategory: number;
   triageLevel: TriageLevel;
   notes: string;
-  transportTime: Date;
+  transportTime?: Date;
+  updatedAt: Date;
   hospitalId: Hospital;
 }
 
@@ -52,6 +53,7 @@ export const GET_PATIENT_BY_ID = (id: string) => {
         triageLevel
         status
         notes
+        updatedAt
         transportTime
         hospitalId {
           id
@@ -81,6 +83,7 @@ export const FETCH_ALL_PATIENTS = gql`
       triageLevel
       status
       notes
+      updatedAt
       transportTime
       hospitalId {
         id
@@ -107,6 +110,7 @@ export const GET_ALL_PATIENTS = gql`
       }
       triageLevel
       notes
+      updatedAt
       transportTime
       hospitalId {
         id
