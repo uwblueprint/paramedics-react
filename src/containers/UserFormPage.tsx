@@ -35,10 +35,10 @@ const UserFormPage = ({
   const users: Array<User> = data ? data.users : [];
 
   const [addUser] = useMutation(ADD_USER, {
-    update(cache, { data: { newUser } }) {
+    update(cache, { data: { addUser } }) {
       cache.writeQuery({
         query: GET_ALL_USERS,
-        data: { users: users.concat([newUser]) },
+        data: { users: users.concat([addUser]) },
       });
     },
   });
