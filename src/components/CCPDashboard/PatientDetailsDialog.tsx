@@ -45,11 +45,11 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
       styles: { color: Colours[`Triage${capitalize(patient.triageLevel)}`] },
     },
     { label: 'Run Number', value: patient.runNumber },
+    { label: 'Hospital', value: patient.hospitalId?.name },
+    { label: 'CCP', value: patient.collectionPointId.name },
     { label: 'Status', value: patient.status },
-    {
-      label: 'Casualty Collection Point',
-      value: patient.collectionPointId.name,
-    },
+    { label: 'Gender', value: patient.status },
+    { label: 'Age', value: patient.age },
   ];
 
   return (
@@ -81,27 +81,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
           </Typography>
         </Box>
       ))}
-      <Box display="flex" marginBottom="24px">
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          className={classes.label}
-        >
-          Gender:
-        </Typography>
-        <Typography variant="body2" style={{ marginRight: '56px' }}>
-          {patient.gender}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          className={classes.label}
-        >
-          Age:
-        </Typography>
-        <Typography variant="body2">{patient.age}</Typography>
-      </Box>
-      <Box display="flex" marginBottom="24px">
+      <Box display="flex" flexDirection="column" marginBottom="12px">
         <Typography
           variant="body2"
           color="textSecondary"
