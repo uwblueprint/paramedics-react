@@ -75,12 +75,21 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     { headerId: 'age', label: 'Age', width: '34px' },
     { headerId: 'status', label: 'Status', width: '104px' },
     ...(type === CCPDashboardTabOptions.PatientOverview
-      ? [{ headerId: 'hospitalId.name', label: 'Hospital', width: '128px' }]
+      ? [
+          { headerId: 'hospitalId.name', label: 'Hospital', width: '128px' },
+          { headerId: 'updatedAt', label: 'Last Edited', width: '192px' },
+        ]
       : []),
     ...(type === CCPDashboardTabOptions.Hospital
-      ? [{ headerId: 'runNumber', label: 'Run Number', width: '128px' }]
+      ? [
+          { headerId: 'runNumber', label: 'Run Number', width: '132px' },
+          {
+            headerId: 'transportTime',
+            label: 'Transported Time',
+            width: '192px',
+          },
+        ]
       : []),
-    { headerId: 'updatedAt', label: 'Last Edited', width: '192px' },
   ];
 
   return (
@@ -125,7 +134,9 @@ export const PatientInfoTable = ({
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
-  const [orderBy, setOrderBy] = React.useState<string>('updatedAt');
+  const [orderBy, setOrderBy] = React.useState<string>(
+    type === CCPDashboardTabOptions.Hospital ? 'transportTime' : 'updatedAt'
+  );
   const [openDetails, setOpenDetails] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
 
@@ -228,30 +239,42 @@ export const PatientInfoTable = ({
             {statusLabels[patient.status]}
           </TableCell>
           {type === CCPDashboardTabOptions.PatientOverview && (
-            <TableCell
-              className={classes.tableCell}
-              width="128px"
-              style={{ maxWidth: '128px' }}
-            >
-              {patient.hospitalId?.name}
-            </TableCell>
+            <>
+              <TableCell
+                className={classes.tableCell}
+                width="128px"
+                style={{ maxWidth: '128px' }}
+              >
+                {patient.hospitalId?.name}
+              </TableCell>
+              <TableCell
+                className={classes.tableCell}
+                width="192px"
+                style={{ maxWidth: '192px' }}
+              >
+                {moment(patient.updatedAt).format('MMM D YYYY, h:mm A')}
+              </TableCell>
+            </>
           )}
           {type === CCPDashboardTabOptions.Hospital && (
-            <TableCell
-              className={classes.tableCell}
-              width="128px"
-              style={{ maxWidth: '128px' }}
-            >
-              {patient.runNumber}
-            </TableCell>
+            <>
+              <TableCell
+                className={classes.tableCell}
+                width="132px"
+                style={{ maxWidth: '132px' }}
+              >
+                {patient.runNumber}
+              </TableCell>
+              <TableCell
+                className={classes.tableCell}
+                width="192px"
+                style={{ maxWidth: '192px' }}
+              >
+                {moment(patient.transportTime).format('MMM D YYYY, h:mm A')}
+              </TableCell>
+            </>
           )}
-          <TableCell
-            className={classes.tableCell}
-            width="192px"
-            style={{ maxWidth: '192px' }}
-          >
-            {moment(patient.updatedAt).format('MMM D YYYY, h:mm A')}
-          </TableCell>
+
           <TableCell width="48px" style={{ maxWidth: '48px' }}>
             <IconButton color="inherit">
               <MoreHoriz />
