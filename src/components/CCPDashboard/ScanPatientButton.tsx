@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
+import { NavLink, useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
 import { ScanIcon } from '../common/ScanIcon';
 
@@ -19,12 +20,16 @@ const useStyles = makeStyles({
 
 export const ScanPatientButton = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const { pathname } = history.location;
 
   return (
     <Button
       className={classes.scanButton}
       variant="contained"
       color="secondary"
+      component={NavLink}
+      to={`${pathname}/scan`}
     >
       <ScanIcon colour={Colours.White} classes={classes.icon} />
       Scan Patient
