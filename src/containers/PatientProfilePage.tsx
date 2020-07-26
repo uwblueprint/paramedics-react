@@ -43,6 +43,9 @@ const PatientProfilePage = ({
 }) => {
   const history = useHistory();
 
+  const [openTransportModal, setOpenTransportModal] = useState(false);
+  const [transportConfirmed, setTransportConfirmed] = useState(false);
+
   const { data, loading } = useQuery(
     mode === 'edit' && patientId
       ? GET_PATIENT_BY_ID(patientId)
@@ -104,6 +107,9 @@ const PatientProfilePage = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleComplete = () => {
+    if (formFields.status === Status.TRANSPORTED) {
+      setOpenTransportModal(true);
+    }
     if (mode === 'new') {
       addPatient({
         variables: {

@@ -2,23 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import '../styles/ResourceCreationPage.css';
-import Typography from '@material-ui/core/Typography';
-import FormField from '../components/common/FormField';
-import BackLink from '../components/ResourceFormPage/BackLink';
-import CancelButton from '../components/ResourceFormPage/CancelButton';
-import DoneButton from '../components/ResourceFormPage/DoneButton';
-import AccessLevelSelector from '../components/ResourceFormPage/AccessLevelSelector';
-import { Colours } from '../styles/Constants';
-import Button from '@material-ui/core/Button';
-import FormField from '../components/common/FormField';
+// import '../styles/ResourceCreationPage.css';
+import { Typography, Link, FormControl, Button } from '@material-ui/core';
+import HospitalTransportSelector from './HospitalTransportSelector';
+import AmbulanceTransportSelector from './AmbulanceTransportSelector';
+import BackLink from '../common/BackLink';
+import CancelButton from '../common/CancelButton';
+import { Colours } from '../../styles/Constants';
 import {
   Patient,
   GET_PATIENT_BY_ID,
-  GET_ALL_PATIENTS,
-} from '../graphql/queries/patients';
-import { ADD_PATIENT, EDIT_PATIENT } from '../graphql/mutations/patients';
-import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
+} from '../../graphql/queries/patients';
+import { EDIT_PATIENT } from '../../graphql/mutations/patients';
+import { Hospital, GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
+import { Ambulance, GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances'
 
 
 const PatientTransportPage = ({
@@ -26,19 +23,36 @@ const PatientTransportPage = ({
     params: { mode, ccpId, patientId },
   },
 }: {
-  match: { params: { mode: string; patientId?: string; ccpId: string } };
+  match: { params: { mode: string; patientId: string; ccpId: string } };
 }) => {
+  const [selectedHospital, setSelectedHospital] = useState("");
+  const [selectedAmbulance, setSelectedAmbulance] = useState("");
+  const [error, setError] = React.useState(false);
+
   const history = useHistory();
 
-  const { data, loading } = useQuery(GET_PATIENT_BY_ID(patientId));
-  const patients: Array<Patient> = data ? data.patient : [];
+  const { data: patientData } = useQuery(GET_PATIENT_BY_ID(patientId));
+  const patient: Patient = patientData ? patientData.patient : {};
+
+  const { data: hospitalData } = useQuery(GET_ALL_HOSPITALS);
+  const hospitals: Array<Hospital> = hospitalData ? hospitalData.hospitals : [];
+
+  const { data: ambulanceData } = useQuery(GET_ALL_AMBULANCES);
+  const ambulances: Array<Ambulance> = ambulanceData ? ambulanceData.ambulances : [];
+
+
   const [editPatient] = useMutation(EDIT_PATIENT);
 
-  useEffect(() => {
+  // useEffect(() => {
+  // }, [patientData, hospitalData, ambulanceData]);
 
-  }, [data]);
+  const handleHospitalChange = (e: any) => {
+    setSelectedHospital(e.target.value);
+  };
 
-
+  const handleAmbulanceChange = (e: any) => {
+    setSelectedAmbulance(e.target.value);
+  };
 
   const handleComplete = () => {
     editPatient({
@@ -46,7 +60,7 @@ const PatientTransportPage = ({
         id: patientId,
         status,
         transportTime: new Date(),
-        hospitalId
+        hospitalId: selectedHospital
       },
     });
     history.replace('/manage');
@@ -54,6 +68,9 @@ const PatientTransportPage = ({
 
   return (
     <div className="resource-add-wrapper">
+      <div className="user-icon">
+        <CancelButton to="/manage" />
+      </div>
       <div className="resource-creation-top-section">
         <BackLink to="/manage" />
         <div className="resource-header">
@@ -67,7 +84,7 @@ const PatientTransportPage = ({
               variant="caption"
               style={{ color: Colours.SecondaryGray }}
             >
-              Choose a hospital and an ambulance from the list below to transport patient {barcode} to.
+              Choose a hospital and an ambulance from the list below to transport patient {patient.barcodeValue} to.
             </Typography>
           </div>
         ) : (
@@ -75,43 +92,26 @@ const PatientTransportPage = ({
           )}
       </div>
       <div className="event-form">
-        <FormField
-          label="Team Member Name:"
-          required
-          isValidated={false}
-          onChange={handleNameChange}
-          value={memberName}
+        <HospitalTransportSelector
+          options={hospitals}
+          currentValue={selectedHospital}
+          handleChange={handleHospitalChange}
         />
-        <FormField
-          label="Email:"
-          required
-          isValidated
-          validators={['required', 'isEmail']}
-          errorMessages={['This is a mandatory field', 'Invalid email']}
-          onChange={handleEmailChange}
-          value={email}
+        <Link href="/manage/hospitals/new" variant="body2" color="secondary" underline="always">Hospital not listed? Add a new hospital</Link>
+        <AmbulanceTransportSelector
+          options={ambulances}
+          currentValue={selectedAmbulance}
+          handleChange={handleAmbulanceChange}
         />
-        <AccessLevelSelector
-          currentValue={role}
-          handleChange={handleRoleChange}
-        />
-        <div className="caption">
-          <Typography
-            variant="caption"
-            style={{ color: Colours.SecondaryGray }}
-          >
-            *Denotes a required field
-            </Typography>
-        </div>
+        <Link href="/manage/ambulances/new" variant="body2" color="secondary" underline="always">Ambulance not listed? Add a new ambulance</Link>
       </div>
       <div className="done-container">
-        <DoneButton
-          handleClick={handleComplete}
-          disabled={memberName === '' || email === ''}
-        />
-      </div>
-      <div className="cancel-container">
-        <CancelButton to="/manage" />
+        <Button
+          onClick={handleComplete}
+          disabled={selectedAmbulance === '' || selectedHospital === ''}
+        >
+          Confirm Transport
+            </Button>
       </div>
     </div>
   );

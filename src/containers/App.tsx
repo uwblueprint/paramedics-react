@@ -6,6 +6,7 @@ import '../styles/App.css';
 import HomeLandingPage from './HomeLandingPage';
 import EventCreationPage from './EventCreationPage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
+import PatientTransportPage from '../components/TransportFlow/PatientTransportPage';
 import PatientProfilePage from './PatientProfilePage';
 
 function App() {
@@ -23,6 +24,11 @@ function App() {
           exact
           path="/patients/:mode/:ccpId/:patientId?"
           component={PatientProfilePage}
+        />
+        <Route
+          exact
+          path="/patients/:mode/:ccpId/:patientId?/transport"
+          component={PatientTransportPage}
         />
         <Route path="/">
           <Redirect to="/events" />
