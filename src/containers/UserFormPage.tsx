@@ -156,7 +156,6 @@ const UserFormPage = ({
         </div>
         <div className="done-container">
           <DoneButton
-            handleClick={handleComplete}
             disabled={memberName === '' || email === ''}
           />
         </div>
