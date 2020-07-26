@@ -6,10 +6,10 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import { IconButton } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { withStyles } from '@material-ui/core/styles';
-import TeamMemberOverviewPage from './TeamMemberOverviewPage';
+import UserOverviewPage from './UserOverviewPage';
 import HospitalOverviewPage from './HospitalOverviewPage';
 import AmbulanceOverviewPage from './AmbulanceOverviewPage';
-import ResourceMenuTabs from '../components/common/ResourceMenuTabs';
+import ResourceMenuTabs from '../components/ResourceOverviewPage/ResourceMenuTabs';
 import { Colours } from '../styles/Constants';
 
 const ResourceOverviewPage: React.FC = () => {
@@ -37,7 +37,7 @@ const ResourceOverviewPage: React.FC = () => {
   let overview;
 
   if (tabLabels[selectedTab] === 'Team Members') {
-    overview = <TeamMemberOverviewPage />;
+    overview = <UserOverviewPage />;
   } else if (tabLabels[selectedTab] === 'Hospitals') {
     overview = <HospitalOverviewPage />;
   } else if (tabLabels[selectedTab] === 'Ambulances') {

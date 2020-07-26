@@ -15,6 +15,7 @@ export const ADD_USER = gql`
       accessLevel: $accessLevel
       emergencyContact: $emergencyContact
     ) {
+      id
       name
       email
       accessLevel

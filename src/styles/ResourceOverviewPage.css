@@ -39,3 +39,9 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+.add-resource-container {
+  position: fixed;
+  right: 48px;
+  bottom: 48px;
+}
+

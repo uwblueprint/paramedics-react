@@ -3,6 +3,7 @@ import {
   Typography,
   Button,
   IconButton,
+  Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -19,9 +20,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Dialog from '@material-ui/core/Dialog';
 import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
-import { GET_ALL_USERS, AccessLevel } from '../graphql/queries/users';
+import { GET_ALL_USERS, User } from '../graphql/queries/users';
 import { useAllUsers } from '../graphql/queries/hooks/users';
 import { DELETE_USER } from '../graphql/mutations/users';
 import { Colours } from '../styles/Constants';
@@ -80,28 +80,57 @@ const options = makeStyles({
   },
 });
 
-interface Member {
-  name: string;
-  email: string;
-  accessLevel: AccessLevel;
-  id: string;
-}
+const dialogStyles = makeStyles({
+  paper: {
+    width: 485,
+    height: 280,
+  },
+  dialogContent: {
+    paddingLeft: 24,
+    paddingTop: 24,
+    paddingRight: 24,
+  },
+  dialogTitle: {
+    paddingLeft: 24,
+    paddingTop: 24,
+    paddingRight: 24,
+    paddingBottom: 0,
+  },
+  dialogCancel: {
+    color: Colours.Secondary,
+    height: 48,
+    width: 107,
+  },
+  dialogDelete: {
+    color: Colours.Danger,
+    height: 48,
+    width: 107,
+  },
+  dialogActionSpacing: {
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+});
 
-const TeamMemberOverviewPage: React.FC = () => {
+const UserOverviewPage: React.FC = () => {
   // Write new updates to cache
   useAllUsers();
 
   // Read from newly updated cache
-  const { data, loading } = useQuery(GET_ALL_USERS);
+  const { data } = useQuery<any>(GET_ALL_USERS);
+
+  const members: Array<User> = data ? data.users : [];
+
+  // States
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedMember, selectMember] = React.useState<number>(-1);
 
   //  Writing to cache when deleting user
   const [deleteUser] = useMutation(DELETE_USER, {
-    update(cache, { data: { deleted } }) {
-      console.log(deleted);
-      let { users } = cache.readQuery<any>({
+    update(cache) {
+      let { users } = cache.readQuery<User[] | null | any>({
         query: GET_ALL_USERS,
       });
 
@@ -141,28 +170,25 @@ const TeamMemberOverviewPage: React.FC = () => {
   const table = tableStyles();
   const dRow = dataRow();
   const optionBtn = options();
+  const dialogStyle = dialogStyles();
 
   let cells;
-
-  if (loading === false && data && data !== undefined) {
-
-    cells = data.users.map((member) => {
-      return (
-        <TableRow>
-          <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
-          <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
-          <TableCell classes={{ root: dRow.root }}>
-            {member.accessLevel}
-          </TableCell>
-          <TableCell classes={{ root: optionBtn.root }}>
-            <IconButton data-id={member.id} onClick={handleClickOptions}>
-              <MoreHorizIcon style={{ color: Colours.Black }} />
-            </IconButton>
-          </TableCell>
-        </TableRow>
-      );
-    });
-  }
+  cells = members.map((member: User) => {
+    return (
+      <TableRow>
+        <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
+        <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
+        <TableCell classes={{ root: dRow.root }}>
+          {member.accessLevel}
+        </TableCell>
+        <TableCell classes={{ root: optionBtn.root }}>
+          <IconButton data-id={member.id} onClick={handleClickOptions}>
+            <MoreHorizIcon style={{ color: Colours.Black }} />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+    );
+  });
 
   return (
     <div className="member-wrapper">
@@ -215,18 +241,34 @@ const TeamMemberOverviewPage: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog open={openModal}>
-        <DialogTitle>You are about to delete a hospital.</DialogTitle>
-        <DialogContent>
-          Supervisors will no longer be able to tranpsort patients at CCPs
-          connected to this hospital.
+      <Dialog classes={{ paper: dialogStyle.paper }} open={openModal}>
+        <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
+          <Typography variant="h6">
+            <strong>You are about to delete a team member.</strong>
+          </Typography>
+        </DialogTitle>
+        <DialogContent classes={{ root: dialogStyle.dialogContent }}>
+          <Typography variant="body2">
+            Deleted team members will no longer have access to any casualty
+            collection points.
+          </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenModal(false)}>Cancel</Button>
-          <Button onClick={handleClickDelete}>Delete</Button>
+        <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
+          <Button
+            classes={{ root: dialogStyle.dialogCancel }}
+            onClick={() => setOpenModal(false)}
+          >
+            <Typography variant="body1">Cancel</Typography>
+          </Button>
+          <Button
+            classes={{ root: dialogStyle.dialogDelete }}
+            onClick={handleClickDelete}
+          >
+            <Typography variant="body1">Delete</Typography>
+          </Button>
         </DialogActions>
       </Dialog>
-      <div className="add-event-container">
+      <div className="add-resource-container">
         <AddResourceButton
           label="Add Team Member"
           route="/manage/members/new"
@@ -236,4 +278,4 @@ const TeamMemberOverviewPage: React.FC = () => {
   );
 };
 
-export default TeamMemberOverviewPage;
+export default UserOverviewPage;

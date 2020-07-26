@@ -32,10 +32,10 @@ const AmbulanceFormPage = ({
 
   const ambulances: Array<Ambulance> = data ? data.ambulances : [];
   const [addAmbulance] = useMutation(ADD_AMBULANCE, {
-    update(cache, { data: { newAmbulance } }) {
+    update(cache, { data: { addAmbulance } }) {
       cache.writeQuery({
         query: GET_ALL_AMBULANCES,
-        data: { ambulances: ambulances.concat([newAmbulance]) },
+        data: { ambulances: ambulances.concat([addAmbulance]) },
       });
     },
   });
