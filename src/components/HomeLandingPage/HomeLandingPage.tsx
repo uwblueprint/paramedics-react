@@ -57,9 +57,9 @@ const HomeLandingPage = () => {
       <div className="landing-body">
         <Grid container direction="row" alignItems="center" spacing={3}>
           {events.map((event: EventType) => (
-            <Grid item key={event.name}>
+            <Grid item key={event.id}>
               <EventCard
-                key={event.name}
+                key={event.id}
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"
