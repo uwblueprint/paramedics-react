@@ -4,12 +4,13 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import MenuTabs from '../components/common/MenuTabs';
-import AddEventButton from '../components/HomeLandingPage/AddEventButton';
-import EventCard from '../components/HomeLandingPage/EventCard';
-import useAllEvents from '../graphql/queries/hooks/events';
-import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
-import '../styles/HomeLandingPage.css';
+import MenuTabs from '../common/MenuTabs';
+import AddEventButton from './AddEventButton';
+import EventCard from './EventCard';
+import useAllEvents from '../../graphql/queries/hooks/events';
+import { EventType, GET_ALL_EVENTS } from '../../graphql/queries/events';
+import '../../styles/HomeLandingPage.css';
+import { useHistory } from 'react-router-dom';
 
 const HomeLandingPage = () => {
   const [selectedTab, setTab] = useState(0);
@@ -19,6 +20,7 @@ const HomeLandingPage = () => {
   ) => {
     setTab(newValue);
   };
+  const history = useHistory();
 
   const tabLabels = ['Current Events', 'Archived Events'];
 
@@ -28,6 +30,7 @@ const HomeLandingPage = () => {
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
   const events: Array<EventType> = data ? data.events : [];
+  console.log(events);
 
   return (
     <div className="landing-wrapper">
@@ -60,6 +63,7 @@ const HomeLandingPage = () => {
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"
+                handleClick={() => history.push(`/events/${event.id}`)}
               />
             </Grid>
           ))}
