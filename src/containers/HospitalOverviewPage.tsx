@@ -122,7 +122,7 @@ const HospitalOverviewPage: React.FC = () => {
   };
 
   let cells;
-  if (loading === false) {
+  if (loading === false && data !== undefined && data) {
     cells = data.hospitals.map((hospital) => {
       return (
         <TableRow>

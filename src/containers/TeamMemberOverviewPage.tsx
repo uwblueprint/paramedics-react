@@ -1,5 +1,12 @@
 import React from 'react';
-import { Typography, IconButton } from '@material-ui/core';
+import {
+  Typography,
+  Button,
+  IconButton,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useHistory } from 'react-router-dom';
@@ -12,8 +19,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Dialog from '@material-ui/core/Dialog';
 import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
 import { GET_ALL_USERS, AccessLevel } from '../graphql/queries/users';
+import { useAllUsers } from '../graphql/queries/hooks/users';
 import { DELETE_USER } from '../graphql/mutations/users';
 import { Colours } from '../styles/Constants';
 
@@ -79,14 +88,20 @@ interface Member {
 }
 
 const TeamMemberOverviewPage: React.FC = () => {
+  // Write new updates to cache
+  useAllUsers();
+
+  // Read from newly updated cache
   const { data, loading } = useQuery(GET_ALL_USERS);
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedMember, selectMember] = React.useState<number>(-1);
 
   //  Writing to cache when deleting user
   const [deleteUser] = useMutation(DELETE_USER, {
-    update(cache) {
-      let { users } = cache.readQuery<Member[] | null | any>({
+    update(cache, { data: { deleted } }) {
+      console.log(deleted);
+      let { users } = cache.readQuery<any>({
         query: GET_ALL_USERS,
       });
 
@@ -118,6 +133,7 @@ const TeamMemberOverviewPage: React.FC = () => {
   const handleClickDelete = () => {
     const memberId = selectedMember;
     deleteUser({ variables: { id: memberId } });
+    setOpenModal(false);
   };
 
   const classes = pStyles();
@@ -129,6 +145,7 @@ const TeamMemberOverviewPage: React.FC = () => {
   let cells;
 
   if (loading === false && data && data !== undefined) {
+
     cells = data.users.map((member) => {
       return (
         <TableRow>
@@ -186,7 +203,7 @@ const TeamMemberOverviewPage: React.FC = () => {
                         <Typography variant="body2">Edit</Typography>
                       </TableCell>
                     </TableRow>
-                    <TableRow hover onClick={handleClickDelete}>
+                    <TableRow hover onClick={() => setOpenModal(true)}>
                       <TableCell classes={{ root: optionBtn.menuDelete }}>
                         <Typography variant="body2">Delete</Typography>
                       </TableCell>
@@ -198,6 +215,17 @@ const TeamMemberOverviewPage: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog open={openModal}>
+        <DialogTitle>You are about to delete a hospital.</DialogTitle>
+        <DialogContent>
+          Supervisors will no longer be able to tranpsort patients at CCPs
+          connected to this hospital.
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+          <Button onClick={handleClickDelete}>Delete</Button>
+        </DialogActions>
+      </Dialog>
       <div className="add-event-container">
         <AddResourceButton
           label="Add Team Member"

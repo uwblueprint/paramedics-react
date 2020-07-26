@@ -32,21 +32,27 @@ const UserFormPage = ({
     mode === 'edit' && userId ? GET_USER_BY_ID(userId) : GET_ALL_USERS
   );
 
+  const [editUser] = useMutation(EDIT_USER);
+
+  const [memberName, setMemberName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
+
   const users: Array<User> = data ? data.users : [];
 
   const [addUser] = useMutation(ADD_USER, {
     update(cache, { data: { newUser } }) {
+
+      console.log("newUser:")
+      console.log(newUser)
+
+
       cache.writeQuery({
         query: GET_ALL_USERS,
         data: { users: users.concat([newUser]) },
       });
     },
   });
-  const [editUser] = useMutation(EDIT_USER);
-
-  const [memberName, setMemberName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -120,8 +126,8 @@ const UserFormPage = ({
             </Typography>
           </div>
         ) : (
-            ''
-          )}
+          ''
+        )}
       </div>
       <ValidatorForm onSubmit={handleComplete}>
         <div className="event-form">

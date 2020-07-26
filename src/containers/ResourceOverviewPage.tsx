@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TeamMemberOverviewPage from './TeamMemberOverviewPage';
 import HospitalOverviewPage from './HospitalOverviewPage';
 import AmbulanceOverviewPage from './AmbulanceOverviewPage';
-import ResourceMenuTabs from '../components/common/resourceMenuTabs';
+import ResourceMenuTabs from '../components/common/ResourceMenuTabs';
 import { Colours } from '../styles/Constants';
 
 const ResourceOverviewPage: React.FC = () => {

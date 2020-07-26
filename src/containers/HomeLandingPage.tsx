@@ -27,6 +27,8 @@ const HomeLandingPage = () => {
 
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
+
+  
   const events: Array<EventType> = data ? data.events : [];
 
   return (

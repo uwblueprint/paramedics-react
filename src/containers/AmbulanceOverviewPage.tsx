@@ -123,7 +123,7 @@ const AmbulanceOverviewPage: React.FC = () => {
 
   let cells;
 
-  if (loading === false) {
+  if (loading === false && data && data !== undefined) {
     cells = data.ambulances.map((ambulance) => {
       return (
         <TableRow>
