@@ -34,10 +34,6 @@ const useStyles = makeStyles({
   popover: {
     padding: '24px',
   },
-  filterOption: {
-    display: 'flex',
-    alignItems: 'center',
-  },
   filterCategory: {
     marginRight: '58px',
   },
@@ -286,7 +282,7 @@ export const PatientInfoTableWithFilters = ({
     filterOption: FilterOption,
     category: FilterCategory
   ) => (
-    <Box className={classes.filterOption} key={filterOption.value}>
+    <Box display="flex" alignItems="center" key={filterOption.value}>
       <Checkbox
         checked={
           selectedFilters[category][filterOption.label]?.selected || false
