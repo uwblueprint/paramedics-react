@@ -25,3 +25,13 @@ export const GET_ALL_EVENTS = gql`
     }
   }
 `;
+
+export const GET_EVENT_BY_ID = (id: string) => gql`
+  query {
+    event(id: ${id}) {
+      id
+      name
+      eventDate
+    }
+  }
+`;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import '../styles/EventCreationPage.css';
 import Typography from '@material-ui/core/Typography';
@@ -13,13 +13,29 @@ import FormField from '../components/common/FormField';
 import Stepper from '../components/EventCreationPage/Stepper';
 import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
 import ADD_EVENT from '../graphql/mutations/events';
-import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
+import {
+  EventType,
+  GET_ALL_EVENTS,
+  GET_EVENT_BY_ID,
+} from '../graphql/queries/events';
 
-const EventCreationPage = () => {
+const EventCreationPage = ({
+  match: {
+    params: { eventId },
+  },
+  mode,
+}: {
+  match: { params: { eventId?: string } };
+  mode: string;
+}) => {
   const history = useHistory();
 
-  const { data } = useQuery(GET_ALL_EVENTS);
+  const { data, loading } = useQuery(
+    mode === 'edit' && eventId ? GET_EVENT_BY_ID(eventId) : GET_ALL_EVENTS
+  );
   const events: Array<EventType> = data ? data.events : [];
+
+  console.log(data);
 
   const [addEvent] = useMutation(ADD_EVENT, {
     update(cache, { data: { newEvent } }) {
@@ -100,6 +116,22 @@ const EventCreationPage = () => {
     history.replace('/events');
   };
 
+  useEffect(() => {
+    if (!loading && mode === 'edit') {
+      const {
+        name,
+        eventDate,
+      }: {
+        name: string;
+        eventDate: string;
+        id: string;
+      } = data.event;
+
+      setEventName(name);
+      setEventDate(new Date(eventDate));
+    }
+  }, [data]);
+
   const content =
     activeStep === 0 ? (
       <form>
@@ -140,7 +172,9 @@ const EventCreationPage = () => {
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
-          <Typography variant="h3">Create New Event</Typography>
+          <Typography variant="h3">
+            {mode === 'new' ? 'Create New Event' : 'Edit Event'}
+          </Typography>
           <div className="user-icon">
             <Button
               variant="outlined"

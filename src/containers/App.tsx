@@ -17,7 +17,16 @@ function App() {
     <ThemeProvider theme={Theme}>
       <Switch>
         <Route exact path="/events" component={HomeLandingPage} />
-        <Route exact path="/events/new" component={EventCreationPage} />
+        <Route
+          exact
+          path="/events/new"
+          component={(props) => <EventCreationPage mode="new" {...props} />}
+        />
+        <Route
+          exact
+          path="/events/edit/:eventId"
+          component={(props) => <EventCreationPage mode="edit" {...props} />}
+        />
         <Route
           exact
           path="/events/:eventID/ccps/:ccpID/scan"
