@@ -31,15 +31,22 @@ interface FormFields {
   status: Status | null;
   triageCategory?: number | null;
   TriageLevel?: number | null;
-  transportTime?: number | null;
 }
 
 const PatientProfilePage = ({
   match: {
-    params: { mode, ccpId, patientId },
+    params: { ccpId, patientId, barcodeValue },
   },
+  mode,
 }: {
-  match: { params: { mode: string; patientId?: string; ccpId: string } };
+  match: {
+    params: {
+      patientId?: string;
+      ccpId: string;
+      barcodeValue?: string;
+    };
+  };
+  mode: string;
 }) => {
   const history = useHistory();
 
@@ -60,7 +67,6 @@ const PatientProfilePage = ({
     status: Status.ON_SITE,
     runNumber: null,
   });
-
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
@@ -92,6 +98,11 @@ const PatientProfilePage = ({
       });
     }
   }, [data]);
+  useEffect(() => {
+    if (mode === 'new' && barcodeValue) {
+      setFormFields({ ...formFields, barcodeValue });
+    }
+  }, []);
 
   const [addPatient] = useMutation(ADD_PATIENT, {
     update(cache, { data: { newPatient } }) {
@@ -118,7 +129,6 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          transportTime: new Date(),
         },
       });
     } else if (mode === 'edit') {
@@ -138,7 +148,6 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          transportTime: new Date(),
         },
       });
     }
