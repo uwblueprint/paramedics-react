@@ -12,7 +12,7 @@ import BackButton from '../components/EventCreationPage/BackButton';
 import FormField from '../components/common/FormField';
 import Stepper from '../components/EventCreationPage/Stepper';
 import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
-import ADD_EVENT from '../graphql/mutations/events';
+import { ADD_EVENT, EDIT_EVENT } from '../graphql/mutations/events';
 import {
   EventType,
   GET_ALL_EVENTS,
@@ -45,6 +45,7 @@ const EventCreationPage = ({
       });
     },
   });
+  const [editEvent] = useMutation(EDIT_EVENT);
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -98,21 +99,40 @@ const EventCreationPage = ({
     : {};
 
   const handleComplete = () => {
-    addEvent({
-      variables: {
-        name: eventName,
-        eventDate:
-          dateParts.year &&
-          dateParts.month &&
-          dateParts.day &&
-          `${dateParts.year}-${dateParts.month.padStart(
-            2,
-            '0'
-          )}-${dateParts.day.padStart(2, '0')}`,
-        createdBy: 1,
-        isActive: true,
-      },
-    });
+    if (mode === 'new') {
+      addEvent({
+        variables: {
+          name: eventName,
+          eventDate:
+            dateParts.year &&
+            dateParts.month &&
+            dateParts.day &&
+            `${dateParts.year}-${dateParts.month.padStart(
+              2,
+              '0'
+            )}-${dateParts.day.padStart(2, '0')}`,
+          createdBy: 16, //TODO: change this to proper user
+          isActive: true,
+        },
+      });
+    } else if (mode === 'edit' && eventId) {
+      editEvent({
+        variables: {
+          id: eventId,
+          name: eventName,
+          eventDate:
+            dateParts.year &&
+            dateParts.month &&
+            dateParts.day &&
+            `${dateParts.year}-${dateParts.month.padStart(
+              2,
+              '0'
+            )}-${dateParts.day.padStart(2, '0')}`,
+          createdBy: 16,
+          isActive: true,
+        },
+      });
+    }
     history.replace('/events');
   };
 
