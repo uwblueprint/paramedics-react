@@ -16,7 +16,6 @@ const useTabStyles = makeStyles({
     maxWidth: '15rem',
   },
   indicator: {
-    backgroundColor: '#000000',
     height: '0.3rem',
   },
   tabTextColor: {
@@ -41,7 +40,7 @@ const MenuTabs: React.FC<{
   return (
     <Tabs
       value={currentTab}
-      indicatorColor="primary"
+      indicatorColor="secondary"
       textColor="inherit"
       onChange={handleChange}
       classes={{ root: classes.root, indicator: classes.indicator }}
