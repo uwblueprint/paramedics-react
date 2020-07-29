@@ -13,10 +13,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_ALL_CCPS } from '../../graphql/queries/templates/ccps';
-import { GET_EVENT_INFO } from '../../graphql/queries/templates/events';
-import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import WebOutlinedIcon from '@material-ui/icons/WebOutlined';
+import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
+import { GET_ALL_CCPS } from '../../graphql/queries/ccps';
+import { GET_EVENT_INFO } from '../../graphql/queries/events';
 
 interface MenuAppBarProps {
   eventId: string;
@@ -41,18 +41,18 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: '111px',
     },
     active: {
-      backgroundColor: "red"
-    }
-  }),
+      backgroundColor: 'red',
+    },
+  })
 );
 
 export default function MenuAppBar(props: MenuAppBarProps) {
   const { pageTitle, eventId } = props;
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { loading: ccpLoading, error, data:ccpInfo } = useQuery(GET_ALL_CCPS);
+  const { loading: ccpLoading, error, data: ccpInfo } = useQuery(GET_ALL_CCPS);
   const { loading: eventLoading, data: eventInfo } = useQuery(GET_EVENT_INFO, {
-      variables: { eventId },
+    variables: { eventId },
   });
   if (ccpLoading || eventLoading) return null;
 
@@ -64,8 +64,13 @@ export default function MenuAppBar(props: MenuAppBarProps) {
     <>
       <AppBar position="static" color="secondary">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" 
-            onClick={toggleMenu}>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleMenu}
+          >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
@@ -80,41 +85,47 @@ export default function MenuAppBar(props: MenuAppBarProps) {
           onClick={toggleMenu}
           onKeyDown={toggleMenu}
         >
-        <List>
-          <ListItem button key={ eventInfo.event.name } classes={{ selected: classes.active }}>
-            <Typography style={{ fontWeight: "bold" }}  className={ classes.event }>
-            { eventInfo.event.name }
-            </Typography>
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem button key={ pageTitle }>
-            <ListItemIcon><WebOutlinedIcon /></ListItemIcon>
-            <Typography >
-              { pageTitle }
-            </Typography>
-          </ListItem>
-      </List>
-      <Divider />
-        <List
-         subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
-            CCP
-          </ListSubheader>
-        }
-        >
-          
-          {ccpInfo.collectionPoints.map((ccp) => (
-            <ListItem button key={ccp.name}>
-              <ListItemIcon><RoomOutlinedIcon /></ListItemIcon>
-              <Typography >
-                { ccp.name }
-            </Typography>
+          <List>
+            <ListItem
+              button
+              key={eventInfo.event.name}
+              classes={{ selected: classes.active }}
+            >
+              <Typography
+                style={{ fontWeight: 'bold' }}
+                className={classes.event}
+              >
+                {eventInfo.event.name}
+              </Typography>
             </ListItem>
-          ))}
-        </List>
-      </div>
+          </List>
+          <Divider />
+          <List>
+            <ListItem button key={pageTitle}>
+              <ListItemIcon>
+                <WebOutlinedIcon />
+              </ListItemIcon>
+              <Typography>{pageTitle}</Typography>
+            </ListItem>
+          </List>
+          <Divider />
+          <List
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                CCP
+              </ListSubheader>
+            }
+          >
+            {ccpInfo.collectionPoints.map((ccp) => (
+              <ListItem button key={ccp.name}>
+                <ListItemIcon>
+                  <RoomOutlinedIcon />
+                </ListItemIcon>
+                <Typography>{ccp.name}</Typography>
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </Drawer>
     </>
   );

@@ -7,18 +7,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box';
-import { makeStyles } from "@material-ui/core/styles";
-import { Colours } from '../../styles/Constants';
+import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_ALL_CCPS } from '../../graphql/queries/templates/ccps';
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
+import { Colours } from '../../styles/Constants';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import { TabOptions } from './EventDashboardPage';
+import { GET_ALL_CCPS } from '../../graphql/queries/ccps';
 
 const useStyles = makeStyles({
   root: {
-    padding: '56px 56px 145px 56px'
+    padding: '56px 56px 145px 56px',
   },
   tableContainer: {
     background: Colours.White,
@@ -31,7 +30,7 @@ const useStyles = makeStyles({
     position: 'fixed',
     bottom: '56px',
     right: '56px',
-    padding: '12px 26px'
+    padding: '12px 26px',
   },
   visuallyHidden: {
     border: 0,
@@ -45,7 +44,7 @@ const useStyles = makeStyles({
     width: 1,
   },
   buttonIcon: {
-    marginRight: '13px'
+    marginRight: '13px',
   },
 });
 
@@ -72,7 +71,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   const createSortHandler = (property: string) => (event: React.MouseEvent) => {
     onRequestSort(event, property);
   };
-  
+
   const headCells: HeadCell[] = [
     { headerId: 'name', label: 'CCP Name' },
     { headerId: 'address', label: 'Address' },
@@ -81,12 +80,11 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-        </TableCell>
-        {headCells.map((headCell, index) => (
+        <TableCell padding="checkbox" />
+        {headCells.map((headCell) => (
           <TableCell
             key={headCell.headerId}
-            align={index === 0 ? 'left' : 'right'}
+            align="left"
             sortDirection={orderBy === headCell.headerId ? order : false}
           >
             <TableSortLabel
@@ -106,15 +104,17 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
       </TableRow>
     </TableHead>
   );
-}
+};
 
-const CCPTabPanel = ({eventId}: {eventId: string}) => {
+const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
-  const { loading, error, data } = useQuery(GET_ALL_CCPS);
+  const { data } = useQuery(GET_ALL_CCPS);
 
-  const rows = data ? data.collectionPoints.filter((ccp:CCP) => ccp.eventId.id === eventId) : [];
+  const rows = data
+    ? data.collectionPoints.filter((ccp: CCP) => ccp.eventId.id === eventId)
+    : [];
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -122,18 +122,13 @@ const CCPTabPanel = ({eventId}: {eventId: string}) => {
     setOrderBy(property);
   };
 
-  const tableRows = stableSort(rows as CCP[], getComparator(order, orderBy))
-  .map((row: CCP, index) => {
-
+  const tableRows = stableSort(
+    rows as CCP[],
+    getComparator(order, orderBy)
+  ).map((row: CCP) => {
     return (
-      <TableRow
-        hover
-        role="checkbox"
-        tabIndex={-1}
-        key={row.id}
-      >
-        <TableCell padding="checkbox">
-        </TableCell>
+      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+        <TableCell padding="checkbox" />
         <TableCell component="th" scope="row">
           {(row as CCP).name}
         </TableCell>
@@ -146,25 +141,28 @@ const CCPTabPanel = ({eventId}: {eventId: string}) => {
 
   return (
     <Box className={classes.root}>
-        <TableContainer className={classes.tableContainer}>
-          <Table>
-            <EnhancedTableHead
-              // type={type}
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {tableRows}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Button className={classes.addButton} variant="contained" color="secondary">
-          <Add className={classes.buttonIcon}/>{`Add CCP`}
-        </Button>
+      <TableContainer className={classes.tableContainer}>
+        <Table>
+          <EnhancedTableHead
+            // type={type}
+            classes={classes}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+          />
+          <TableBody>{tableRows}</TableBody>
+        </Table>
+      </TableContainer>
+      <Button
+        className={classes.addButton}
+        variant="contained"
+        color="secondary"
+      >
+        <Add className={classes.buttonIcon} />
+        Add CCP
+      </Button>
     </Box>
   );
-}
+};
 
 export default CCPTabPanel;

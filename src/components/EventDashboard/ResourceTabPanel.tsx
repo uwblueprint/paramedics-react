@@ -24,25 +24,25 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles({
   root: {
-    padding: '0 56px 145px 56px'
+    padding: '0 56px 145px 56px',
   },
   tableContainer: {
     background: Colours.White,
     border: `1px solid ${Colours.BorderLightGray}`,
-    borderRadius: '4px'
+    borderRadius: '4px',
   },
   active: {
-    color: Colours.ActiveGreen
+    color: Colours.ActiveGreen,
   },
   activeIcon: {
     fontSize: '12px',
-    marginRight: '8px'
+    marginRight: '8px',
   },
   inactive: {
-    color: Colours.InactiveGrey
+    color: Colours.InactiveGrey,
   },
   buttonIcon: {
-    marginRight: '13px'
+    marginRight: '13px',
   },
   visuallyHidden: {
     border: 0,
@@ -56,7 +56,7 @@ const useStyles = makeStyles({
     width: 1,
   },
   toolbar: {
-    padding: '0 0 0 4px'
+    padding: '0 0 0 4px',
   },
   addButton: {
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
@@ -64,8 +64,8 @@ const useStyles = makeStyles({
     position: 'fixed',
     bottom: '56px',
     right: '56px',
-    padding: '12px 26px'
-  }
+    padding: '12px 26px',
+  },
 });
 
 interface Hospital {
@@ -115,19 +115,19 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     { headerId: 'name', label: 'Hospital Name' },
     { headerId: 'isActive', label: 'Activity' },
   ];
-  
+
   const ambulanceHeadCells = [
     { headerId: 'vehicleNumber', label: 'Digit' },
     { headerId: 'isActive', label: 'Activity' },
   ];
-  
-  const headCells: HeadCell[] = type === TabOptions.Hospital ? hospitalHeadCells : ambulanceHeadCells;
+
+  const headCells: HeadCell[] =
+    type === TabOptions.Hospital ? hospitalHeadCells : ambulanceHeadCells;
 
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-        </TableCell>
+        <TableCell padding="checkbox"></TableCell>
         {headCells.map((headCell, index) => (
           <TableCell
             key={headCell.headerId}
@@ -152,7 +152,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
       </TableRow>
     </TableHead>
   );
-}
+};
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
@@ -181,24 +181,45 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         checked={rowCount > 0 && numSelected === rowCount}
         onChange={onSelectAllClick}
       />
-      <Typography variant="body1" color="secondary">Select all</Typography>
+      <Typography variant="body1" color="secondary">
+        Select all
+      </Typography>
       {numSelected > 0 && (
-        <Box display="flex" justifyContent="flex-end" alignItems="center" flexGrow={1}>
-          <Typography variant="body2" component="div" style={{ marginRight: '16px' }}>
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
+          flexGrow={1}
+        >
+          <Typography
+            variant="body2"
+            component="div"
+            style={{ marginRight: '16px' }}
+          >
             {numSelected} selected
           </Typography>
-          <Button color="secondary" onClick={handleClickOpen} ><Remove className={classes.buttonIcon} />Exclude</Button>
-          <Button color="secondary" onClick={handleClickOpen}><Add className={classes.buttonIcon} />Include</Button>
+          <Button color="secondary" onClick={handleClickOpen}>
+            <Remove className={classes.buttonIcon} />
+            Exclude
+          </Button>
+          <Button color="secondary" onClick={handleClickOpen}>
+            <Add className={classes.buttonIcon} />
+            Include
+          </Button>
           <Dialog
             open={open}
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">Include {type === TabOptions.Hospital ? 'Hospitals' : 'Ambulances'}?</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+              Include{' '}
+              {type === TabOptions.Hospital ? 'Hospitals' : 'Ambulances'}?
+            </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Are you sure you want to include the following {type === TabOptions.Hospital ? 'hospital' : 'ambulance'}(s)?
+                Are you sure you want to include the following{' '}
+                {type === TabOptions.Hospital ? 'hospital' : 'ambulance'}(s)?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -216,29 +237,46 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   );
 };
 
-const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: ResourceTabPanelProps) => {
+const ResourceTabPanel = ({
+  eventId,
+  type,
+  hospitals = [],
+  ambulances = [],
+}: ResourceTabPanelProps) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<string>(type === TabOptions.Hospital ? 'name' : 'vehicleNumber');
+  const [orderBy, setOrderBy] = React.useState<string>(
+    type === TabOptions.Hospital ? 'name' : 'vehicleNumber'
+  );
   const [selected, setSelected] = React.useState<string[]>([]);
-  
-  const createHospitalData = (
-    allHospitals: Hospital[]
-  ): HospitalData[] => {
-    return allHospitals.map(h => ({ id: h.id, name: h.name, isActive: hospitals.filter(hospital => hospital.id === h.id).length > 0 })); 
-  }
-  
-  const createAmbulanceData = (
-    allAmbulances: Ambulance[]
-  ): AmbulanceData[] => {
-    return allAmbulances.map(a => ({ id: a.id, vehicleNumber: a.vehicleNumber, isActive: ambulances.filter(ambulance => ambulance.id === a.id).length > 0 })); 
-  }
 
-  const query = type === TabOptions.Hospital ? GET_ALL_HOSPITALS : GET_ALL_AMBULANCES;
+  const createHospitalData = (allHospitals: Hospital[]): HospitalData[] => {
+    return allHospitals.map((h) => ({
+      id: h.id,
+      name: h.name,
+      isActive: hospitals.filter((hospital) => hospital.id === h.id).length > 0,
+    }));
+  };
+
+  const createAmbulanceData = (allAmbulances: Ambulance[]): AmbulanceData[] => {
+    return allAmbulances.map((a) => ({
+      id: a.id,
+      vehicleNumber: a.vehicleNumber,
+      isActive:
+        ambulances.filter((ambulance) => ambulance.id === a.id).length > 0,
+    }));
+  };
+
+  const query =
+    type === TabOptions.Hospital ? GET_ALL_HOSPITALS : GET_ALL_AMBULANCES;
 
   const { data } = useQuery(query);
 
-  const rows = data ? ( type === TabOptions.Hospital ? createHospitalData(data.hospitals) : createAmbulanceData(data.ambulances) ) : [];
+  const rows = data
+    ? type === TabOptions.Hospital
+      ? createHospitalData(data.hospitals)
+      : createAmbulanceData(data.ambulances)
+    : [];
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -248,7 +286,9 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = (rows as (HospitalData | AmbulanceData)[]).map((n) => n.id);
+      const newSelecteds = (rows as (HospitalData | AmbulanceData)[]).map(
+        (n) => n.id
+      );
       setSelected(newSelecteds);
       return;
     }
@@ -268,7 +308,7 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -277,8 +317,10 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
-  const tableRows = stableSort(rows as (HospitalData | AmbulanceData)[], getComparator(order, orderBy))
-  .map((row: HospitalData | AmbulanceData, index) => {
+  const tableRows = stableSort(
+    rows as (HospitalData | AmbulanceData)[],
+    getComparator(order, orderBy)
+  ).map((row: HospitalData | AmbulanceData, index) => {
     const isItemSelected = isSelected(row.id);
     const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -299,19 +341,34 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
           />
         </TableCell>
         <TableCell component="th" id={labelId} scope="row">
-          {type === TabOptions.Hospital ? (row as HospitalData).name : (row as AmbulanceData).vehicleNumber}
+          {type === TabOptions.Hospital
+            ? (row as HospitalData).name
+            : (row as AmbulanceData).vehicleNumber}
         </TableCell>
         <TableCell align="right">
-        {row.isActive ? 
-          <Typography variant="button" className={classes.active}><FiberManualRecord className={classes.activeIcon}/>Active</Typography> : 
-          <Typography variant="button" className={classes.inactive}>Inactive</Typography>
-        }
+          {row.isActive ? (
+            <Typography variant="button" className={classes.active}>
+              <FiberManualRecord className={classes.activeIcon} />
+              Active
+            </Typography>
+          ) : (
+            <Typography variant="button" className={classes.inactive}>
+              Inactive
+            </Typography>
+          )}
         </TableCell>
         <TableCell align="right">
-          {row.isActive ? 
-            <Button color="secondary" disabled={selected.length > 0}><Remove className={classes.buttonIcon}/>Exclude</Button> : 
-            <Button color="secondary" disabled={selected.length > 0}><Add className={classes.buttonIcon}/>Include</Button>
-          }
+          {row.isActive ? (
+            <Button color="secondary" disabled={selected.length > 0}>
+              <Remove className={classes.buttonIcon} />
+              Exclude
+            </Button>
+          ) : (
+            <Button color="secondary" disabled={selected.length > 0}>
+              <Add className={classes.buttonIcon} />
+              Include
+            </Button>
+          )}
         </TableCell>
       </TableRow>
     );
@@ -319,31 +376,34 @@ const ResourceTabPanel = ({eventId, type, hospitals = [], ambulances = []}: Reso
 
   return (
     <Box className={classes.root}>
-        <EnhancedTableToolbar 
-          numSelected={selected.length}
-          onSelectAllClick={handleSelectAllClick}
-          rowCount={rows.length}
-          type={type}
-        />
-        <TableContainer className={classes.tableContainer}>
-          <Table>
-            <EnhancedTableHead
-              type={type}
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {tableRows}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Button className={classes.addButton} variant="contained" color="secondary">
-          <Add className={classes.buttonIcon}/>{`Add ${type === TabOptions.Hospital ? 'Hospital' : 'Ambulance'}`}
-        </Button>
+      <EnhancedTableToolbar
+        numSelected={selected.length}
+        onSelectAllClick={handleSelectAllClick}
+        rowCount={rows.length}
+        type={type}
+      />
+      <TableContainer className={classes.tableContainer}>
+        <Table>
+          <EnhancedTableHead
+            type={type}
+            classes={classes}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+          />
+          <TableBody>{tableRows}</TableBody>
+        </Table>
+      </TableContainer>
+      <Button
+        className={classes.addButton}
+        variant="contained"
+        color="secondary"
+      >
+        <Add className={classes.buttonIcon} />
+        {`Add ${type === TabOptions.Hospital ? 'Hospital' : 'Ambulance'}`}
+      </Button>
     </Box>
   );
-}
+};
 
 export default ResourceTabPanel;
