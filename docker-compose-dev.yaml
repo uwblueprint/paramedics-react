@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   # The primary API endpoint service
   paramedics-react-dev:
@@ -11,12 +11,14 @@ services:
       - type: bind
         source: ./
         target: /app
-      - '/app/node_modules'
+      - "/app/node_modules"
     ports:
       - "3000:3000"
     logging:
       driver: "json-file"
       options:
         max-size: 100m
+    env_file:
+      - paramedics-react.env
     # For some reason, this is needed for container to work
     tty: true

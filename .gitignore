@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+#dotenv
+*.env
+
 # production
 /build
 
@@ -24,3 +27,6 @@ yarn-error.log*
 
 # builder file
 builder
+
+# ngrok log
+ngrok.log

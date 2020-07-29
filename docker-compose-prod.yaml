@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   # The primary API endpoint service
   paramedics-react:
@@ -8,12 +8,12 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     volumes:
-    - type: bind
-      source: ./
-      target: /app
-    - '/app/node_modules'
+      - type: bind
+        source: ./
+        target: /app
+      - "/app/node_modules"
     ports:
-    - "5000:5000"
+      - "5000:5000"
     logging:
       driver: "json-file"
       options:

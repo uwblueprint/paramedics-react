@@ -1,10 +1,10 @@
-import React from "react";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
-import CardOptions from "./CardOptions";
+import React from 'react';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+import CardOptions from './CardOptions';
 
 interface EventCardProps {
   date: Date;
@@ -13,21 +13,22 @@ interface EventCardProps {
   onClick: () => void;
 }
 
+type EventCard = ({ date, eventTitle, address }: EventCardProps) => JSX.Element;
+
 const useEventCardStyles = makeStyles({
   root: {
-    display: "inline-block",
-    boxShadow: "none",
-    width: "20rem",
-    height: "10rem",
-    cursor: "pointer"
+    display: 'inline-block',
+    boxShadow: 'none',
+    width: '20rem',
+    height: '10rem',
   },
   cardContent: {
-    padding: "2em 2em",
+    padding: '2em 2em',
   },
   eventTitle: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 });
 

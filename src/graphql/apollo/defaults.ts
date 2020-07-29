@@ -1,6 +1,9 @@
 const defaults = {
   events: {
-    name: "",
+    name: '',
+  },
+  patients: {
+    gender: '',
   },
 };
 
