@@ -12,7 +12,6 @@ import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 import '../styles/HomeLandingPage.css';
 
 const HomeLandingPage = () => {
-  const history = useHistory();
   const [selectedTab, setTab] = useState(0);
   const handleChange = (
     event: React.ChangeEvent<unknown>,
@@ -29,10 +28,6 @@ const HomeLandingPage = () => {
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
   const events: Array<EventType> = data ? data.events : [];
-  
-  const handleEventCardClick = (eventId: string) => {
-    history.replace(`/events/${eventId}`)
-  }
 
   return (
     <div className="landing-wrapper">
@@ -65,7 +60,6 @@ const HomeLandingPage = () => {
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"
-                onClick={() => handleEventCardClick(event.id)}
               />
             </Grid>
           ))}
