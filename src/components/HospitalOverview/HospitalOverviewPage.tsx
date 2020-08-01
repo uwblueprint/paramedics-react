@@ -13,11 +13,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
-import { useAllHospitals } from '../graphql/queries/hooks/hospitals';
-import { GET_ALL_HOSPITALS, Hospital } from '../graphql/queries/hospitals';
-import { DELETE_HOSPITAL } from '../graphql/mutations/hospitals';
-import { Colours } from '../styles/Constants';
+import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
+import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
+import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
+import { Colours } from '../../styles/Constants';
 
 const pStyles = makeStyles({
   body2: {

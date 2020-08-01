@@ -20,11 +20,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
-import { GET_ALL_USERS, User } from '../graphql/queries/users';
-import { useAllUsers } from '../graphql/queries/hooks/users';
-import { DELETE_USER } from '../graphql/mutations/users';
-import { Colours } from '../styles/Constants';
+import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import { GET_ALL_USERS, User } from '../../graphql/queries/users';
+import { useAllUsers } from '../../graphql/queries/hooks/users';
+import { DELETE_USER } from '../../graphql/mutations/users';
+import { Colours } from '../../styles/Constants';
 
 const pStyles = makeStyles({
   body2: {

@@ -3,16 +3,16 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Theme } from '../styles/Theme';
-import HomeLandingPage from './HomeLandingPage';
-import EventCreationPage from './EventCreationPage';
+import HomeLandingPage from '../components/HomeLanding/HomeLandingPage';
+import EventCreationPage from '../components/EventCreation/EventCreationPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
-import EnterBarcodePage from '../components/EnterBarcodePage/EnterBarcodePage';
+import EnterBarcodePage from '../components/EnterBarcode/EnterBarcodePage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
 import PatientProfilePage from './PatientProfilePage';
-import ResourceOverviewPage from './ResourceOverviewPage';
-import HospitalFormPage from "../components/ResourceFormPage/HospitalFormPage";
-import AmbulanceFormPage from "../components/ResourceFormPage/AmbulanceFormPage";
-import MemberFormPage from "../components/ResourceFormPage/UserFormPage";
+import ResourceOverviewPage from '../components/ResourceOverview/ResourceOverviewPage';
+import HospitalFormPage from "../components/ResourceForm/HospitalFormPage";
+import AmbulanceFormPage from "../components/ResourceForm/AmbulanceFormPage";
+import MemberFormPage from "../components/ResourceForm/UserFormPage";
 
 import '../styles/App.css';
 

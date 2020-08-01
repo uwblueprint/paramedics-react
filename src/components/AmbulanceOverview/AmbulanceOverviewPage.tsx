@@ -19,11 +19,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
-import { useAllAmbulances } from '../graphql/queries/hooks/ambulances';
-import { GET_ALL_AMBULANCES, Ambulance } from '../graphql/queries/ambulances';
-import { DELETE_AMBULANCE } from '../graphql/mutations/ambulances';
-import { Colours } from '../styles/Constants';
+import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
+import { GET_ALL_AMBULANCES, Ambulance } from '../../graphql/queries/ambulances';
+import { DELETE_AMBULANCE } from '../../graphql/mutations/ambulances';
+import { Colours } from '../../styles/Constants';
 
 const pStyles = makeStyles({
   body2: {

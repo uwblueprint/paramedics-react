@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import '../styles/HomeLandingPage.css';
-import '../styles/ResourceOverviewPage.css';
+import '../../styles/HomeLandingPage.css';
+import '../../styles/ResourceOverviewPage.css';
 import Typography from '@material-ui/core/Typography';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { IconButton } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { withStyles } from '@material-ui/core/styles';
-import UserOverviewPage from './UserOverviewPage';
-import HospitalOverviewPage from './HospitalOverviewPage';
-import AmbulanceOverviewPage from './AmbulanceOverviewPage';
-import ResourceMenuTabs from '../components/ResourceOverviewPage/ResourceMenuTabs';
-import { Colours } from '../styles/Constants';
+import UserOverviewPage from '../UserOverview/UserOverviewPage';
+import HospitalOverviewPage from '../HospitalOverview/HospitalOverviewPage';
+import AmbulanceOverviewPage from '../AmbulanceOverview/AmbulanceOverviewPage';
+import ResourceMenuTabs from './ResourceMenuTabs';
+import { Colours } from '../../styles/Constants';
 
 const ResourceOverviewPage: React.FC = () => {
   const [selectedTab, setTab] = useState(0);
