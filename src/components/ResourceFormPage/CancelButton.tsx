@@ -8,6 +8,9 @@ const useCancelButtonStyles = makeStyles({
     minWidth: '160px',
     minHeight: '40px',
     fontSize: '18px',
+    marginTop: '10px',
+    position: 'absolute',
+    left: '56px',
   },
 });
 

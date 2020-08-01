@@ -14,15 +14,14 @@ const useRadioStyles = makeStyles({
     borderRadius: '10px',
     backgroundColor: '#FFFFFF',
     padding: '0',
-    marginTop: '16px',
-    marginBottom: '10px',
+    marginTop: '0px',
+    marginBottom: '24px',
     maxHeight: '15vh',
     width: '100%',
     maxWidth: '100%',
     '& .MuiInput-formControl': {
       marginTop: 'auto',
     },
-
     '& label.Mui-focused': {
       color: '#2E5584',
     },

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import '../../styles/ResourceCreationPage.css';
 import { ValidatorForm } from 'react-material-ui-form-validator';
-import Typography from '@material-ui/core/Typography';
+import { Typography, makeStyles } from '@material-ui/core';
 import FormField from '../common/FormField';
 import BackLink from './BackLink';
 import CancelButton from './CancelButton';
@@ -18,6 +17,27 @@ import {
   GET_ALL_USERS,
   GET_USER_BY_ID,
 } from '../../graphql/queries/users';
+
+const useStyles = makeStyles({
+  resourceWrapper: {
+    backgroundColor: 'white',
+  },
+  resourceCreationTopSection: {
+    margin: '48px 30px 0px 30px',
+    backgroundColor: 'white',
+    borderBottom: '1px solid #c4c4c4',
+  },
+  resourceHeader: {
+    display: 'flex',
+    padding: '16px 0px',
+  },
+  resourceForm: {
+    padding: '30px',
+  },
+  caption: {
+    marginBottom: '16px',
+  },
+});
 
 const UserFormPage = ({
   match: {
@@ -63,7 +83,7 @@ const UserFormPage = ({
       setEmail(email);
       setRole(accessLevel);
     }
-  }, [data]);
+  }, [data, loading]);
 
   const handleNameChange = (e: any) => {
     setMemberName(e.target.value);
@@ -101,30 +121,32 @@ const UserFormPage = ({
     history.replace('/manage');
   };
 
+  const classes = useStyles();
+
   return (
-    <div className="resource-add-wrapper">
-      <div className="resource-creation-top-section">
+    <div className={classes.resourceWrapper}>
+      <div className={classes.resourceCreationTopSection}>
         <BackLink to="/manage" />
-        <div className="resource-header">
+        <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new team member' : 'Edit team member'}
           </Typography>
         </div>
         {mode === 'new' ? (
-          <div className="top-bar-link">
+          <div className={classes.caption}>
             <Typography
               variant="caption"
-              style={{ color: Colours.SecondaryGray }}
+              style={{ color: Colours.SecondaryGray, marginBottom: '16px' }}
             >
               New team members will receive sign up instructions via email.
             </Typography>
           </div>
         ) : (
-            ''
-          )}
+          ''
+        )}
       </div>
       <ValidatorForm onSubmit={handleComplete}>
-        <div className="event-form">
+        <div className={classes.resourceForm}>
           <FormField
             label="Team Member Name:"
             required
@@ -145,24 +167,16 @@ const UserFormPage = ({
             currentValue={role}
             handleChange={handleRoleChange}
           />
-          <div className="caption">
-            <Typography
-              variant="caption"
-              style={{ color: Colours.SecondaryGray }}
-            >
-              *Denotes a required field
-            </Typography>
-          </div>
+          <Typography
+            variant="caption"
+            style={{ color: Colours.SecondaryGray }}
+          >
+            *Denotes a required field
+          </Typography>
         </div>
-        <div className="done-container">
-          <DoneButton
-            disabled={memberName === '' || email === ''}
-          />
-        </div>
+        <DoneButton disabled={memberName === '' || email === ''} />
       </ValidatorForm>
-      <div className="cancel-container">
-        <CancelButton to="/manage" />
-      </div>
+      <CancelButton to="/manage" />
     </div>
   );
 };

@@ -11,7 +11,7 @@ const useTextFieldStyles = makeStyles({
     backgroundColor: '#FFFFFF',
     padding: '20px',
     marginTop: '0px',
-    marginBottom: '10px',
+    marginBottom: '20px',
     height: '120px',
     width: '100%',
     '& .MuiInput-formControl': {

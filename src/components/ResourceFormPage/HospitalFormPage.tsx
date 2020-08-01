@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import '../../styles/ResourceCreationPage.css';
-import Typography from '@material-ui/core/Typography';
+import { Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import FormField from '../common/FormField';
@@ -15,6 +14,24 @@ import {
   GET_ALL_HOSPITALS,
   GET_HOSPITAL_BY_ID,
 } from '../../graphql/queries/hospitals';
+
+const useStyles = makeStyles({
+  resourceWrapper: {
+    backgroundColor: 'white',
+  },
+  resourceCreationTopSection: {
+    margin: '48px 30px 0px 30px',
+    backgroundColor: 'white',
+    borderBottom: '1px solid #c4c4c4',
+  },
+  resourceHeader: {
+    display: 'flex',
+    padding: '16px 0px',
+  },
+  resourceForm: {
+    padding: '30px',
+  },
+});
 
 const HospitalFormPage = ({
   match: {
@@ -53,7 +70,7 @@ const HospitalFormPage = ({
       } = data.hospital;
       setHospitalName(name);
     }
-  }, [data]);
+  }, [data, loading]);
 
   const handleNameChange = (e: any) => {
     setHospitalName(e.target.value);
@@ -77,17 +94,19 @@ const HospitalFormPage = ({
     history.replace('/manage');
   };
 
+  const classes = useStyles();
+
   return (
-    <div className="resource-add-wrapper">
-      <div className="resource-creation-top-section">
+    <div className={classes.resourceWrapper}>
+      <div className={classes.resourceCreationTopSection}>
         <BackLink to="/manage" />
-        <div className="resource-header">
+        <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new hospital' : 'Edit Hospital'}
           </Typography>
         </div>
       </div>
-      <div className="event-form">
+      <div className={classes.resourceForm}>
         <form>
           <FormField
             label="Hospital Name:"
@@ -97,24 +116,12 @@ const HospitalFormPage = ({
             value={hospitalName}
           />
         </form>
-        <div className="caption">
-          <Typography
-            variant="caption"
-            style={{ color: Colours.SecondaryGray }}
-          >
-            *Denotes a required field
-          </Typography>
-        </div>
+        <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>
+          *Denotes a required field
+        </Typography>
       </div>
-      <div className="done-container">
-        <DoneButton
-          handleClick={handleComplete}
-          disabled={hospitalName === ''}
-        />
-      </div>
-      <div className="cancel-container">
-        <CancelButton to="/manage" />
-      </div>
+      <DoneButton handleClick={handleComplete} disabled={hospitalName === ''} />
+      <CancelButton to="/manage" />
     </div>
   );
 };

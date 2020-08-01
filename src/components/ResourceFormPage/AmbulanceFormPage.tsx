@@ -1,20 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
+import { Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import { ADD_AMBULANCE, EDIT_AMBULANCE } from '../../graphql/mutations/ambulances';
+import {
+  ADD_AMBULANCE,
+  EDIT_AMBULANCE,
+} from '../../graphql/mutations/ambulances';
 import {
   Ambulance,
   GET_ALL_AMBULANCES,
   GET_AMBULANCE_BY_ID,
 } from '../../graphql/queries/ambulances';
-import '../../styles/ResourceCreationPage.css';
 import FormField from '../common/FormField';
 import BackLink from './BackLink';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
+
+const useStyles = makeStyles({
+  resourceWrapper: {
+    backgroundColor: 'white',
+  },
+  resourceCreationTopSection: {
+    margin: '48px 30px 0px 30px',
+    backgroundColor: 'white',
+    borderBottom: '1px solid #c4c4c4',
+  },
+  resourceHeader: {
+    display: 'flex',
+    padding: '16px 0px',
+  },
+  resourceForm: {
+    padding: '30px',
+  },
+});
 
 const AmbulanceFormPage = ({
   match: {
@@ -52,7 +72,7 @@ const AmbulanceFormPage = ({
       } = data.ambulance;
       setAmbulanceNumber(vehicleNumber);
     }
-  }, [data]);
+  }, [data, loading]);
 
   const handleNumberChange = (e: any) => {
     setAmbulanceNumber(e.target.value);
@@ -77,17 +97,19 @@ const AmbulanceFormPage = ({
     history.replace('/manage');
   };
 
+  const classes = useStyles();
+
   return (
-    <div className="resource-add-wrapper">
-      <div className="resource-creation-top-section">
+    <div className={classes.resourceWrapper}>
+      <div className={classes.resourceCreationTopSection}>
         <BackLink to="/manage" />
-        <div className="resource-header">
+        <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new ambulance' : 'Edit Ambulance'}
           </Typography>
         </div>
       </div>
-      <div className="event-form">
+      <div className={classes.resourceForm}>
         <form>
           <FormField
             label="Ambulance Number:"
@@ -97,24 +119,15 @@ const AmbulanceFormPage = ({
             value={ambulanceNumber}
           />
         </form>
-        <div className="caption">
-          <Typography
-            variant="caption"
-            style={{ color: Colours.SecondaryGray }}
-          >
-            *Denotes a required field
-          </Typography>
-        </div>
+        <Typography variant="caption" style={{ color: Colours.SecondaryGray }}>
+          *Denotes a required field
+        </Typography>
       </div>
-      <div className="done-container">
-        <DoneButton
-          handleClick={handleComplete}
-          disabled={ambulanceNumber === 0}
-        />
-      </div>
-      <div className="cancel-container">
-        <CancelButton to="/manage" />
-      </div>
+      <DoneButton
+        handleClick={handleComplete}
+        disabled={ambulanceNumber === 0}
+      />
+      <CancelButton to="/manage" />
     </div>
   );
 };
