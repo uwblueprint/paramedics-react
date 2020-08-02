@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { IconButton } from '@material-ui/core';
@@ -7,9 +8,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
 import { Colours } from '../../styles/Constants';
 import ResourceMenuTabs from './ResourceMenuTabs';
-import HospitalOverviewPage from '../HospitalOverview/HospitalOverviewPage';
-import AmbulanceOverviewPage from '../AmbulanceOverview/AmbulanceOverviewPage';
-import UserOverviewPage from '../UserOverview/UserOverviewPage';
+import HospitalOverviewPage from './HospitalOverviewPage';
+import AmbulanceOverviewPage from './AmbulanceOverviewPage';
+import UserOverviewPage from './UserOverviewPage';
 
 const BackButton = withStyles({
   root: {
@@ -54,13 +55,16 @@ const useLayout = makeStyles({
 
 const ResourceOverviewPage: React.FC = () => {
   const [selectedTab, setTab] = useState(0);
+  // const history = useHistory();
+  const tabLabels = ['Team Members', 'Hospitals', 'Ambulances'];
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTab(newValue);
+    // let path = `/${tabLabels[selectedTab]}`;
+    // history.push(path);
   };
 
   const classes = useLayout();
-
-  const tabLabels = ['Team Members', 'Hospitals', 'Ambulances'];
 
   let overview;
   if (tabLabels[selectedTab] === 'Team Members') {

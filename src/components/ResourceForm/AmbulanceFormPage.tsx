@@ -19,7 +19,7 @@ import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
-  resourceWrapper: {
+  resourcewrapper: {
     backgroundColor: 'white',
   },
   resourceCreationTopSection: {
@@ -100,7 +100,7 @@ const AmbulanceFormPage = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.resourceWrapper}>
+    <div className={classes.resourcewrapper}>
       <div className={classes.resourceCreationTopSection}>
         <BackLink to="/manage" />
         <div className={classes.resourceHeader}>

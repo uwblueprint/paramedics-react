@@ -20,7 +20,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import AddResourceButton from './AddResourceButton';
 import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
 import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
 import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
@@ -114,7 +114,7 @@ const dialogStyles = makeStyles({
 });
 
 const useLayout = makeStyles({
-  Wrapper: {
+  wrapper: {
     backgroundColor: '#f0f0f0',
     padding: '56px',
     minHeight: '100vh',
@@ -209,7 +209,7 @@ const HospitalOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className={classes.Wrapper}>
+    <div className={classes.wrapper}>
       <Typography variant="h5">Hospital Overview</Typography>
       <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
         A list of all hospitals that can be added to an event.

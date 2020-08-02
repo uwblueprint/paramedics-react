@@ -5,8 +5,8 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography, 
-  IconButton 
+  Typography,
+  IconButton
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
@@ -20,7 +20,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import AddResourceButton from './AddResourceButton';
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -117,7 +117,7 @@ const dialogStyles = makeStyles({
 });
 
 const useLayout = makeStyles({
-  Wrapper: {
+  wrapper: {
     backgroundColor: '#f0f0f0',
     padding: '56px',
     minHeight: '100vh',
@@ -215,7 +215,7 @@ const AmbulanceOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className={classes.Wrapper}>
+    <div className={classes.wrapper}>
       <Typography variant="h5">Ambulance Overview</Typography>
       <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
         A list of all ambulances that can be added to an event.

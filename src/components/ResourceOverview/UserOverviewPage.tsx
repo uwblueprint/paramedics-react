@@ -20,7 +20,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import AddResourceButton from './AddResourceButton';
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -114,7 +114,7 @@ const dialogStyles = makeStyles({
 });
 
 const useLayout = makeStyles({
-  Wrapper: {
+  wrapper: {
     backgroundColor: '#f0f0f0',
     padding: '56px',
     minHeight: '100vh',
@@ -212,7 +212,7 @@ const UserOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className={classes.Wrapper}>
+    <div className={classes.wrapper}>
       <Typography variant="h5">Team Member Overview</Typography>
       <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
         A list of all team members that can be added to an event.

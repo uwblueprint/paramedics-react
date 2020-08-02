@@ -16,7 +16,7 @@ export const FETCH_ALL_EVENTS = gql`
 
 export const GET_ALL_EVENTS = gql`
   query {
-    events {
+    events @client {
       name
       eventDate
     }
