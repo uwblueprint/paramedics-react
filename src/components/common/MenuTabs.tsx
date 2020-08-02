@@ -41,7 +41,7 @@ const MenuTabs: React.FC<{
     <Tabs
       value={currentTab}
       indicatorColor="secondary"
-      textColor="inherit"
+      textColor="secondary"
       onChange={handleChange}
       classes={{ root: classes.root, indicator: classes.indicator }}
     >
