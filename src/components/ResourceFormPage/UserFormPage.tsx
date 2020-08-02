@@ -83,7 +83,7 @@ const UserFormPage = ({
       setEmail(email);
       setRole(accessLevel);
     }
-  }, [data, loading]);
+  }, [data, loading, mode]);
 
   const handleNameChange = (e: any) => {
     setMemberName(e.target.value);
@@ -142,8 +142,8 @@ const UserFormPage = ({
             </Typography>
           </div>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </div>
       <ValidatorForm onSubmit={handleComplete}>
         <div className={classes.resourceForm}>

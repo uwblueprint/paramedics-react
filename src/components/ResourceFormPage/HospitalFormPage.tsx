@@ -70,7 +70,7 @@ const HospitalFormPage = ({
       } = data.hospital;
       setHospitalName(name);
     }
-  }, [data, loading]);
+  }, [data, loading, mode]);
 
   const handleNameChange = (e: any) => {
     setHospitalName(e.target.value);
