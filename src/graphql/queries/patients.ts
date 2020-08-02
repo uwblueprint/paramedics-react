@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { CCPType } from './collectionPoints';
+import { Hospital } from './hospitals';
 
 export enum TriageLevel {
   GREEN = 'GREEN',
@@ -21,13 +22,15 @@ export interface Patient {
   gender: string;
   age: number;
   runNumber: number;
-  barcodeValue: number;
+  barcodeValue: string;
   collectionPointId: CCPType;
   status: Status;
   triageCategory: number;
   triageLevel: TriageLevel;
   notes: string;
-  transportTime: Date;
+  transportTime?: Date;
+  updatedAt: Date;
+  hospitalId: Hospital;
 }
 
 export const GET_PATIENT_BY_ID = (id: string) => {
@@ -50,7 +53,12 @@ export const GET_PATIENT_BY_ID = (id: string) => {
         triageLevel
         status
         notes
+        updatedAt
         transportTime
+        hospitalId {
+          id
+          name
+        }
       }
     }
   `;
@@ -75,7 +83,12 @@ export const FETCH_ALL_PATIENTS = gql`
       triageLevel
       status
       notes
+      updatedAt
       transportTime
+      hospitalId {
+        id
+        name
+      }
     }
   }
 `;
@@ -97,7 +110,12 @@ export const GET_ALL_PATIENTS = gql`
       }
       triageLevel
       notes
+      updatedAt
       transportTime
+      hospitalId {
+        id
+        name
+      }
     }
   }
 `;

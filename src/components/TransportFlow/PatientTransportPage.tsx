@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -40,7 +40,15 @@ const useStyles = makeStyles({
     minWidth: '160px',
     minHeight: '40px',
     fontSize: '18px',
-    marginTop: '10px',
+    margin: '10px 0px',
+    position: 'absolute',
+    right: '56px',
+  },
+  cancelButton: {
+    minWidth: '160px',
+    minHeight: '40px',
+    fontSize: '18px',
+    marginTop: '50px',
     position: 'absolute',
     right: '56px',
   },
@@ -67,11 +75,7 @@ const PatientTransportPage = ({
   const { data: ambulanceData } = useQuery(GET_ALL_AMBULANCES);
   const ambulances: Array<Ambulance> = ambulanceData ? ambulanceData.ambulances : [];
 
-
   const [editPatient] = useMutation(EDIT_PATIENT);
-
-  // useEffect(() => {
-  // }, [hospitalData, ambulanceData]);
 
   const handleHospitalChange = (e: any) => {
     setSelectedHospital(e.target.value);
@@ -87,6 +91,7 @@ const PatientTransportPage = ({
         id: patientId,
         status: Status.TRANSPORTED,
         transportTime: new Date(),
+        collectionPointId: ccpId,
         hospitalId: selectedHospital,
         ambulanceId: selectedAmbulance
       },
@@ -98,11 +103,15 @@ const PatientTransportPage = ({
 
   return (
     <div className={classes.resourceWrapper}>
-      <div className="user-icon">
-        <CancelButton to="/manage" />
-      </div>
+      <Button
+        href={`/events/${eventId}/ccps/${ccpId}`}
+        color="secondary"
+        className={classes.cancelButton}
+      >
+        Cancel
+        </Button>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage" />
+        <BackLink to="/events/${eventId}/ccps/${ccpId}" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             Patient Transport
@@ -134,11 +143,13 @@ const PatientTransportPage = ({
       <Button
         className={classes.confirmButton}
         onClick={handleComplete}
+        color="secondary"
+        variant="contained"
         disabled={selectedAmbulance === '' || selectedHospital === ''}
       >
         Confirm Transport
             </Button>
-    </div>
+    </div >
   );
 };
 

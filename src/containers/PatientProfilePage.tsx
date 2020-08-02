@@ -32,15 +32,23 @@ interface FormFields {
   status: Status | null;
   triageCategory?: number | null;
   TriageLevel?: number | null;
-  transportTime?: number | null;
 }
 
 const PatientProfilePage = ({
   match: {
-    params: { eventId, ccpId, mode, patientId },
+    params: { eventId, ccpId, patientId, barcodeValue },
   },
+  mode,
 }: {
-  match: { params: { eventId: string; ccpId: string; mode: string; patientId?: string; } };
+  match: {
+    params: {
+      eventId: string;
+      patientId?: string;
+      ccpId: string;
+      barcodeValue?: string;
+    };
+  };
+  mode: string;
 }) => {
   const history = useHistory();
 
@@ -65,7 +73,6 @@ const PatientProfilePage = ({
     status: Status.ON_SITE,
     runNumber: null,
   });
-
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
@@ -98,6 +105,11 @@ const PatientProfilePage = ({
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
   }, [data]);
+  useEffect(() => {
+    if (mode === 'new' && barcodeValue) {
+      setFormFields({ ...formFields, barcodeValue });
+    }
+  }, []);
 
   const [addPatient] = useMutation(ADD_PATIENT, {
     update(cache, { data: { newPatient } }) {
@@ -131,7 +143,6 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          transportTime: new Date(),
         },
       });
     } else if (mode === 'edit') {
@@ -144,14 +155,13 @@ const PatientProfilePage = ({
             ? parseInt(formFields.runNumber.toString())
             : -1,
           barcodeValue: formFields.barcodeValue
-            ? parseInt(formFields.barcodeValue.toString())
-            : -1,
+            ? formFields.barcodeValue.toString()
+            : '',
           collectionPointId: ccpId,
           status: formFields.status,
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          transportTime: new Date(),
         },
       });
     }
@@ -167,7 +177,7 @@ const PatientProfilePage = ({
       <PatientTransportDialog
         open={openTransportModal}
         handleClose={handleCloseDialog}
-        confirmTransportLink={`/events/${eventId}/ccps/${ccpId}/patients/${patientId}/transport`}
+        confirmTransportLink={`/patients/${eventId}/${ccpId}/${patientId}/transport`}
       />
       <div className="event-creation-top-section">
         <div className="landing-top-bar">

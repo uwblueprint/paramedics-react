@@ -18,7 +18,7 @@ const AmbulanceTransportSelector = ({
 }) => {
     return (
         <>
-            <FormLabel>Hospital</FormLabel>
+            <FormLabel>Ambulance</FormLabel>
             <RadioGroup value={currentValue} onChange={handleChange}>
                 {options.map((ambulance) => (
                     <FormControlLabel value={ambulance.id} control={<Radio />} label={`#${ambulance.vehicleNumber}`} />

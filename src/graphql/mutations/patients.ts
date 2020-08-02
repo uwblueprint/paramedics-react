@@ -5,7 +5,7 @@ export const ADD_PATIENT = gql`
     $gender: String
     $age: Int
     $runNumber: Int
-    $barcodeValue: Int!
+    $barcodeValue: String!
     $collectionPointId: ID!
     $status: status
     $triageCategory: Int
@@ -58,7 +58,7 @@ export const EDIT_PATIENT = gql`
     $gender: String
     $age: Int
     $runNumber: Int
-    $barcodeValue: Int
+    $barcodeValue: String
     $collectionPointId: ID!
     $status: status
     $triageCategory: Int
