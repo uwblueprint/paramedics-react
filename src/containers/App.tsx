@@ -12,7 +12,7 @@ import PatientProfilePage from './PatientProfilePage';
 import ResourceOverviewPage from '../components/ResourceOverview/ResourceOverviewPage';
 import HospitalFormPage from "../components/ResourceForm/HospitalFormPage";
 import AmbulanceFormPage from "../components/ResourceForm/AmbulanceFormPage";
-import MemberFormPage from "../components/ResourceForm/UserFormPage";
+import UserFormPage from "../components/ResourceForm/UserFormPage";
 
 import '../styles/App.css';
 
@@ -25,7 +25,7 @@ function App() {
         <Route exact path="/manage/" component={ResourceOverviewPage} />
         <Route exact path="/manage/hospitals/:mode/:hospitalId?" component={HospitalFormPage} />
         <Route exact path="/manage/ambulances/:mode/:ambulanceId?" component={AmbulanceFormPage} />
-        <Route exact path="/manage/members/:mode/:userId?" component={MemberFormPage} />
+        <Route exact path="/manage/members/:mode/:userId?" component={UserFormPage} />
         <Route
           exact
           path="/events/:eventID/ccps/:ccpID/scan"
