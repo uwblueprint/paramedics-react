@@ -60,6 +60,7 @@ const HomeLandingPage = () => {
             <Grid item key={event.id}>
               <EventCard
                 key={event.id}
+                eventId={event.id}
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"

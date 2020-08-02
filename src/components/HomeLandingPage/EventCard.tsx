@@ -8,6 +8,7 @@ import CardOptions from './CardOptions';
 
 interface EventCardProps {
   date: Date;
+  eventId: string;
   eventTitle: string;
   address: string;
   handleClick: () => void;
@@ -38,6 +39,7 @@ const EventCard: EventCard = ({
   eventTitle,
   address,
   handleClick,
+  eventId,
 }: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
@@ -47,7 +49,7 @@ const EventCard: EventCard = ({
           <Typography color="textSecondary">{date}</Typography>
 
           <Box ml="auto">
-            <CardOptions />
+            <CardOptions eventId={eventId} />
           </Box>
         </Box>
 
