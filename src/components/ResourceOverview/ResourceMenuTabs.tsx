@@ -1,26 +1,23 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Tabs from "@material-ui/core/Tabs";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import { Colours } from '../../styles/Constants';
-import Tab from "@material-ui/core/Tab";
-
-
 
 const useTabStyles = makeStyles({
   root: {
-    textTransform: "none",
+    textTransform: 'none',
   },
   tabSize: {
-    textTransform: "none",
-    width: "15rem",
-    maxWidth: "15rem",
+    textTransform: 'none',
+    width: '15rem',
+    maxWidth: '15rem',
     paddingTop: 0,
   },
   indicator: {
     backgroundColor: Colours.SecondaryHover,
-    height: "0.3rem",
+    height: '0.3rem',
   },
   tabTextColor: {
     opacity: 0.4,
@@ -52,15 +49,11 @@ const ResourceMenuTabs = ({
       {tabLabels.map((label: string) => (
         <Tab
           key={label}
-          label={
-            <Typography variant="body1">
-              <Box fontWeight="">{label}</Box>
-            </Typography>
-          }
+          label={<Typography variant="body1">{label}</Typography>}
           classes={{
             root: classes.tabSize,
             textColorInherit: classes.tabTextColor,
-            selected: classes.selected
+            selected: classes.selected,
           }}
         />
       ))}

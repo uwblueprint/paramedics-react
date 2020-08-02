@@ -1,16 +1,18 @@
 import React from 'react';
 import {
+  Typography,
+  Button,
+  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
 } from '@material-ui/core';
+import Popper from '@material-ui/core/Popper';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
-import Popper from '@material-ui/core/Popper';
-import { Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,12 +20,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
-import { useAllAmbulances } from '../graphql/queries/hooks/ambulances';
-import { GET_ALL_AMBULANCES, Ambulance } from '../graphql/queries/ambulances';
-import { DELETE_AMBULANCE } from '../graphql/mutations/ambulances';
-import { Colours } from '../styles/Constants';
+import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import { GET_ALL_USERS, User } from '../../graphql/queries/users';
+import { useAllUsers } from '../../graphql/queries/hooks/users';
+import { DELETE_USER } from '../../graphql/mutations/users';
+import { Colours } from '../../styles/Constants';
 
 const pStyles = makeStyles({
   body2: {
@@ -112,62 +113,80 @@ const dialogStyles = makeStyles({
   },
 });
 
-const AmbulanceOverviewPage: React.FC = () => {
+const useLayout = makeStyles({
+  Wrapper: {
+    backgroundColor: '#f0f0f0',
+    padding: '56px',
+    minHeight: '100vh',
+  },
+  tablePopper: {
+    minWidth: '159px',
+    height: '112px',
+    backgroundColor: Colours.White,
+    borderRadius: '4px',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+  },
+  addResourceContainer: {
+    position: 'fixed',
+    right: '48px',
+    bottom: '48px',
+  },
+});
 
+const UserOverviewPage: React.FC = () => {
+  // Write new updates to cache
+  useAllUsers();
+
+  // Read from newly updated cache
+  const { data } = useQuery<any>(GET_ALL_USERS);
+
+  const members: Array<User> = data ? data.users : [];
+
+  // States
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedAmbulance, selectAmbulance] = React.useState<number>(-1);
-
-  // Update cache
-  useAllAmbulances();
-
-  // Read newly updated cache
-  const { data } = useQuery(GET_ALL_AMBULANCES);
-
-  const ambulances: Array<Ambulance> = data ? data.ambulances : [];
+  const [selectedMember, selectMember] = React.useState<number>(-1);
 
   //  Writing to cache when deleting user
-  const [deleteAmbulance] = useMutation(DELETE_AMBULANCE, {
+  const [deleteUser] = useMutation(DELETE_USER, {
     update(cache) {
-      let { ambulances } = cache.readQuery<any>({
-        query: GET_ALL_AMBULANCES,
+      let { users } = cache.readQuery<User[] | null | any>({
+        query: GET_ALL_USERS,
       });
 
       setAnchorEl(null);
 
-      const filtered = ambulances.filter(
-        (ambulance) => ambulance.id !== selectedAmbulance
-      );
-      ambulances = filtered;
+      const filtered = users.filter((user) => user.id !== selectedMember);
+      users = filtered;
       cache.writeQuery({
-        query: GET_ALL_AMBULANCES,
-        data: { ambulances },
+        query: GET_ALL_USERS,
+        data: { users },
       });
     },
   });
 
   const handleClickOptions = (event) => {
-    selectAmbulance(event.currentTarget.getAttribute('data-id'));
+    selectMember(event.currentTarget.getAttribute('data-id'));
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
   const history = useHistory();
   const handleClickEdit = () => {
-    const ambulanceId = selectedAmbulance;
-    history.replace(`/manage/ambulances/edit/${ambulanceId}`);
-  };
-
-  const handleClickDelete = () => {
-    const ambulanceId = selectedAmbulance;
-    deleteAmbulance({ variables: { id: ambulanceId } });
-    setOpenModal(false);
-
+    const memberId = selectedMember;
+    history.replace(`/manage/members/edit/${memberId}`);
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
 
-  const classes = pStyles();
+  const handleClickDelete = () => {
+    const memberId = selectedMember;
+    deleteUser({ variables: { id: memberId } });
+    setOpenModal(false);
+  };
+
+  const paraStyle = pStyles();
+  const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
@@ -175,15 +194,16 @@ const AmbulanceOverviewPage: React.FC = () => {
   const dialogStyle = dialogStyles();
 
   let cells;
-
-  cells = ambulances.map((ambulance: Ambulance) => {
+  cells = members.map((member: User) => {
     return (
-      <TableRow>
+      <TableRow key={member.id}>
+        <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
+        <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
         <TableCell classes={{ root: dRow.root }}>
-          #{ambulance.vehicleNumber}
+          {member.accessLevel}
         </TableCell>
         <TableCell classes={{ root: optionBtn.root }}>
-          <IconButton data-id={ambulance.id} onClick={handleClickOptions}>
+          <IconButton data-id={member.id} onClick={handleClickOptions}>
             <MoreHorizIcon style={{ color: Colours.Black }} />
           </IconButton>
         </TableCell>
@@ -192,19 +212,20 @@ const AmbulanceOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className="member-wrapper">
-      <Typography variant="h5">Ambulance Overview</Typography>
-      <Typography variant="body2" classes={{ body2: classes.body2 }}>
-        A list of all ambulances that can be added to an event.
+    <div className={classes.Wrapper}>
+      <Typography variant="h5">Team Member Overview</Typography>
+      <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
+        A list of all team members that can be added to an event.
       </Typography>
+
       <TableContainer>
         <Table classes={{ root: table.root }}>
           <TableHead>
             <TableRow>
-              <TableCell classes={{ root: hRow.root }}>
-                Ambulance number
-              </TableCell>
-              <TableCell />
+              <TableCell classes={{ root: hRow.root }}>Name</TableCell>
+              <TableCell classes={{ root: hRow.root }}>Email</TableCell>
+              <TableCell classes={{ root: hRow.root }}>Role</TableCell>
+              <TableCell classes={{ root: optionBtn.root }} />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -218,7 +239,7 @@ const AmbulanceOverviewPage: React.FC = () => {
               anchorEl={anchorEl}
             >
               <div>
-                <Table className="table-popper">
+                <Table className={classes.tablePopper}>
                   <TableBody>
                     <TableRow
                       hover
@@ -241,7 +262,6 @@ const AmbulanceOverviewPage: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
       <Dialog classes={{ paper: dialogStyle.paper }} open={openModal}>
         <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
           <Typography variant="h6">
@@ -269,14 +289,14 @@ const AmbulanceOverviewPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <div className="add-resource-container">
+      <div className={classes.addResourceContainer}>
         <AddResourceButton
-          label="Add Ambulance"
-          route="/manage/ambulances/new"
+          label="Add Team Member"
+          route="/manage/members/new"
         />
       </div>
     </div>
   );
 };
 
-export default AmbulanceOverviewPage;
+export default UserOverviewPage;

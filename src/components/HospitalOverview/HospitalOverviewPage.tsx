@@ -1,18 +1,17 @@
 import React from 'react';
 import {
-  Typography,
-  Button,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  Button,
+  Typography,
+  IconButton,
 } from '@material-ui/core';
-import Popper from '@material-ui/core/Popper';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useHistory } from 'react-router-dom';
-import { useQuery } from 'react-apollo';
+import Popper from '@material-ui/core/Popper';
 import { useMutation } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,11 +19,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import AddResourceButton from '../components/ResourceOverviewPage/AddResourceButton';
-import { GET_ALL_USERS, User } from '../graphql/queries/users';
-import { useAllUsers } from '../graphql/queries/hooks/users';
-import { DELETE_USER } from '../graphql/mutations/users';
-import { Colours } from '../styles/Constants';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import AddResourceButton from '../ResourceOverview/AddResourceButton';
+import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
+import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
+import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
+import { Colours } from '../../styles/Constants';
 
 const pStyles = makeStyles({
   body2: {
@@ -113,76 +113,94 @@ const dialogStyles = makeStyles({
   },
 });
 
-const UserOverviewPage: React.FC = () => {
-  // Write new updates to cache
-  useAllUsers();
+const useLayout = makeStyles({
+  Wrapper: {
+    backgroundColor: '#f0f0f0',
+    padding: '56px',
+    minHeight: '100vh',
+  },
+  tablePopper: {
+    minWidth: '159px',
+    height: '112px',
+    backgroundColor: Colours.White,
+    borderRadius: '4px',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+  },
+  addResourceContainer: {
+    position: 'fixed',
+    right: '48px',
+    bottom: '48px',
+  },
+});
 
-  // Read from newly updated cache
-  const { data } = useQuery<any>(GET_ALL_USERS);
-
-  const members: Array<User> = data ? data.users : [];
-
-  // States
+const HospitalOverviewPage: React.FC = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedMember, selectMember] = React.useState<number>(-1);
+  const [selectedHospital, selectHospital] = React.useState<number>(-1);
 
-  //  Writing to cache when deleting user
-  const [deleteUser] = useMutation(DELETE_USER, {
-    update(cache) {
-      let { users } = cache.readQuery<User[] | null | any>({
-        query: GET_ALL_USERS,
-      });
+  // Update cache
+  useAllHospitals();
 
-      setAnchorEl(null);
+  // Read newly updated cache
+  const { data } = useQuery(GET_ALL_HOSPITALS);
 
-      const filtered = users.filter((user) => user.id !== selectedMember);
-      users = filtered;
-      cache.writeQuery({
-        query: GET_ALL_USERS,
-        data: { users },
-      });
-    },
-  });
-
-  const handleClickOptions = (event) => {
-    selectMember(event.currentTarget.getAttribute('data-id'));
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const history = useHistory();
-  const handleClickEdit = () => {
-    const memberId = selectedMember;
-    history.replace(`/manage/members/edit/${memberId}`);
-  };
+  const hospitals: Array<Hospital> = data ? data.hospitals : [];
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
 
-  const handleClickDelete = () => {
-    const memberId = selectedMember;
-    deleteUser({ variables: { id: memberId } });
-    setOpenModal(false);
-  };
-
-  const classes = pStyles();
+  const paraStyle = pStyles();
+  const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
   const optionBtn = options();
   const dialogStyle = dialogStyles();
 
+  //  Writing to cache when deleting user
+  const [deleteHospital] = useMutation(DELETE_HOSPITAL, {
+    update(cache) {
+      let { hospitals } = cache.readQuery<null | any>({
+        query: GET_ALL_HOSPITALS,
+      });
+
+      setAnchorEl(null);
+
+      const filtered = hospitals.filter(
+        (hospital) => hospital.id !== selectedHospital
+      );
+      hospitals = filtered;
+      cache.writeQuery({
+        query: GET_ALL_HOSPITALS,
+        data: { hospitals },
+      });
+    },
+  });
+
+  const handleClickOptions = (event) => {
+    selectHospital(event.currentTarget.getAttribute('data-id'));
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const history = useHistory();
+  const handleClickEdit = () => {
+    const hospitalId = selectedHospital;
+    history.replace(`/manage/hospitals/edit/${hospitalId}`);
+  };
+
+  const handleClickDelete = () => {
+    const hospitalId = selectedHospital;
+    deleteHospital({ variables: { id: hospitalId } });
+    setOpenModal(false);
+  };
+
   let cells;
-  cells = members.map((member: User) => {
+  cells = hospitals.map((hospital: Hospital) => {
     return (
-      <TableRow>
-        <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
-        <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
-        <TableCell classes={{ root: dRow.root }}>
-          {member.accessLevel}
-        </TableCell>
+      <TableRow key={hospital.id}>
+        <TableCell classes={{ root: dRow.root }}>{hospital.name}</TableCell>
         <TableCell classes={{ root: optionBtn.root }}>
-          <IconButton data-id={member.id} onClick={handleClickOptions}>
+          <IconButton data-id={hospital.id} onClick={handleClickOptions}>
             <MoreHorizIcon style={{ color: Colours.Black }} />
           </IconButton>
         </TableCell>
@@ -191,20 +209,18 @@ const UserOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className="member-wrapper">
-      <Typography variant="h5">Team Member Overview</Typography>
-      <Typography variant="body2" classes={{ body2: classes.body2 }}>
-        A list of all team members that can be added to an event.
+    <div className={classes.Wrapper}>
+      <Typography variant="h5">Hospital Overview</Typography>
+      <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
+        A list of all hospitals that can be added to an event.
       </Typography>
 
       <TableContainer>
         <Table classes={{ root: table.root }}>
           <TableHead>
             <TableRow>
-              <TableCell classes={{ root: hRow.root }}>Name</TableCell>
-              <TableCell classes={{ root: hRow.root }}>Email</TableCell>
-              <TableCell classes={{ root: hRow.root }}>Role</TableCell>
-              <TableCell classes={{ root: optionBtn.root }} />
+              <TableCell classes={{ root: hRow.root }}>Hospital Name</TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -218,7 +234,7 @@ const UserOverviewPage: React.FC = () => {
               anchorEl={anchorEl}
             >
               <div>
-                <Table className="table-popper">
+                <Table className={classes.tablePopper}>
                   <TableBody>
                     <TableRow
                       hover
@@ -268,14 +284,11 @@ const UserOverviewPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <div className="add-resource-container">
-        <AddResourceButton
-          label="Add Team Member"
-          route="/manage/members/new"
-        />
+      <div className={classes.addResourceContainer}>
+        <AddResourceButton label="Add Hospital" route="/manage/hospitals/new" />
       </div>
     </div>
   );
 };
 
-export default UserOverviewPage;
+export default HospitalOverviewPage;
