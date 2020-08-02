@@ -11,8 +11,9 @@ export const ADD_PATIENT = gql`
     $triageCategory: Int
     $triageLevel: triageLevel!
     $notes: String
-    $transportTime: DateTime,
+    $transportTime: DateTime
     $hospitalId: ID
+    $ambulanceId: ID
   ) {
     addPatient(
       gender: $gender
@@ -26,6 +27,7 @@ export const ADD_PATIENT = gql`
       notes: $notes
       transportTime: $transportTime
       hospitalId: $hospitalId
+      ambulanceId: $ambulanceId
     ) {
       id
       gender
@@ -47,6 +49,10 @@ export const ADD_PATIENT = gql`
       hospitalId {
         id
         name
+      }
+      ambulanceId {
+        id
+        vehicleNumber
       }
     }
   }
@@ -66,6 +72,7 @@ export const EDIT_PATIENT = gql`
     $notes: String
     $transportTime: DateTime
     $hospitalId: ID
+    $ambulanceId: ID
   ) {
     updatePatient(
       id: $id
@@ -80,6 +87,7 @@ export const EDIT_PATIENT = gql`
       notes: $notes
       transportTime: $transportTime
       hospitalId: $hospitalId
+      ambulanceId: $ambulanceId
     ) {
       id
       gender
@@ -101,6 +109,10 @@ export const EDIT_PATIENT = gql`
       hospitalId {
         id
         name
+      }
+      ambulanceId {
+        id
+        vehicleNumber
       }
     }
   }
