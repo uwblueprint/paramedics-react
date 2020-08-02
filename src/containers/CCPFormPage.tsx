@@ -1,23 +1,18 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import "../styles/EventCreationPage.css";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core"
-import Button from "@material-ui/core/Button";
-import CancelModal from "../components/EventCreationPage/CancelModal";
-import Map from "../components/EventCreationPage/Map";
-import NextButton from "../components/EventCreationPage/NextButton";
-import BackButton from "../components/EventCreationPage/BackButton";
-import FormField from "../components/EventCreationPage/FormField";
-import Stepper from "../components/EventCreationPage/Stepper";
-import SelectDateModal from "../components/EventCreationPage/SelectDateModal";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "react-apollo";
-import { ADD_EVENT } from "../graphql/mutations/templates/events";
-import { EventType, GET_ALL_EVENTS } from "../graphql/queries/templates/events";
+import { useMutation } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import '../styles/EventCreationPage.css';
+import { ValidatorForm } from 'react-material-ui-form-validator';
+import Typography from '@material-ui/core/Typography';
+import { Colours } from '../styles/Constants';
+import { makeStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import NextButton from '../components/CCPForm/NextButton';
+import Map from '../components/EventCreationPage/Map';
+import FormField from '../components/common/FormField';
 
 const CCPFormPage = () => {
-
   const useStyles = makeStyles({
     ccpWrapper: {
       backgroundColor: 'white',
@@ -32,41 +27,29 @@ const CCPFormPage = () => {
       padding: '16px 0px',
     },
     ccpForm: {
-      padding: '30px',
+      padding: '56px 56px 37px 56px',
     },
+    ccpCompleteDiv: {
+      marginBottom: 71,
+      margin: '0px 56px',
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+    ccpCancelBtn: {
+      minWidth: '107px',
+      minHeight: '48px',
+      fontSize: '18px',
+      fontWeight: 500,
+      color: Colours.Secondary,
+    }
   });
 
   const classes = useStyles();
   const history = useHistory();
 
-  const { data } = useQuery(GET_ALL_EVENTS);
-  const events: Array<EventType> = data ? data.events : [];
-
-  const [addEvent] = useMutation(ADD_EVENT,
-    {
-      update(cache, { data: { addEvent } }) {
-        cache.writeQuery({
-          query: GET_ALL_EVENTS,
-          data: { events: events.concat([addEvent]) },
-        });
-      }
-    }
-  );
-
-  const [openCancelModal, setOpenHandleModal] = useState(false);
-  const [openDateModal, setOpenDateModal] = useState(false);
-
-  const [eventName, setEventName] = useState<string>("");
+  const [eventName, setEventName] = useState<string>('');
   const [eventDate, setEventDate] = useState<Date | null>(null);
-  const [eventLocation, setEventLocation] = useState<string>("");
-
-  const [activeStep, setActiveStep] = useState<number>(0);
-
-  const handleOpenCancelModal = () => setOpenHandleModal(true);
-  const handleCloseCancelModal = () => setOpenHandleModal(false);
-
-  const handleOpenDateModal = () => setOpenDateModal(true);
-  const handleCloseDateModal = () => setOpenDateModal(false);
+  const [eventLocation, setEventLocation] = useState<string>('');
 
   const handleNameChange = (e: any) => {
     setEventName(e.target.value);
@@ -78,49 +61,27 @@ const CCPFormPage = () => {
     setEventLocation(e.target.value);
   };
 
-  const handleNext = () => {
-    setActiveStep((prevStep) => prevStep + 1);
-  };
-  const handleBack = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-  };
-
-  const dateParts: {
-    year?: string;
-    month?: string;
-    day?: string;
-    literal?: string;
-  } = eventDate
-      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
-        (obj, currentPart) => ({
-          ...obj,
-          [currentPart.type]: currentPart.value,
-        }),
-        {}
-      )
-      : {};
-
-  const handleComplete = () => {
-
-  };
+  const handleComplete = () => {};
 
   const content = (
-        <form>
-          <FormField
-            label="Name:"
-            placeholder="Create A Name"
-            onChange={handleLocationChange}
-            value={eventLocation}
-          />
-          <FormField
-            label="Event Location:"
-            placeholder="Enter Location Here"
-            onChange={handleLocationChange}
-            value={eventLocation}
-          />
-          <Map />
-        </form>
-      );
+    <ValidatorForm>
+      <FormField
+        label="Name:"
+        placeholder="Create A Name"
+        isValidated
+        onChange={handleLocationChange}
+        value={eventLocation}
+      />
+      <FormField
+        label="Event Location:"
+        placeholder="Enter Location Here"
+        isValidated
+        onChange={handleLocationChange}
+        value={eventLocation}
+      />
+      <Map />
+    </ValidatorForm>
+  );
 
   return (
     <div className={classes.ccpWrapper}>
@@ -129,13 +90,14 @@ const CCPFormPage = () => {
           <Typography variant="h3">Create a CCP</Typography>
           <div className="user-icon">
             <Button
-              variant="outlined"
               color="primary"
-              onClick={handleOpenCancelModal}
               style={{
-                minWidth: "18rem",
-                minHeight: "2.5rem",
-                fontSize: "18px",
+                minWidth: '107px',
+                minHeight: '48px',
+                fontSize: '18px',
+                fontWeight: 500,
+                color: Colours.Secondary,
+                fontWeight: 500,
               }}
             >
               Cancel
@@ -143,10 +105,14 @@ const CCPFormPage = () => {
           </div>
         </div>
       </div>
-      <div className={classes.ccpForm}>
-          {content}
+      <div className={classes.ccpForm}>{content}</div>
+      <div className={classes.ccpCompleteDiv}>
+        <NextButton
+          handleClick={handleComplete}
+          disabled={false}
+          buttonText="Complete"
+        />
       </div>
-
     </div>
   );
 };
