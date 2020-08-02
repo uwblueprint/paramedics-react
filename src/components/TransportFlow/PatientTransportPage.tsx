@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-// import '../styles/ResourceCreationPage.css';
-import { Typography, Link, FormControl, Button } from '@material-ui/core';
+import { Typography, makeStyles, Button } from '@material-ui/core';
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
 import BackLink from '../common/BackLink';
 import CancelButton from '../common/CancelButton';
 import { Colours } from '../../styles/Constants';
 import {
+  Status,
   Patient,
   GET_PATIENT_BY_ID,
 } from '../../graphql/queries/patients';
@@ -17,17 +17,44 @@ import { EDIT_PATIENT } from '../../graphql/mutations/patients';
 import { Hospital, GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import { Ambulance, GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances'
 
+const useStyles = makeStyles({
+  resourceWrapper: {
+    backgroundColor: 'white',
+  },
+  resourceCreationTopSection: {
+    margin: '48px 30px 0px 30px',
+    backgroundColor: 'white',
+    borderBottom: '1px solid #c4c4c4',
+  },
+  resourceHeader: {
+    display: 'flex',
+    padding: '16px 0px',
+  },
+  resourceForm: {
+    padding: '30px',
+  },
+  caption: {
+    marginBottom: '16px',
+  },
+  confirmButton: {
+    minWidth: '160px',
+    minHeight: '40px',
+    fontSize: '18px',
+    marginTop: '10px',
+    position: 'absolute',
+    right: '56px',
+  },
+});
 
 const PatientTransportPage = ({
   match: {
-    params: { mode, ccpId, patientId },
+    params: { eventId, ccpId, patientId },
   },
 }: {
-  match: { params: { mode: string; patientId: string; ccpId: string } };
+  match: { params: { eventId: string; patientId: string; ccpId: string } };
 }) => {
   const [selectedHospital, setSelectedHospital] = useState("");
   const [selectedAmbulance, setSelectedAmbulance] = useState("");
-  const [error, setError] = React.useState(false);
 
   const history = useHistory();
 
@@ -44,7 +71,7 @@ const PatientTransportPage = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   // useEffect(() => {
-  // }, [patientData, hospitalData, ambulanceData]);
+  // }, [hospitalData, ambulanceData]);
 
   const handleHospitalChange = (e: any) => {
     setSelectedHospital(e.target.value);
@@ -58,61 +85,59 @@ const PatientTransportPage = ({
     editPatient({
       variables: {
         id: patientId,
-        status,
+        status: Status.TRANSPORTED,
         transportTime: new Date(),
-        hospitalId: selectedHospital
+        hospitalId: selectedHospital,
+        ambulanceId: selectedAmbulance
       },
     });
-    history.replace('/manage');
+    history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 
+  const classes = useStyles();
+
   return (
-    <div className="resource-add-wrapper">
+    <div className={classes.resourceWrapper}>
       <div className="user-icon">
         <CancelButton to="/manage" />
       </div>
-      <div className="resource-creation-top-section">
+      <div className={classes.resourceCreationTopSection}>
         <BackLink to="/manage" />
-        <div className="resource-header">
+        <div className={classes.resourceHeader}>
           <Typography variant="h4">
             Patient Transport
           </Typography>
         </div>
-        {mode === 'new' ? (
-          <div className="top-bar-link">
-            <Typography
-              variant="caption"
-              style={{ color: Colours.SecondaryGray }}
-            >
-              Choose a hospital and an ambulance from the list below to transport patient {patient.barcodeValue} to.
+        <div className={classes.caption}>
+          <Typography
+            variant="caption"
+            style={{ color: Colours.SecondaryGray }}
+          >
+            Choose a hospital and an ambulance from the list below to transport patient {patient.barcodeValue} to.
             </Typography>
-          </div>
-        ) : (
-            ''
-          )}
+        </div>
       </div>
-      <div className="event-form">
+      <div className={classes.resourceForm}>
         <HospitalTransportSelector
           options={hospitals}
           currentValue={selectedHospital}
           handleChange={handleHospitalChange}
         />
-        <Link href="/manage/hospitals/new" variant="body2" color="secondary" underline="always">Hospital not listed? Add a new hospital</Link>
+        {/* <Link href="/manage/hospitals/new/patientId" variant="body2" color="secondary" underline="always">Hospital not listed? Add a new hospital</Link> */}
         <AmbulanceTransportSelector
           options={ambulances}
           currentValue={selectedAmbulance}
           handleChange={handleAmbulanceChange}
         />
-        <Link href="/manage/ambulances/new" variant="body2" color="secondary" underline="always">Ambulance not listed? Add a new ambulance</Link>
+        {/* <Link href="/manage/ambulances/new/patientId" variant="body2" color="secondary" underline="always">Ambulance not listed? Add a new ambulance</Link> */}
       </div>
-      <div className="done-container">
-        <Button
-          onClick={handleComplete}
-          disabled={selectedAmbulance === '' || selectedHospital === ''}
-        >
-          Confirm Transport
+      <Button
+        className={classes.confirmButton}
+        onClick={handleComplete}
+        disabled={selectedAmbulance === '' || selectedHospital === ''}
+      >
+        Confirm Transport
             </Button>
-      </div>
     </div>
   );
 };

@@ -2,23 +2,22 @@ import React from 'react';
 import {
   DialogContent,
   Button,
+  Dialog,
   DialogActions,
   DialogTitle
 } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
-import { Colours } from '../../styles/Constants';
-import { Patient } from '../../graphql/queries/patients';
-
 
 const PatientTransportDialog = ({
+  open,
   handleClose,
-  handleConfirmTransport
+  confirmTransportLink
 }: {
+  open: boolean;
   handleClose: () => void;
-  handleConfirmTransport: () => void;
+  confirmTransportLink: string;
 }) => {
   return (
-    <div>
+    <Dialog open={open}>
       <DialogTitle>
         You are about to transport a patient to a hospital
       </DialogTitle>
@@ -32,17 +31,19 @@ const PatientTransportDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
+          color="secondary"
           onClick={handleClose}
         >
           Cancel
         </Button>
         <Button
-          onClick={handleConfirmTransport}
+          color="secondary"
+          href={confirmTransportLink}
         >
           Continue to transport
         </Button>
       </DialogActions>
-    </div>
+    </Dialog>
   );
 };
 

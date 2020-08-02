@@ -22,12 +22,12 @@ function App() {
         />
         <Route
           exact
-          path="/patients/:mode/:ccpId/:patientId?"
+          path="/events/:eventId/ccps/:ccpId/patients/:mode/:patientId?"
           component={PatientProfilePage}
         />
         <Route
           exact
-          path="/patients/:mode/:ccpId/:patientId?/transport"
+          path="/events/:eventId/ccps/:ccpId/patients/:patientId/transport"
           component={PatientTransportPage}
         />
         <Route path="/">

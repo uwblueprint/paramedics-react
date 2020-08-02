@@ -11,6 +11,7 @@ import CompletePatientButton from '../components/PatientCreationPage/CompletePat
 import RadioSelector from '../components/common/RadioSelector';
 import TriagePills from '../components/PatientCreationPage/TriagePills';
 import StatusPills from '../components/PatientCreationPage/StatusPills';
+import PatientTransportDialog from '../components/PatientCreationPage/PatientTransportDialog';
 import {
   TriageLevel,
   Status,
@@ -36,15 +37,16 @@ interface FormFields {
 
 const PatientProfilePage = ({
   match: {
-    params: { mode, ccpId, patientId },
+    params: { eventId, ccpId, mode, patientId },
   },
 }: {
-  match: { params: { mode: string; patientId?: string; ccpId: string } };
+  match: { params: { eventId: string; ccpId: string; mode: string; patientId?: string; } };
 }) => {
   const history = useHistory();
 
   const [openTransportModal, setOpenTransportModal] = useState(false);
   const [transportConfirmed, setTransportConfirmed] = useState(false);
+  const [transportingPatient, setTransportingPatient] = useState(false);
 
   const { data, loading } = useQuery(
     mode === 'edit' && patientId
@@ -93,6 +95,7 @@ const PatientProfilePage = ({
         status,
         runNumber,
       });
+      setTransportConfirmed(status === Status.TRANSPORTED);
     }
   }, [data]);
 
@@ -106,9 +109,13 @@ const PatientProfilePage = ({
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
 
+  const handleCloseDialog = () => {
+    history.replace(`/events/${eventId}/ccps/${ccpId}`);
+  }
+
   const handleComplete = () => {
-    if (formFields.status === Status.TRANSPORTED) {
-      setOpenTransportModal(true);
+    if (transportingPatient && !transportConfirmed) {
+      formFields.status = null;
     }
     if (mode === 'new') {
       addPatient({
@@ -117,8 +124,8 @@ const PatientProfilePage = ({
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber,
           barcodeValue: formFields.barcodeValue
-            ? parseInt(formFields.barcodeValue.toString())
-            : -1,
+            ? formFields.barcodeValue.toString()
+            : '',
           collectionPointId: ccpId,
           status: formFields.status,
           triageCategory: formFields.triageCategory,
@@ -148,11 +155,20 @@ const PatientProfilePage = ({
         },
       });
     }
-    history.replace('/');
+    if (transportingPatient && !transportConfirmed) {
+      setOpenTransportModal(true);
+    } else {
+      history.replace(`/events/${eventId}/ccps/${ccpId}`);
+    }
   };
 
   return (
     <div className="landing-wrapper">
+      <PatientTransportDialog
+        open={openTransportModal}
+        handleClose={handleCloseDialog}
+        confirmTransportLink={`/events/${eventId}/ccps/${ccpId}/patients/${patientId}/transport`}
+      />
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
           <Typography variant="h3">
@@ -196,6 +212,7 @@ const PatientProfilePage = ({
               newStatus: Status
             ) => {
               setFormFields({ ...formFields, status: newStatus });
+              setTransportingPatient(newStatus === Status.TRANSPORTED);
             }}
           />
           {mode === 'edit' && (
