@@ -113,6 +113,26 @@ const dialogStyles = makeStyles({
   },
 });
 
+const useLayout = makeStyles({
+  Wrapper: {
+    backgroundColor: '#f0f0f0',
+    padding: '56px',
+    minHeight: '100vh',
+  },
+  tablePopper: {
+    minWidth: '159px',
+    height: '112px',
+    backgroundColor: Colours.White,
+    borderRadius: '4px',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+  },
+  addResourceContainer: {
+    position: 'fixed',
+    right: '48px',
+    bottom: '48px',
+  },
+});
+
 const UserOverviewPage: React.FC = () => {
   // Write new updates to cache
   useAllUsers();
@@ -165,7 +185,8 @@ const UserOverviewPage: React.FC = () => {
     setOpenModal(false);
   };
 
-  const classes = pStyles();
+  const paraStyle = pStyles();
+  const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
@@ -175,7 +196,7 @@ const UserOverviewPage: React.FC = () => {
   let cells;
   cells = members.map((member: User) => {
     return (
-      <TableRow>
+      <TableRow key={member.id}>
         <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
         <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
         <TableCell classes={{ root: dRow.root }}>
@@ -191,9 +212,9 @@ const UserOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className="member-wrapper">
+    <div className={classes.Wrapper}>
       <Typography variant="h5">Team Member Overview</Typography>
-      <Typography variant="body2" classes={{ body2: classes.body2 }}>
+      <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
         A list of all team members that can be added to an event.
       </Typography>
 
@@ -218,7 +239,7 @@ const UserOverviewPage: React.FC = () => {
               anchorEl={anchorEl}
             >
               <div>
-                <Table className="table-popper">
+                <Table className={classes.tablePopper}>
                   <TableBody>
                     <TableRow
                       hover
@@ -268,7 +289,7 @@ const UserOverviewPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <div className="add-resource-container">
+      <div className={classes.addResourceContainer}>
         <AddResourceButton
           label="Add Team Member"
           route="/manage/members/new"

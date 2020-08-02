@@ -1,16 +1,56 @@
 import React, { useState } from 'react';
-import '../../styles/HomeLandingPage.css';
-import '../../styles/ResourceOverviewPage.css';
 import Typography from '@material-ui/core/Typography';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { IconButton } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { withStyles } from '@material-ui/core/styles';
-import UserOverviewPage from '../UserOverview/UserOverviewPage';
+import { makeStyles } from '@material-ui/styles';
+import { Colours } from '../../styles/Constants';
+import ResourceMenuTabs from './ResourceMenuTabs';
 import HospitalOverviewPage from '../HospitalOverview/HospitalOverviewPage';
 import AmbulanceOverviewPage from '../AmbulanceOverview/AmbulanceOverviewPage';
-import ResourceMenuTabs from './ResourceMenuTabs';
-import { Colours } from '../../styles/Constants';
+import UserOverviewPage from '../UserOverview/UserOverviewPage';
+
+const BackButton = withStyles({
+  root: {
+    marginRight: 33.5,
+    padding: 0,
+  },
+})(IconButton);
+
+const RefreshButton = withStyles({
+  root: {
+    marginLeft: '70%',
+    padding: 0,
+  },
+})(IconButton);
+
+const useLayout = makeStyles({
+  resourceWrapper: {
+    backgroundColor: '#f0f0f0',
+    minHeight: '100vh',
+  },
+  titleBar: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '24px',
+    background: Colours.SecondaryHover,
+    color: Colours.White,
+    paddingLeft: '16px',
+    paddingTop: '16px',
+    paddingBottom: '16px',
+  },
+  resourceTopBar: {
+    display: 'flex',
+    paddingBottom: '16px',
+  },
+  resourceTopSection: {
+    padding: '0em 3em 0em 3em',
+    backgroundColor: Colours.White,
+    borderBottom: '1px solid #C4C4C4',
+    color: Colours.Black,
+  },
+});
 
 const ResourceOverviewPage: React.FC = () => {
   const [selectedTab, setTab] = useState(0);
@@ -18,24 +58,11 @@ const ResourceOverviewPage: React.FC = () => {
     setTab(newValue);
   };
 
-  const BackButton = withStyles({
-    root: {
-      marginRight: 33.5,
-      padding: 0,
-    },
-  })(IconButton);
-
-  const RefreshButton = withStyles({
-    root: {
-      marginLeft: '77%',
-      padding: 0,
-    },
-  })(IconButton);
+  const classes = useLayout();
 
   const tabLabels = ['Team Members', 'Hospitals', 'Ambulances'];
 
   let overview;
-
   if (tabLabels[selectedTab] === 'Team Members') {
     overview = <UserOverviewPage />;
   } else if (tabLabels[selectedTab] === 'Hospitals') {
@@ -45,24 +72,23 @@ const ResourceOverviewPage: React.FC = () => {
   }
 
   return (
-    <div className="landing-wrapper">
-      <span className="title-bar">
+    <div className={classes.resourceWrapper}>
+      <span className={classes.titleBar}>
         <BackButton>
           <ArrowBackIcon style={{ color: Colours.White }} />
         </BackButton>
         <Typography variant="h6">Resource Management</Typography>
 
-        <RefreshButton>
-          <RefreshIcon
-            onClick={() => {
-              window.location.reload();
-            }}
-            style={{ color: Colours.White }}
-          />
+        <RefreshButton
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          <RefreshIcon style={{ color: Colours.White }} />
         </RefreshButton>
       </span>
-      <div className="landing-top-section-resource">
-        <div className="landing-top-bar-resource" />
+      <div className={classes.resourceTopSection}>
+        <div className={classes.resourceTopBar} />
         <ResourceMenuTabs
           handleChange={handleChange}
           currentTab={selectedTab}

@@ -5,12 +5,13 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Typography, 
+  IconButton 
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
 import Popper from '@material-ui/core/Popper';
-import { Typography, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,7 +22,10 @@ import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from '../ResourceOverview/AddResourceButton';
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
-import { GET_ALL_AMBULANCES, Ambulance } from '../../graphql/queries/ambulances';
+import {
+  GET_ALL_AMBULANCES,
+  Ambulance,
+} from '../../graphql/queries/ambulances';
 import { DELETE_AMBULANCE } from '../../graphql/mutations/ambulances';
 import { Colours } from '../../styles/Constants';
 
@@ -112,8 +116,27 @@ const dialogStyles = makeStyles({
   },
 });
 
-const AmbulanceOverviewPage: React.FC = () => {
+const useLayout = makeStyles({
+  Wrapper: {
+    backgroundColor: '#f0f0f0',
+    padding: '56px',
+    minHeight: '100vh',
+  },
+  tablePopper: {
+    minWidth: '159px',
+    height: '112px',
+    backgroundColor: Colours.White,
+    borderRadius: '4px',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+  },
+  addResourceContainer: {
+    position: 'fixed',
+    right: '48px',
+    bottom: '48px',
+  },
+});
 
+const AmbulanceOverviewPage: React.FC = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedAmbulance, selectAmbulance] = React.useState<number>(-1);
@@ -161,13 +184,13 @@ const AmbulanceOverviewPage: React.FC = () => {
     const ambulanceId = selectedAmbulance;
     deleteAmbulance({ variables: { id: ambulanceId } });
     setOpenModal(false);
-
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
 
-  const classes = pStyles();
+  const paraStyle = pStyles();
+  const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
@@ -178,7 +201,7 @@ const AmbulanceOverviewPage: React.FC = () => {
 
   cells = ambulances.map((ambulance: Ambulance) => {
     return (
-      <TableRow>
+      <TableRow key={ambulance.id}>
         <TableCell classes={{ root: dRow.root }}>
           #{ambulance.vehicleNumber}
         </TableCell>
@@ -192,9 +215,9 @@ const AmbulanceOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className="member-wrapper">
+    <div className={classes.Wrapper}>
       <Typography variant="h5">Ambulance Overview</Typography>
-      <Typography variant="body2" classes={{ body2: classes.body2 }}>
+      <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
         A list of all ambulances that can be added to an event.
       </Typography>
       <TableContainer>
@@ -218,7 +241,7 @@ const AmbulanceOverviewPage: React.FC = () => {
               anchorEl={anchorEl}
             >
               <div>
-                <Table className="table-popper">
+                <Table className={classes.tablePopper}>
                   <TableBody>
                     <TableRow
                       hover
@@ -269,7 +292,7 @@ const AmbulanceOverviewPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <div className="add-resource-container">
+      <div className={classes.addResourceContainer}>
         <AddResourceButton
           label="Add Ambulance"
           route="/manage/ambulances/new"

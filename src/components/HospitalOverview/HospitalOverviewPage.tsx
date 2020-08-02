@@ -1,7 +1,14 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+  IconButton,
+} from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import { Typography, IconButton } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -106,6 +113,26 @@ const dialogStyles = makeStyles({
   },
 });
 
+const useLayout = makeStyles({
+  Wrapper: {
+    backgroundColor: '#f0f0f0',
+    padding: '56px',
+    minHeight: '100vh',
+  },
+  tablePopper: {
+    minWidth: '159px',
+    height: '112px',
+    backgroundColor: Colours.White,
+    borderRadius: '4px',
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+  },
+  addResourceContainer: {
+    position: 'fixed',
+    right: '48px',
+    bottom: '48px',
+  },
+});
+
 const HospitalOverviewPage: React.FC = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -122,7 +149,8 @@ const HospitalOverviewPage: React.FC = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
 
-  const classes = pStyles();
+  const paraStyle = pStyles();
+  const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
@@ -164,13 +192,12 @@ const HospitalOverviewPage: React.FC = () => {
     const hospitalId = selectedHospital;
     deleteHospital({ variables: { id: hospitalId } });
     setOpenModal(false);
-
   };
 
   let cells;
   cells = hospitals.map((hospital: Hospital) => {
     return (
-      <TableRow>
+      <TableRow key={hospital.id}>
         <TableCell classes={{ root: dRow.root }}>{hospital.name}</TableCell>
         <TableCell classes={{ root: optionBtn.root }}>
           <IconButton data-id={hospital.id} onClick={handleClickOptions}>
@@ -182,9 +209,9 @@ const HospitalOverviewPage: React.FC = () => {
   });
 
   return (
-    <div className="member-wrapper">
+    <div className={classes.Wrapper}>
       <Typography variant="h5">Hospital Overview</Typography>
-      <Typography variant="body2" classes={{ body2: classes.body2 }}>
+      <Typography variant="body2" classes={{ body2: paraStyle.body2 }}>
         A list of all hospitals that can be added to an event.
       </Typography>
 
@@ -207,7 +234,7 @@ const HospitalOverviewPage: React.FC = () => {
               anchorEl={anchorEl}
             >
               <div>
-                <Table className="table-popper">
+                <Table className={classes.tablePopper}>
                   <TableBody>
                     <TableRow
                       hover
@@ -257,7 +284,7 @@ const HospitalOverviewPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <div className="add-resource-container">
+      <div className={classes.addResourceContainer}>
         <AddResourceButton label="Add Hospital" route="/manage/hospitals/new" />
       </div>
     </div>
