@@ -53,25 +53,62 @@ const useLayout = makeStyles({
   },
 });
 
-const ResourceOverviewPage: React.FC = () => {
-  const [selectedTab, setTab] = useState(0);
-  // const history = useHistory();
+const ResourceOverviewPage: React.FC = ({
+  match: {
+    params: { resource },
+  },
+}: {
+  match: { params: { resource: string } };
+}) => {
+  const history = useHistory();
   const tabLabels = ['Team Members', 'Hospitals', 'Ambulances'];
+
+  let index = 0;
+  switch (resource) {
+    case 'members':
+      index = 0;
+      break;
+    case 'hospitals':
+      index = 1;
+      break;
+    case 'ambulances':
+      index = 2;
+      break;
+    default:
+      index = 0;
+      history.replace('/manage/members');
+      break;
+  }
+
+  const [selectedTab, setTab] = useState(index);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTab(newValue);
-    // let path = `/${tabLabels[selectedTab]}`;
-    // history.push(path);
+    let path = '';
+    switch (newValue) {
+      case 0:
+        path = '/manage/members';
+        break;
+      case 1:
+        path = '/manage/hospitals';
+        break;
+      case 2:
+        path = '/manage/ambulances';
+        break;
+      default:
+        break;
+    }
+    history.push(path);
   };
 
   const classes = useLayout();
 
-  let overview;
-  if (tabLabels[selectedTab] === 'Team Members') {
+  let overview = null;
+  if (resource === 'members') {
     overview = <UserOverviewPage />;
-  } else if (tabLabels[selectedTab] === 'Hospitals') {
+  } else if (resource === 'hospitals') {
     overview = <HospitalOverviewPage />;
-  } else if (tabLabels[selectedTab] === 'Ambulances') {
+  } else if (resource === 'ambulances') {
     overview = <AmbulanceOverviewPage />;
   }
 

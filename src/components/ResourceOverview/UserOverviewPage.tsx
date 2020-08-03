@@ -200,7 +200,8 @@ const UserOverviewPage: React.FC = () => {
         <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
         <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
         <TableCell classes={{ root: dRow.root }}>
-          {member.accessLevel}
+          {member.accessLevel.charAt(0).toUpperCase() +
+            member.accessLevel.substring(1).toLowerCase()}
         </TableCell>
         <TableCell classes={{ root: optionBtn.root }}>
           <IconButton data-id={member.id} onClick={handleClickOptions}>

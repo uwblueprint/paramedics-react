@@ -91,7 +91,7 @@ const HospitalFormPage = ({
         },
       });
     }
-    history.replace('/manage');
+    history.replace('/manage/hospitals');
   };
 
   const classes = useStyles();
@@ -121,7 +121,7 @@ const HospitalFormPage = ({
         </Typography>
       </div>
       <DoneButton handleClick={handleComplete} disabled={hospitalName === ''} />
-      <CancelButton to="/manage" />
+      <CancelButton to="/manage/hospitals" />
     </div>
   );
 };

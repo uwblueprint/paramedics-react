@@ -118,7 +118,7 @@ const UserFormPage = ({
         },
       });
     }
-    history.replace('/manage');
+    history.replace('/manage/members');
   };
 
   const classes = useStyles();
@@ -176,7 +176,7 @@ const UserFormPage = ({
         </div>
         <DoneButton disabled={memberName === '' || email === ''} />
       </ValidatorForm>
-      <CancelButton to="/manage" />
+      <CancelButton to="/manage/members" />
     </div>
   );
 };

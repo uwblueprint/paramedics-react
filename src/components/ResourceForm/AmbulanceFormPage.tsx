@@ -94,7 +94,7 @@ const AmbulanceFormPage = ({
       });
     }
 
-    history.replace('/manage');
+    history.replace('/manage/ambulances');
   };
 
   const classes = useStyles();
@@ -127,7 +127,7 @@ const AmbulanceFormPage = ({
         handleClick={handleComplete}
         disabled={ambulanceNumber === 0}
       />
-      <CancelButton to="/manage" />
+      <CancelButton to="/manage/ambulances" />
     </div>
   );
 };
