@@ -17,6 +17,7 @@ import { Colours } from '../../styles/Constants';
 import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
 import ResourceTabPanel from './ResourceTabPanel';
 import { formatDate } from '../../utils/format';
+import LoadingState from '../common/LoadingState';
 
 type TParams = { eventId: string };
 
@@ -66,13 +67,15 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
   const { eventId } = match.params;
   // TO DO: error handling when eventId does not exist in database
-  const { loading, data: eventInfo } = useQuery(GET_EVENT_BY_ID, {
+  const { loading: eventLoading, data: eventInfo } = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId },
   });
 
   const [tab, setTab] = React.useState(TabOptions.CCP);
 
-  if (loading) return null;
+  if (eventLoading) {
+    return <LoadingState />;
+  }
 
   const { event } = eventInfo;
 

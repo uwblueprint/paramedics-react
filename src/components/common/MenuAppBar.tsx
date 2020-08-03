@@ -1,5 +1,6 @@
 import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import { Colours } from '../../styles/Constants';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -9,48 +10,53 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
 import { useQuery } from '@apollo/react-hooks';
-import WebOutlinedIcon from '@material-ui/icons/WebOutlined';
+import { ScanIcon } from './ScanIcon';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
-import { GET_ALL_CCPS } from '../../graphql/queries/ccps';
+import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
+import { useHistory } from 'react-router-dom';
 
 interface MenuAppBarProps {
   eventId: string;
   pageTitle: string;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-    list: {
-      width: 250,
-    },
-    fullList: {
-      width: 'auto',
-    },
-    event: {
-      paddingTop: '111px',
-    },
-    active: {
-      backgroundColor: 'red',
-    },
-  })
-);
+const useStyles = makeStyles({
+  menuButton: {
+    marginRight: '23px',
+  },
+  title: {
+    flexGrow: 1,
+  },
+  list: {
+    width: '250px',
+  },
+  fullList: {
+    width: 'auto',
+  },
+  eventName: {
+    paddingTop: '111px',
+  },
+  active: {
+    backgroundColor: 'red',
+  },
+  link: {
+    textDecoration: 'none',
+  },
+});
 
 export default function MenuAppBar(props: MenuAppBarProps) {
   const { pageTitle, eventId } = props;
+  const history = useHistory();
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { loading: ccpLoading, error, data: ccpInfo } = useQuery(GET_ALL_CCPS);
+  const { loading: ccpLoading, data: ccpInfo } = useQuery(
+    GET_CCPS_BY_EVENT_ID,
+    { variables: { eventId } }
+  );
   const { loading: eventLoading, data: eventInfo } = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId },
   });
@@ -58,6 +64,14 @@ export default function MenuAppBar(props: MenuAppBarProps) {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleDirectoryClick = () => {
+    history.push(`/events/${eventId}`);
+  };
+
+  const handleCCPClick = (ccpId) => {
+    history.push(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   return (
@@ -86,26 +100,19 @@ export default function MenuAppBar(props: MenuAppBarProps) {
           onKeyDown={toggleMenu}
         >
           <List>
-            <ListItem
-              button
-              key={eventInfo.event.name}
-              classes={{ selected: classes.active }}
-            >
-              <Typography
-                style={{ fontWeight: 'bold' }}
-                className={classes.event}
-              >
+            <ListItem key={eventInfo.event.name}>
+              <Typography variant="h6" className={classes.eventName}>
                 {eventInfo.event.name}
               </Typography>
             </ListItem>
           </List>
           <Divider />
           <List>
-            <ListItem button key={pageTitle}>
+            <ListItem button key="directory" onClick={handleDirectoryClick}>
               <ListItemIcon>
-                <WebOutlinedIcon />
+                <ScanIcon colour={Colours.Black} />
               </ListItemIcon>
-              <Typography>{pageTitle}</Typography>
+              <Typography variant="body2">Directory</Typography>
             </ListItem>
           </List>
           <Divider />
@@ -116,12 +123,16 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               </ListSubheader>
             }
           >
-            {ccpInfo.collectionPoints.map((ccp) => (
-              <ListItem button key={ccp.name}>
+            {ccpInfo.collectionPointsByEvent.map((ccp) => (
+              <ListItem
+                button
+                key={ccp.name}
+                onClick={() => handleCCPClick(ccp.id)}
+              >
                 <ListItemIcon>
                   <RoomOutlinedIcon />
                 </ListItemIcon>
-                <Typography>{ccp.name}</Typography>
+                <Typography variant="body2">{ccp.name}</Typography>
               </ListItem>
             ))}
           </List>
