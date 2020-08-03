@@ -12,7 +12,6 @@ import ResourceOverviewPage from '../components/ResourceOverview/ResourceOvervie
 import HospitalFormPage from '../components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from '../components/ResourceForm/AmbulanceFormPage';
 import UserFormPage from '../components/ResourceForm/UserFormPage';
-
 import '../styles/App.css';
 
 function App() {
@@ -26,6 +25,9 @@ function App() {
           path="/manage/:resource"
           component={ResourceOverviewPage}
         />
+        <Route exact  path="/manage/">
+          <Redirect to="/events" />
+        </Route>
         <Route
           exact
           path="/manage/hospitals/:mode/:hospitalId?"
@@ -66,9 +68,9 @@ function App() {
           path="/patients/new/:ccpId/:barcodeValue?"
           component={(props) => <PatientProfilePage mode="new" {...props} />}
         />
-        {/* <Route path="/">
+        <Route path="/">
           <Redirect to="/events" />
-        </Route> */}
+        </Route>
       </Switch>
     </ThemeProvider>
   );

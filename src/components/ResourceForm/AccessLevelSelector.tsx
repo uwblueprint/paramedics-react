@@ -53,7 +53,7 @@ const AccessLevelSelector = ({
   const accessLevels = [
     { val: AccessLevel.ADMIN, label: 'Admin' },
     { val: AccessLevel.SUPERVISOR, label: 'CCP Supervisor' },
-    { val: AccessLevel.COMMANDER, label: 'Dispatch' },
+    { val: AccessLevel.COMMANDER, label: 'Dispatch Coordinator' },
   ];
   return (
     <Container className={classes.root}>
