@@ -12,7 +12,7 @@ import BackButton from '../components/EventCreationPage/BackButton';
 import FormField from '../components/common/FormField';
 import Stepper from '../components/EventCreationPage/Stepper';
 import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
-import ADD_EVENT from '../graphql/mutations/events';
+import { ADD_EVENT } from '../graphql/mutations/events';
 import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 
 const EventCreationPage = () => {

@@ -37,6 +37,7 @@
     "no-shadow": "off",
     "no-plusplus": "off",
     "react/jsx-curly-newline": "off",
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "no-nested-ternary": "off"
   }
 }

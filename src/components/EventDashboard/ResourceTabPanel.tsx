@@ -8,19 +8,21 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
-import { TabOptions } from './EventDashboardPage';
-import { Colours } from '../../styles/Constants';
-import { useQuery } from 'react-apollo';
-import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
-import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
+import { useQuery, useMutation } from 'react-apollo';
 import { Box, Typography, Button, Checkbox } from '@material-ui/core';
 import { FiberManualRecord, Add, Remove } from '@material-ui/icons';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
+import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
+import { Colours } from '../../styles/Constants';
+import { TabOptions } from './EventDashboardPage';
+import {
+  ADD_HOSPITALS_TO_EVENT,
+  ADD_AMBULANCES_TO_EVENT,
+  DELETE_HOSPITALS_FROM_EVENT,
+  DELETE_AMBULANCES_FROM_EVENT,
+} from '../../graphql/mutations/events';
+import { ActionConfirmationDialog } from './ActionConfirmationDialog';
 
 const useStyles = makeStyles({
   root: {
@@ -85,13 +87,15 @@ interface ResourceTabPanelProps {
   ambulances?: Ambulance[];
 }
 
-interface HospitalData extends Hospital {
+export interface HospitalData extends Hospital {
   isActive: boolean;
 }
 
-interface AmbulanceData extends Ambulance {
+export interface AmbulanceData extends Ambulance {
   isActive: boolean;
 }
+
+export type ResourceData = HospitalData | AmbulanceData;
 
 interface HeadCell {
   headerId: string;
@@ -113,12 +117,12 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   };
   const hospitalHeadCells = [
     { headerId: 'name', label: 'Hospital Name' },
-    { headerId: 'isActive', label: 'Activity' },
+    { headerId: 'isActive', label: 'Status' },
   ];
 
   const ambulanceHeadCells = [
     { headerId: 'vehicleNumber', label: 'Digit' },
-    { headerId: 'isActive', label: 'Activity' },
+    { headerId: 'isActive', label: 'Status' },
   ];
 
   const headCells: HeadCell[] =
@@ -127,11 +131,11 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox"></TableCell>
-        {headCells.map((headCell, index) => (
+        <TableCell padding="checkbox" />
+        {headCells.map((headCell) => (
           <TableCell
             key={headCell.headerId}
-            align={index === 0 ? 'left' : 'right'}
+            align="left"
             sortDirection={orderBy === headCell.headerId ? order : false}
           >
             <TableSortLabel
@@ -148,7 +152,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell></TableCell>
+        <TableCell />
       </TableRow>
     </TableHead>
   );
@@ -158,21 +162,19 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   rowCount: number;
-  type: TabOptions.Hospital | TabOptions.Ambulance;
+  handleIncludeClick: () => void;
+  handleExcludeClick: () => void;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, onSelectAllClick, rowCount, type } = props;
+  const {
+    numSelected,
+    onSelectAllClick,
+    rowCount,
+    handleIncludeClick,
+    handleExcludeClick,
+  } = props;
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Toolbar className={classes.toolbar} disableGutters>
@@ -196,41 +198,16 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             component="div"
             style={{ marginRight: '16px' }}
           >
-            {numSelected} selected
+            {`${numSelected} selected`}
           </Typography>
-          <Button color="secondary" onClick={handleClickOpen}>
-            <Remove className={classes.buttonIcon} />
-            Exclude
-          </Button>
-          <Button color="secondary" onClick={handleClickOpen}>
+          <Button color="secondary" onClick={handleIncludeClick}>
             <Add className={classes.buttonIcon} />
             Include
           </Button>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              Include{' '}
-              {type === TabOptions.Hospital ? 'Hospitals' : 'Ambulances'}?
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Are you sure you want to include the following{' '}
-                {type === TabOptions.Hospital ? 'hospital' : 'ambulance'}(s)?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={handleClose} color="primary" autoFocus>
-                Confirm
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <Button color="secondary" onClick={handleExcludeClick}>
+            <Remove className={classes.buttonIcon} />
+            Exclude
+          </Button>
         </Box>
       )}
     </Toolbar>
@@ -248,7 +225,106 @@ const ResourceTabPanel = ({
   const [orderBy, setOrderBy] = React.useState<string>(
     type === TabOptions.Hospital ? 'name' : 'vehicleNumber'
   );
-  const [selected, setSelected] = React.useState<string[]>([]);
+  const [selected, setSelected] = React.useState<ResourceData[]>([]);
+  const [
+    singleSelected,
+    setSingleSelected,
+  ] = React.useState<ResourceData | null>(null);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [includeOrExclude, setIncludeOrExclude] = React.useState<
+    'include' | 'exclude' | null
+  >(null);
+
+  const [addHospitalsToEvent] = useMutation(ADD_HOSPITALS_TO_EVENT);
+  const [addAmbulancesToEvent] = useMutation(ADD_AMBULANCES_TO_EVENT);
+  const [deleteHospitalsFromEvent] = useMutation(DELETE_HOSPITALS_FROM_EVENT);
+  const [deleteAmbulancesFromEvent] = useMutation(DELETE_AMBULANCES_FROM_EVENT);
+
+  const handleClose = () => {
+    setSelected([]);
+    setSingleSelected(null);
+    setOpen(false);
+    setIncludeOrExclude(null);
+  };
+
+  const handleIncludeClick = () => {
+    setIncludeOrExclude('include');
+    setOpen(true);
+  };
+
+  const handleExcludeClick = () => {
+    setIncludeOrExclude('exclude');
+    setOpen(true);
+  };
+
+  const convertSelected = (selected) =>
+    selected.map((resource: ResourceData) => ({
+      id: resource.id,
+    }));
+
+  const handleAddHospitals = (selected: HospitalData[]) => {
+    addHospitalsToEvent({
+      variables: { eventId, hospitals: convertSelected(selected) },
+    });
+  };
+
+  const handleAddAmbulances = (selected: AmbulanceData[]) => {
+    addAmbulancesToEvent({
+      variables: { eventId, ambulances: convertSelected(selected) },
+    });
+  };
+
+  const handleAddResources = () => {
+    const resourcesToAdd = singleSelected
+      ? ([singleSelected] as ResourceData[])
+      : selected;
+
+    if (type === TabOptions.Hospital) {
+      handleAddHospitals(resourcesToAdd as HospitalData[]);
+    } else {
+      handleAddAmbulances(resourcesToAdd as AmbulanceData[]);
+    }
+
+    handleClose();
+  };
+
+  const handleSingleIncludeClick = (row: ResourceData) => {
+    setSingleSelected(row);
+    setIncludeOrExclude('include');
+    setOpen(true);
+  };
+
+  const handleDeleteHospitals = (selected: HospitalData[]) => {
+    deleteHospitalsFromEvent({
+      variables: { eventId, hospitals: convertSelected(selected) },
+    });
+  };
+
+  const handleDeleteAmbulances = (selected: AmbulanceData[]) => {
+    deleteAmbulancesFromEvent({
+      variables: { eventId, ambulances: convertSelected(selected) },
+    });
+  };
+
+  const handleDeleteResources = () => {
+    const resourcesToDelete = singleSelected
+      ? ([singleSelected] as ResourceData[])
+      : selected;
+
+    if (type === TabOptions.Hospital) {
+      handleDeleteHospitals(resourcesToDelete as HospitalData[]);
+    } else {
+      handleDeleteAmbulances(resourcesToDelete as AmbulanceData[]);
+    }
+
+    handleClose();
+  };
+
+  const handleSingleExcludeClick = (row: ResourceData) => {
+    setSingleSelected(row);
+    setIncludeOrExclude('exclude');
+    setOpen(true);
+  };
 
   const createHospitalData = (allHospitals: Hospital[]): HospitalData[] => {
     return allHospitals.map((h) => ({
@@ -286,21 +362,18 @@ const ResourceTabPanel = ({
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = (rows as (HospitalData | AmbulanceData)[]).map(
-        (n) => n.id
-      );
-      setSelected(newSelecteds);
+      setSelected(rows);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: string[] = [];
+  const handleClick = (event: React.MouseEvent, row: ResourceData) => {
+    const selectedIndex = selected.findIndex((r) => r.id === row.id);
+    let newSelected: ResourceData[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, row);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -315,12 +388,13 @@ const ResourceTabPanel = ({
     setSelected(newSelected);
   };
 
-  const isSelected = (id: string) => selected.indexOf(id) !== -1;
+  const isSelected = (id: string) =>
+    selected.findIndex((row) => row.id === id) !== -1;
 
   const tableRows = stableSort(
-    rows as (HospitalData | AmbulanceData)[],
+    rows as ResourceData[],
     getComparator(order, orderBy)
-  ).map((row: HospitalData | AmbulanceData, index) => {
+  ).map((row: ResourceData, index) => {
     const isItemSelected = isSelected(row.id);
     const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -337,7 +411,7 @@ const ResourceTabPanel = ({
           <Checkbox
             checked={isItemSelected}
             inputProps={{ 'aria-labelledby': labelId }}
-            onClick={(event) => handleClick(event, row.id)}
+            onClick={(event) => handleClick(event, row)}
           />
         </TableCell>
         <TableCell component="th" id={labelId} scope="row">
@@ -345,7 +419,7 @@ const ResourceTabPanel = ({
             ? (row as HospitalData).name
             : (row as AmbulanceData).vehicleNumber}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="left">
           {row.isActive ? (
             <Typography variant="button" className={classes.active}>
               <FiberManualRecord className={classes.activeIcon} />
@@ -359,12 +433,26 @@ const ResourceTabPanel = ({
         </TableCell>
         <TableCell align="right">
           {row.isActive ? (
-            <Button color="secondary" disabled={selected.length > 0}>
+            <Button
+              color="secondary"
+              disabled={selected.length > 0}
+              // onClick={() => handleDeleteSingleResource(row)}
+              onClick={() => {
+                handleSingleExcludeClick(row);
+              }}
+            >
               <Remove className={classes.buttonIcon} />
               Exclude
             </Button>
           ) : (
-            <Button color="secondary" disabled={selected.length > 0}>
+            <Button
+              color="secondary"
+              disabled={selected.length > 0}
+              // onClick={() => handleAddSingleResource(row)}
+              onClick={() => {
+                handleSingleIncludeClick(row);
+              }}
+            >
               <Add className={classes.buttonIcon} />
               Include
             </Button>
@@ -380,7 +468,8 @@ const ResourceTabPanel = ({
         numSelected={selected.length}
         onSelectAllClick={handleSelectAllClick}
         rowCount={rows.length}
-        type={type}
+        handleIncludeClick={handleIncludeClick}
+        handleExcludeClick={handleExcludeClick}
       />
       <TableContainer className={classes.tableContainer}>
         <Table>
@@ -402,6 +491,17 @@ const ResourceTabPanel = ({
         <Add className={classes.buttonIcon} />
         {`Add ${type === TabOptions.Hospital ? 'Hospital' : 'Ambulance'}`}
       </Button>
+      <ActionConfirmationDialog
+        open={open}
+        type={type}
+        handleClose={handleClose}
+        handleAdd={handleAddResources}
+        handleDelete={handleDeleteResources}
+        includeOrExclude={includeOrExclude}
+        selected={
+          singleSelected ? ([singleSelected] as ResourceData[]) : selected
+        }
+      />
     </Box>
   );
 };

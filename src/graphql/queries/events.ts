@@ -4,6 +4,8 @@ export interface EventType {
   id: string;
   name: string;
   eventDate: Date;
+  // ambulances: Ambulance[];
+  // hospitals: Hospital[];
 }
 
 export const FETCH_ALL_EVENTS = gql`
@@ -12,6 +14,14 @@ export const FETCH_ALL_EVENTS = gql`
       id
       name
       eventDate
+      ambulances {
+        id
+        vehicleNumber
+      }
+      hospitals {
+        id
+        name
+      }
     }
   }
 `;
@@ -22,13 +32,21 @@ export const GET_ALL_EVENTS = gql`
       id
       name
       eventDate
+      ambulances {
+        id
+        vehicleNumber
+      }
+      hospitals {
+        id
+        name
+      }
     }
   }
 `;
 
 export const GET_EVENT_INFO = gql`
   query Event($eventId: ID!) {
-    event(id: $eventId){
+    event(id: $eventId) {
       name
       eventDate
       ambulances {
