@@ -19,7 +19,7 @@ import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
-  resourcewrapper: {
+  resourceWrapper: {
     backgroundColor: 'white',
   },
   resourceCreationTopSection: {
