@@ -53,7 +53,7 @@ const useLayout = makeStyles({
   },
 });
 
-const ResourceOverviewPage: React.FC = ({
+const ResourceOverviewPage = ({
   match: {
     params: { resource },
   },
@@ -103,7 +103,7 @@ const ResourceOverviewPage: React.FC = ({
 
   const classes = useLayout();
 
-  let overview = null;
+  let overview;
   if (resource === 'members') {
     overview = <UserOverviewPage />;
   } else if (resource === 'hospitals') {

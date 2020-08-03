@@ -25,8 +25,8 @@ function App() {
           path="/manage/:resource"
           component={ResourceOverviewPage}
         />
-        <Route exact  path="/manage/">
-          <Redirect to="/events" />
+        <Route exact path="/manage/">
+          <Redirect to="/manage/members" />
         </Route>
         <Route
           exact
