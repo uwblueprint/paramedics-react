@@ -1,12 +1,16 @@
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import TableRow from '@material-ui/core/TableRow';
-import Box from '@material-ui/core/Box';
+import {
+  Box,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableSortLabel,
+  TableRow,
+} from '@material-ui/core';
+import { MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import { Button } from '@material-ui/core';
@@ -101,6 +105,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell />
       </TableRow>
     </TableHead>
   );
@@ -133,6 +138,14 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         <TableCell component="th" scope="row">
           -
         </TableCell>
+        <TableCell
+          width="48px"
+          style={{ maxWidth: '48px', paddingTop: 0, paddingBottom: 0 }}
+        >
+          <IconButton color="inherit">
+            <MoreHoriz />
+          </IconButton>
+        </TableCell>
       </TableRow>
     );
   });
@@ -142,7 +155,6 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
       <TableContainer className={classes.tableContainer}>
         <Table>
           <EnhancedTableHead
-            // type={type}
             classes={classes}
             order={order}
             orderBy={orderBy}

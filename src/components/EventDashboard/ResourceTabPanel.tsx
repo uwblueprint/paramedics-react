@@ -69,6 +69,10 @@ const useStyles = makeStyles({
     right: '56px',
     padding: '12px 26px',
   },
+  buttonCell: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
 });
 
 interface Hospital {
@@ -196,6 +200,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         >
           <Typography
             variant="body2"
+            color="textSecondary"
             component="div"
             style={{ marginRight: '16px' }}
           >
@@ -455,12 +460,11 @@ const ResourceTabPanel = ({
             </Typography>
           )}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="right" className={classes.buttonCell}>
           {row.isActive ? (
             <Button
               color="secondary"
               disabled={selected.length > 0}
-              // onClick={() => handleDeleteSingleResource(row)}
               onClick={() => {
                 handleSingleExcludeClick(row);
               }}
@@ -472,7 +476,6 @@ const ResourceTabPanel = ({
             <Button
               color="secondary"
               disabled={selected.length > 0}
-              // onClick={() => handleAddSingleResource(row)}
               onClick={() => {
                 handleSingleIncludeClick(row);
               }}
