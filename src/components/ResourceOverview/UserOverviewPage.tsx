@@ -193,8 +193,7 @@ const UserOverviewPage: React.FC = () => {
   const optionBtn = options();
   const dialogStyle = dialogStyles();
 
-  let cells;
-  cells = members.map((member: User) => {
+  const cells = members.map((member: User) => {
     return (
       <TableRow key={member.id}>
         <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>

@@ -37,31 +37,31 @@ const MenuTabs: React.FC<{
   currentTab: number;
   tabLabels: Array<string>;
 }) => {
-    const classes = useTabStyles();
-    return (
-      <Tabs
-        value={currentTab}
-        indicatorColor="primary"
-        textColor="inherit"
-        onChange={handleChange}
-        classes={{ root: classes.root, indicator: classes.indicator }}
-      >
-        {tabLabels.map((label: string) => (
-          <Tab
-            key={label}
-            label={
-              <Typography component="span" variant="body1">
-                <Box fontWeight="fontWeightBold">{label}</Box>
-              </Typography>
-            }
-            classes={{
-              root: classes.tabSize,
-              textColorInherit: classes.tabTextColor,
-            }}
-          />
-        ))}
-      </Tabs>
-    );
-  };
+  const classes = useTabStyles();
+  return (
+    <Tabs
+      value={currentTab}
+      indicatorColor="primary"
+      textColor="inherit"
+      onChange={handleChange}
+      classes={{ root: classes.root, indicator: classes.indicator }}
+    >
+      {tabLabels.map((label: string) => (
+        <Tab
+          key={label}
+          label={
+            <Typography component="span" variant="body1">
+              <Box fontWeight="fontWeightBold">{label}</Box>
+            </Typography>
+          }
+          classes={{
+            root: classes.tabSize,
+            textColorInherit: classes.tabTextColor,
+          }}
+        />
+      ))}
+    </Tabs>
+  );
+};
 
 export default MenuTabs;

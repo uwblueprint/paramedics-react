@@ -6,7 +6,7 @@ import {
   DialogActions,
   Button,
   Typography,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
@@ -197,13 +197,11 @@ const AmbulanceOverviewPage: React.FC = () => {
   const optionBtn = options();
   const dialogStyle = dialogStyles();
 
-  let cells;
-
-  cells = ambulances.map((ambulance: Ambulance) => {
+  const cells = ambulances.map((ambulance: Ambulance) => {
     return (
       <TableRow key={ambulance.id}>
         <TableCell classes={{ root: dRow.root }}>
-          #{ambulance.vehicleNumber}
+          {`#${ambulance.vehicleNumber}`}
         </TableCell>
         <TableCell classes={{ root: optionBtn.root }}>
           <IconButton data-id={ambulance.id} onClick={handleClickOptions}>

@@ -72,14 +72,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-      : {};
+    : {};
 
   const handleComplete = () => {
     addEvent({
@@ -124,17 +124,17 @@ const EventCreationPage = () => {
         />
       </form>
     ) : (
-        <form>
-          <FormField
-            label="Event Location:"
-            placeholder="Enter Location Here"
-            onChange={handleLocationChange}
-            value={eventLocation}
-            isValidated={false}
-          />
-          <Map />
-        </form>
-      );
+      <form>
+        <FormField
+          label="Event Location:"
+          placeholder="Enter Location Here"
+          onChange={handleLocationChange}
+          value={eventLocation}
+          isValidated={false}
+        />
+        <Map />
+      </form>
+    );
 
   return (
     <div className="landing-wrapper">

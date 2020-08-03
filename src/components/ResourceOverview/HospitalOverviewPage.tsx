@@ -194,8 +194,7 @@ const HospitalOverviewPage: React.FC = () => {
     setOpenModal(false);
   };
 
-  let cells;
-  cells = hospitals.map((hospital: Hospital) => {
+  const cells = hospitals.map((hospital: Hospital) => {
     return (
       <TableRow key={hospital.id}>
         <TableCell classes={{ root: dRow.root }}>{hospital.name}</TableCell>

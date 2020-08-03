@@ -142,8 +142,8 @@ const UserFormPage = ({
             </Typography>
           </div>
         ) : (
-            ''
-          )}
+          ''
+        )}
       </div>
       <ValidatorForm onSubmit={handleComplete}>
         <div className={classes.resourceForm}>
