@@ -60,7 +60,7 @@ export const DELETE_AMBULANCES_FROM_EVENT = gql`
     $eventId: ID!
     $ambulances: [AmbulanceInput]!
   ) {
-    deleteAmbulancesFromEvent(eventId: $eventId, hospitals: $hospitals) {
+    deleteAmbulancesFromEvent(eventId: $eventId, ambulances: $ambulances) {
       id
       ambulances {
         id

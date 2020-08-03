@@ -12,6 +12,7 @@ import { useQuery, useMutation } from 'react-apollo';
 import { Box, Typography, Button, Checkbox } from '@material-ui/core';
 import { FiberManualRecord, Add, Remove } from '@material-ui/icons';
 import { Order, stableSort, getComparator } from '../../utils/sort';
+import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
 import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
 import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import { Colours } from '../../styles/Constants';
@@ -235,10 +236,33 @@ const ResourceTabPanel = ({
     'include' | 'exclude' | null
   >(null);
 
-  const [addHospitalsToEvent] = useMutation(ADD_HOSPITALS_TO_EVENT);
-  const [addAmbulancesToEvent] = useMutation(ADD_AMBULANCES_TO_EVENT);
-  const [deleteHospitalsFromEvent] = useMutation(DELETE_HOSPITALS_FROM_EVENT);
-  const [deleteAmbulancesFromEvent] = useMutation(DELETE_AMBULANCES_FROM_EVENT);
+  // Have to refetch GET_EVENT_BY_ID because only the list
+  // of all events in the cache is automatically updated
+  const mutationOptions = {
+    refetchQueries: [
+      {
+        query: GET_EVENT_BY_ID,
+        variables: { eventId },
+      },
+    ],
+  };
+
+  const [addHospitalsToEvent] = useMutation(
+    ADD_HOSPITALS_TO_EVENT,
+    mutationOptions
+  );
+  const [addAmbulancesToEvent] = useMutation(
+    ADD_AMBULANCES_TO_EVENT,
+    mutationOptions
+  );
+  const [deleteHospitalsFromEvent] = useMutation(
+    DELETE_HOSPITALS_FROM_EVENT,
+    mutationOptions
+  );
+  const [deleteAmbulancesFromEvent] = useMutation(
+    DELETE_AMBULANCES_FROM_EVENT,
+    mutationOptions
+  );
 
   const handleClose = () => {
     setSelected([]);
