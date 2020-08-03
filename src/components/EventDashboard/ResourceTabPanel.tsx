@@ -1,15 +1,20 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
 import { useQuery, useMutation } from 'react-apollo';
-import { Box, Typography, Button, Checkbox } from '@material-ui/core';
+import {
+  Box,
+  Typography,
+  Button,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+} from '@material-ui/core';
 import { FiberManualRecord, Add, Remove } from '@material-ui/icons';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { GET_EVENT_BY_ID } from '../../graphql/queries/events';

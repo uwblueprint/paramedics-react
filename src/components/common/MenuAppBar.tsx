@@ -1,23 +1,25 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Colours } from '../../styles/Constants';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Divider from '@material-ui/core/Divider';
-import { useQuery } from '@apollo/react-hooks';
-import { ScanIcon } from './ScanIcon';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  MenuIcon,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListSubheader,
+  Divider,
+} from '@material-ui/core';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
+import { useQuery } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
+import { ScanIcon } from './ScanIcon';
 import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
-import { useHistory } from 'react-router-dom';
+import { Colours } from '../../styles/Constants';
 
 interface MenuAppBarProps {
   eventId: string;

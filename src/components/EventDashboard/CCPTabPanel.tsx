@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Box,
+  Button,
   IconButton,
   Table,
   TableBody,
@@ -10,11 +11,9 @@ import {
   TableSortLabel,
   TableRow,
 } from '@material-ui/core';
-import { MoreHoriz } from '@material-ui/icons';
+import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
-import { Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
