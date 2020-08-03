@@ -13,7 +13,7 @@ import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import { GET_ALL_CCPS } from '../../graphql/queries/ccps';
+import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 
 const useStyles = makeStyles({
   root: {
@@ -110,11 +110,9 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
-  const { data } = useQuery(GET_ALL_CCPS);
+  const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
 
-  const rows = data
-    ? data.collectionPoints.filter((ccp: CCP) => ccp.eventId.id === eventId)
-    : [];
+  const rows = data ? data.collectionPointsByEvent : [];
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';

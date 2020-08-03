@@ -16,7 +16,7 @@ import { useQuery } from '@apollo/react-hooks';
 import WebOutlinedIcon from '@material-ui/icons/WebOutlined';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import { GET_ALL_CCPS } from '../../graphql/queries/ccps';
-import { GET_EVENT_INFO } from '../../graphql/queries/events';
+import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
 
 interface MenuAppBarProps {
   eventId: string;
@@ -51,7 +51,7 @@ export default function MenuAppBar(props: MenuAppBarProps) {
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { loading: ccpLoading, error, data: ccpInfo } = useQuery(GET_ALL_CCPS);
-  const { loading: eventLoading, data: eventInfo } = useQuery(GET_EVENT_INFO, {
+  const { loading: eventLoading, data: eventInfo } = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId },
   });
   if (ccpLoading || eventLoading) return null;

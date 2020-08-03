@@ -18,3 +18,15 @@ export const GET_ALL_CCPS = gql`
     }
   }
 `;
+
+export const GET_CCPS_BY_EVENT_ID = gql`
+  query collectionPointsByEvent($eventId: ID!) {
+    collectionPointsByEvent(eventId: $eventId) {
+      id
+      name
+      eventId {
+        id
+      }
+    }
+  }
+`;

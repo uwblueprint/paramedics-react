@@ -14,7 +14,7 @@ import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import CCPTabPanel from './CCPTabPanel';
 import MenuAppBar from '../common/MenuAppBar';
 import { Colours } from '../../styles/Constants';
-import { GET_EVENT_INFO } from '../../graphql/queries/events';
+import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
 import ResourceTabPanel from './ResourceTabPanel';
 import { formatDate } from '../../utils/format';
 
@@ -66,7 +66,7 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
   const { eventId } = match.params;
   // TO DO: error handling when eventId does not exist in database
-  const { loading, data: eventInfo } = useQuery(GET_EVENT_INFO, {
+  const { loading, data: eventInfo } = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId },
   });
 

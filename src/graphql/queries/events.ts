@@ -44,7 +44,7 @@ export const GET_ALL_EVENTS = gql`
   }
 `;
 
-export const GET_EVENT_INFO = gql`
+export const GET_EVENT_BY_ID = gql`
   query Event($eventId: ID!) {
     event(id: $eventId) {
       name
