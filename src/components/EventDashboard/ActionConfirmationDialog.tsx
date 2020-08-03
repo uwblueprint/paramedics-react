@@ -78,7 +78,7 @@ export const ActionConfirmationDialog = (
       <List dense className={classes.list}>
         {type === TabOptions.Hospital &&
           (selected as HospitalData[]).map((resource: HospitalData) => (
-            <ListItem className={classes.listItem}>
+            <ListItem className={classes.listItem} key={resource.name}>
               <ListItemText
                 primary={resource.name}
                 primaryTypographyProps={{ variant: 'body1' }}
@@ -88,7 +88,7 @@ export const ActionConfirmationDialog = (
           ))}
         {type === TabOptions.Ambulance &&
           (selected as AmbulanceData[]).map((resource: AmbulanceData) => (
-            <ListItem className={classes.listItem}>
+            <ListItem className={classes.listItem} key={resource.vehicleNumber}>
               <ListItemText
                 primary={resource.vehicleNumber}
                 primaryTypographyProps={{ variant: 'body1' }}

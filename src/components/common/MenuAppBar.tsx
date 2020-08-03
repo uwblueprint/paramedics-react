@@ -5,7 +5,6 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  MenuIcon,
   Drawer,
   List,
   ListItem,
@@ -13,6 +12,7 @@ import {
   ListSubheader,
   Divider,
 } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
