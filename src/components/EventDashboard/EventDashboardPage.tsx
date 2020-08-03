@@ -47,6 +47,7 @@ const useStyles = makeStyles({
     background: Colours.White,
     padding: '0 56px',
   },
+  icon: { fontSize: '18px', paddingRight: '10px' },
 });
 
 const TabPanel = (props: TabPanelProps) => {
@@ -88,25 +89,20 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       <MenuAppBar pageTitle="Directory" eventId={eventId} />
       <Container className={classes.container}>
         <Typography variant="h3">{event.name}</Typography>
-        <Typography
-          variant="body1"
+        <Box
+          display="flex"
+          alignItems="center"
           style={{
             color: Colours.SecondaryGray,
-            display: 'flex',
-            alignItems: 'center',
           }}
         >
-          <LocationOnOutlinedIcon
-            style={{ fontSize: '18px', paddingRight: '10px' }}
-          />
+          <LocationOnOutlinedIcon className={classes.icon} />
           <Typography variant="body1" style={{ paddingRight: '52px' }}>
             Ezra Street l1j3j4, Waterloo Canada
           </Typography>
-          <CalendarTodayOutlinedIcon
-            style={{ fontSize: '18px', paddingRight: '10px' }}
-          />
-          {formatDate(event.eventDate)}
-        </Typography>
+          <CalendarTodayOutlinedIcon className={classes.icon} />
+          <Typography variant="body1">{formatDate(event.eventDate)}</Typography>
+        </Box>
       </Container>
       <Tabs
         textColor="secondary"
