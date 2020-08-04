@@ -9,7 +9,8 @@ type AddEventButton = () => JSX.Element;
 const useEventButtonStyles = makeStyles({
   root: {
     borderRadius: '3rem',
-    minWidth: '15rem',
+    minWidth: '228px',
+    minHeight: '48px',
   },
 });
 
@@ -20,7 +21,7 @@ const AddEventButton: AddEventButton = () => {
       component={NavLink}
       to="/events/new"
       variant="contained"
-      color="primary"
+      color="secondary"
       startIcon={<AddIcon />}
       classes={{
         root: classes.root,
