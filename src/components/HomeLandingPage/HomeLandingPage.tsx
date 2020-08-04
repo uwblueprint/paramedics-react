@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
+import { useHistory } from 'react-router-dom';
 import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
@@ -19,6 +20,7 @@ const HomeLandingPage = () => {
   ) => {
     setTab(newValue);
   };
+  const history = useHistory();
 
   const tabLabels = ['Current Events', 'Archived Events'];
 
@@ -43,7 +45,7 @@ const HomeLandingPage = () => {
             >
               Joe Li
             </Typography>
-            <AccountCircleIcon fontSize="large" color="primary" />
+            <AccountCircleIcon fontSize="large" color="secondary" />
           </div>
         </div>
         <MenuTabs
@@ -55,12 +57,13 @@ const HomeLandingPage = () => {
       <div className="landing-body">
         <Grid container direction="row" alignItems="center" spacing={3}>
           {events.map((event: EventType) => (
-            <Grid item key={event.name}>
+            <Grid item key={event.id}>
               <EventCard
-                key={event.name}
+                key={event.id}
                 date={event.eventDate}
                 eventTitle={event.name}
                 address="N/A"
+                handleClick={() => history.push(`/events/${event.id}`)}
               />
             </Grid>
           ))}

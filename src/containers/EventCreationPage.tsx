@@ -5,15 +5,15 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import CancelModal from './CancelModal';
-import Map from './Map';
-import NextButton from './NextButton';
-import BackButton from './BackButton';
-import FormField from '../common/FormField';
-import Stepper from './Stepper';
-import SelectDateModal from './SelectDateModal';
-import ADD_EVENT from '../../graphql/mutations/events';
-import { EventType, GET_ALL_EVENTS } from '../../graphql/queries/events';
+import CancelModal from '../components/EventCreation/CancelModal';
+import Map from '../components/EventCreation/Map';
+import NextButton from '../components/EventCreation/NextButton';
+import BackButton from '../components/EventCreation/BackButton';
+import FormField from '../components/common/FormField';
+import Stepper from '../components/EventCreation/Stepper';
+import SelectDateModal from '../components/EventCreation/SelectDateModal';
+import ADD_EVENT from '../graphql/mutations/events';
+import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 
 const EventCreationPage = () => {
   const history = useHistory();
@@ -72,14 +72,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-    : {};
+      : {};
 
   const handleComplete = () => {
     addEvent({
@@ -124,17 +124,17 @@ const EventCreationPage = () => {
         />
       </form>
     ) : (
-      <form>
-        <FormField
-          label="Event Location:"
-          placeholder="Enter Location Here"
-          onChange={handleLocationChange}
-          value={eventLocation}
-          isValidated={false}
-        />
-        <Map />
-      </form>
-    );
+        <form>
+          <FormField
+            label="Event Location:"
+            placeholder="Enter Location Here"
+            onChange={handleLocationChange}
+            value={eventLocation}
+            isValidated={false}
+          />
+          <Map />
+        </form>
+      );
 
   return (
     <div className="landing-wrapper">

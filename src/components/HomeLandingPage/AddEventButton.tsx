@@ -9,7 +9,8 @@ type AddEventButton = () => JSX.Element;
 const useEventButtonStyles = makeStyles({
   root: {
     borderRadius: '3rem',
-    minWidth: '15rem',
+    minWidth: '228px',
+    minHeight: '48px',
   },
 });
 
