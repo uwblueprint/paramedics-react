@@ -37,7 +37,6 @@ const useTextFieldStyles = makeStyles({
 
 const FormField: React.FC<{
   label: string;
-  required?: boolean;
   placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLElement>) => void;
   value: string | number | null;
@@ -47,7 +46,6 @@ const FormField: React.FC<{
   errorMessages?: Array<string>;
 }> = ({
   label,
-  required,
   placeholder,
   onChange,
   value,
@@ -57,7 +55,6 @@ const FormField: React.FC<{
   errorMessages,
 }: {
   label: string;
-  required?: boolean;
   placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLElement>) => void;
   value: string | number | null;
@@ -88,7 +85,6 @@ const FormField: React.FC<{
   return (
     <TextField
       label={label}
-      required={required}
       placeholder={placeholder}
       InputLabelProps={{
         shrink: true,

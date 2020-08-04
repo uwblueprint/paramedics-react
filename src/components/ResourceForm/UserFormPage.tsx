@@ -126,7 +126,7 @@ const UserFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage" />
+        <BackLink to="/manage/members" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new team member' : 'Edit team member'}
@@ -148,15 +148,13 @@ const UserFormPage = ({
       <ValidatorForm onSubmit={handleComplete}>
         <div className={classes.resourceForm}>
           <FormField
-            label="Team Member Name:"
-            required
+            label="*Team Member Name:"
             isValidated={false}
             onChange={handleNameChange}
             value={memberName}
           />
           <FormField
-            label="Email:"
-            required
+            label="*Email:"
             isValidated
             validators={['required', 'isEmail']}
             errorMessages={['This is a mandatory field', 'Invalid email']}

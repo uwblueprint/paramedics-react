@@ -61,7 +61,7 @@ const AmbulanceFormPage = ({
   });
   const [editAmbulance] = useMutation(EDIT_AMBULANCE);
 
-  const [ambulanceNumber, setAmbulanceNumber] = useState<number>(0);
+  const [ambulanceNumber, setAmbulanceNumber] = useState<string>('');
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -70,7 +70,7 @@ const AmbulanceFormPage = ({
       }: {
         vehicleNumber: number;
       } = data.ambulance;
-      setAmbulanceNumber(vehicleNumber);
+      setAmbulanceNumber(vehicleNumber.toString());
     }
   }, [data, loading, mode]);
 
@@ -82,14 +82,14 @@ const AmbulanceFormPage = ({
     if (mode === 'new') {
       addAmbulance({
         variables: {
-          vehicleNumber: parseInt(ambulanceNumber.toString()),
+          vehicleNumber: parseInt(ambulanceNumber),
         },
       });
     } else if (mode === 'edit') {
       editAmbulance({
         variables: {
           id: ambulanceId,
-          vehicleNumber: parseInt(ambulanceNumber.toString()),
+          vehicleNumber: parseInt(ambulanceNumber),
         },
       });
     }
@@ -100,9 +100,9 @@ const AmbulanceFormPage = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.resourcewrapper}>
+    <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage" />
+        <BackLink to="/manage/ambulances" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new ambulance' : 'Edit Ambulance'}
@@ -112,8 +112,7 @@ const AmbulanceFormPage = ({
       <div className={classes.resourceForm}>
         <form>
           <FormField
-            label="Ambulance Number:"
-            required
+            label="*Ambulance Number:"
             isValidated={false}
             onChange={handleNumberChange}
             value={ambulanceNumber}
@@ -125,7 +124,7 @@ const AmbulanceFormPage = ({
       </div>
       <DoneButton
         handleClick={handleComplete}
-        disabled={ambulanceNumber === 0}
+        disabled={ambulanceNumber === ''}
       />
       <CancelButton to="/manage/ambulances" />
     </div>

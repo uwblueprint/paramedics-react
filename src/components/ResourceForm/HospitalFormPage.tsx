@@ -99,7 +99,7 @@ const HospitalFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage" />
+        <BackLink to="/manage/hospitals" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new hospital' : 'Edit Hospital'}
@@ -109,8 +109,7 @@ const HospitalFormPage = ({
       <div className={classes.resourceForm}>
         <form>
           <FormField
-            label="Hospital Name:"
-            required
+            label="*Hospital Name:"
             isValidated={false}
             onChange={handleNameChange}
             value={hospitalName}

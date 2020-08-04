@@ -57,7 +57,7 @@ const AccessLevelSelector = ({
   ];
   return (
     <Container className={classes.root}>
-      <Typography className={classes.label}>Role: *</Typography>
+      <Typography className={classes.label}>*Role:</Typography>
       <RadioGroup
         row
         aria-label="position"
