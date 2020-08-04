@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import '../../styles/EventCreationPage.css';
+import '../styles/EventCreationPage.css';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import CancelModal from '../components/EventCreation/CancelModal';
-import Map from '../components/EventCreation/Map';
-import NextButton from '../components/EventCreation/NextButton';
-import BackButton from '../components/EventCreation/BackButton';
+import CancelModal from '../components/EventCreationPage/CancelModal';
+import Map from '../components/EventCreationPage/Map';
+import NextButton from '../components/EventCreationPage/NextButton';
+import BackButton from '../components/EventCreationPage/BackButton';
 import FormField from '../components/common/FormField';
-import Stepper from '../components/EventCreation/Stepper';
-import SelectDateModal from '../components/EventCreation/SelectDateModal';
+import Stepper from '../components/EventCreationPage/Stepper';
+import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
 import ADD_EVENT from '../graphql/mutations/events';
 import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
 
