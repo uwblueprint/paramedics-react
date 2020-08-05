@@ -21,7 +21,7 @@ const DoneButton = ({
   handleClick,
   disabled,
 }: {
-  handleClick?: () => any | null;
+  handleClick?: () => void;
   disabled?: boolean;
 }) => {
   const classes = useDoneButtonStyles();

@@ -93,7 +93,6 @@ const AmbulanceFormPage = ({
         },
       });
     }
-
     history.replace('/manage/ambulances');
   };
 
