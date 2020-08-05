@@ -153,7 +153,10 @@ const AmbulanceOverviewPage: React.FC = () => {
 
   //  Writing to cache when deleting user
   const [deleteAmbulance] = useMutation(DELETE_AMBULANCE, {
-    update(cache) {
+    update(cache, { data: { deleteAmbulance } }) {
+      if (!deleteAmbulance) {
+        return;
+      }
       let { ambulances } = cache.readQuery<any>({
         query: GET_ALL_AMBULANCES,
       });

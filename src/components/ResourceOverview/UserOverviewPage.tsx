@@ -151,7 +151,10 @@ const UserOverviewPage: React.FC = () => {
 
   //  Writing to cache when deleting user
   const [deleteUser] = useMutation(DELETE_USER, {
-    update(cache) {
+    update(cache, { data: { deleteUser } }) {
+      if (!deleteUser) {
+        return;
+      }
       let { users } = cache.readQuery<User[] | null | any>({
         query: GET_ALL_USERS,
       });

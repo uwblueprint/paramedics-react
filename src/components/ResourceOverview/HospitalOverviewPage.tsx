@@ -161,7 +161,10 @@ const HospitalOverviewPage: React.FC = () => {
 
   //  Writing to cache when deleting user
   const [deleteHospital] = useMutation(DELETE_HOSPITAL, {
-    update(cache) {
+    update(cache, { data: { deleteHospital } }) {
+      if (!deleteHospital) {
+        return;
+      }
       let { hospitals } = cache.readQuery<null | any>({
         query: GET_ALL_HOSPITALS,
       });
@@ -266,7 +269,7 @@ const HospitalOverviewPage: React.FC = () => {
       </TableContainer>
       <Dialog classes={{ paper: dialogStyle.paper }} open={openModal}>
         <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
-            You are about to delete a hospital.
+          You are about to delete a hospital.
         </DialogTitle>
         <DialogContent classes={{ root: dialogStyle.dialogContent }}>
           <Typography variant="body2">
