@@ -11,13 +11,13 @@ const useTabStyles = makeStyles({
   },
   tabSize: {
     textTransform: 'none',
-    width: '15rem',
-    maxWidth: '15rem',
+    width: '216px',
+    maxWidth: '216px',
     paddingTop: 0,
   },
   indicator: {
     backgroundColor: Colours.SecondaryHover,
-    height: '0.3rem',
+    height: '4.797px',
   },
   tabTextColor: {
     opacity: 0.4,

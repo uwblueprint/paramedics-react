@@ -12,7 +12,7 @@ const useAllAmbulances = (): void => {
     client.writeQuery({
       query: GET_ALL_AMBULANCES,
       data: {
-        hospitals: data.ambulances,
+        ambulances: data.ambulances,
       },
     });
   }

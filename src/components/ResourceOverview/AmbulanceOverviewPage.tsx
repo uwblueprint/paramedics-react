@@ -98,6 +98,8 @@ const dialogStyles = makeStyles({
     paddingTop: 24,
     paddingRight: 24,
     paddingBottom: 0,
+    fontWeight: 500,
+    fontSize: 20,
   },
   dialogCancel: {
     color: Colours.Secondary,
@@ -183,6 +185,12 @@ const AmbulanceOverviewPage: React.FC = () => {
   const handleClickDelete = () => {
     const ambulanceId = selectedAmbulance;
     deleteAmbulance({ variables: { id: ambulanceId } });
+    setAnchorEl(null);
+    setOpenModal(false);
+  };
+
+  const handleClickCancel = () => {
+    setAnchorEl(null);
     setOpenModal(false);
   };
 
@@ -265,20 +273,18 @@ const AmbulanceOverviewPage: React.FC = () => {
 
       <Dialog classes={{ paper: dialogStyle.paper }} open={openModal}>
         <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
-          <Typography variant="h6">
-            <strong>You are about to delete a team member.</strong>
-          </Typography>
+          You are about to delete an Ambulance.
         </DialogTitle>
         <DialogContent classes={{ root: dialogStyle.dialogContent }}>
           <Typography variant="body2">
-            Deleted team members will no longer have access to any casualty
-            collection points.
+            Supervisors will no longer be able to transport patients at CCPs
+            using this vehicle.
           </Typography>
         </DialogContent>
         <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
           <Button
             classes={{ root: dialogStyle.dialogCancel }}
-            onClick={() => setOpenModal(false)}
+            onClick={handleClickCancel}
           >
             <Typography variant="body1">Cancel</Typography>
           </Button>

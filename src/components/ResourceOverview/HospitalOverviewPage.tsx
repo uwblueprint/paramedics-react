@@ -95,6 +95,8 @@ const dialogStyles = makeStyles({
     paddingTop: 24,
     paddingRight: 24,
     paddingBottom: 0,
+    fontWeight: 500,
+    fontSize: 20,
   },
   dialogCancel: {
     color: Colours.Secondary,
@@ -192,6 +194,12 @@ const HospitalOverviewPage: React.FC = () => {
     const hospitalId = selectedHospital;
     deleteHospital({ variables: { id: hospitalId } });
     setOpenModal(false);
+    setAnchorEl(null);
+  };
+
+  const handleClickCancel = () => {
+    setAnchorEl(null);
+    setOpenModal(false);
   };
 
   const cells = hospitals.map((hospital: Hospital) => {
@@ -258,20 +266,18 @@ const HospitalOverviewPage: React.FC = () => {
       </TableContainer>
       <Dialog classes={{ paper: dialogStyle.paper }} open={openModal}>
         <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
-          <Typography variant="h6">
-            <strong>You are about to delete a team member.</strong>
-          </Typography>
+            You are about to delete a hospital.
         </DialogTitle>
         <DialogContent classes={{ root: dialogStyle.dialogContent }}>
           <Typography variant="body2">
-            Deleted team members will no longer have access to any casualty
-            collection points.
+            Supervisors will no longer be able to transport patients at CCPS
+            connected to this hospital.
           </Typography>
         </DialogContent>
         <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
           <Button
             classes={{ root: dialogStyle.dialogCancel }}
-            onClick={() => setOpenModal(false)}
+            onClick={handleClickCancel}
           >
             <Typography variant="body1">Cancel</Typography>
           </Button>
