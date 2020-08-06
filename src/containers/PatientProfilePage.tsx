@@ -31,7 +31,6 @@ interface FormFields {
   status: Status | null;
   triageCategory?: number | null;
   TriageLevel?: number | null;
-  transportTime?: number | null;
 }
 
 const PatientProfilePage = ({
@@ -130,7 +129,6 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          transportTime: new Date(),
         },
       });
     } else if (mode === 'edit') {
@@ -150,7 +148,6 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          transportTime: new Date(),
         },
       });
     }
