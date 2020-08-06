@@ -1,7 +1,7 @@
 import React from 'react';
-import { Colours } from '../../styles/Constants';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import { Colours } from '../../styles/Constants';
 
 const useEventButtonStyles = makeStyles({
   root: {

@@ -5,12 +5,14 @@ import { useHistory } from 'react-router-dom';
 import '../styles/EventCreationPage.css';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import Typography from '@material-ui/core/Typography';
-import { Colours } from '../styles/Constants';
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { Colours } from '../styles/Constants';
 import NextButton from '../components/CCPForm/NextButton';
 import Map from '../components/EventCreationPage/Map';
 import FormField from '../components/common/FormField';
+import { GET_ALL_CCPS, CollectionPoint } from '../graphql/queries/ccp';
+import ADD_CCP from '../graphql/mutations/ccp';
 
 const CCPFormPage = () => {
   const useStyles = makeStyles({
@@ -47,21 +49,33 @@ const CCPFormPage = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [eventName, setEventName] = useState<string>('');
-  const [eventDate, setEventDate] = useState<Date | null>(null);
+  const [ccpName, setCCPName] = useState<string>('');
   const [eventLocation, setEventLocation] = useState<string>('');
 
+  const { data } = useQuery(GET_ALL_CCPS);
+  const collectionPoints: Array<CollectionPoint> = data ? data.collectionPoints : [];
+
+  const [addCCP] = useMutation(ADD_CCP, {
+    update(cache, { data: { addCollectionPoint } }) {
+      cache.writeQuery({
+        query: GET_ALL_CCPS,
+        data: { events: collectionPoints.concat([addCollectionPoint]) },
+      });
+    },
+  });
+
   const handleNameChange = (e: any) => {
-    setEventName(e.target.value);
-  };
-  const handleDateChange = (e: any) => {
-    setEventDate(e.target.value);
+    setCCPName(e.target.value);
   };
   const handleLocationChange = (e: any) => {
     setEventLocation(e.target.value);
   };
 
-  const handleComplete = () => {};
+  const handleComplete = () => {
+
+
+
+  };
 
   const content = (
     <ValidatorForm>
@@ -69,8 +83,8 @@ const CCPFormPage = () => {
         label="Name:"
         placeholder="Create A Name"
         isValidated
-        onChange={handleLocationChange}
-        value={eventLocation}
+        onChange={handleNameChange}
+        value={ccpName}
       />
       <FormField
         label="Event Location:"
@@ -97,7 +111,6 @@ const CCPFormPage = () => {
                 fontSize: '18px',
                 fontWeight: 500,
                 color: Colours.Secondary,
-                fontWeight: 500,
               }}
             >
               Cancel
