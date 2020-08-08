@@ -11,7 +11,7 @@ import { Colours } from '../styles/Constants';
 import NextButton from '../components/CCPForm/NextButton';
 import Map from '../components/EventCreationPage/Map';
 import FormField from '../components/common/FormField';
-import { GET_ALL_CCPS, CollectionPoint } from '../graphql/queries/ccp';
+import { GET_ALL_CCPS, CCPType } from '../graphql/queries/collectionPoints';
 import ADD_CCP from '../graphql/mutations/ccp';
 
 const CCPFormPage = () => {
@@ -43,7 +43,7 @@ const CCPFormPage = () => {
       fontSize: '18px',
       fontWeight: 500,
       color: Colours.Secondary,
-    }
+    },
   });
 
   const classes = useStyles();
@@ -53,7 +53,7 @@ const CCPFormPage = () => {
   const [eventLocation, setEventLocation] = useState<string>('');
 
   const { data } = useQuery(GET_ALL_CCPS);
-  const collectionPoints: Array<CollectionPoint> = data ? data.collectionPoints : [];
+  const collectionPoints: Array<CCPType> = data ? data.collectionPoints : [];
 
   const [addCCP] = useMutation(ADD_CCP, {
     update(cache, { data: { addCollectionPoint } }) {
@@ -72,9 +72,13 @@ const CCPFormPage = () => {
   };
 
   const handleComplete = () => {
-
-
-
+    addCCP({
+      variables: {
+        name: ccpName,
+        eventtId: 1,
+        createdBy: 1,
+      },
+    });
   };
 
   const content = (

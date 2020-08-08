@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { EventType } from './events';
 
-export interface CollectionPoint {
+export interface CCPType {
   id: number;
   name: string;
   eventId: EventType;
