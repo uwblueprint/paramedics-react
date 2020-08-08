@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
-import { EventType } from './events';
+import { Event } from './events';
 
 export interface CCP {
   id: string;
   name: string;
-  eventId: EventType;
+  eventId: Event;
 }
 
 export const GET_ALL_CCPS = gql`

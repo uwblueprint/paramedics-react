@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import { Colours } from '../../styles/Constants';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
+import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 
 const useStyles = makeStyles({
   root: {
@@ -50,12 +50,6 @@ const useStyles = makeStyles({
     marginRight: '13px',
   },
 });
-
-interface CCP {
-  id: string;
-  name: string;
-  eventId: { id: string };
-}
 
 interface HeadCell {
   headerId: string;

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export interface EventType {
+export interface Event {
   id: string;
   name: string;
   eventDate: Date;
