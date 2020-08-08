@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { EventType } from './events';
 
 export interface CCPType {
-  id: number;
+  id: string;
   name: string;
   eventId: EventType;
 }
