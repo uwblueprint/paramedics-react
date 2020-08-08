@@ -29,11 +29,11 @@ const CCPFormPage = () => {
       padding: '16px 0px',
     },
     ccpForm: {
-      padding: '56px 56px 37px 56px',
+      padding: '56px 56px 101px 56px',
     },
     ccpCompleteDiv: {
       marginBottom: 71,
-      margin: '0px 56px',
+      marginTop: 31,
       display: 'flex',
       justifyContent: 'flex-end',
     },
@@ -82,22 +82,29 @@ const CCPFormPage = () => {
   };
 
   const content = (
-    <ValidatorForm>
+    <ValidatorForm onSubmit={handleComplete}>
       <FormField
         label="Name:"
         placeholder="Create A Name"
-        isValidated
+        isValidated={ccpName !== ""}
         onChange={handleNameChange}
         value={ccpName}
       />
       <FormField
         label="Event Location:"
         placeholder="Enter Location Here"
-        isValidated
+        isValidated={eventLocation !== ""}
         onChange={handleLocationChange}
         value={eventLocation}
       />
       <Map />
+      <div className={classes.ccpCompleteDiv}>
+        <NextButton
+          handleClick={() => {}}
+          disabled={eventLocation === "" || ccpName === ""}
+          buttonText="Complete"
+        />
+      </div>
     </ValidatorForm>
   );
 
@@ -123,13 +130,6 @@ const CCPFormPage = () => {
         </div>
       </div>
       <div className={classes.ccpForm}>{content}</div>
-      <div className={classes.ccpCompleteDiv}>
-        <NextButton
-          handleClick={handleComplete}
-          disabled={false}
-          buttonText="Complete"
-        />
-      </div>
     </div>
   );
 };
