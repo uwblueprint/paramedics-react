@@ -1,15 +1,18 @@
 import gql from 'graphql-tag';
 
 const ADD_CCP = gql`
-  mutation addCollectionPoint($name: String!, $eventId: ID!, $createdBy: ID) {
+  mutation addCollectionPoint($name: String!, $eventId: ID!, $createdBy: ID!) {
     addCollectionPoint(
       name: $name
-      eventtId: $eventDate
+      eventId: $eventId
       createdBy: $createdBy
     ) {
       id
       name
-      eventId
+      eventId {
+        name
+        eventDate 
+      }
     }
   }
 `;
