@@ -17,9 +17,11 @@ import {
 } from '@material-ui/core';
 import { FiberManualRecord, Add, Remove } from '@material-ui/icons';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
-import { GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
-import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
+import {
+  Ambulance,
+  GET_ALL_AMBULANCES,
+} from '../../graphql/queries/ambulances';
+import { Hospital, GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import { Colours } from '../../styles/Constants';
 import { TabOptions } from './EventDashboardPage';
 import {
@@ -79,16 +81,6 @@ const useStyles = makeStyles({
     paddingBottom: 0,
   },
 });
-
-interface Hospital {
-  id: string;
-  name: string;
-}
-
-interface Ambulance {
-  id: string;
-  vehicleNumber: number;
-}
 
 interface ResourceTabPanelProps {
   eventId: string;

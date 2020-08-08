@@ -1,11 +1,13 @@
 import gql from 'graphql-tag';
+import { Ambulance } from './ambulances';
+import { Hospital } from './hospitals';
 
 export interface Event {
   id: string;
   name: string;
   eventDate: Date;
-  // ambulances: Ambulance[];
-  // hospitals: Hospital[];
+  ambulances: Ambulance[];
+  hospitals: Hospital[];
 }
 
 export const FETCH_ALL_EVENTS = gql`
