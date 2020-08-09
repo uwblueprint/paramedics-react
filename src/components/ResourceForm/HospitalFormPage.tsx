@@ -17,7 +17,7 @@ import {
 
 const useStyles = makeStyles({
   resourceWrapper: {
-    backgroundColor: 'white',
+    backgroundColor: Colours.White,
   },
   resourceCreationTopSection: {
     margin: '48px 30px 0px 30px',
