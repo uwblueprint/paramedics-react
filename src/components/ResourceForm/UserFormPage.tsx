@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   resourceCreationTopSection: {
     margin: '48px 30px 0px 30px',
     backgroundColor: Colours.White,
-    borderBottom: '1px solid #c4c4c4',
+    borderBottom: `1px solid ${Colours.BorderLightGray}`,
   },
   resourceHeader: {
     display: 'flex',
