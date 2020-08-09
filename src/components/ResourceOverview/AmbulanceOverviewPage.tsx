@@ -72,7 +72,7 @@ const options = makeStyles({
     borderRadius: '4px 4px 4px 4px',
   },
   menuDelete: {
-    color: '#9B2F2F',
+    color: Colours.DangerHover,
   },
 });
 
