@@ -1,9 +1,73 @@
 version: 2.1
 jobs:
+  install:
+    docker:
+      - image: uwbpparamedics/uwblueprint-paramedics-react:0.0.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+              - v1-dependencies-
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
   build:
     docker:
-      - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
+      - image: uwbpparamedics/uwblueprint-paramedics-react:0.0.1
     steps:
-      - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
-      - run: echo "test"
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - node/with-cache:
+          steps:
+            - run: npm install
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Install docker-compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+      - run:
+          name: Building image
+          command: docker build -t uwbpparamedics/uwblueprint-paramedics-react:0.0.1 -f Dockerfile.prod .
+      - run:
+          name: Run Docker compose
+          command: |
+            set -x
+            docker-compose -f docker-compose-prod.yaml up -d
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+  lint:
+    docker:
+      - image: uwbpparamedics/uwblueprint-paramedics-react:0.0.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run:
+          - name: Lint
+          - command: npm run lint
+
+workflows:
+  version: 2
+  build-lint:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - lint:
+          requires:
+            - build
