@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -9,7 +9,8 @@ import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import useAllEvents from '../../graphql/queries/hooks/events';
-import { EventType, GET_ALL_EVENTS } from '../../graphql/queries/events';
+import { EventType, FETCH_ALL_EVENTS } from '../../graphql/queries/events';
+import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
 import '../../styles/HomeLandingPage.css';
 
 const HomeLandingPage = () => {
@@ -28,8 +29,39 @@ const HomeLandingPage = () => {
   useAllEvents();
 
   // Fetch events from cache
-  const { data } = useQuery(GET_ALL_EVENTS);
+  const { data, refetch } = useQuery(FETCH_ALL_EVENTS);
+  const [editEvent] = useMutation(EDIT_EVENT);
+  const [deleteEvent] = useMutation(DELETE_EVENT);
   const events: Array<EventType> = data ? data.events : [];
+
+  const handleArchiveEvent = async (event: EventType) => {
+    await editEvent({
+      variables: {
+        id: event.id,
+        name: event.name,
+        eventDate: event.eventDate,
+        createdBy: event.createdBy.id,
+        isActive: false,
+      },
+    });
+    // Force re-render
+    refetch();
+  };
+
+  const handleDeleteEvent = async (event: EventType) => {
+    await deleteEvent({
+      variables: {
+        id: event.id,
+      },
+    });
+    // Force re-render
+    refetch();
+  };
+
+  // Filters for inactive or active events
+  const filteredEvents = events.filter(
+    (event) => event.isActive === (selectedTab === 0)
+  );
 
   return (
     <div className="landing-wrapper">
@@ -55,7 +87,7 @@ const HomeLandingPage = () => {
       </div>
       <div className="landing-body">
         <Grid container direction="row" alignItems="center" spacing={3}>
-          {events.map((event: EventType) => (
+          {filteredEvents.map((event: EventType) => (
             <Grid item key={event.id}>
               <EventCard
                 key={event.id}
@@ -64,6 +96,8 @@ const HomeLandingPage = () => {
                 eventTitle={event.name}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
+                handleArchiveEvent={() => handleArchiveEvent(event)}
+                handleDeleteEvent={() => handleDeleteEvent(event)}
               />
             </Grid>
           ))}

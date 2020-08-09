@@ -12,6 +12,8 @@ interface EventCardProps {
   eventTitle: string;
   address: string;
   handleClick: () => void;
+  handleArchiveEvent: () => void;
+  handleDeleteEvent: () => void;
 }
 
 type EventCard = ({ date, eventTitle, address }: EventCardProps) => JSX.Element;
@@ -40,6 +42,8 @@ const EventCard: EventCard = ({
   address,
   handleClick,
   eventId,
+  handleArchiveEvent,
+  handleDeleteEvent,
 }: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
@@ -49,7 +53,12 @@ const EventCard: EventCard = ({
           <Typography color="textSecondary">{date}</Typography>
 
           <Box ml="auto">
-            <CardOptions eventId={eventId} />
+            <CardOptions
+              eventId={eventId}
+              eventTitle={eventTitle}
+              handleArchiveEvent={handleArchiveEvent}
+              handleDeleteEvent={handleDeleteEvent}
+            />
           </Box>
         </Box>
 
