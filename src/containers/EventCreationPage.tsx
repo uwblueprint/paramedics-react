@@ -14,7 +14,7 @@ import Stepper from '../components/EventCreationPage/Stepper';
 import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
 import { ADD_EVENT, EDIT_EVENT } from '../graphql/mutations/events';
 import {
-  EventType,
+  Event,
   GET_ALL_EVENTS,
   GET_EVENT_BY_ID,
 } from '../graphql/queries/events';
@@ -31,9 +31,14 @@ const EventCreationPage = ({
   const history = useHistory();
 
   const { data, loading } = useQuery(
-    mode === 'edit' && eventId ? GET_EVENT_BY_ID(eventId) : GET_ALL_EVENTS
+    mode === 'edit' && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
+    {
+      variables: {
+        eventId,
+      },
+    }
   );
-  const events: Array<EventType> = data ? data.events : [];
+  const events: Array<Event> = data ? data.events : [];
 
   const [addEvent] = useMutation(ADD_EVENT, {
     update(cache, { data: { newEvent } }) {

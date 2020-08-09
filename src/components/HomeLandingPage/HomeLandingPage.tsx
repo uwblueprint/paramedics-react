@@ -9,7 +9,7 @@ import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import useAllEvents from '../../graphql/queries/hooks/events';
-import { EventType, FETCH_ALL_EVENTS } from '../../graphql/queries/events';
+import { Event, FETCH_ALL_EVENTS } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
 import '../../styles/HomeLandingPage.css';
 
@@ -32,9 +32,9 @@ const HomeLandingPage = () => {
   const { data, refetch } = useQuery(FETCH_ALL_EVENTS);
   const [editEvent] = useMutation(EDIT_EVENT);
   const [deleteEvent] = useMutation(DELETE_EVENT);
-  const events: Array<EventType> = data ? data.events : [];
+  const events: Array<Event> = data ? data.events : [];
 
-  const handleArchiveEvent = async (event: EventType) => {
+  const handleArchiveEvent = async (event: Event) => {
     await editEvent({
       variables: {
         id: event.id,
@@ -48,7 +48,7 @@ const HomeLandingPage = () => {
     refetch();
   };
 
-  const handleDeleteEvent = async (event: EventType) => {
+  const handleDeleteEvent = async (event: Event) => {
     await deleteEvent({
       variables: {
         id: event.id,
@@ -87,7 +87,7 @@ const HomeLandingPage = () => {
       </div>
       <div className="landing-body">
         <Grid container direction="row" alignItems="center" spacing={3}>
-          {filteredEvents.map((event: EventType) => (
+          {filteredEvents.map((event: Event) => (
             <Grid item key={event.id}>
               <EventCard
                 key={event.id}

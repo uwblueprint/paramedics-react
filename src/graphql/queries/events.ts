@@ -1,6 +1,8 @@
 import gql from 'graphql-tag';
+import { Ambulance } from './ambulances';
+import { Hospital } from './hospitals';
 
-export interface EventType {
+export interface Event {
   id: string;
   name: string;
   eventDate: Date;
@@ -8,6 +10,8 @@ export interface EventType {
   createdBy: {
     id: string;
   };
+  ambulances: Ambulance[];
+  hospitals: Hospital[];
 }
 
 export const FETCH_ALL_EVENTS = gql`
@@ -19,6 +23,14 @@ export const FETCH_ALL_EVENTS = gql`
       isActive
       createdBy {
         id
+      }
+      ambulances {
+        id
+        vehicleNumber
+      }
+      hospitals {
+        id
+        name
       }
     }
   }
@@ -38,15 +50,20 @@ export const GET_ALL_EVENTS = gql`
   }
 `;
 
-export const GET_EVENT_BY_ID = (id: string) => gql`
-  query {
-    event(id: ${id}) {
+export const GET_EVENT_BY_ID = gql`
+  query Event($eventId: ID!) {
+    event(id: $eventId) {
       id
       name
-      eventDate
       isActive
-      createdBy {
+      eventDate
+      ambulances {
         id
+        vehicleNumber
+      }
+      hospitals {
+        id
+        name
       }
     }
   }

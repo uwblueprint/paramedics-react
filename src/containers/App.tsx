@@ -5,6 +5,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { Theme } from '../styles/Theme';
 import HomeLandingPage from '../components/HomeLandingPage/HomeLandingPage';
 import EventCreationPage from './EventCreationPage';
+import EventDashboardPage from '../components/EventDashboard/EventDashboardPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcodePage/EnterBarcodePage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
