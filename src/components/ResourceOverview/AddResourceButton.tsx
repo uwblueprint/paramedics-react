@@ -11,8 +11,8 @@ interface ButtonType {
 
 const useButtonStyles = makeStyles({
   root: {
-    borderRadius: '3rem',
-    minWidth: '15rem',
+    borderRadius: '2000px',
+    minWidth: '228px',
   },
 });
 

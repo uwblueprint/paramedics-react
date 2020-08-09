@@ -46,7 +46,7 @@ const useLayout = makeStyles({
     paddingBottom: '16px',
   },
   resourceTopSection: {
-    padding: '0em 3em 0em 3em',
+    padding: '8px 0px 0px 64px',
     backgroundColor: Colours.White,
     borderBottom: `1px solid ${Colours.BorderLightGray}`,
     color: Colours.Black,
