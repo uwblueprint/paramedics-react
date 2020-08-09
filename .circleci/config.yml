@@ -58,7 +58,7 @@ jobs:
             - v1-dependencies-
       - run:
           - name: Lint
-          - command: npm run lint
+          - command: eslint --ext .ts,.tsx --fix ./src
 
 workflows:
   version: 2
