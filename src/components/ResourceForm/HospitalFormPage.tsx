@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
   resourceCreationTopSection: {
     margin: '48px 30px 0px 30px',
-    backgroundColor: 'white',
+    backgroundColor: Colours.White,
     borderBottom: '1px solid #c4c4c4',
   },
   resourceHeader: {
