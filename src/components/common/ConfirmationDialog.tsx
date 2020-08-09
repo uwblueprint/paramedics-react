@@ -1,5 +1,4 @@
 import React from 'react';
-import { Colours } from '../../styles/Constants';
 import {
   Button,
   makeStyles,
@@ -10,6 +9,7 @@ import {
   Typography,
   Box,
 } from '@material-ui/core';
+import { Colours } from '../../styles/Constants';
 
 interface ConfirmationDialogProps {
   open: boolean;

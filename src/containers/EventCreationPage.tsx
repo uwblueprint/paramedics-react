@@ -35,8 +35,6 @@ const EventCreationPage = ({
   );
   const events: Array<EventType> = data ? data.events : [];
 
-  console.log(data);
-
   const [addEvent] = useMutation(ADD_EVENT, {
     update(cache, { data: { newEvent } }) {
       cache.writeQuery({
@@ -111,7 +109,7 @@ const EventCreationPage = ({
               2,
               '0'
             )}-${dateParts.day.padStart(2, '0')}`,
-          createdBy: 16, //TODO: change this to proper user
+          createdBy: 16, // TODO: change this to proper user
           isActive: true,
         },
       });
