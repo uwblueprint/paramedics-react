@@ -48,7 +48,7 @@ const headerRow = makeStyles({
 
 const dataRow = makeStyles({
   root: {
-    color: 'black',
+    color: Colours.Black,
     fontWeight: 400,
     fontSize: 14,
     paddingTop: 16.5,
