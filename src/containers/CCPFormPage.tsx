@@ -14,6 +14,42 @@ import FormField from '../components/common/FormField';
 import { GET_ALL_CCPS, GET_CCP_BY_ID, CCP } from '../graphql/queries/ccps';
 import ADD_CCP from '../graphql/mutations/ccps';
 
+const useStyles = makeStyles({
+  ccpWrapper: {
+    backgroundColor: 'white',
+  },
+  ccpFormTopSection: {
+    margin: '48px 30px 0px 30px',
+    backgroundColor: 'white',
+    borderBottom: '1px solid #c4c4c4',
+  },
+  ccpHeader: {
+    display: 'flex',
+    padding: '16px 0px',
+  },
+  ccpForm: {
+    padding: '56px 56px 101px 56px',
+  },
+  ccpCompleteDiv: {
+    marginBottom: 71,
+    marginTop: 31,
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  ccpCancelBtn: {
+    minWidth: '107px',
+    minHeight: '48px',
+    fontSize: '18px',
+    fontWeight: 500,
+    color: Colours.Secondary,
+  },
+  ccpBtnPosition: {
+    display: "flex",
+    marginLeft: "auto",
+    alignSelf: "center",
+  }
+});
+
 const CCPFormPage = ({
   match: { 
     params: { eventID, ccpID } 
@@ -28,53 +64,26 @@ const CCPFormPage = ({
   };
   mode: string;
 }) => {
-  const useStyles = makeStyles({
-    ccpWrapper: {
-      backgroundColor: 'white',
-    },
-    ccpFormTopSection: {
-      margin: '48px 30px 0px 30px',
-      backgroundColor: 'white',
-      borderBottom: '1px solid #c4c4c4',
-    },
-    ccpHeader: {
-      display: 'flex',
-      padding: '16px 0px',
-    },
-    ccpForm: {
-      padding: '56px 56px 101px 56px',
-    },
-    ccpCompleteDiv: {
-      marginBottom: 71,
-      marginTop: 31,
-      display: 'flex',
-      justifyContent: 'flex-end',
-    },
-    ccpCancelBtn: {
-      minWidth: '107px',
-      minHeight: '48px',
-      fontSize: '18px',
-      fontWeight: 500,
-      color: Colours.Secondary,
-    },
-    ccpBtnPosition: {
-      display: "flex",
-      marginLeft: "auto",
-      alignSelf: "center",
-    }
-  });
+
 
   const classes = useStyles();
   const history = useHistory();
 
-  const [ccpName, setCCPName] = useState<string>('');
-  const [eventLocation, setEventLocation] = useState<string>('');
 
-  const { data } = mode === "new" ? useQuery(GET_ALL_CCPS) : useQuery(GET_CCP_BY_ID, {
+
+  const { data } =  useQuery(mode === "new" ? GET_ALL_CCPS : GET_CCP_BY_ID, mode === "new" ? {}: {
     variables: { id: ccpID }
   });
 
+
+  console.log(data);
+
   const collectionPoints: Array<CCP> = data ? data.collectionPoints : [];
+  const collectionPoint: CCP = data ? data.collectionPoint : null;
+
+  const [ccpName, setCCPName] = useState<string>(collectionPoint ? collectionPoint.name : '');
+  // TODO: Add actual location
+  const [eventLocation, setEventLocation] = useState<string>('');
 
   const [addCCP] = useMutation(ADD_CCP, {
     update(cache, { data: { addCollectionPoint } }) {
@@ -132,7 +141,7 @@ const CCPFormPage = ({
       <div className={classes.ccpCompleteDiv}>
         <CompleteButton
           disabled={eventLocation === "" || ccpName === ""}
-          buttonText={mode === "new" ? "Complete" : "Update"}
+          buttonText="Complete"
         />
       </div>
     </ValidatorForm>

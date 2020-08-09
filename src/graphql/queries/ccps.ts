@@ -14,6 +14,7 @@ export const GET_CCP_BY_ID = gql`
       id
       name
       eventId {
+        id
         name
         eventDate 
       }
