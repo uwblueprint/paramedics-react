@@ -18,7 +18,8 @@ function App() {
     <ThemeProvider theme={Theme}>
       <Switch>
         <Route exact path="/events" component={HomeLandingPage} />
-        <Route exact path="/events/new" component={CCPFormPage} />
+        <Route exact path="/events/:eventID/new" component={(props) => <CCPFormPage mode="new" {...props} />} />
+        <Route exact path="/events/:eventID/ccps/:ccpID" component={(props) => <CCPFormPage mode="edit" {...props} />} />
         <Route
           exact
           path="/events/:eventID/ccps/:ccpID/scan"

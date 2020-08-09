@@ -17,33 +17,30 @@ const useEventButtonStyles = makeStyles({
   },
 });
 
-const NextButton: React.FC<{
-  handleClick: () => void;
+const CompleteButton: React.FC<{
   disabled: boolean;
   buttonText: string;
 }> = ({
-  handleClick,
   disabled,
   buttonText,
 }: {
-  handleClick: () => void;
   disabled: boolean;
   buttonText: string;
 }) => {
-  const classes = useEventButtonStyles();
-  return (
-    <Button
-      variant="contained"
-      onClick={handleClick}
-      classes={{
-        root: classes.root,
-        disabled: classes.disabled,
-      }}
-      disabled={disabled}
-    >
-      {buttonText}
-    </Button>
-  );
-};
+    const classes = useEventButtonStyles();
+    return (
+      <Button
+        variant="contained"
+        classes={{
+          root: classes.root,
+          disabled: classes.disabled,
+        }}
+        disabled={disabled}
+        type="submit"
+      >
+        {buttonText}
+      </Button>
+    );
+  };
 
-export default NextButton;
+export default CompleteButton;
