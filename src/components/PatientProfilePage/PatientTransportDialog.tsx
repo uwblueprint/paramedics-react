@@ -4,17 +4,17 @@ import {
   Button,
   Dialog,
   DialogActions,
-  DialogTitle
+  DialogTitle,
 } from '@material-ui/core';
 
 const PatientTransportDialog = ({
   open,
   handleClose,
-  confirmTransportLink
+  handleComplete,
 }: {
   open: boolean;
   handleClose: () => void;
-  confirmTransportLink: string;
+  handleComplete: () => void;
 }) => {
   return (
     <Dialog open={open}>
@@ -26,20 +26,16 @@ const PatientTransportDialog = ({
         <ul>
           <li>Move a patient on scene to a selected hospital and ambulance.</li>
           <li>All transported patients can be found in the hospital tab.</li>
-          <li>A run number needs to be manually added to transported patients.</li>
+          <li>
+            A run number needs to be manually added to transported patients.
+          </li>
         </ul>
       </DialogContent>
       <DialogActions>
-        <Button
-          color="secondary"
-          onClick={handleClose}
-        >
+        <Button color="secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button
-          color="secondary"
-          href={confirmTransportLink}
-        >
+        <Button color="secondary" onClick={handleComplete}>
           Continue to transport
         </Button>
       </DialogActions>

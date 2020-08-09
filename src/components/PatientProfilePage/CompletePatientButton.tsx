@@ -6,7 +6,9 @@ const useCompletePatientButtonStyles = makeStyles({
   root: {
     borderRadius: '3rem',
     minWidth: '15rem',
-    float: 'right',
+    margin: '10px 0px',
+    position: 'relative',
+    left: '75%',
   },
 });
 
