@@ -36,7 +36,7 @@ const tableStyles = makeStyles({
 
 const headerRow = makeStyles({
   root: {
-    color: 'black',
+    color: Colours.Black,
     fontWeight: 600,
     fontSize: 14,
     paddingTop: 17,
