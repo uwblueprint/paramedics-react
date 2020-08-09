@@ -1,12 +1,7 @@
 import React from 'react';
 import {
   Typography,
-  Button,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';

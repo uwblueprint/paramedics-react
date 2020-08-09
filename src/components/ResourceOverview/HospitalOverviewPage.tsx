@@ -1,10 +1,5 @@
 import React from 'react';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
   Typography,
   IconButton,
 } from '@material-ui/core';
