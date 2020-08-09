@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  Typography,
-  IconButton,
-} from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Popper from '@material-ui/core/Popper';
 import { useMutation } from '@apollo/react-hooks';

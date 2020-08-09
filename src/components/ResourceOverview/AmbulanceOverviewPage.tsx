@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  Typography,
-  IconButton,
-} from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';

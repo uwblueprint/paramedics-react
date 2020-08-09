@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  Typography,
-  IconButton,
-} from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useHistory } from 'react-router-dom';
