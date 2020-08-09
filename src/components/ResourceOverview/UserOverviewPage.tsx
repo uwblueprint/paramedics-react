@@ -21,6 +21,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import AddResourceButton from './AddResourceButton';
+import ConfirmModal from './ConfirmModal';
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -275,31 +276,14 @@ const UserOverviewPage: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog classes={{ paper: dialogStyle.paper }} open={openModal}>
-        <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
-          You are about to delete a team member.
-        </DialogTitle>
-        <DialogContent classes={{ root: dialogStyle.dialogContent }}>
-          <Typography variant="body2">
-            Deleted team members will no longer have access to any casualty
-            collection points.
-          </Typography>
-        </DialogContent>
-        <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
-          <Button
-            classes={{ root: dialogStyle.dialogCancel }}
-            onClick={handleClickCancel}
-          >
-            <Typography variant="body1">Cancel</Typography>
-          </Button>
-          <Button
-            classes={{ root: dialogStyle.dialogDelete }}
-            onClick={handleClickDelete}
-          >
-            <Typography variant="body1">Delete</Typography>
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmModal
+      open={openModal}
+      title="You are about to delete a team member." 
+      body="Deleted team members will no longer have access to any casualty collection points."
+      actionLabel="Delete"
+      handleClickAction={handleClickDelete}
+      handleClickCancel={handleClickCancel}
+      />
       <div className={classes.addResourceContainer}>
         <AddResourceButton
           label="Add Team Member"

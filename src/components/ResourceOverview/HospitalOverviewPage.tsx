@@ -21,6 +21,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
+import ConfirmModal from './ConfirmModal';
 import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
 import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
 import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
@@ -267,31 +268,14 @@ const HospitalOverviewPage: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog classes={{ paper: dialogStyle.paper }} open={openModal}>
-        <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
-          You are about to delete a hospital.
-        </DialogTitle>
-        <DialogContent classes={{ root: dialogStyle.dialogContent }}>
-          <Typography variant="body2">
-            Supervisors will no longer be able to transport patients at CCPS
-            connected to this hospital.
-          </Typography>
-        </DialogContent>
-        <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
-          <Button
-            classes={{ root: dialogStyle.dialogCancel }}
-            onClick={handleClickCancel}
-          >
-            <Typography variant="body1">Cancel</Typography>
-          </Button>
-          <Button
-            classes={{ root: dialogStyle.dialogDelete }}
-            onClick={handleClickDelete}
-          >
-            <Typography variant="body1">Delete</Typography>
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmModal
+      open={openModal}
+      title="You are about to delete a hospital." 
+      body="Supervisors will no longer be able to transport patients at CCPS connected to this hospital."
+      actionLabel="Delete"
+      handleClickAction={handleClickDelete}
+      handleClickCancel={handleClickCancel}
+      />
       <div className={classes.addResourceContainer}>
         <AddResourceButton label="Add Hospital" route="/manage/hospitals/new" />
       </div>
