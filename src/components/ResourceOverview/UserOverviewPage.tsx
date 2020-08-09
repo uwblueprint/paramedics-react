@@ -16,7 +16,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import AddResourceButton from './AddResourceButton';
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from '../common/ConfirmModal';
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -73,41 +73,6 @@ const options = makeStyles({
   },
   menuDelete: {
     color: '#9B2F2F',
-  },
-});
-
-const dialogStyles = makeStyles({
-  paper: {
-    width: 485,
-    height: 280,
-  },
-  dialogContent: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-  },
-  dialogTitle: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-    paddingBottom: 0,
-    fontWeight: 500,
-    fontSize: 20,
-  },
-  dialogCancel: {
-    color: Colours.Secondary,
-    height: 48,
-    width: 107,
-  },
-  dialogDelete: {
-    color: Colours.Danger,
-    height: 48,
-    width: 107,
-  },
-  dialogActionSpacing: {
-    paddingBottom: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
   },
 });
 
@@ -198,7 +163,6 @@ const UserOverviewPage: React.FC = () => {
   const table = tableStyles();
   const dRow = dataRow();
   const optionBtn = options();
-  const dialogStyle = dialogStyles();
 
   const cells = members.map((member: User) => {
     return (
@@ -272,12 +236,12 @@ const UserOverviewPage: React.FC = () => {
         </Table>
       </TableContainer>
       <ConfirmModal
-      open={openModal}
-      title="You are about to delete a team member." 
-      body="Deleted team members will no longer have access to any casualty collection points."
-      actionLabel="Delete"
-      handleClickAction={handleClickDelete}
-      handleClickCancel={handleClickCancel}
+        open={openModal}
+        title="You are about to delete a team member."
+        body="Deleted team members will no longer have access to any casualty collection points."
+        actionLabel="Delete"
+        handleClickAction={handleClickDelete}
+        handleClickCancel={handleClickCancel}
       />
       <div className={classes.addResourceContainer}>
         <AddResourceButton

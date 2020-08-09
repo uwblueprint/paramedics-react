@@ -16,7 +16,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from '../common/ConfirmModal';
 import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
 import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
 import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
@@ -76,41 +76,6 @@ const options = makeStyles({
   },
 });
 
-const dialogStyles = makeStyles({
-  paper: {
-    width: 485,
-    height: 280,
-  },
-  dialogContent: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-  },
-  dialogTitle: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-    paddingBottom: 0,
-    fontWeight: 500,
-    fontSize: 20,
-  },
-  dialogCancel: {
-    color: Colours.Secondary,
-    height: 48,
-    width: 107,
-  },
-  dialogDelete: {
-    color: Colours.Danger,
-    height: 48,
-    width: 107,
-  },
-  dialogActionSpacing: {
-    paddingBottom: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-});
-
 const useLayout = makeStyles({
   wrapper: {
     backgroundColor: '#f0f0f0',
@@ -153,7 +118,6 @@ const HospitalOverviewPage: React.FC = () => {
   const table = tableStyles();
   const dRow = dataRow();
   const optionBtn = options();
-  const dialogStyle = dialogStyles();
 
   //  Writing to cache when deleting user
   const [deleteHospital] = useMutation(DELETE_HOSPITAL, {
@@ -264,12 +228,12 @@ const HospitalOverviewPage: React.FC = () => {
         </Table>
       </TableContainer>
       <ConfirmModal
-      open={openModal}
-      title="You are about to delete a hospital." 
-      body="Supervisors will no longer be able to transport patients at CCPS connected to this hospital."
-      actionLabel="Delete"
-      handleClickAction={handleClickDelete}
-      handleClickCancel={handleClickCancel}
+        open={openModal}
+        title="You are about to delete a hospital."
+        body="Supervisors will no longer be able to transport patients at CCPS connected to this hospital."
+        actionLabel="Delete"
+        handleClickAction={handleClickDelete}
+        handleClickCancel={handleClickCancel}
       />
       <div className={classes.addResourceContainer}>
         <AddResourceButton label="Add Hospital" route="/manage/hospitals/new" />

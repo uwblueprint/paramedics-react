@@ -16,7 +16,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from '../common/ConfirmModal';
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -76,41 +76,6 @@ const options = makeStyles({
   },
   menuDelete: {
     color: '#9B2F2F',
-  },
-});
-
-const dialogStyles = makeStyles({
-  paper: {
-    width: 485,
-    height: 280,
-  },
-  dialogContent: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-  },
-  dialogTitle: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-    paddingBottom: 0,
-    fontWeight: 500,
-    fontSize: 20,
-  },
-  dialogCancel: {
-    color: Colours.Secondary,
-    height: 48,
-    width: 107,
-  },
-  dialogDelete: {
-    color: Colours.Danger,
-    height: 48,
-    width: 107,
-  },
-  dialogActionSpacing: {
-    paddingBottom: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
   },
 });
 
@@ -202,7 +167,6 @@ const AmbulanceOverviewPage: React.FC = () => {
   const table = tableStyles();
   const dRow = dataRow();
   const optionBtn = options();
-  const dialogStyle = dialogStyles();
 
   const cells = ambulances.map((ambulance: Ambulance) => {
     return (
@@ -270,12 +234,12 @@ const AmbulanceOverviewPage: React.FC = () => {
         </Table>
       </TableContainer>
       <ConfirmModal
-      open={openModal}
-      title="You are about to delete an ambulance." 
-      body="Supervisors will no longer be able to transport patients at CCPs using this vehicle."
-      actionLabel="Delete"
-      handleClickAction={handleClickDelete}
-      handleClickCancel={handleClickCancel}
+        open={openModal}
+        title="You are about to delete an ambulance."
+        body="Supervisors will no longer be able to transport patients at CCPs using this vehicle."
+        actionLabel="Delete"
+        handleClickAction={handleClickDelete}
+        handleClickCancel={handleClickCancel}
       />
       <div className={classes.addResourceContainer}>
         <AddResourceButton

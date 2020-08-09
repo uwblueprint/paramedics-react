@@ -12,14 +12,14 @@ import BackButton from '../components/EventCreationPage/BackButton';
 import FormField from '../components/common/FormField';
 import Stepper from '../components/EventCreationPage/Stepper';
 import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
-import ADD_EVENT from '../graphql/mutations/events';
-import { EventType, GET_ALL_EVENTS } from '../graphql/queries/events';
+import { ADD_EVENT } from '../graphql/mutations/events';
+import { Event, GET_ALL_EVENTS } from '../graphql/queries/events';
 
 const EventCreationPage = () => {
   const history = useHistory();
 
   const { data } = useQuery(GET_ALL_EVENTS);
-  const events: Array<EventType> = data ? data.events : [];
+  const events: Array<Event> = data ? data.events : [];
 
   const [addEvent] = useMutation(ADD_EVENT, {
     update(cache, { data: { addEvent } }) {
@@ -72,14 +72,14 @@ const EventCreationPage = () => {
     day?: string;
     literal?: string;
   } = eventDate
-      ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
         (obj, currentPart) => ({
           ...obj,
           [currentPart.type]: currentPart.value,
         }),
         {}
       )
-      : {};
+    : {};
 
   const handleComplete = () => {
     addEvent({
@@ -124,17 +124,17 @@ const EventCreationPage = () => {
         />
       </form>
     ) : (
-        <form>
-          <FormField
-            label="Event Location:"
-            placeholder="Enter Location Here"
-            onChange={handleLocationChange}
-            value={eventLocation}
-            isValidated={false}
-          />
-          <Map />
-        </form>
-      );
+      <form>
+        <FormField
+          label="Event Location:"
+          placeholder="Enter Location Here"
+          onChange={handleLocationChange}
+          value={eventLocation}
+          isValidated={false}
+        />
+        <Map />
+      </form>
+    );
 
   return (
     <div className="landing-wrapper">
