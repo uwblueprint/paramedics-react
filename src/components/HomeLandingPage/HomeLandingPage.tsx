@@ -9,7 +9,7 @@ import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import useAllEvents from '../../graphql/queries/hooks/events';
-import { EventType, GET_ALL_EVENTS } from '../../graphql/queries/events';
+import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
 import '../../styles/HomeLandingPage.css';
 
 const HomeLandingPage = () => {
@@ -29,8 +29,7 @@ const HomeLandingPage = () => {
 
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
-
-  const events: Array<EventType> = data ? data.events : [];
+  const events: Array<Event> = data ? data.events : [];
 
   return (
     <div className="landing-wrapper">
@@ -56,7 +55,7 @@ const HomeLandingPage = () => {
       </div>
       <div className="landing-body">
         <Grid container direction="row" alignItems="center" spacing={3}>
-          {events.map((event: EventType) => (
+          {events.map((event: Event) => (
             <Grid item key={event.id}>
               <EventCard
                 key={event.id}

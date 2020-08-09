@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { CCPType } from './collectionPoints';
+import { CCP } from './ccps';
 import { Hospital } from './hospitals';
 
 export enum TriageLevel {
@@ -23,7 +23,7 @@ export interface Patient {
   age: number;
   runNumber: number;
   barcodeValue: number;
-  collectionPointId: CCPType;
+  collectionPointId: CCP;
   status: Status;
   triageCategory: number;
   triageLevel: TriageLevel;
