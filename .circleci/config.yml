@@ -4,7 +4,7 @@ orbs:
 jobs:
   install:
     docker:
-      - image: uwbpparamedics/uwblueprint-paramedics-react:0.0.1
+      - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
     steps:
       - checkout
       - restore_cache:
@@ -18,7 +18,7 @@ jobs:
 
   build:
     docker:
-      - image: uwbpparamedics/uwblueprint-paramedics-react:0.0.1
+      - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
     steps:
       - checkout
       - restore_cache:
@@ -38,7 +38,7 @@ jobs:
             chmod +x /usr/local/bin/docker-compose
       - run:
           name: Building image
-          command: docker build -t uwbpparamedics/uwblueprint-paramedics-react:0.0.1 -f Dockerfile.prod .
+          command: docker build -t uwbpparamedics/uw-blueprint-paramedics-react:0.0.1 -f Dockerfile.prod .
       - run:
           name: Run Docker compose
           command: |
@@ -51,7 +51,7 @@ jobs:
 
   lint:
     docker:
-      - image: uwbpparamedics/uwblueprint-paramedics-react:0.0.1
+      - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
     steps:
       - checkout
       - restore_cache:
