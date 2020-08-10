@@ -64,6 +64,7 @@ jobs:
       - run:
           name: Lint
           command: |
+            npm install
             npm run lint
 
 workflows:
