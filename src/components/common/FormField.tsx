@@ -11,7 +11,7 @@ const useTextFieldStyles = makeStyles({
     backgroundColor: '#FFFFFF',
     padding: '20px',
     marginTop: '0px',
-    marginBottom: '10px',
+    marginBottom: '20px',
     height: '120px',
     width: '100%',
     '& .MuiInput-formControl': {
@@ -66,42 +66,42 @@ const FormField: React.FC<{
   errorMessages?: Array<string>;
   readOnly?: boolean;
 }) => {
-  const classes = useTextFieldStyles();
-  if (isValidated) {
+    const classes = useTextFieldStyles();
+    if (isValidated) {
+      return (
+        <TextValidator
+          label={label}
+          placeholder={placeholder}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          className={classes.root}
+          margin="normal"
+          onChange={onChange}
+          value={value}
+          onFocus={handleFocus}
+          validators={validators}
+          errorMessages={errorMessages}
+        />
+      );
+    }
     return (
-      <TextValidator
+      <TextField
         label={label}
         placeholder={placeholder}
         InputLabelProps={{
           shrink: true,
+        }}
+        InputProps={{
+          readOnly,
         }}
         className={classes.root}
         margin="normal"
         onChange={onChange}
         value={value}
         onFocus={handleFocus}
-        validators={validators}
-        errorMessages={errorMessages}
       />
     );
-  }
-  return (
-    <TextField
-      label={label}
-      placeholder={placeholder}
-      InputLabelProps={{
-        shrink: true,
-      }}
-      InputProps={{
-        readOnly,
-      }}
-      className={classes.root}
-      margin="normal"
-      onChange={onChange}
-      value={value}
-      onFocus={handleFocus}
-    />
-  );
-};
+  };
 
 export default FormField;
