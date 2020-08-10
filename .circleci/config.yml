@@ -57,9 +57,9 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run:
-          - name: Lint
-          - command: |
-              npm run lint
+          name: Lint
+          command: |
+            npm run lint
 
 workflows:
   version: 2
