@@ -48,6 +48,7 @@ export const GET_PATIENT_BY_ID = (id: string) => {
           id
           name
           eventId {
+            id
             name
             eventDate
           }
@@ -82,6 +83,7 @@ export const FETCH_ALL_PATIENTS = gql`
         id
         name
         eventId {
+          id
           name
           eventDate
         }
@@ -114,6 +116,7 @@ export const GET_ALL_PATIENTS = gql`
         id
         name
         eventId {
+          id
           name
           eventDate
         }

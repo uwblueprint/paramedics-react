@@ -173,9 +173,6 @@ const PatientProfilePage = ({
   };
 
   const handleHospitalChange = (e: React.ChangeEvent<HTMLElement>) => {
-    console.log(
-      JSON.stringify('peep' + JSON.stringify((e.target as HTMLInputElement).id))
-    );
     setSelectedHospital({
       id: (e.target as HTMLInputElement).value,
       name: hospitals.filter(
