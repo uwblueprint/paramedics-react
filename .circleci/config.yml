@@ -65,6 +65,7 @@ jobs:
           name: Lint
           command: |
             npm install
+            npm install @typescript-eslint/eslint-plugin@latest --save-dev
             npm run lint
 
 workflows:
