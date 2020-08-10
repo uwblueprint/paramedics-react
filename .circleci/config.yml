@@ -53,8 +53,6 @@ jobs:
   lint:
     docker:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
-    pre:
-      - node node_modules/eslint/bin/eslint.js
     steps:
       - checkout
       - restore_cache:
