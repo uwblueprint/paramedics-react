@@ -59,7 +59,7 @@ jobs:
       - run:
           - name: Lint
           - command: |
-              eslint --ext .ts,.tsx --fix ./src
+              npm run lint
 
 workflows:
   version: 2
