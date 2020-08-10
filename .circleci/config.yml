@@ -41,6 +41,10 @@ jobs:
           command: |
             set -x
             docker-compose -f docker-compose-prod.yaml up -d
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
       - save_cache:
           paths:
             - node_modules
@@ -49,12 +53,16 @@ jobs:
   lint:
     docker:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
+    pre:
+      - node node_modules/eslint/bin/eslint.js
     steps:
       - checkout
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
+      - attach_workspace:
+          at: .
       - run:
           name: Lint
           command: |
