@@ -22,10 +22,10 @@ const EventCreationPage = () => {
   const events: Array<Event> = data ? data.events : [];
 
   const [addEvent] = useMutation(ADD_EVENT, {
-    update(cache, { data: { newEvent } }) {
+    update(cache, { data: { addEvent } }) {
       cache.writeQuery({
         query: GET_ALL_EVENTS,
-        data: { events: events.concat([newEvent]) },
+        data: { events: events.concat([addEvent]) },
       });
     },
   });

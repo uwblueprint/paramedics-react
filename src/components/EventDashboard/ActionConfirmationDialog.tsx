@@ -62,7 +62,7 @@ export const ActionConfirmationDialog = (
       <DialogTitle id="alert-dialog-title">
         {`${includeOrExclude === 'include' ? 'Include' : 'Exclude'} ${
           type === TabOptions.Hospital ? 'Hospitals' : 'Ambulances'
-          }`}
+        }`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText
@@ -72,7 +72,7 @@ export const ActionConfirmationDialog = (
         >
           {`Are you sure you want to ${includeOrExclude} the following ${
             type === TabOptions.Hospital ? 'hospital' : 'ambulance'
-            }${selected.length > 1 ? 's' : ''}?`}
+          }${selected.length > 1 ? 's' : ''}?`}
         </DialogContentText>
       </DialogContent>
       <List dense className={classes.list}>
