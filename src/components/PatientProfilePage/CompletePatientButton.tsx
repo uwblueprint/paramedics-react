@@ -7,8 +7,8 @@ const useCompletePatientButtonStyles = makeStyles({
     borderRadius: '4px',
     minWidth: '230px',
     margin: '10px 0px',
-    position: 'relative',
-    left: '75%',
+    display: 'flex',
+    marginLeft: 'auto',
   },
 });
 
