@@ -9,7 +9,6 @@ import {
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
 import { Colours } from '../../styles/Constants';
-import { Patient } from '../../graphql/queries/patients';
 import { Hospital } from '../../graphql/queries/hospitals';
 import { Ambulance } from '../../graphql/queries/ambulances';
 
@@ -52,7 +51,7 @@ const useStyles = makeStyles({
 
 const PatientTransportPage = ({
   open,
-  patient,
+  patientBarcode,
   handleClose,
   handleComplete,
   hospitals,
@@ -63,7 +62,7 @@ const PatientTransportPage = ({
   handleAmbulanceChange,
 }: {
   open: boolean;
-  patient?: Patient;
+  patientBarcode: string | null;
   handleClose: () => void;
   handleComplete: () => void;
   hospitals: Array<Hospital>;
@@ -103,7 +102,9 @@ const PatientTransportPage = ({
               style={{ color: Colours.SecondaryGray }}
             >
               Choose a hospital and an ambulance from the list below to
-              transport patient to.
+              transport patient
+              {patientBarcode ? ` ${patientBarcode} ` : ' '}
+              to.
             </Typography>
           </div>
         </div>

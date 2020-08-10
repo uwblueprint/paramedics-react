@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, NavLink } from 'react-router-dom';
 import '../../styles/EventCreationPage.css';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -58,8 +58,14 @@ const PatientProfilePage = ({
 }) => {
   const history = useHistory();
 
-  const [selectedHospital, setSelectedHospital] = useState('');
-  const [selectedAmbulance, setSelectedAmbulance] = useState('');
+  const [selectedHospital, setSelectedHospital] = useState<Hospital>({
+    id: '',
+    name: '',
+  });
+  const [selectedAmbulance, setSelectedAmbulance] = useState<Ambulance>({
+    id: '',
+    vehicleNumber: 0,
+  });
   const [openTransportModal, setOpenTransportModal] = useState(false);
   const [openTransportPage, setOpenTransportPage] = useState(false);
   const [transportConfirmed, setTransportConfirmed] = useState(false);
@@ -109,8 +115,8 @@ const PatientProfilePage = ({
         notes: string;
         status: Status;
         runNumber: number | null;
-        hospitalId: string;
-        ambulanceId: string;
+        hospitalId: Hospital;
+        ambulanceId: Ambulance;
       } = data.patient;
       setFormFields({
         ...formFields,
@@ -122,8 +128,8 @@ const PatientProfilePage = ({
         status,
         runNumber,
       });
-      setSelectedHospital(hospitalId);
-      setSelectedAmbulance(ambulanceId);
+      if (hospitalId) setSelectedHospital(hospitalId);
+      if (ambulanceId) setSelectedAmbulance(ambulanceId);
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
   }, [data, loading, mode]);
@@ -149,24 +155,42 @@ const PatientProfilePage = ({
   };
 
   const handleCancelTransport = () => {
-    setSelectedHospital('');
-    setSelectedAmbulance('');
+    setSelectedHospital({
+      id: '',
+      name: '',
+    });
+    setSelectedAmbulance({
+      id: '',
+      vehicleNumber: 0,
+    });
     setOpenTransportModal(false);
     setOpenTransportPage(false);
   };
 
   const handleConfirmTransport = () => {
     setTransportConfirmed(true);
-    setOpenTransportModal(false);
     setOpenTransportPage(false);
   };
 
   const handleHospitalChange = (e: React.ChangeEvent<HTMLElement>) => {
-    setSelectedHospital((e.target as HTMLInputElement).value);
+    console.log(
+      JSON.stringify('peep' + JSON.stringify((e.target as HTMLInputElement).id))
+    );
+    setSelectedHospital({
+      id: (e.target as HTMLInputElement).value,
+      name: hospitals.filter(
+        (hospital) => hospital.id === (e.target as HTMLInputElement).value
+      )[0].name,
+    });
   };
 
   const handleAmbulanceChange = (e: React.ChangeEvent<HTMLElement>) => {
-    setSelectedAmbulance((e.target as HTMLInputElement).value);
+    setSelectedAmbulance({
+      id: (e.target as HTMLInputElement).value,
+      vehicleNumber: ambulances.filter(
+        (ambulance) => ambulance.id === (e.target as HTMLInputElement).value
+      )[0].vehicleNumber,
+    });
   };
 
   const handleComplete = () => {
@@ -190,8 +214,9 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          hospitalId: selectedHospital !== '' ? selectedHospital : null,
-          ambulanceId: selectedAmbulance !== '' ? selectedAmbulance : null,
+          hospitalId: selectedHospital.id !== '' ? selectedHospital.id : null,
+          ambulanceId:
+            selectedAmbulance.id !== '' ? selectedAmbulance.id : null,
         },
       });
     } else if (mode === 'edit') {
@@ -211,8 +236,9 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
-          hospitalId: selectedHospital !== '' ? selectedHospital : null,
-          ambulanceId: selectedAmbulance !== '' ? selectedAmbulance : null,
+          hospitalId: selectedHospital.id !== '' ? selectedHospital.id : null,
+          ambulanceId:
+            selectedAmbulance.id !== '' ? selectedAmbulance.id : null,
         },
       });
     }
@@ -223,20 +249,23 @@ const PatientProfilePage = ({
     <div className="landing-wrapper">
       <PatientTransportPage
         open={openTransportPage}
-        // patient={mode === 'edit' ? data.patient : null}
+        patientBarcode={mode === 'edit' ? formFields.barcodeValue : null}
         handleClose={handleCancelTransport}
         handleComplete={handleConfirmTransport}
         hospitals={hospitals}
         ambulances={ambulances}
-        selectedHospital={selectedHospital}
-        selectedAmbulance={selectedAmbulance}
+        selectedHospital={selectedHospital.id}
+        selectedAmbulance={selectedAmbulance.id}
         handleHospitalChange={handleHospitalChange}
         handleAmbulanceChange={handleAmbulanceChange}
       />
       <PatientTransportDialog
         open={openTransportModal}
         handleClose={handleCloseDialog}
-        handleComplete={() => setOpenTransportPage(true)}
+        handleComplete={() => {
+          setOpenTransportPage(true);
+          setOpenTransportModal(false);
+        }}
       />
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
@@ -247,6 +276,8 @@ const PatientProfilePage = ({
             <Button
               variant="outlined"
               color="secondary"
+              component={NavLink}
+              to={`/events/${eventId}/ccps/${ccpId}`}
               style={{
                 minWidth: '18rem',
                 minHeight: '2.5rem',
@@ -287,22 +318,6 @@ const PatientProfilePage = ({
               setTransportingPatient(newStatus === Status.TRANSPORTED);
             }}
           />
-          {mode === 'edit' && (
-            <FormField
-              label="Run Number:"
-              placeholder="Enter run number"
-              onChange={(e: React.ChangeEvent<HTMLElement>) => {
-                setFormFields({
-                  ...formFields,
-                  runNumber: parseInt((e.target as HTMLInputElement).value),
-                });
-              }}
-              value={
-                formFields.runNumber ? formFields.runNumber.toString() : ''
-              }
-              isValidated={false}
-            />
-          )}
           <TriagePills
             currentStatus={formFields.triage}
             handleChange={(
@@ -360,13 +375,13 @@ const PatientProfilePage = ({
               </Typography>
               <FormField
                 label="Hospital:"
-                value={selectedHospital} // there's probably a better way to do this
+                value={selectedHospital.name} // there's probably a better way to do this
                 readOnly
                 isValidated={false}
               />
               <FormField
                 label="Ambulance Number:"
-                value={selectedAmbulance} // there's probably a better way to do this
+                value={selectedAmbulance.vehicleNumber.toString()} // there's probably a better way to do this
                 readOnly
                 isValidated={false}
               />

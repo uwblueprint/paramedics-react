@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useCompletePatientButtonStyles = makeStyles({
   root: {
-    borderRadius: '3rem',
-    minWidth: '15rem',
+    borderRadius: '4px',
+    minWidth: '230px',
     margin: '10px 0px',
     position: 'relative',
     left: '75%',
