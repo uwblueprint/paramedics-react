@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import { Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -44,6 +45,7 @@ const AmbulanceFormPage = ({
   match: { params: { mode: string; ambulanceId?: string } };
 }) => {
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const { data, loading } = useQuery(
     mode === 'edit' && ambulanceId
       ? GET_AMBULANCE_BY_ID(ambulanceId)
@@ -85,6 +87,7 @@ const AmbulanceFormPage = ({
           vehicleNumber: parseInt(ambulanceNumber),
         },
       });
+      enqueueSnackbar('Ambulance deleted.');
     } else if (mode === 'edit') {
       editAmbulance({
         variables: {
@@ -92,6 +95,7 @@ const AmbulanceFormPage = ({
           vehicleNumber: parseInt(ambulanceNumber),
         },
       });
+      enqueueSnackbar('Ambulance edited.');
     }
     history.replace('/manage/ambulances');
   };

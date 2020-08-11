@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import Popper from '@material-ui/core/Popper';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -94,6 +95,7 @@ const useLayout = makeStyles({
 });
 
 const HospitalOverviewPage: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedHospital, selectHospital] = React.useState<number>(-1);
@@ -155,6 +157,7 @@ const HospitalOverviewPage: React.FC = () => {
     deleteHospital({ variables: { id: hospitalId } });
     setOpenModal(false);
     setAnchorEl(null);
+    enqueueSnackbar('Hospital deleted.');
   };
 
   const handleClickCancel = () => {
