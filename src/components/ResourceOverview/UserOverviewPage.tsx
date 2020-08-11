@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { useSnackbar } from 'notistack';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
@@ -94,6 +95,8 @@ const useLayout = makeStyles({
 });
 
 const UserOverviewPage: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
   // Write new updates to cache
   useAllUsers();
 
@@ -147,6 +150,7 @@ const UserOverviewPage: React.FC = () => {
     deleteUser({ variables: { id: memberId } });
     setOpenModal(false);
     setAnchorEl(null);
+    enqueueSnackbar('Team member deleted.');
   };
 
   const handleClickCancel = () => {

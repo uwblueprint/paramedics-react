@@ -90,5 +90,10 @@ export const Theme = createMuiTheme({
     MuiTab: {
       wrapper: { textTransform: 'none' },
     },
+    MuiSnackbarContent: {
+      root: {
+        justifyContent: 'center',
+      },
+    },
   },
 });
