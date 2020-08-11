@@ -92,7 +92,16 @@ export const Theme = createMuiTheme({
     },
     MuiSnackbarContent: {
       root: {
+        minWidth: 'unset !important',
         justifyContent: 'center',
+        borderRadius: 0,
+        padding: '16px 24px',
+      },
+      message: {
+        fontSize: '18px',
+        letterSpacing: '0.5px',
+        lineHeight: '24px',
+        fontWeight: 'normal',
       },
     },
   },
