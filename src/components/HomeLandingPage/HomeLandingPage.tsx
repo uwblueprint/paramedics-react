@@ -3,8 +3,7 @@ import { useQuery } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
@@ -12,7 +11,12 @@ import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
 import '../../styles/HomeLandingPage.css';
 
+type LocationState = { addedEventId: string | null };
+
 const HomeLandingPage = () => {
+  const history = useHistory();
+  const location = useLocation<LocationState>();
+  const { addedEventId } = location.state || { addEventId: null };
   const [selectedTab, setTab] = useState(0);
   const handleChange = (
     event: React.ChangeEvent<unknown>,
@@ -20,7 +24,6 @@ const HomeLandingPage = () => {
   ) => {
     setTab(newValue);
   };
-  const history = useHistory();
 
   const tabLabels = ['Current Events', 'Archived Events'];
 
