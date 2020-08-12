@@ -48,6 +48,7 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
           readers: ['code_128_reader'],
         },
       },
+      // eslint-disable-next-line func-names
       function (err) {
         if (err) {
           // console.log(err);
@@ -67,12 +68,14 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
     };
   }, []);
   return (
+    /*eslint-disable */
     <div id="barcode-scan">
       {/* Hardcoded styles to make barcode scan full screen */}
       <video src="" style={{ width: '100%', height: 'auto' }} />
       <video src="" className="drawingBuffer" style={{ display: 'none' }} />
       <canvas className="drawingBuffer" style={{ display: 'none' }} />
     </div>
+    /* eslint-enable */
   );
 };
 
