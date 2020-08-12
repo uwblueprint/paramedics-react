@@ -48,10 +48,9 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
           readers: ['code_128_reader'],
         },
       },
-      // eslint-disable-next-line func-names
-      function (err) {
+      (err: boolean) => {
         if (err) {
-          // console.log(err);
+          // TODO: add error handling;
           return;
         }
         Quagga.start();
