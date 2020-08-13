@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import '../../styles/EventCreationPage.css';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
