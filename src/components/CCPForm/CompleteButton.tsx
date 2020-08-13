@@ -20,27 +20,21 @@ const useEventButtonStyles = makeStyles({
 const CompleteButton: React.FC<{
   disabled: boolean;
   buttonText: string;
-}> = ({
-  disabled,
-  buttonText,
-}: {
-  disabled: boolean;
-  buttonText: string;
-}) => {
-    const classes = useEventButtonStyles();
-    return (
-      <Button
-        variant="contained"
-        classes={{
-          root: classes.root,
-          disabled: classes.disabled,
-        }}
-        disabled={disabled}
-        type="submit"
-      >
-        {buttonText}
-      </Button>
-    );
-  };
+}> = ({ disabled, buttonText }: { disabled: boolean; buttonText: string }) => {
+  const classes = useEventButtonStyles();
+  return (
+    <Button
+      variant="contained"
+      classes={{
+        root: classes.root,
+        disabled: classes.disabled,
+      }}
+      disabled={disabled}
+      type="submit"
+    >
+      {buttonText}
+    </Button>
+  );
+};
 
 export default CompleteButton;

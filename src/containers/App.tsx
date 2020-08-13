@@ -8,7 +8,7 @@ import EventCreationPage from './EventCreationPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcodePage/EnterBarcodePage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
-import CCPFormPage from './CCPFormPage';
+import CCPFormPage from '../components/CCPForm/CCPFormPage';
 import PatientProfilePage from './PatientProfilePage';
 
 import '../styles/App.css';
@@ -18,8 +18,16 @@ function App() {
     <ThemeProvider theme={Theme}>
       <Switch>
         <Route exact path="/events" component={HomeLandingPage} />
-        <Route exact path="/events/:eventID/new" component={(props) => <CCPFormPage mode="new" {...props} />} />
-        <Route exact path="/events/:eventID/ccps/:ccpID" component={(props) => <CCPFormPage mode="edit" {...props} />} />
+        <Route
+          exact
+          path="/events/:eventID/new"
+          component={(props) => <CCPFormPage mode="new" {...props} />}
+        />
+        <Route
+          exact
+          path="/events/:eventID/ccps/:ccpID"
+          component={(props) => <CCPFormPage mode="edit" {...props} />}
+        />
         <Route
           exact
           path="/events/:eventID/ccps/:ccpID/scan"
