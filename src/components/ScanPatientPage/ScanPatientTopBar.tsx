@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, createStyles } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Quagga from 'quagga';
 import { Colours } from '../../styles/Constants';
 
 const useScanPatientTopBarStyles = makeStyles(() =>

@@ -7,10 +7,10 @@ import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import FormField from '../components/common/FormField';
-import CompletePatientButton from '../components/PatientCreationPage/CompletePatientButton';
+import CompletePatientButton from '../components/PatientCreation/CompletePatientButton';
 import RadioSelector from '../components/common/RadioSelector';
-import TriagePills from '../components/PatientCreationPage/TriagePills';
-import StatusPills from '../components/PatientCreationPage/StatusPills';
+import TriagePills from '../components/PatientCreation/TriagePills';
+import StatusPills from '../components/PatientCreation/StatusPills';
 import {
   TriageLevel,
   Status,

@@ -11,7 +11,7 @@ const useTextFieldStyles = makeStyles({
     backgroundColor: '#FFFFFF',
     padding: '20px',
     marginTop: '0px',
-    marginBottom: '10px',
+    marginBottom: '20px',
     height: '120px',
     width: '100%',
     '& .MuiInput-formControl': {
@@ -37,9 +37,9 @@ const useTextFieldStyles = makeStyles({
 
 const FormField: React.FC<{
   label: string;
-  placeholder: string;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLElement>) => void;
-  value: string;
+  value: string | number | null;
   handleFocus?: () => void;
   isValidated: boolean;
   validators?: Array<string>;
@@ -55,7 +55,7 @@ const FormField: React.FC<{
   errorMessages,
 }: {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLElement>) => void;
   value: string | number | null;
   handleFocus?: () => void;
