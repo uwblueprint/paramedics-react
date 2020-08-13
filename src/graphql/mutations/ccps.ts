@@ -10,6 +10,7 @@ const ADD_CCP = gql`
       id
       name
       eventId {
+        id
         name
         eventDate 
       }
@@ -17,4 +18,33 @@ const ADD_CCP = gql`
   }
 `;
 
-export default ADD_CCP;
+const EDIT_CCP = gql`
+
+  mutation updateCollectionPoint( 
+    $id: ID!
+    $name: String
+    $eventId: ID
+    $createdBy: ID) {
+      updateCollectionPoint(
+        id: $id
+        name: $name
+        eventId: $eventId
+        createdBy: $createdBy
+      ) {
+        id
+        name
+        eventId {
+          id
+          name
+          eventDate 
+        }
+
+      }
+
+
+    }
+
+
+`;
+
+export { ADD_CCP, EDIT_CCP };

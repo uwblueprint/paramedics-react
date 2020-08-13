@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import '../styles/EventCreationPage.css';
 import { ValidatorForm } from 'react-material-ui-form-validator';
@@ -12,7 +12,7 @@ import CompleteButton from '../components/CCPForm/CompleteButton';
 import Map from '../components/EventCreationPage/Map';
 import FormField from '../components/common/FormField';
 import { GET_ALL_CCPS, GET_CCP_BY_ID, CCP } from '../graphql/queries/ccps';
-import ADD_CCP from '../graphql/mutations/ccps';
+import { ADD_CCP, EDIT_CCP } from '../graphql/mutations/ccps';
 
 const useStyles = makeStyles({
   ccpWrapper: {
@@ -71,17 +71,23 @@ const CCPFormPage = ({
 
 
 
-  const { data } =  useQuery(mode === "new" ? GET_ALL_CCPS : GET_CCP_BY_ID, mode === "new" ? {}: {
+  const { data } =  useQuery(mode === "new" ? GET_ALL_CCPS : GET_CCP_BY_ID, mode === "new" ? {} : {
     variables: { id: ccpID }
   });
 
 
-  console.log(data);
-
   const collectionPoints: Array<CCP> = data ? data.collectionPoints : [];
   const collectionPoint: CCP = data ? data.collectionPoint : null;
 
-  const [ccpName, setCCPName] = useState<string>(collectionPoint ? collectionPoint.name : '');
+
+
+
+  const [ccpName, setCCPName] = useState<string>('');
+  
+    useEffect(() => {
+      setCCPName(collectionPoint ? collectionPoint.name : '')
+    }, [collectionPoint]);
+
   // TODO: Add actual location
   const [eventLocation, setEventLocation] = useState<string>('');
 
@@ -93,6 +99,8 @@ const CCPFormPage = ({
       });
     },
   });
+
+  const [editCCP] = useMutation(EDIT_CCP);
 
   const handleNameChange = (e: any) => {
     setCCPName(e.target.value);
@@ -108,13 +116,26 @@ const CCPFormPage = ({
   const handleComplete = () => {
 
     // TODO: Change User ID to the current user
-    addCCP({
-      variables: {
-        name: ccpName,
-        eventId: eventID,
-        createdBy: 1,
-      },
-    });
+
+    if (mode === "edit") {
+      editCCP({
+        variables: {
+          id: ccpID,
+          name: ccpName,
+          eventId: eventID,
+        }
+      });
+    } else {
+
+      addCCP({
+        variables: {
+          name: ccpName,
+          eventId: eventID,
+          createdBy: 1,
+        },
+      });
+
+    }
 
     // TODO: Check for valid eventID
 
