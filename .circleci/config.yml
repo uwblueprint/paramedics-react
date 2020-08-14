@@ -61,3 +61,5 @@ workflows:
       - prod-build
       - dev-build
       - dev-lint
+          requires:
+            - dev-build
