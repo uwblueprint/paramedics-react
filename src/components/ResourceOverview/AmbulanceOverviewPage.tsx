@@ -14,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
+import OptionPopper from '../common/OptionPopper';
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -198,35 +199,13 @@ const AmbulanceOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-            <Popper
-              id={id}
+            <OptionPopper 
+              id={id} 
               open={open}
-              popperOptions={{
-                modifiers: { offset: { enabled: true, offset: '-69.5,0' } },
-              }}
               anchorEl={anchorEl}
-            >
-              <div>
-                <Table className={classes.tablePopper}>
-                  <TableBody>
-                    <TableRow
-                      hover
-                      classes={{ hover: optionBtn.menuHover }}
-                      onClick={handleClickEdit}
-                    >
-                      <TableCell classes={{ root: optionBtn.menuCell }}>
-                        <Typography variant="body2">Edit</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow hover onClick={() => setOpenModal(true)}>
-                      <TableCell classes={{ root: optionBtn.menuDelete }}>
-                        <Typography variant="body2">Delete</Typography>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </Popper>
+              onDeleteClick={() => setOpenModal(true)}
+              onEditClick={handleClickEdit}
+            />
           </TableBody>
         </Table>
       </TableContainer>

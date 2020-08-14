@@ -156,7 +156,7 @@ const CCPFormPage = ({
       <Map />
       <div className={classes.ccpCompleteDiv}>
         <CompleteButton
-          disabled={eventLocation === '' || ccpName === ''}
+          disabled={ccpName === ''}
           buttonText="Complete"
         />
       </div>

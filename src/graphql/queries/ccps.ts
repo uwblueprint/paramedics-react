@@ -27,6 +27,7 @@ export const GET_ALL_CCPS = gql`
       id
       name
       eventId {
+        id
         name
         eventDate
       }
