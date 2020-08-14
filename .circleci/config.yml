@@ -52,7 +52,7 @@ jobs:
           at: .
       - run:
           name: Lint
-          command: npm run lint
+          command: npm install; npm run lint
 
 workflows:
   version: 2
@@ -60,6 +60,4 @@ workflows:
     jobs:
       - prod-build
       - dev-build
-      - dev-lint:
-          requires:
-            - dev-build
+      - dev-lint
