@@ -60,6 +60,6 @@ workflows:
     jobs:
       - prod-build
       - dev-build
-      - dev-lint
+      - dev-lint:
           requires:
             - dev-build
