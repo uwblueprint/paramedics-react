@@ -135,7 +135,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   }
 
   const handleDelete = () => {
-
+// TODO: handle delete here
   }
 
   const tableRows = stableSort(
