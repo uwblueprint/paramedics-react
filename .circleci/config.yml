@@ -7,9 +7,6 @@ jobs:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
       - setup_remote_docker:
           docker_layer_caching: false
       - run:
@@ -23,19 +20,12 @@ jobs:
           command: |
             set -x
             docker-compose -f docker-compose-prod.yaml up -d
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 
   dev-build:
     docker:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.2
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
       - setup_remote_docker:
           docker_layer_caching: false
       - run:
@@ -52,10 +42,6 @@ jobs:
           command: |
             set -x
             docker-compose -f docker-compose-dev.yaml up -d
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 
   dev-lint:
     docker:
@@ -74,6 +60,4 @@ workflows:
     jobs:
       - prod-build
       - dev-build
-      - dev-lint:
-          requires:
-            - dev-build
+      - dev-lint
