@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-
   prod-build:
     docker:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
@@ -28,7 +27,6 @@ jobs:
           root: .
           paths:
             - .
-
 
   dev-build:
     docker:
@@ -68,9 +66,7 @@ jobs:
           at: .
       - run:
           name: Lint
-          command: |
-            npm install
-            npm run lint
+          command: npm run lint
 
 workflows:
   version: 2
@@ -79,5 +75,5 @@ workflows:
       - prod-build
       - dev-build
       - dev-lint:
-        requires:
-          - dev-build
+          requires:
+            - dev-build
