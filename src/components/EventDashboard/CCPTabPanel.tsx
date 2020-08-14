@@ -14,6 +14,7 @@ import {
 import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
 import OptionPopper from '../common/OptionPopper';
 import { Order, stableSort, getComparator } from '../../utils/sort';
@@ -116,6 +117,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
 
   const rows = data ? data.collectionPointsByEvent : [];
   const open = Boolean(anchorEl);
+  const history = useHistory();
   const id = open ? 'simple-popper' : undefined;
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
@@ -123,6 +125,18 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+
+  const handleAdd = () => {
+    history.replace(`/events/${eventId}/new`);
+  }
+
+  const handleEdit = () => {
+    history.replace(`/events/${eventId}/ccps/`);
+  }
+
+  const handleDelete = () => {
+
+  }
 
   const tableRows = stableSort(
     rows as CCP[],
@@ -169,6 +183,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
       </TableContainer>
       <Button
         className={classes.addButton}
+        onClick={handleAdd}
         variant="contained"
         color="secondary"
       >
@@ -179,8 +194,8 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         id={id}
         open={open}
         anchorEl={anchorEl}
-        onEditClick={() => {}}
-        onDeleteClick={() => {}}
+        onEditClick={handleEdit}
+        onDeleteClick={handleDelete}
       />
     </Box>
   );
