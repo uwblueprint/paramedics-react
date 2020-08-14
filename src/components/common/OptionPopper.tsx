@@ -45,7 +45,7 @@ const OptionPopper = ({
 }: {
     id: string | undefined;
     open: boolean;
-    anchorEl: HTMLInputElement | null;
+    anchorEl: HTMLButtonElement | null;
     onEditClick: () => void;
     onDeleteClick: () => void;
 }) => {

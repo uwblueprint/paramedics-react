@@ -15,6 +15,7 @@ import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import { Colours } from '../../styles/Constants';
+import OptionPopper from '../common/OptionPopper';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 
@@ -108,9 +109,12 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
+  const [anchorEl, setAnchorEl] = React.useState<null | (EventTarget & HTMLButtonElement)>(null);
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
 
   const rows = data ? data.collectionPointsByEvent : [];
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -135,7 +139,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           width="48px"
           style={{ maxWidth: '48px', paddingTop: 0, paddingBottom: 0 }}
         >
-          <IconButton color="inherit">
+          <IconButton onClick={(e) => { setAnchorEl(anchorEl ? null : e.currentTarget) }} color="inherit">
             <MoreHoriz />
           </IconButton>
         </TableCell>
@@ -164,6 +168,13 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         <Add className={classes.buttonIcon} />
         Add CCP
       </Button>
+      <OptionPopper
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onEditClick={() => {}}
+        onDeleteClick={() => {}}
+      />
     </Box>
   );
 };
