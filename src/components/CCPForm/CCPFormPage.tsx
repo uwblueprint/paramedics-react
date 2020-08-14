@@ -155,10 +155,7 @@ const CCPFormPage = ({
       />
       <Map />
       <div className={classes.ccpCompleteDiv}>
-        <CompleteButton
-          disabled={ccpName === ''}
-          buttonText="Complete"
-        />
+        <CompleteButton disabled={ccpName === ''} buttonText="Complete" />
       </div>
     </ValidatorForm>
   );

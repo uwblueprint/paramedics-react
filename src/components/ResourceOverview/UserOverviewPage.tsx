@@ -1,6 +1,5 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
-import Popper from '@material-ui/core/Popper';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
@@ -132,7 +131,7 @@ const UserOverviewPage: React.FC = () => {
   const handleClickOptions = (event) => {
     selectMember(event.currentTarget.getAttribute('data-id'));
     setAnchorEl(anchorEl ? null : event.currentTarget);
-    console.log(event.currentTarget.type)
+    console.log(event.currentTarget.type);
   };
 
   const history = useHistory();
@@ -202,8 +201,8 @@ const UserOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-            <OptionPopper 
-              id={id} 
+            <OptionPopper
+              id={id}
               open={open}
               anchorEl={anchorEl}
               onDeleteClick={() => setOpenModal(true)}

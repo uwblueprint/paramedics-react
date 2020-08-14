@@ -109,7 +109,9 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [anchorEl, setAnchorEl] = React.useState<null | (EventTarget & HTMLButtonElement)>(null);
+  const [anchorEl, setAnchorEl] = React.useState<
+    null | (EventTarget & HTMLButtonElement)
+  >(null);
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
 
   const rows = data ? data.collectionPointsByEvent : [];
@@ -139,7 +141,12 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           width="48px"
           style={{ maxWidth: '48px', paddingTop: 0, paddingBottom: 0 }}
         >
-          <IconButton onClick={(e) => { setAnchorEl(anchorEl ? null : e.currentTarget) }} color="inherit">
+          <IconButton
+            onClick={(e) => {
+              setAnchorEl(anchorEl ? null : e.currentTarget);
+            }}
+            color="inherit"
+          >
             <MoreHoriz />
           </IconButton>
         </TableCell>

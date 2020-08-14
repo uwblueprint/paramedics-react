@@ -45,4 +45,4 @@ export const GET_CCPS_BY_EVENT_ID = gql`
       }
     }
   }
-  `;
+`;
