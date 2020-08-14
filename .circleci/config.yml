@@ -2,29 +2,12 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-  install-prod:
-    docker:
-      - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-              - v1-dependencies-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
 
-  build-prod:
+  prod-build:
     docker:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.1
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
       - node/with-cache:
           steps:
             - run: npm install
@@ -45,34 +28,13 @@ jobs:
           root: .
           paths:
             - .
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
 
-  install-dev:
+
+  dev-build:
     docker:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.2
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-              - v1-dependencies-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-  build-dev:
-    docker:
-      - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.2
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
       - node/with-cache:
           steps:
             - run: npm install
@@ -96,20 +58,12 @@ jobs:
           root: .
           paths:
             - .
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
 
-  lint:
+  dev-lint:
     docker:
       - image: uwbpparamedics/uw-blueprint-paramedics-react:0.0.2
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
       - attach_workspace:
           at: .
       - run:
@@ -120,16 +74,10 @@ jobs:
 
 workflows:
   version: 2
-  build-lint:
+  build-and-lint:
     jobs:
-      - install-dev
-      - install-prod
-      - build-prod:
-          requires:
-            - install-prod
-      - build-dev:
-          requires:
-            - install-dev
-      - lint:
-          requires:
-            - build-dev
+      - prod-build
+      - dev-build
+      - dev-lint:
+        requires:
+          - dev-build
