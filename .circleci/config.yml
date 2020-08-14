@@ -51,8 +51,11 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Installing packages
+          command: npm install
+      - run:
           name: Lint
-          command: npm install; npm run lint
+          command: npm run lint
 
 workflows:
   version: 2
