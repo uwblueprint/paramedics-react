@@ -47,6 +47,19 @@ const HomeLandingPage = () => {
     // Force re-render
     refetch();
   };
+  const handleUnarchiveEvent = async (event: Event) => {
+    await editEvent({
+      variables: {
+        id: event.id,
+        name: event.name,
+        eventDate: event.eventDate,
+        createdBy: event.createdBy.id,
+        isActive: true,
+      },
+    });
+    // Force re-render
+    refetch();
+  };
 
   const handleDeleteEvent = async (event: Event) => {
     await deleteEvent({
@@ -85,9 +98,11 @@ const HomeLandingPage = () => {
                 eventId={event.id}
                 date={event.eventDate}
                 eventTitle={event.name}
+                isActive={event.isActive}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
                 handleArchiveEvent={() => handleArchiveEvent(event)}
+                handleUnarchiveEvent={() => handleUnarchiveEvent(event)}
                 handleDeleteEvent={() => handleDeleteEvent(event)}
               />
             </Grid>
