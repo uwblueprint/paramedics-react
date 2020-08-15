@@ -49,7 +49,8 @@ const CardOptions: CardOptions = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (event) => {
+    event.stopPropagation();
     setAnchorEl(null);
   };
   const handleEditEvent = (

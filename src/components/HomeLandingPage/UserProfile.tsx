@@ -30,6 +30,14 @@ const UserProfile = () => {
     event.stopPropagation();
     history.replace('/manage/members');
   };
+  const handleEditProfileClick = (event) => {
+    event.stopPropagation();
+    //TODO: Redirect to edit profile
+  };
+  const handleLogoutClick = (event) => {
+    event.stopPropagation();
+    //TODO: Logout
+  };
 
   const classes = useStyles();
   return (
@@ -53,11 +61,11 @@ const UserProfile = () => {
           horizontal: 'center',
         }}
       >
-        <MenuItem>Edit profile</MenuItem>
+        <MenuItem onClick={handleEditProfileClick}>Edit profile</MenuItem>
         <MenuItem onClick={handleResourceManagementClick}>
           Resource management
         </MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
     </div>
   );
