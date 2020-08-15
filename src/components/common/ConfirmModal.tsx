@@ -38,6 +38,11 @@ const dialogStyles = makeStyles({
     height: 48,
     width: 107,
   },
+  dialogConfirm: {
+    color: Colours.Secondary,
+    height: 48,
+    width: 107,
+  },
   dialogActionSpacing: {
     paddingBottom: 8,
     paddingLeft: 16,
@@ -52,10 +57,12 @@ const ConfirmModal = ({
   title,
   body,
   actionLabel,
+  actionLabelStatus = 'danger',
 }: {
   title: string;
   body: string;
   actionLabel: string;
+  actionLabelStatus?: 'danger' | 'secondary';
   open: boolean;
   handleClickCancel: () => void;
   handleClickAction: () => void;
@@ -73,12 +80,20 @@ const ConfirmModal = ({
       <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
         <Button
           classes={{ root: dialogStyle.dialogCancel }}
-          onClick={handleClickCancel}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleClickCancel();
+          }}
         >
           <Typography variant="body1">Cancel</Typography>
         </Button>
         <Button
-          classes={{ root: dialogStyle.dialogDelete }}
+          classes={{
+            root:
+              actionLabelStatus === 'secondary'
+                ? dialogStyle.dialogConfirm
+                : dialogStyle.dialogDelete,
+          }}
           onClick={handleClickAction}
         >
           <Typography variant="body1">{actionLabel}</Typography>

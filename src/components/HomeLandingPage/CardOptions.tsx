@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import ConfirmationDialog from '../common/ConfirmationDialog';
+import ConfirmModal from '../common/ConfirmModal';
 
 type CardOptions = ({
   eventId,
@@ -90,24 +90,22 @@ const CardOptions: CardOptions = ({
   if (isActive) {
     return (
       <>
-        <ConfirmationDialog
+        <ConfirmModal
           open={openArchiveDialog}
-          setOpen={setOpenArchiveDialog}
-          dialogTitle="Are you sure you want to archive the following event?"
-          closeTitle="Cancel"
-          okTitle="Archive"
-          okAction={handleArchiveEvent}
-          dialogContentText={`${eventTitle} will be moved into the Archived Events tab.`}
+          title="Are you sure you want to archive the following event?"
+          actionLabel="Archive"
+          actionLabelStatus="secondary"
+          handleClickAction={handleArchiveEvent}
+          handleClickCancel={() => setOpenArchiveDialog(false)}
+          body={`${eventTitle} will be moved into the Archived Events tab.`}
         />
-        <ConfirmationDialog
+        <ConfirmModal
           open={openDeleteDialog}
-          setOpen={setOpenDeleteDialog}
-          dialogTitle="Are you sure you want to delete the following event?"
-          closeTitle="Cancel"
-          okTitle="Delete"
-          okTitleStatus="danger"
-          okAction={handleDeleteEvent}
-          dialogContentText={`${eventTitle} cannot be recovered when deleted.`}
+          title="Are you sure you want to delete the following event?"
+          actionLabel="Delete"
+          handleClickAction={handleDeleteEvent}
+          handleClickCancel={() => setOpenDeleteDialog(false)}
+          body={`${eventTitle} cannot be recovered when deleted.`}
         />
         <IconButton
           onClick={handleClick}
@@ -131,14 +129,14 @@ const CardOptions: CardOptions = ({
   } else {
     return (
       <>
-        <ConfirmationDialog
+        <ConfirmModal
           open={openUnarchiveDialog}
-          setOpen={setOpenUnarchiveDialog}
-          dialogTitle="Are you sure you want to unarchive the following event?"
-          closeTitle="Cancel"
-          okTitle="Unarchive"
-          okAction={handleUnarchiveEvent}
-          dialogContentText={`${eventTitle} will be moved into the Current Events tab.`}
+          title="Are you sure you want to unarchive the following event?"
+          actionLabel="Unarchive"
+          actionLabelStatus="secondary"
+          handleClickAction={handleUnarchiveEvent}
+          handleClickCancel={() => setOpenUnarchiveDialog(false)}
+          body={`${eventTitle} will be moved into the Current Events tab.`}
         />
 
         <IconButton
