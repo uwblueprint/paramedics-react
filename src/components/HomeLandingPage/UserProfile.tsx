@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 const UserProfile = () => {
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleClick = (event) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
@@ -32,16 +32,22 @@ const UserProfile = () => {
   };
   const handleEditProfileClick = (event) => {
     event.stopPropagation();
-    //TODO: Redirect to edit profile
+    // TODO: Redirect to edit profile
   };
   const handleLogoutClick = (event) => {
     event.stopPropagation();
-    //TODO: Logout
+    // TODO: Logout
   };
 
   const classes = useStyles();
   return (
-    <div className={classes.iconWrapper} onClick={handleClick}>
+    <div
+      className={classes.iconWrapper}
+      onKeyDown={handleClick}
+      onClick={handleClick}
+      tabIndex={0}
+      role="button"
+    >
       <Typography variant="h6" align="right" style={{ marginRight: '0.5em' }}>
         Joe Li
       </Typography>
