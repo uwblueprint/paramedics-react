@@ -94,7 +94,10 @@ const ConfirmModal = ({
                 ? dialogStyle.dialogConfirm
                 : dialogStyle.dialogDelete,
           }}
-          onClick={handleClickAction}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleClickAction();
+          }}
         >
           <Typography variant="body1">{actionLabel}</Typography>
         </Button>
