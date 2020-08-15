@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useQuery, useMutation } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { useHistory } from 'react-router-dom';
 import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
+import UserProfile from './UserProfile';
 import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, FETCH_ALL_EVENTS } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
@@ -68,16 +68,7 @@ const HomeLandingPage = () => {
       <div className="landing-top-section">
         <div className="landing-top-bar">
           <Typography variant="h3">Mass Casualty Events</Typography>
-          <div className="user-icon">
-            <Typography
-              variant="h6"
-              align="right"
-              style={{ marginRight: '0.5em' }}
-            >
-              Joe Li
-            </Typography>
-            <AccountCircleIcon fontSize="large" color="secondary" />
-          </div>
+          <UserProfile />
         </div>
         <MenuTabs
           handleChange={handleChange}

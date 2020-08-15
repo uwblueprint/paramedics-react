@@ -23,6 +23,7 @@ function App() {
           path="/events/new"
           component={(props) => <EventCreationPage mode="new" {...props} />}
         />
+        <Route exact path="/events/:eventId" component={EventDashboardPage} />
         <Route
           exact
           path="/events/edit/:eventId"
