@@ -131,7 +131,6 @@ const UserOverviewPage: React.FC = () => {
   const handleClickOptions = (event) => {
     selectMember(event.currentTarget.getAttribute('data-id'));
     setAnchorEl(anchorEl ? null : event.currentTarget);
-    console.log(event.currentTarget.type);
   };
 
   const history = useHistory();

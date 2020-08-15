@@ -110,6 +110,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
+  const [row, selectRow] = React.useState<string | null>('');
   const [anchorEl, setAnchorEl] = React.useState<
     null | (EventTarget & HTMLButtonElement)
   >(null);
@@ -131,9 +132,10 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   }
 
   const handleEdit = () => {
-    history.replace(`/events/${eventId}/ccps/`);
+    history.replace(`/events/${eventId}/ccps/${row}`);
   }
 
+  //TODO: Implement deletion
   const handleDelete = () => {
 
   }
@@ -156,8 +158,10 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           style={{ maxWidth: '48px', paddingTop: 0, paddingBottom: 0 }}
         >
           <IconButton
+            data-id={row.id}
             onClick={(e) => {
               setAnchorEl(anchorEl ? null : e.currentTarget);
+              selectRow(e.currentTarget.getAttribute('data-id'));
             }}
             color="inherit"
           >

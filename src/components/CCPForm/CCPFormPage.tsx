@@ -67,10 +67,7 @@ const CCPFormPage = ({
   const history = useHistory();
 
   const { data } = useQuery(
-    mode === 'new' ? GET_ALL_CCPS : GET_CCP_BY_ID,
-    mode === 'new'
-      ? {}
-      : {
+    mode === 'new' ? GET_ALL_CCPS : GET_CCP_BY_ID,{
           variables: { id: ccpID },
         }
   );
@@ -127,7 +124,7 @@ const CCPFormPage = ({
         variables: {
           name: ccpName,
           eventId: eventID,
-          createdBy: 3,
+          createdBy: 4,
         },
       });
     }
