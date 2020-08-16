@@ -56,9 +56,6 @@ const useStyles = makeStyles({
   detailsDialog: {
     width: '662px',
   },
-  menu: {
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
-  },
 });
 
 interface HeadCell {
@@ -410,7 +407,6 @@ export const PatientInfoTable = ({
       )}
       <Menu
         id="simple-menu"
-        className={classes.menu}
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
