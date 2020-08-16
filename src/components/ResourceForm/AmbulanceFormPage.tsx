@@ -87,7 +87,7 @@ const AmbulanceFormPage = ({
           vehicleNumber: parseInt(ambulanceNumber),
         },
       });
-      enqueueSnackbar('Ambulance deleted.');
+      enqueueSnackbar('Ambulance added.');
     } else if (mode === 'edit') {
       editAmbulance({
         variables: {
