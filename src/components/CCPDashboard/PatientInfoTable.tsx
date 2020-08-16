@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 import {
   makeStyles,
   Table,
@@ -12,14 +13,24 @@ import {
   IconButton,
   Dialog,
   DialogActions,
+  Menu,
+  MenuItem,
 } from '@material-ui/core';
+import { useMutation } from '@apollo/react-hooks';
 import { MoreHoriz } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
-import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
+import {
+  Patient,
+  TriageLevel,
+  Status,
+  GET_ALL_PATIENTS,
+} from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
+import DeletePatientDialog from './DeletePatientDialog';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
 import { capitalize } from '../../utils/format';
+import { DELETE_PATIENT } from '../../graphql/mutations/patients';
 
 const useStyles = makeStyles({
   visuallyHidden: {
@@ -44,6 +55,9 @@ const useStyles = makeStyles({
   },
   detailsDialog: {
     width: '662px',
+  },
+  menu: {
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
   },
 });
 
@@ -128,9 +142,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 export const PatientInfoTable = ({
   patients,
   type,
+  eventId,
+  ccpId,
 }: {
   patients: Patient[];
   type: CCPDashboardTabOptions;
+  eventId: string;
+  ccpId: string;
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
@@ -138,11 +156,63 @@ export const PatientInfoTable = ({
     type === CCPDashboardTabOptions.Hospital ? 'transportTime' : 'updatedAt'
   );
   const [openDetails, setOpenDetails] = React.useState(false);
+  const [openDeletePatient, setOpenDeletePatient] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const history = useHistory();
+
+  const [deletePatient] = useMutation(DELETE_PATIENT, {
+    update(cache, { data: { deletePatient } }) {
+      if (!deletePatient) {
+        return;
+      }
+      let { patients } = cache.readQuery<any>({
+        query: GET_ALL_PATIENTS,
+      });
+      const filtered = patients.filter(
+        (patient) => patient.id !== ((selectedPatient as unknown) as Patient).id
+      );
+      patients = filtered;
+      cache.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: { patients },
+      });
+    },
+  });
 
   const handleOpenDetails = (patient) => {
     setSelectedPatient(patient);
     setOpenDetails(true);
+  };
+
+  const handleClickOptions = (event, patient) => {
+    setSelectedPatient(patient);
+    event.stopPropagation();
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClickEdit = () => {
+    history.replace(
+      `/events/${eventId}/ccps/${ccpId}/patients/edit/${
+        ((selectedPatient as unknown) as Patient).id
+      }`
+    );
+  };
+
+  const handleClickDelete = () => {
+    setAnchorEl(null);
+    setOpenDeletePatient(true);
+  };
+
+  const handleConfirmDeletePatient = () => {
+    deletePatient({
+      variables: { id: ((selectedPatient as unknown) as Patient).id },
+    });
+    setOpenDeletePatient(false);
   };
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
@@ -153,6 +223,10 @@ export const PatientInfoTable = ({
 
   const handleCloseDetails = () => {
     setOpenDetails(false);
+  };
+
+  const handleCancelDeletePatient = () => {
+    setOpenDeletePatient(false);
   };
 
   const tableRows = stableSort(patients, getComparator(order, orderBy)).map(
@@ -274,9 +348,11 @@ export const PatientInfoTable = ({
               </TableCell>
             </>
           )}
-
           <TableCell width="48px" style={{ maxWidth: '48px' }}>
-            <IconButton color="inherit">
+            <IconButton
+              color="inherit"
+              onClick={(e) => handleClickOptions(e, patient)}
+            >
               <MoreHoriz />
             </IconButton>
           </TableCell>
@@ -317,7 +393,13 @@ export const PatientInfoTable = ({
             }}
           >
             <Button
-              onClick={() => {}}
+              onClick={() => {
+                history.replace(
+                  `/events/${eventId}/ccps/${ccpId}/patients/edit/${
+                    ((selectedPatient as unknown) as Patient).id
+                  }`
+                );
+              }}
               color="secondary"
               className={classes.editButton}
             >
@@ -326,6 +408,24 @@ export const PatientInfoTable = ({
           </DialogActions>
         </Dialog>
       )}
+      <Menu
+        id="simple-menu"
+        className={classes.menu}
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+      >
+        <MenuItem onClick={handleClickEdit}>Edit patient</MenuItem>
+        <MenuItem style={{ color: Colours.Danger }} onClick={handleClickDelete}>
+          Delete patient
+        </MenuItem>
+      </Menu>
+      <DeletePatientDialog
+        open={openDeletePatient}
+        onClose={handleCancelDeletePatient}
+        handleConfirm={handleConfirmDeletePatient}
+      />
     </Table>
   );
 };

@@ -48,7 +48,7 @@ const useStyles = makeStyles({
 });
 
 export const HospitalOverview = (props: HospitalOverviewProps) => {
-  const { patients } = props;
+  const { patients, eventId, ccpId } = props;
   const classes = useStyles();
 
   const [selectedHospital, setSelectedHospital] = React.useState<string>(
@@ -143,6 +143,8 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
         <PatientInfoTable
           patients={filteredPatients}
           type={CCPDashboardTabOptions.Hospital}
+          eventId={eventId}
+          ccpId={ccpId}
         />
       </Card>
       <ScanPatientButton />
