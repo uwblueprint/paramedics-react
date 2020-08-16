@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.2'
 services:
   # The primary API endpoint service
   paramedics-react:
@@ -11,10 +11,10 @@ services:
       - type: bind
         source: ./
         target: /app
-      - "/app/node_modules"
+      - '/app/node_modules'
     ports:
-      - "5000:5000"
+      - '5000:5000'
     logging:
-      driver: "json-file"
+      driver: 'json-file'
       options:
         max-size: 100m
