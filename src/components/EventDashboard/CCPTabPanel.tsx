@@ -17,6 +17,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
 import OptionPopper from '../common/OptionPopper';
+import { Option } from '../common/OptionPopper';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 
@@ -53,6 +54,18 @@ const useStyles = makeStyles({
   },
 });
 
+const useOptions = makeStyles({
+  root: {
+    textAlign: 'right',
+  },
+  menuCell: {
+    borderBottom: 0,
+  },
+  menuDelete: {
+    color: Colours.DangerHover,
+  },
+});
+
 interface HeadCell {
   headerId: string;
   label: string;
@@ -64,6 +77,8 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
 }
+
+
 
 const EnhancedTableHead = (props: EnhancedTableProps) => {
   const { classes, order, orderBy, onRequestSort } = props;
@@ -109,6 +124,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
+  const optionStyle = useOptions();
   const [order, setOrder] = React.useState<Order>('asc');
   const [row, selectRow] = React.useState<string | null>('');
   const [anchorEl, setAnchorEl] = React.useState<
@@ -120,6 +136,8 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const open = Boolean(anchorEl);
   const history = useHistory();
   const id = open ? 'simple-popper' : undefined;
+
+
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -139,6 +157,16 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const handleDelete = () => {
 // TODO: handle delete here
   }
+
+  const options = [{
+    styles: optionStyle.menuCell,
+    onClick: handleEdit,
+    name: "Edit",
+  }, {
+    styles: optionStyle.menuDelete,
+    onClick: handleDelete,
+    name: "Delete",
+  }];
 
   const tableRows = stableSort(
     rows as CCP[],
@@ -194,13 +222,12 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         <Add className={classes.buttonIcon} />
         Add CCP
       </Button>
-      <OptionPopper
+      {/* <OptionPopper
         id={id}
         open={open}
         anchorEl={anchorEl}
-        onEditClick={handleEdit}
-        onDeleteClick={handleDelete}
-      />
+        options={options}
+      /> */}
     </Box>
   );
 };

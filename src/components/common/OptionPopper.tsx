@@ -8,7 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
 import { Colours } from '../../styles/Constants';
 
-const options = makeStyles({
+const useOptions = makeStyles({
   root: {
     textAlign: 'right',
   },
@@ -33,21 +33,27 @@ const useLayout = makeStyles({
   },
 });
 
+export interface Option {
+  styles: any;
+  onClick: () => void;
+  name: string;
+
+}
+
 const OptionPopper = ({
   id,
   open,
   anchorEl,
-  onEditClick,
-  onDeleteClick,
+  options
 }: {
   id: string | undefined;
   open: boolean;
   anchorEl: HTMLButtonElement | null;
-  onEditClick: () => void;
-  onDeleteClick: () => void;
+  options: [Option];
 }) => {
-  const optionBtn = options();
   const classes = useLayout();
+  const optionStyle = useOptions();
+  const optionBtn = useOptions();
 
   return (
     <Popper
@@ -61,7 +67,17 @@ const OptionPopper = ({
       <div>
         <Table className={classes.tablePopper}>
           <TableBody>
-            <TableRow
+            {/* {options.map((option) => {
+              return (<TableRow
+                hover
+                classes={{ hover: optionStyle.menuHover }}
+                onClick={option.onClick}>
+                <TableCell classes={{ root: option.styles }}>
+                  <Typography variant="body2">{option.name}</Typography>
+                </TableCell>
+              </TableRow>);
+            })} */}
+            {/* <TableRow
               hover
               classes={{ hover: optionBtn.menuHover }}
               onClick={onEditClick}
@@ -74,12 +90,14 @@ const OptionPopper = ({
               <TableCell classes={{ root: optionBtn.menuDelete }}>
                 <Typography variant="body2">Delete</Typography>
               </TableCell>
-            </TableRow>
+            </TableRow> */}
           </TableBody>
         </Table>
       </div>
+
     </Popper>
   );
 };
+
 
 export default OptionPopper;
