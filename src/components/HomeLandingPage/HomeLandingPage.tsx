@@ -15,7 +15,7 @@ type LocationState = { addedEventId: string | null };
 const HomeLandingPage = () => {
   const history = useHistory();
   const location = useLocation<LocationState>();
-  const { addedEventId } = location.state || { addEventId: null };
+  const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
 
   // Clear the addedEventId in location state now that it's been used
