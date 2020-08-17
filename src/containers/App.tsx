@@ -66,17 +66,14 @@ function App() {
           />
           <Route
             exact
-            path="/patients/edit/:ccpId/:patientId"
+            path="/patients/edit/ccps/:ccpId/patient/:patientId"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
           <Route
             exact
-            path="/patients/new/:ccpId/:barcodeValue?"
+            path="/patients/new/ccps/:ccpId/:barcodeValue?"
             component={(props) => <PatientProfilePage mode="new" {...props} />}
           />
-          <Route path="/">
-            <Redirect to="/events" />
-          </Route>
         </Switch>
       </SnackbarProvider>
     </ThemeProvider>

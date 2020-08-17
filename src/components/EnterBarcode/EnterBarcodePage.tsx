@@ -32,13 +32,13 @@ const EnterBarcodePage = ({
           id,
         } = selectedPatient[0];
         // Redirect to patient profile
-        history.replace(`/patients/edit/${patientCCPId}/${id}`);
+        history.replace(`/patients/edit/ccps/${patientCCPId}/patient/${id}`);
       } else {
         // No existing patient
-        history.replace(`/patients/new/${ccpID}/${barcode}`);
+        history.replace(`/patients/new/ccps/${ccpID}/${barcode}`);
       }
     }
-    history.replace(`/patients/new/${ccpID}/${barcode}`);
+    history.replace(`/patients/new/ccps/${ccpID}/${barcode}`);
   };
 
   return (
