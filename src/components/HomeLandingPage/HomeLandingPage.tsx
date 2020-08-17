@@ -22,7 +22,7 @@ const HomeLandingPage = () => {
   window.history.pushState(
     {
       ...location.state,
-      addEventId: null,
+      addedEventId: null,
     },
     ''
   );
