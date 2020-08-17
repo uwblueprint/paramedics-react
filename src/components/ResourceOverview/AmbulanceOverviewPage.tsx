@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
 import Popper from '@material-ui/core/Popper';
@@ -97,6 +98,7 @@ const useLayout = makeStyles({
 });
 
 const AmbulanceOverviewPage: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedAmbulance, selectAmbulance] = React.useState<number>(-1);
@@ -148,6 +150,7 @@ const AmbulanceOverviewPage: React.FC = () => {
     deleteAmbulance({ variables: { id: ambulanceId } });
     setAnchorEl(null);
     setOpenModal(false);
+    enqueueSnackbar('Ambulance deleted.');
   };
 
   const handleClickCancel = () => {
