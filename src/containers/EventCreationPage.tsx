@@ -28,8 +28,8 @@ const EventCreationPage = () => {
         data: { events: events.concat([addEvent]) },
       });
     },
-    onCompleted(data) {
-      history.replace('/events', { addedEventId: data.id });
+    onCompleted({ addEvent }) {
+      history.replace('/events', { addedEventId: addEvent.id });
     },
     onError() {
       history.replace('/events');

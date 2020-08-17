@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-apollo';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useHistory, useLocation } from 'react-router-dom';
 import MenuTabs from '../common/MenuTabs';
@@ -18,6 +17,16 @@ const HomeLandingPage = () => {
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addEventId: null };
   const [selectedTab, setTab] = useState(0);
+
+  // Clear the addedEventId in location state now that it's been used
+  window.history.pushState(
+    {
+      ...location.state,
+      addEventId: null,
+    },
+    ''
+  );
+
   const handleChange = (
     event: React.ChangeEvent<unknown>,
     newValue: number
@@ -64,6 +73,7 @@ const HomeLandingPage = () => {
                 key={event.id}
                 date={event.eventDate}
                 eventTitle={event.name}
+                isNew={event.id === addedEventId}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
               />
