@@ -13,6 +13,7 @@ export const ADD_EVENT = gql`
       createdBy: $createdBy
       isActive: $isActive
     ) {
+      id
       name
       eventDate
     }
