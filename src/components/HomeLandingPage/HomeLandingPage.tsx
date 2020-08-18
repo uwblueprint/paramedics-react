@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-apollo';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
@@ -12,15 +10,29 @@ import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
 import '../../styles/HomeLandingPage.css';
 
+type LocationState = { addedEventId: string | null };
+
 const HomeLandingPage = () => {
+  const history = useHistory();
+  const location = useLocation<LocationState>();
+  const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
+
+  // Clear the addedEventId in location state now that it's been used
+  window.history.pushState(
+    {
+      ...location.state,
+      addedEventId: null,
+    },
+    ''
+  );
+
   const handleChange = (
     event: React.ChangeEvent<unknown>,
     newValue: number
   ) => {
     setTab(newValue);
   };
-  const history = useHistory();
 
   const tabLabels = ['Current Events', 'Archived Events'];
 
@@ -61,6 +73,7 @@ const HomeLandingPage = () => {
                 key={event.id}
                 date={event.eventDate}
                 eventTitle={event.name}
+                isNew={event.id === addedEventId}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
               />

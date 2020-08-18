@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import { Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -41,6 +42,7 @@ const HospitalFormPage = ({
   match: { params: { mode: string; hospitalId?: string } };
 }) => {
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { data, loading } = useQuery(
     mode === 'edit' && hospitalId
@@ -83,6 +85,7 @@ const HospitalFormPage = ({
           name: hospitalName,
         },
       });
+      enqueueSnackbar('Hospital added.');
     } else if (mode === 'edit') {
       editHospital({
         variables: {
@@ -90,6 +93,7 @@ const HospitalFormPage = ({
           name: hospitalName,
         },
       });
+      enqueueSnackbar('Hospital edited.');
     }
     history.replace('/manage/hospitals');
   };

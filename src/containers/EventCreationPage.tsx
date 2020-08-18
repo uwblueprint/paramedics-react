@@ -28,6 +28,12 @@ const EventCreationPage = () => {
         data: { events: events.concat([addEvent]) },
       });
     },
+    onCompleted({ addEvent }) {
+      history.replace('/events', { addedEventId: addEvent.id });
+    },
+    onError() {
+      history.replace('/events');
+    },
   });
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
@@ -97,7 +103,6 @@ const EventCreationPage = () => {
         isActive: true,
       },
     });
-    history.replace('/events');
   };
 
   const content =
