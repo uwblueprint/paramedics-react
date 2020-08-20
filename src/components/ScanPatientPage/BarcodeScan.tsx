@@ -48,9 +48,9 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
           readers: ['code_128_reader'],
         },
       },
-      function (err) {
+      (err: boolean) => {
         if (err) {
-          // console.log(err);
+          // TODO: add error handling;
           return;
         }
         Quagga.start();
@@ -67,12 +67,14 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
     };
   }, []);
   return (
+    /*eslint-disable */
     <div id="barcode-scan">
       {/* Hardcoded styles to make barcode scan full screen */}
       <video src="" style={{ width: '100%', height: 'auto' }} />
       <video src="" className="drawingBuffer" style={{ display: 'none' }} />
       <canvas className="drawingBuffer" style={{ display: 'none' }} />
     </div>
+    /* eslint-enable */
   );
 };
 
