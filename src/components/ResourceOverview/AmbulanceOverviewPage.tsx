@@ -198,13 +198,13 @@ const AmbulanceOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-            <OptionPopper
+            {/* <OptionPopper
               id={id}
               open={open}
               anchorEl={anchorEl}
               onDeleteClick={() => setOpenModal(true)}
               onEditClick={handleClickEdit}
-            />
+            /> */}
           </TableBody>
         </Table>
       </TableContainer>

@@ -10,6 +10,7 @@ import {
   TableHead,
   TableSortLabel,
   TableRow,
+  ClickAwayListener,
 } from '@material-ui/core';
 import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -135,9 +136,6 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const rows = data ? data.collectionPointsByEvent : [];
   const open = Boolean(anchorEl);
   const history = useHistory();
-  const id = open ? 'simple-popper' : undefined;
-
-
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -155,10 +153,10 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
 
   //TODO: Implement deletion
   const handleDelete = () => {
-// TODO: handle delete here
+    // TODO: handle delete here
   }
 
-  const options = [{
+  const options: Array<Option> = [{
     styles: optionStyle.menuCell,
     onClick: handleEdit,
     name: "Edit",
@@ -201,6 +199,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   });
 
   return (
+
     <Box className={classes.root}>
       <TableContainer className={classes.tableContainer}>
         <Table>
@@ -222,14 +221,13 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         <Add className={classes.buttonIcon} />
         Add CCP
       </Button>
-      {/* <OptionPopper
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        options={options}
-      /> */}
-    </Box>
-  );
+        <OptionPopper
+            open={open}
+            anchorEl={anchorEl}
+            onClickAway={() => { setAnchorEl(null)}}
+            options={options}
+          />
+    </Box>);
 };
 
 export default CCPTabPanel;

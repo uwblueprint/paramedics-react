@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography, ClickAwayListener, } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -41,60 +41,45 @@ export interface Option {
 }
 
 const OptionPopper = ({
-  id,
   open,
   anchorEl,
-  options
+  onClickAway,
+  options,
 }: {
-  id: string | undefined;
   open: boolean;
   anchorEl: HTMLButtonElement | null;
-  options: [Option];
+  onClickAway: () => void;
+  options: Array<Option>;
 }) => {
   const classes = useLayout();
   const optionStyle = useOptions();
-  const optionBtn = useOptions();
 
   return (
     <Popper
-      id={id}
       open={open}
       popperOptions={{
         modifiers: { offset: { enabled: true, offset: '-69.5,0' } },
       }}
       anchorEl={anchorEl}
     >
-      <div>
-        <Table className={classes.tablePopper}>
-          <TableBody>
-            {/* {options.map((option) => {
-              return (<TableRow
-                hover
-                classes={{ hover: optionStyle.menuHover }}
-                onClick={option.onClick}>
-                <TableCell classes={{ root: option.styles }}>
-                  <Typography variant="body2">{option.name}</Typography>
-                </TableCell>
-              </TableRow>);
-            })} */}
-            {/* <TableRow
-              hover
-              classes={{ hover: optionBtn.menuHover }}
-              onClick={onEditClick}
-            >
-              <TableCell classes={{ root: optionBtn.menuCell }}>
-                <Typography variant="body2">Edit</Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow hover onClick={onDeleteClick}>
-              <TableCell classes={{ root: optionBtn.menuDelete }}>
-                <Typography variant="body2">Delete</Typography>
-              </TableCell>
-            </TableRow> */}
-          </TableBody>
-        </Table>
-      </div>
-
+      <ClickAwayListener onClickAway={onClickAway}>
+        <div>
+          <Table className={classes.tablePopper}>
+            <TableBody>
+              {options.map((option: Option) => {
+                return (<TableRow
+                  hover
+                  classes={{ hover: optionStyle.menuHover }}
+                  onClick={option.onClick}>
+                  <TableCell classes={{ root: option.styles }}>
+                    <Typography variant="body2">{option.name}</Typography>
+                  </TableCell>
+                </TableRow>);
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      </ClickAwayListener>
     </Popper>
   );
 };
