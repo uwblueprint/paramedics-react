@@ -144,7 +144,7 @@ const UserOverviewPage: React.FC = () => {
   };
 
   const open = Boolean(anchorEl);
-  
+
   const handleClickDelete = () => {
     const memberId = selectedMember;
     deleteUser({ variables: { id: memberId } });
