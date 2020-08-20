@@ -14,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper from '../common/OptionPopper';
+import { Option } from '../common/OptionPopper';
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -58,7 +59,7 @@ const dataRow = makeStyles({
   },
 });
 
-const options = makeStyles({
+const optionStyles = makeStyles({
   root: {
     textAlign: 'right',
   },
@@ -159,7 +160,17 @@ const UserOverviewPage: React.FC = () => {
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
-  const optionBtn = options();
+  const optionStyle = optionStyles();
+
+  const options: Array<Option> = [{
+    styles: optionStyle.menuCell,
+    onClick: handleClickEdit,
+    name: "Edit",
+  }, {
+    styles: optionStyle.menuDelete,
+    onClick: handleClickDelete,
+    name: "Delete",
+  }];
 
   const cells = members.map((member: User) => {
     return (
@@ -169,10 +180,10 @@ const UserOverviewPage: React.FC = () => {
         <TableCell classes={{ root: dRow.root }}>
           {member.accessLevel
             ? member.accessLevel.charAt(0).toUpperCase() +
-              member.accessLevel.substring(1).toLowerCase()
+            member.accessLevel.substring(1).toLowerCase()
             : null}
         </TableCell>
-        <TableCell classes={{ root: optionBtn.root }}>
+        <TableCell classes={{ root: optionStyle.root }}>
           <IconButton data-id={member.id} onClick={handleClickOptions}>
             <MoreHorizIcon style={{ color: Colours.Black }} />
           </IconButton>
@@ -195,18 +206,17 @@ const UserOverviewPage: React.FC = () => {
               <TableCell classes={{ root: hRow.root }}>Name</TableCell>
               <TableCell classes={{ root: hRow.root }}>Email</TableCell>
               <TableCell classes={{ root: hRow.root }}>Role</TableCell>
-              <TableCell classes={{ root: optionBtn.root }} />
+              <TableCell classes={{ root: optionStyle.root }} />
             </TableRow>
           </TableHead>
           <TableBody>
             {cells}
-            {/* <OptionPopper
-              id={id}
+            <OptionPopper
               open={open}
               anchorEl={anchorEl}
-              onDeleteClick={() => setOpenModal(true)}
-              onEditClick={handleClickEdit}
-            /> */}
+              onClickAway={() => { setAnchorEl(null) }}
+              options={options}
+            />
           </TableBody>
         </Table>
       </TableContainer>

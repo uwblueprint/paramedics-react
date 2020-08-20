@@ -14,6 +14,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper from '../common/OptionPopper';
+import { Option } from '../common/OptionPopper';
 import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
 import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
 import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
@@ -58,7 +59,7 @@ const dataRow = makeStyles({
   },
 });
 
-const options = makeStyles({
+const optionStyles = makeStyles({
   root: {
     textAlign: 'right',
   },
@@ -107,14 +108,13 @@ const HospitalOverviewPage: React.FC = () => {
   const hospitals: Array<Hospital> = data ? data.hospitals : [];
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
 
   const paraStyle = pStyles();
   const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
-  const optionBtn = options();
+  const optionStyle = optionStyles();
 
   //  Writing to cache when deleting user
   const [deleteHospital] = useMutation(DELETE_HOSPITAL, {
@@ -162,11 +162,21 @@ const HospitalOverviewPage: React.FC = () => {
     setOpenModal(false);
   };
 
+  const options: Array<Option> = [{
+    styles: optionStyle.menuCell,
+    onClick: handleClickEdit,
+    name: "Edit",
+  }, {
+    styles: optionStyle.menuDelete,
+    onClick: handleClickDelete,
+    name: "Delete",
+  }];
+
   const cells = hospitals.map((hospital: Hospital) => {
     return (
       <TableRow key={hospital.id}>
         <TableCell classes={{ root: dRow.root }}>{hospital.name}</TableCell>
-        <TableCell classes={{ root: optionBtn.root }}>
+        <TableCell classes={{ root: optionStyle.root }}>
           <IconButton data-id={hospital.id} onClick={handleClickOptions}>
             <MoreHorizIcon style={{ color: Colours.Black }} />
           </IconButton>
@@ -192,13 +202,12 @@ const HospitalOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-            {/* <OptionPopper
-              id={id}
+            <OptionPopper
               open={open}
               anchorEl={anchorEl}
-              onDeleteClick={() => setOpenModal(true)}
-              onEditClick={handleClickEdit}
-            /> */}
+              onClickAway={() => { setAnchorEl(null)}}
+              options={options}
+            />
           </TableBody>
         </Table>
       </TableContainer>

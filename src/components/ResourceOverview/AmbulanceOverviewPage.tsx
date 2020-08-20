@@ -14,6 +14,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper from '../common/OptionPopper';
+import { Option } from '../common/OptionPopper';
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -61,7 +62,7 @@ const dataRow = makeStyles({
   },
 });
 
-const options = makeStyles({
+const optionStyles = makeStyles({
   root: {
     textAlign: 'right',
   },
@@ -156,14 +157,22 @@ const AmbulanceOverviewPage: React.FC = () => {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
-
   const paraStyle = pStyles();
   const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
-  const optionBtn = options();
+  const optionStyle = optionStyles();
+
+  const options: Array<Option> = [{
+    styles: optionStyle.menuCell,
+    onClick: handleClickEdit,
+    name: "Edit",
+  }, {
+    styles: optionStyle.menuDelete,
+    onClick: handleClickDelete,
+    name: "Delete",
+  }];
 
   const cells = ambulances.map((ambulance: Ambulance) => {
     return (
@@ -171,7 +180,7 @@ const AmbulanceOverviewPage: React.FC = () => {
         <TableCell classes={{ root: dRow.root }}>
           {`#${ambulance.vehicleNumber}`}
         </TableCell>
-        <TableCell classes={{ root: optionBtn.root }}>
+        <TableCell classes={{ root: optionStyle.root }}>
           <IconButton data-id={ambulance.id} onClick={handleClickOptions}>
             <MoreHorizIcon style={{ color: Colours.Black }} />
           </IconButton>
@@ -198,13 +207,12 @@ const AmbulanceOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-            {/* <OptionPopper
-              id={id}
+              <OptionPopper
               open={open}
               anchorEl={anchorEl}
-              onDeleteClick={() => setOpenModal(true)}
-              onEditClick={handleClickEdit}
-            /> */}
+              onClickAway={() => { setAnchorEl(null)}}
+              options={options}
+              />
           </TableBody>
         </Table>
       </TableContainer>

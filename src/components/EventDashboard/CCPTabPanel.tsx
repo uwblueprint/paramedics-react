@@ -10,7 +10,6 @@ import {
   TableHead,
   TableSortLabel,
   TableRow,
-  ClickAwayListener,
 } from '@material-ui/core';
 import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
