@@ -221,7 +221,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         Add CCP
       </Button>
       <OptionPopper
-        id={row ? row : ""}
+        id={row || ''}
         open={open}
         anchorEl={anchorEl}
         onClickAway={() => {
