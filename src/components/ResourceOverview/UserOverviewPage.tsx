@@ -13,8 +13,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
-import OptionPopper from '../common/OptionPopper';
-import { Option } from '../common/OptionPopper';
+import OptionPopper, { Option } from '../common/OptionPopper';
+
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -141,8 +141,7 @@ const UserOverviewPage: React.FC = () => {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
-
+  
   const handleClickDelete = () => {
     const memberId = selectedMember;
     deleteUser({ variables: { id: memberId } });
@@ -162,15 +161,18 @@ const UserOverviewPage: React.FC = () => {
   const dRow = dataRow();
   const optionStyle = optionStyles();
 
-  const options: Array<Option> = [{
-    styles: optionStyle.menuCell,
-    onClick: handleClickEdit,
-    name: "Edit",
-  }, {
-    styles: optionStyle.menuDelete,
-    onClick: handleClickDelete,
-    name: "Delete",
-  }];
+  const options: Array<Option> = [
+    {
+      styles: optionStyle.menuCell,
+      onClick: handleClickEdit,
+      name: 'Edit',
+    },
+    {
+      styles: optionStyle.menuDelete,
+      onClick: handleClickDelete,
+      name: 'Delete',
+    },
+  ];
 
   const cells = members.map((member: User) => {
     return (
@@ -180,7 +182,7 @@ const UserOverviewPage: React.FC = () => {
         <TableCell classes={{ root: dRow.root }}>
           {member.accessLevel
             ? member.accessLevel.charAt(0).toUpperCase() +
-            member.accessLevel.substring(1).toLowerCase()
+              member.accessLevel.substring(1).toLowerCase()
             : null}
         </TableCell>
         <TableCell classes={{ root: optionStyle.root }}>
@@ -214,7 +216,9 @@ const UserOverviewPage: React.FC = () => {
             <OptionPopper
               open={open}
               anchorEl={anchorEl}
-              onClickAway={() => { setAnchorEl(null) }}
+              onClickAway={() => {
+                setAnchorEl(null);
+              }}
               options={options}
             />
           </TableBody>

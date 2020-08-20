@@ -13,8 +13,8 @@ import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
-import OptionPopper from '../common/OptionPopper';
-import { Option } from '../common/OptionPopper';
+import OptionPopper, { Option } from '../common/OptionPopper';
+
 import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
 import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
 import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
@@ -162,15 +162,18 @@ const HospitalOverviewPage: React.FC = () => {
     setOpenModal(false);
   };
 
-  const options: Array<Option> = [{
-    styles: optionStyle.menuCell,
-    onClick: handleClickEdit,
-    name: "Edit",
-  }, {
-    styles: optionStyle.menuDelete,
-    onClick: handleClickDelete,
-    name: "Delete",
-  }];
+  const options: Array<Option> = [
+    {
+      styles: optionStyle.menuCell,
+      onClick: handleClickEdit,
+      name: 'Edit',
+    },
+    {
+      styles: optionStyle.menuDelete,
+      onClick: handleClickDelete,
+      name: 'Delete',
+    },
+  ];
 
   const cells = hospitals.map((hospital: Hospital) => {
     return (
@@ -205,7 +208,9 @@ const HospitalOverviewPage: React.FC = () => {
             <OptionPopper
               open={open}
               anchorEl={anchorEl}
-              onClickAway={() => { setAnchorEl(null)}}
+              onClickAway={() => {
+                setAnchorEl(null);
+              }}
               options={options}
             />
           </TableBody>

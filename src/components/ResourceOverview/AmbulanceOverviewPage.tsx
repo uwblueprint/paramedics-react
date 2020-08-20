@@ -13,8 +13,8 @@ import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
-import OptionPopper from '../common/OptionPopper';
-import { Option } from '../common/OptionPopper';
+import OptionPopper, { Option } from '../common/OptionPopper';
+
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -164,15 +164,18 @@ const AmbulanceOverviewPage: React.FC = () => {
   const dRow = dataRow();
   const optionStyle = optionStyles();
 
-  const options: Array<Option> = [{
-    styles: optionStyle.menuCell,
-    onClick: handleClickEdit,
-    name: "Edit",
-  }, {
-    styles: optionStyle.menuDelete,
-    onClick: handleClickDelete,
-    name: "Delete",
-  }];
+  const options: Array<Option> = [
+    {
+      styles: optionStyle.menuCell,
+      onClick: handleClickEdit,
+      name: 'Edit',
+    },
+    {
+      styles: optionStyle.menuDelete,
+      onClick: handleClickDelete,
+      name: 'Delete',
+    },
+  ];
 
   const cells = ambulances.map((ambulance: Ambulance) => {
     return (
@@ -207,12 +210,14 @@ const AmbulanceOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-              <OptionPopper
+            <OptionPopper
               open={open}
               anchorEl={anchorEl}
-              onClickAway={() => { setAnchorEl(null)}}
+              onClickAway={() => {
+                setAnchorEl(null);
+              }}
               options={options}
-              />
+            />
           </TableBody>
         </Table>
       </TableContainer>

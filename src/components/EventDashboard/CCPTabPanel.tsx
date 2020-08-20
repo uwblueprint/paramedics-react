@@ -16,8 +16,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
 import { useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
-import OptionPopper from '../common/OptionPopper';
-import { Option } from '../common/OptionPopper';
+import OptionPopper, { Option } from '../common/OptionPopper';
+
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 
@@ -77,8 +77,6 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
 }
-
-
 
 const EnhancedTableHead = (props: EnhancedTableProps) => {
   const { classes, order, orderBy, onRequestSort } = props;
@@ -144,26 +142,29 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
 
   const handleAdd = () => {
     history.replace(`/events/${eventId}/new`);
-  }
+  };
 
   const handleEdit = () => {
     history.replace(`/events/${eventId}/ccps/${row}`);
-  }
+  };
 
-  //TODO: Implement deletion
+  // TODO: Implement deletion
   const handleDelete = () => {
     // TODO: handle delete here
-  }
+  };
 
-  const options: Array<Option> = [{
-    styles: optionStyle.menuCell,
-    onClick: handleEdit,
-    name: "Edit",
-  }, {
-    styles: optionStyle.menuDelete,
-    onClick: handleDelete,
-    name: "Delete",
-  }];
+  const options: Array<Option> = [
+    {
+      styles: optionStyle.menuCell,
+      onClick: handleEdit,
+      name: 'Edit',
+    },
+    {
+      styles: optionStyle.menuDelete,
+      onClick: handleDelete,
+      name: 'Delete',
+    },
+  ];
 
   const tableRows = stableSort(
     rows as CCP[],
@@ -198,7 +199,6 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   });
 
   return (
-
     <Box className={classes.root}>
       <TableContainer className={classes.tableContainer}>
         <Table>
@@ -220,13 +220,16 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         <Add className={classes.buttonIcon} />
         Add CCP
       </Button>
-        <OptionPopper
-            open={open}
-            anchorEl={anchorEl}
-            onClickAway={() => { setAnchorEl(null)}}
-            options={options}
-          />
-    </Box>);
+      <OptionPopper
+        open={open}
+        anchorEl={anchorEl}
+        onClickAway={() => {
+          setAnchorEl(null);
+        }}
+        options={options}
+      />
+    </Box>
+  );
 };
 
 export default CCPTabPanel;

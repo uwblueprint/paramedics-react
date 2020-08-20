@@ -66,11 +66,9 @@ const CCPFormPage = ({
   const classes = useStyles();
   const history = useHistory();
 
-  const { data } = useQuery(
-    mode === 'new' ? GET_ALL_CCPS : GET_CCP_BY_ID,{
-          variables: { id: ccpID },
-        }
-  );
+  const { data } = useQuery(mode === 'new' ? GET_ALL_CCPS : GET_CCP_BY_ID, {
+    variables: { id: ccpID },
+  });
 
   const collectionPoints: Array<CCP> = data ? data.collectionPoints : [];
   const collectionPoint: CCP = data ? data.collectionPoint : null;

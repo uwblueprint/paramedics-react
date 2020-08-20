@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, ClickAwayListener, } from '@material-ui/core';
+import { Typography, ClickAwayListener } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -37,7 +37,6 @@ export interface Option {
   styles: any;
   onClick: () => void;
   name: string;
-
 }
 
 const OptionPopper = ({
@@ -67,14 +66,17 @@ const OptionPopper = ({
           <Table className={classes.tablePopper}>
             <TableBody>
               {options.map((option: Option) => {
-                return (<TableRow
-                  hover
-                  classes={{ hover: optionStyle.menuHover }}
-                  onClick={option.onClick}>
-                  <TableCell classes={{ root: option.styles }}>
-                    <Typography variant="body2">{option.name}</Typography>
-                  </TableCell>
-                </TableRow>);
+                return (
+                  <TableRow
+                    hover
+                    classes={{ hover: optionStyle.menuHover }}
+                    onClick={option.onClick}
+                  >
+                    <TableCell classes={{ root: option.styles }}>
+                      <Typography variant="body2">{option.name}</Typography>
+                    </TableCell>
+                  </TableRow>
+                );
               })}
             </TableBody>
           </Table>
@@ -83,6 +85,5 @@ const OptionPopper = ({
     </Popper>
   );
 };
-
 
 export default OptionPopper;
