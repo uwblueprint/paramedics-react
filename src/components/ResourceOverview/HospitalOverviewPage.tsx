@@ -209,6 +209,7 @@ const HospitalOverviewPage: React.FC = () => {
           <TableBody>
             {cells}
             <OptionPopper
+              id={String(selectedHospital)}
               open={open}
               anchorEl={anchorEl}
               onClickAway={() => {

@@ -214,6 +214,7 @@ const AmbulanceOverviewPage: React.FC = () => {
           <TableBody>
             {cells}
             <OptionPopper
+            id={String(selectedAmbulance)}
               open={open}
               anchorEl={anchorEl}
               onClickAway={() => {

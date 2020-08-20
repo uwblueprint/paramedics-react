@@ -218,6 +218,7 @@ const UserOverviewPage: React.FC = () => {
           <TableBody>
             {cells}
             <OptionPopper
+              id={String(selectedMember)}
               open={open}
               anchorEl={anchorEl}
               onClickAway={() => {

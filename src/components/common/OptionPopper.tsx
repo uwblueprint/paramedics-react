@@ -40,11 +40,13 @@ export interface Option {
 }
 
 const OptionPopper = ({
+  id,
   open,
   anchorEl,
   onClickAway,
   options,
 }: {
+  id: string;
   open: boolean;
   anchorEl: HTMLButtonElement | null;
   onClickAway: () => void;
@@ -65,10 +67,11 @@ const OptionPopper = ({
         <div>
           <Table className={classes.tablePopper}>
             <TableBody>
-              {options.map((option: Option) => {
+              {options.map((option: Option, index: number) => {
                 return (
                   <TableRow
                     hover
+                    key={id + String(index)}
                     classes={{ hover: optionStyle.menuHover }}
                     onClick={option.onClick}
                   >
