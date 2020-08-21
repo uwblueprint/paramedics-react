@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
 import { Theme } from '../styles/Theme';
 import HomeLandingPage from '../components/HomeLandingPage/HomeLandingPage';
 import EventCreationPage from '../components/EventCreationPage/EventCreationPage';
@@ -18,71 +19,75 @@ import '../styles/App.css';
 function App() {
   return (
     <ThemeProvider theme={Theme}>
-      <Switch>
-        <Route exact path="/events" component={HomeLandingPage} />
-        <Route
-          exact
-          path="/events/new"
-          component={(props) => <EventCreationPage mode="new" {...props} />}
-        />
-        <Route exact path="/events/:eventId" component={EventDashboardPage} />
-        <Route
-          exact
-          path="/events/edit/:eventId"
-          component={(props) => <EventCreationPage mode="edit" {...props} />}
-        />
-        <Route
-          exact
-          path="/manage/:resource"
-          component={ResourceOverviewPage}
-        />
-        <Route exact path="/manage/">
-          <Redirect to="/manage/members" />
-        </Route>
-        <Route
-          exact
-          path="/manage/hospitals/:mode/:hospitalId?"
-          component={HospitalFormPage}
-        />
-        <Route
-          exact
-          path="/manage/ambulances/:mode/:ambulanceId?"
-          component={AmbulanceFormPage}
-        />
-        <Route
-          exact
-          path="/manage/members/:mode/:userId?"
-          component={UserFormPage}
-        />
-        <Route
-          exact
-          path="/events/:eventID/ccps/:ccpID/scan"
-          component={ScanPatientPage}
-        />
-        <Route
-          exact
-          path="/events/:eventID/ccps/:ccpID/scan/manual"
-          component={EnterBarcodePage}
-        />
-        <Route
-          exact
-          path="/events/:eventId/ccps/:ccpId"
-          component={CCPDashboardPage}
-        />
-        <Route
-          exact
-          path="/patients/edit/:ccpId/:patientId"
-          component={(props) => <PatientProfilePage mode="edit" {...props} />}
-        />
-        <Route
-          exact
-          path="/patients/new/:ccpId/:barcodeValue?"
-          component={(props) => <PatientProfilePage mode="new" {...props} />}
-        />
-        <Route path="/">
-          <Redirect to="/events" />
-        </Route>
-      </Switch>
+      <SnackbarProvider
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+      >
+        <Switch>
+          <Route exact path="/events" component={HomeLandingPage} />
+          <Route
+            exact
+            path="/events/new"
+            component={(props) => <EventCreationPage mode="new" {...props} />}
+          />
+          <Route exact path="/events/:eventId" component={EventDashboardPage} />
+          <Route
+            exact
+            path="/events/edit/:eventId"
+            component={(props) => <EventCreationPage mode="edit" {...props} />}
+          />
+          <Route
+            exact
+            path="/manage/:resource"
+            component={ResourceOverviewPage}
+          />
+          <Route exact path="/manage/">
+            <Redirect to="/manage/members" />
+          </Route>
+          <Route
+            exact
+            path="/manage/hospitals/:mode/:hospitalId?"
+            component={HospitalFormPage}
+          />
+          <Route
+            exact
+            path="/manage/ambulances/:mode/:ambulanceId?"
+            component={AmbulanceFormPage}
+          />
+          <Route
+            exact
+            path="/manage/members/:mode/:userId?"
+            component={UserFormPage}
+          />
+          <Route
+            exact
+            path="/events/:eventID/ccps/:ccpID/scan"
+            component={ScanPatientPage}
+          />
+          <Route
+            exact
+            path="/events/:eventID/ccps/:ccpID/scan/manual"
+            component={EnterBarcodePage}
+          />
+          <Route
+            exact
+            path="/events/:eventId/ccps/:ccpId"
+            component={CCPDashboardPage}
+          />
+          <Route
+            exact
+            path="/patients/edit/:ccpId/:patientId"
+            component={(props) => <PatientProfilePage mode="edit" {...props} />}
+          />
+          <Route
+            exact
+            path="/patients/new/:ccpId/:barcodeValue?"
+            component={(props) => <PatientProfilePage mode="new" {...props} />}
+          />
+          <Route path="/">
+            <Redirect to="/events" />
+          </Route>
+        </Switch>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

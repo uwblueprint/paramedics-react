@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import { ValidatorForm } from 'react-material-ui-form-validator';
@@ -47,6 +48,7 @@ const UserFormPage = ({
   match: { params: { mode: string; userId?: string } };
 }) => {
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { data, loading } = useQuery(
     mode === 'edit' && userId ? GET_USER_BY_ID(userId) : GET_ALL_USERS
@@ -108,6 +110,7 @@ const UserFormPage = ({
           emergencyContact: '1234567890',
         },
       });
+      enqueueSnackbar('Team member added.');
     } else if (mode === 'edit') {
       editUser({
         variables: {
@@ -117,6 +120,7 @@ const UserFormPage = ({
           accessLevel: role,
         },
       });
+      enqueueSnackbar('Team member edited.');
     }
     history.replace('/manage/members');
   };

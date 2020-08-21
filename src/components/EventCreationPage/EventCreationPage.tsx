@@ -47,6 +47,12 @@ const EventCreationPage = ({
         data: { events: events.concat([addEvent]) },
       });
     },
+    onCompleted({ addEvent }) {
+      history.replace('/events', { addedEventId: addEvent.id });
+    },
+    onError() {
+      history.replace('/events');
+    },
   });
   const [editEvent] = useMutation(EDIT_EVENT);
 
@@ -232,7 +238,9 @@ const EventCreationPage = ({
             <NextButton
               handleClick={activeStep < 1 ? handleNext : handleComplete}
               disabled={eventName === '' || eventDate === null}
-              buttonText={activeStep < 1 ? 'Next' : 'Create'}
+              buttonText={
+                activeStep < 1 ? 'Next' : mode === 'new' ? 'Create' : 'Save'
+              }
             />
           </div>
         }

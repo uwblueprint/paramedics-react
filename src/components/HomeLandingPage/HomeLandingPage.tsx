@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from 'react-apollo';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 
-import { useHistory } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-apollo';
+import { Grid, Typography } from '@material-ui/core';
+import { useHistory, useLocation } from 'react-router-dom';
 import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
@@ -13,15 +12,29 @@ import { Event, FETCH_ALL_EVENTS } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
 import '../../styles/HomeLandingPage.css';
 
+type LocationState = { addedEventId: string | null };
+
 const HomeLandingPage = () => {
+  const history = useHistory();
+  const location = useLocation<LocationState>();
+  const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
+
+  // Clear the addedEventId in location state now that it's been used
+  window.history.pushState(
+    {
+      ...location.state,
+      addedEventId: null,
+    },
+    ''
+  );
+
   const handleChange = (
     event: React.ChangeEvent<unknown>,
     newValue: number
   ) => {
     setTab(newValue);
   };
-  const history = useHistory();
 
   const tabLabels = ['Current Events', 'Archived Events'];
 
@@ -99,6 +112,7 @@ const HomeLandingPage = () => {
                 date={event.eventDate}
                 eventTitle={event.name}
                 isActive={event.isActive}
+                isNew={event.id === addedEventId}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
                 handleArchiveEvent={() => handleArchiveEvent(event)}
