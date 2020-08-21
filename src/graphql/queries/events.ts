@@ -45,6 +45,7 @@ export const GET_ALL_EVENTS = gql`
       isActive
       createdBy {
         id
+        name
       }
     }
   }

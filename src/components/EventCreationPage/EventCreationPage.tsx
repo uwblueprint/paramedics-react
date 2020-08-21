@@ -19,6 +19,11 @@ import {
   GET_EVENT_BY_ID,
 } from '../../graphql/queries/events';
 
+enum EventModes {
+  New = 'new',
+  Edit = 'edit',
+}
+
 const EventCreationPage = ({
   match: {
     params: { eventId },
@@ -31,7 +36,7 @@ const EventCreationPage = ({
   const history = useHistory();
 
   const { data, loading } = useQuery(
-    mode === 'edit' && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
+    mode === EventModes.Edit && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
     {
       variables: {
         eventId,
@@ -108,7 +113,7 @@ const EventCreationPage = ({
     : {};
 
   const handleComplete = () => {
-    if (mode === 'new') {
+    if (mode === EventModes.New) {
       addEvent({
         variables: {
           name: eventName,
@@ -124,7 +129,7 @@ const EventCreationPage = ({
           isActive: true,
         },
       });
-    } else if (mode === 'edit' && eventId) {
+    } else if (mode === EventModes.Edit && eventId) {
       editEvent({
         variables: {
           id: eventId,
@@ -146,7 +151,7 @@ const EventCreationPage = ({
   };
 
   useEffect(() => {
-    if (!loading && mode === 'edit') {
+    if (!loading && mode === EventModes.Edit) {
       const {
         name,
         eventDate,
@@ -159,7 +164,7 @@ const EventCreationPage = ({
       setEventName(name);
       setEventDate(new Date(eventDate));
     }
-  }, [data]);
+  }, [data, loading, mode]);
 
   const content =
     activeStep === 0 ? (
@@ -202,7 +207,7 @@ const EventCreationPage = ({
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
           <Typography variant="h3">
-            {mode === 'new' ? 'Create New Event' : 'Edit Event'}
+            {mode === EventModes.New ? 'Create New Event' : 'Edit Event'}
           </Typography>
           <div className="user-icon">
             <Button
@@ -239,7 +244,11 @@ const EventCreationPage = ({
               handleClick={activeStep < 1 ? handleNext : handleComplete}
               disabled={eventName === '' || eventDate === null}
               buttonText={
-                activeStep < 1 ? 'Next' : mode === 'new' ? 'Create' : 'Save'
+                activeStep < 1
+                  ? 'Next'
+                  : mode === EventModes.New
+                  ? 'Create'
+                  : 'Save'
               }
             />
           </div>
