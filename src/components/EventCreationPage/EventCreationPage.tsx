@@ -142,7 +142,7 @@ const EventCreationPage = ({
               2,
               '0'
             )}-${dateParts.day.padStart(2, '0')}`,
-          createdBy: 16,
+          createdBy: 1,
           isActive: true,
         },
       });
