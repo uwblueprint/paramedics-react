@@ -4,13 +4,18 @@ import {
   makeStyles,
   Button,
   Dialog,
-  Link,
+  AppBar,
+  Toolbar,
+  IconButton
 } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
 import { Colours } from '../../styles/Constants';
 import { Hospital } from '../../graphql/queries/hospitals';
 import { Ambulance } from '../../graphql/queries/ambulances';
+import { CCP } from '../../graphql/queries/ccps';
 
 const useStyles = makeStyles({
   resourceWrapper: {
@@ -47,11 +52,22 @@ const useStyles = makeStyles({
     position: 'absolute',
     right: '56px',
   },
+  appBarText: {
+    marginLeft: '15px',
+  },
+  appBar: {
+    backgroundColor: Colours.SecondaryHover,
+  },
+  icon: {
+    fontSize: '18px',
+    padding: '0px 5px 0px 20px'
+  },
 });
 
 const PatientTransportPage = ({
   open,
   patientBarcode,
+  ccp,
   handleClose,
   handleComplete,
   hospitals,
@@ -63,6 +79,7 @@ const PatientTransportPage = ({
 }: {
   open: boolean;
   patientBarcode: string | null;
+  ccp: CCP;
   handleClose: () => void;
   handleComplete: () => void;
   hospitals: Array<Hospital>;
@@ -76,6 +93,18 @@ const PatientTransportPage = ({
 
   return (
     <Dialog fullScreen open={open} onClose={handleClose}>
+      <AppBar position="relative" className={classes.appBar}>
+        <Toolbar variant="dense">
+          <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.appBarText}>{ccp.name}</Typography>
+          <LocationOnOutlinedIcon className={classes.icon} />
+          <Typography variant="caption" >
+            Ezra Street l1j3j4, Waterloo Canada
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <div className={classes.resourceWrapper}>
         <Button
           color="secondary"
@@ -85,14 +114,13 @@ const PatientTransportPage = ({
           Cancel
         </Button>
         <div className={classes.resourceCreationTopSection}>
-          <Link
-            component="button"
+          <Button
             onClick={handleClose}
             color="secondary"
-            variant="body2"
+            style={{ textTransform: 'none' }}
           >
             &#60; Back
-          </Link>
+          </Button>
           <div className={classes.resourceHeader}>
             <Typography variant="h4">Patient Transport</Typography>
           </div>

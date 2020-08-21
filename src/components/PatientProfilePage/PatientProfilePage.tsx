@@ -26,6 +26,8 @@ import {
   Ambulance,
   GET_ALL_AMBULANCES,
 } from '../../graphql/queries/ambulances';
+import { CCP, GET_CPP_BY_ID } from '../../graphql/queries/ccps';
+import { useSnackbar } from 'notistack';
 
 interface FormFields {
   barcodeValue: string;
@@ -57,7 +59,11 @@ const PatientProfilePage = ({
   mode: string;
 }) => {
   const history = useHistory();
-
+  const { enqueueSnackbar } = useSnackbar();
+  const [openTransportModal, setOpenTransportModal] = useState(false);
+  const [openTransportPage, setOpenTransportPage] = useState(false);
+  const [transportConfirmed, setTransportConfirmed] = useState(false);
+  const [transportingPatient, setTransportingPatient] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital>({
     id: '',
     name: '',
@@ -66,10 +72,16 @@ const PatientProfilePage = ({
     id: '',
     vehicleNumber: 0,
   });
-  const [openTransportModal, setOpenTransportModal] = useState(false);
-  const [openTransportPage, setOpenTransportPage] = useState(false);
-  const [transportConfirmed, setTransportConfirmed] = useState(false);
-  const [transportingPatient, setTransportingPatient] = useState(false);
+
+  const [addPatient] = useMutation(ADD_PATIENT, {
+    update(cache, { data: { addPatient } }) {
+      cache.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: { patients: patients.concat([addPatient]) },
+      });
+    },
+  });
+  const [editPatient] = useMutation(EDIT_PATIENT);
 
   const { data, loading } = useQuery(
     mode === 'edit' && patientId
@@ -79,11 +91,12 @@ const PatientProfilePage = ({
   const patients: Array<Patient> = data ? data.patient : [];
   const { data: hospitalData } = useQuery(GET_ALL_HOSPITALS);
   const hospitals: Array<Hospital> = hospitalData ? hospitalData.hospitals : [];
-
   const { data: ambulanceData } = useQuery(GET_ALL_AMBULANCES);
   const ambulances: Array<Ambulance> = ambulanceData
     ? ambulanceData.ambulances
     : [];
+  const { data: ccpData } = useQuery(GET_CPP_BY_ID(ccpId));
+  const ccp: CCP = ccpData ? ccpData.collectionPoint : [];
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
@@ -139,16 +152,6 @@ const PatientProfilePage = ({
       setFormFields({ ...formFields, barcodeValue });
     }
   }, [mode, barcodeValue]);
-
-  const [addPatient] = useMutation(ADD_PATIENT, {
-    update(cache, { data: { addPatient } }) {
-      cache.writeQuery({
-        query: GET_ALL_PATIENTS,
-        data: { patients: patients.concat([addPatient]) },
-      });
-    },
-  });
-  const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleCloseDialog = () => {
     setOpenTransportModal(false);
@@ -239,6 +242,7 @@ const PatientProfilePage = ({
         },
       });
     }
+    if (transportingPatient) enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`);
     history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 
@@ -247,6 +251,7 @@ const PatientProfilePage = ({
       <PatientTransportPage
         open={openTransportPage}
         patientBarcode={mode === 'edit' ? formFields.barcodeValue : null}
+        ccp={ccp}
         handleClose={handleCancelTransport}
         handleComplete={handleConfirmTransport}
         hospitals={hospitals}
