@@ -90,8 +90,5 @@ export const Theme = createMuiTheme({
     MuiTab: {
       wrapper: { textTransform: 'none' },
     },
-    MuiDialogContent: {
-      root: { padding: '16px 24px' },
-    },
   },
 });

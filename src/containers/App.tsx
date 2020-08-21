@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Theme } from '../styles/Theme';
 import HomeLandingPage from '../components/HomeLandingPage/HomeLandingPage';
-import EventCreationPage from './EventCreationPage';
+import EventCreationPage from '../components/EventCreationPage/EventCreationPage';
 import EventDashboardPage from '../components/EventDashboard/EventDashboardPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcode/EnterBarcodePage';

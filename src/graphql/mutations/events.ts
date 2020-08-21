@@ -34,6 +34,7 @@ export const EDIT_EVENT = gql`
       createdBy: $createdBy
       isActive: $isActive
     ) {
+      id
       name
       eventDate
     }
