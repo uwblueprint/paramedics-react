@@ -73,16 +73,6 @@ const PatientProfilePage = ({
     vehicleNumber: 0,
   });
 
-  const [addPatient] = useMutation(ADD_PATIENT, {
-    update(cache, { data: { addPatient } }) {
-      cache.writeQuery({
-        query: GET_ALL_PATIENTS,
-        data: { patients: patients.concat([addPatient]) },
-      });
-    },
-  });
-  const [editPatient] = useMutation(EDIT_PATIENT);
-
   const { data, loading } = useQuery(
     mode === 'edit' && patientId
       ? GET_PATIENT_BY_ID(patientId)
@@ -97,6 +87,16 @@ const PatientProfilePage = ({
     : [];
   const { data: ccpData } = useQuery(GET_CPP_BY_ID(ccpId));
   const ccp: CCP = ccpData ? ccpData.collectionPoint : [];
+
+  const [addPatient] = useMutation(ADD_PATIENT, {
+    update(cache, { data: { addPatient } }) {
+      cache.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: { patients: patients.concat([addPatient]) },
+      });
+    },
+  });
+  const [editPatient] = useMutation(EDIT_PATIENT);
 
   // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
@@ -193,6 +193,17 @@ const PatientProfilePage = ({
     });
   };
 
+  const action = () => (
+    <>
+      <Button
+        style={{ color: '#28B2FF' }}
+        onClick={() => console.log('Wee woo wee woo')}
+      >
+        View Patient Details
+      </Button>
+    </>
+  );
+
   const handleComplete = () => {
     if (transportingPatient && !transportConfirmed) {
       setOpenTransportModal(true);
@@ -242,7 +253,11 @@ const PatientProfilePage = ({
         },
       });
     }
-    if (transportingPatient) enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`);
+    if (transportingPatient) {
+      enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
+        action,
+      });
+    }
     history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 

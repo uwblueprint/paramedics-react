@@ -43,4 +43,4 @@ export const GET_CPP_BY_ID = (id: string) => {
     }
   }
 `;
-}
+};

@@ -6,7 +6,7 @@ import {
   Dialog,
   AppBar,
   Toolbar,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
@@ -60,7 +60,7 @@ const useStyles = makeStyles({
   },
   icon: {
     fontSize: '18px',
-    padding: '0px 5px 0px 20px'
+    padding: '0px 5px 0px 20px',
   },
 });
 
@@ -95,12 +95,19 @@ const PatientTransportPage = ({
     <Dialog fullScreen open={open} onClose={handleClose}>
       <AppBar position="relative" className={classes.appBar}>
         <Toolbar variant="dense">
-          <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
+          >
             <ArrowBackIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.appBarText}>{ccp.name}</Typography>
+          <Typography variant="h6" className={classes.appBarText}>
+            {ccp.name}
+          </Typography>
           <LocationOnOutlinedIcon className={classes.icon} />
-          <Typography variant="caption" >
+          <Typography variant="caption">
             Ezra Street l1j3j4, Waterloo Canada
           </Typography>
         </Toolbar>
