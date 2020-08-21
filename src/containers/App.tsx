@@ -32,7 +32,7 @@ function App() {
           <Route exact path="/events/:eventId" component={EventDashboardPage} />
           <Route
             exact
-            path="/events/edit/:eventId"
+            path="/events/:eventId/edit"
             component={(props) => <EventCreationPage mode="edit" {...props} />}
           />
           <Route

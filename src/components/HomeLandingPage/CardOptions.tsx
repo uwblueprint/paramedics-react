@@ -66,7 +66,7 @@ const CardOptions: CardOptions = ({
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     event.stopPropagation();
-    history.replace(`/events/edit/${eventId}`);
+    history.replace(`/events/${eventId}/edit`);
   };
   const handleOpenArchiveDialog = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
