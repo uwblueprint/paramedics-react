@@ -38,6 +38,11 @@ export const EDIT_EVENT = gql`
       id
       name
       eventDate
+      isActive
+      createdBy {
+        id
+        name
+      }
     }
   }
 `;

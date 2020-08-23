@@ -19,6 +19,7 @@ const HomeLandingPage = () => {
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   // Clear the addedEventId in location state now that it's been used
   window.history.pushState(
@@ -42,9 +43,25 @@ const HomeLandingPage = () => {
   useAllEvents();
 
   // Fetch events from cache
-  const { data, refetch } = useQuery(FETCH_ALL_EVENTS);
+  const { data } = useQuery(FETCH_ALL_EVENTS);
   const [editEvent] = useMutation(EDIT_EVENT);
-  const [deleteEvent] = useMutation(DELETE_EVENT);
+  const [deleteEvent] = useMutation(DELETE_EVENT, {
+    update(cache, { data: { deleteEvent } }) {
+      if (!deleteEvent) {
+        return;
+      }
+      let { events } = cache.readQuery<any>({
+        query: FETCH_ALL_EVENTS,
+      });
+
+      events = events.filter((event) => event.id !== selectedEvent!.id);
+
+      cache.writeQuery({
+        query: FETCH_ALL_EVENTS,
+        data: { events },
+      });
+    },
+  });
   const events: Array<Event> = data ? data.events : [];
 
   const handleArchiveEvent = async (event: Event) => {
@@ -57,8 +74,6 @@ const HomeLandingPage = () => {
         isActive: false,
       },
     });
-    // Force re-render
-    refetch();
   };
   const handleUnarchiveEvent = async (event: Event) => {
     await editEvent({
@@ -70,23 +85,21 @@ const HomeLandingPage = () => {
         isActive: true,
       },
     });
-    // Force re-render
-    refetch();
   };
 
   const handleDeleteEvent = async (event: Event) => {
+    await setSelectedEvent(event);
     await deleteEvent({
       variables: {
         id: event.id,
       },
     });
-    // Force re-render
-    refetch();
   };
 
   // Filters for inactive or active events
-  const filteredEvents = events.filter(
-    (event) => event.isActive === (selectedTab === 0)
+  const filteredEvents = React.useMemo(
+    () => events.filter((event) => event.isActive === (selectedTab === 0)),
+    [events, selectedTab]
   );
 
   return (
