@@ -72,18 +72,21 @@ const CardOptions: CardOptions = ({
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     event.stopPropagation();
+    setAnchorEl(null);
     setOpenArchiveDialog(true);
   };
   const handleOpenUnarchiveDialog = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     event.stopPropagation();
+    setAnchorEl(null);
     setOpenUnarchiveDialog(true);
   };
   const handleOpenDeleteDialog = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     event.stopPropagation();
+    setAnchorEl(null);
     setOpenDeleteDialog(true);
   };
 
