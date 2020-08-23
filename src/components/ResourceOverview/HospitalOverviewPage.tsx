@@ -160,6 +160,10 @@ const HospitalOverviewPage: React.FC = () => {
     enqueueSnackbar('Hospital deleted.');
   };
 
+  const handleDeleteOption = () => {
+    setOpenModal(true);
+  }
+
   const handleClickCancel = () => {
     setAnchorEl(null);
     setOpenModal(false);
@@ -173,7 +177,7 @@ const HospitalOverviewPage: React.FC = () => {
     },
     {
       styles: optionStyle.menuDelete,
-      onClick: handleClickDelete,
+      onClick: handleDeleteOption,
       name: 'Delete',
     },
   ];

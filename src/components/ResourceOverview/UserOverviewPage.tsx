@@ -153,6 +153,10 @@ const UserOverviewPage: React.FC = () => {
     enqueueSnackbar('Team member deleted.');
   };
 
+  const handleDeleteOption = () => {
+    setOpenModal(true);
+  }
+
   const handleClickCancel = () => {
     setAnchorEl(null);
     setOpenModal(false);
@@ -173,7 +177,7 @@ const UserOverviewPage: React.FC = () => {
     },
     {
       styles: optionStyle.menuDelete,
-      onClick: handleClickDelete,
+      onClick: handleDeleteOption,
       name: 'Delete',
     },
   ];
