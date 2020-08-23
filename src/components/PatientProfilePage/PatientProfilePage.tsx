@@ -197,7 +197,6 @@ const PatientProfilePage = ({
     <>
       <Button
         style={{ color: '#28B2FF' }}
-        onClick={() => console.log('Wee woo wee woo')}
       >
         View Patient Details
       </Button>
@@ -392,13 +391,13 @@ const PatientProfilePage = ({
               </Typography>
               <FormField
                 label="Hospital:"
-                value={selectedHospital.name} // there's probably a better way to do this
+                value={selectedHospital.name}
                 readOnly
                 isValidated={false}
               />
               <FormField
                 label="Ambulance Number:"
-                value={selectedAmbulance.vehicleNumber.toString()} // there's probably a better way to do this
+                value={selectedAmbulance.vehicleNumber.toString()}
                 readOnly
                 isValidated={false}
               />
