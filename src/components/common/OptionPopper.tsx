@@ -67,20 +67,18 @@ const OptionPopper = ({
         <div>
           <Table className={classes.tablePopper}>
             <TableBody>
-              {options.map((option: Option, index: number) => {
-                return (
-                  <TableRow
-                    hover
-                    key={id + String(index)}
-                    classes={{ hover: optionStyle.menuHover }}
-                    onClick={option.onClick}
-                  >
-                    <TableCell classes={{ root: option.styles }}>
-                      <Typography variant="body2">{option.name}</Typography>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {options.map((option: Option, index) => (
+                <TableRow
+                  hover
+                  key={(id + index) as string}
+                  classes={{ hover: optionStyle.menuHover }}
+                  onClick={option.onClick}
+                >
+                  <TableCell classes={{ root: option.styles }}>
+                    <Typography variant="body2">{option.name}</Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
