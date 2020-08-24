@@ -63,14 +63,17 @@ const OptionPopper = ({
       }}
       anchorEl={anchorEl}
     >
-      <ClickAwayListener onClickAway={(event) => { event.stopPropagation(); onClickAway(); }}>
+      <ClickAwayListener onClickAway={(event) => {
+        event.stopPropagation();
+        onClickAway();
+      }}>
         <div>
           <Table className={classes.tablePopper}>
             <TableBody>
               {options.map((option: Option, index: number) => (
                 <TableRow
                   hover
-                  key={(id + index) as string}
+                  key={id + String(index)}
                   classes={{ hover: optionStyle.menuHover }}
                   onClick={(event) => { event.stopPropagation(); option.onClick(); }}
                 >

@@ -32,7 +32,7 @@ function App() {
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID"
+            path="/events/:eventID/ccps/:ccpID/edit"
             component={(props) => <CCPFormPage mode="edit" {...props} />}
           />
           <Route exact path="/events/new" component={EventCreationPage} />
