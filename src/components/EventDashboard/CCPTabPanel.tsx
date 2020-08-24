@@ -3,6 +3,8 @@ import {
   Box,
   Button,
   IconButton,
+  Menu,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -13,10 +15,12 @@ import {
 } from '@material-ui/core';
 import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Colours } from '../../styles/Constants';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
+import { DELETE_CCP } from '../../graphql/mutations/ccps';
+import ConfirmModal from '../common/ConfirmModal';
 
 const useStyles = makeStyles({
   root: {
@@ -105,17 +109,74 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 };
 
 const CCPTabPanel = ({ eventId }: { eventId: string }) => {
-  const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
+  const [orderBy, setOrderBy] = React.useState<string>('name');
   const [order, setOrder] = React.useState<Order>('asc');
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const [openConfirmDelete, setOpenConfirmDelete] = React.useState<boolean>(
+    false
+  );
+  const [selectedCCP, setSelectedCCP] = React.useState<CCP | null>(null);
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
 
   const rows = data ? data.collectionPointsByEvent : [];
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+    setSelectedCCP(null);
+  };
+
+  const handleCloseConfirmDelete = () => {
+    handleCloseMenu();
+    setOpenConfirmDelete(false);
+  };
+
+  //  Writing to cache when deleting ccp
+  const [deleteCCP] = useMutation(DELETE_CCP, {
+    update(cache, { data: { deleteCollectionPoint } }) {
+      if (!deleteCollectionPoint) {
+        return;
+      }
+      let { collectionPointsByEvent } = cache.readQuery<any>({
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      const filtered = collectionPointsByEvent.filter(
+        (ccp) => ccp.id !== (selectedCCP as CCP).id
+      );
+      collectionPointsByEvent = filtered;
+      cache.writeQuery({
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { collectionPointsByEvent },
+      });
+    },
+    onCompleted() {
+      handleCloseConfirmDelete();
+    },
+  });
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+  };
+
+  const handleClickOptions = (event, row: CCP) => {
+    setSelectedCCP(row);
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleOpenConfirmDelete = () => {
+    setOpenConfirmDelete(true);
+  };
+
+  const handleClickDelete = () => {
+    const ccpId = (selectedCCP as CCP).id;
+    deleteCCP({ variables: { id: ccpId } });
   };
 
   const tableRows = stableSort(
@@ -135,9 +196,30 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           width="48px"
           style={{ maxWidth: '48px', paddingTop: 0, paddingBottom: 0 }}
         >
-          <IconButton color="inherit">
+          <IconButton
+            data-id={row.id}
+            color="inherit"
+            onClick={(event) => {
+              handleClickOptions(event, row);
+            }}
+          >
             <MoreHoriz />
           </IconButton>
+          <Menu
+            id="ccp-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleCloseMenu}
+          >
+            <MenuItem onClick={() => {}}>Edit</MenuItem>
+            <MenuItem
+              style={{ color: Colours.Danger }}
+              onClick={handleOpenConfirmDelete}
+            >
+              Delete
+            </MenuItem>
+          </Menu>
         </TableCell>
       </TableRow>
     );
@@ -164,6 +246,23 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         <Add className={classes.buttonIcon} />
         Add CCP
       </Button>
+      {selectedCCP && (
+        <ConfirmModal
+          open={openConfirmDelete}
+          title="Are you sure you want to delete the following CCP?"
+          body={
+            <>
+              <span style={{ color: Colours.Secondary, fontWeight: 500 }}>
+                {(selectedCCP as CCP).name}
+              </span>
+              {' cannot be recovered when deleted.'}
+            </>
+          }
+          actionLabel="Delete"
+          handleClickAction={handleClickDelete}
+          handleClickCancel={handleCloseConfirmDelete}
+        />
+      )}
     </Box>
   );
 };
