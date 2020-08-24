@@ -155,7 +155,7 @@ const UserOverviewPage: React.FC = () => {
 
   const handleDeleteOption = () => {
     setOpenModal(true);
-  }
+  };
 
   const handleClickCancel = () => {
     setAnchorEl(null);

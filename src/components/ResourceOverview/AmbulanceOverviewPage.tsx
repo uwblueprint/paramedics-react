@@ -156,7 +156,7 @@ const AmbulanceOverviewPage: React.FC = () => {
 
   const handleDeleteOption = () => {
     setOpenModal(true);
-  }
+  };
 
   const handleClickCancel = () => {
     setAnchorEl(null);
