@@ -10,10 +10,10 @@ import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const EnterBarcodePage = ({
   match: {
-    params: { ccpID },
+    params: { eventID, ccpID },
   },
 }: {
-  match: { params: { ccpID: string } };
+  match: { params: { eventID: string; ccpID: string } };
 }) => {
   const history = useHistory();
   const { pathname } = history.location;
@@ -28,17 +28,24 @@ const EnterBarcodePage = ({
       if (selectedPatient.length > 0) {
         // Found patient
         const {
-          collectionPointId: { id: patientCCPId },
+          collectionPointId: {
+            id: patientCCPId,
+            eventId: { id: patientEventId },
+          },
           id,
         } = selectedPatient[0];
         // Redirect to patient profile
-        history.replace(`/patients/edit/ccps/${patientCCPId}/patient/${id}`);
+        history.replace(
+          `/events/${patientEventId}/ccps/${patientCCPId}/patients/${id}`
+        );
       } else {
         // No existing patient
-        history.replace(`/patients/new/ccps/${ccpID}/${barcode}`);
+        history.replace(
+          `/events/${eventID}/ccps/${ccpID}/patients/new/${barcode}`
+        );
       }
     }
-    history.replace(`/patients/new/ccps/${ccpID}/${barcode}`);
+    history.replace(`/events/${eventID}/ccps/${ccpID}/patients/new/${barcode}`);
   };
 
   return (

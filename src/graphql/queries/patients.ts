@@ -22,7 +22,7 @@ export interface Patient {
   gender: string;
   age: number;
   runNumber: number;
-  barcodeValue: number;
+  barcodeValue: string;
   collectionPointId: CCP;
   status: Status;
   triageCategory: number;
@@ -76,6 +76,7 @@ export const FETCH_ALL_PATIENTS = gql`
         id
         name
         eventId {
+          id
           name
           eventDate
         }

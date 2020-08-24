@@ -56,7 +56,7 @@ function App() {
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/scan/manual"
+            path="/events/:eventID/ccps/:ccpID/manual"
             component={EnterBarcodePage}
           />
           <Route
@@ -66,13 +66,13 @@ function App() {
           />
           <Route
             exact
-            path="/patients/edit/ccps/:ccpId/patient/:patientId"
-            component={(props) => <PatientProfilePage mode="edit" {...props} />}
+            path="/events/:eventId/ccps/:ccpId/patients/new/:barcodeValue?"
+            component={(props) => <PatientProfilePage mode="new" {...props} />}
           />
           <Route
             exact
-            path="/patients/new/ccps/:ccpId/:barcodeValue?"
-            component={(props) => <PatientProfilePage mode="new" {...props} />}
+            path="/events/:eventId/ccps/:ccpId/patients/:patientId"
+            component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
         </Switch>
       </SnackbarProvider>
