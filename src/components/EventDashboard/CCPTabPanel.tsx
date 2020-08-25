@@ -16,6 +16,7 @@ import {
 import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useSnackbar } from 'notistack';
 import { Colours } from '../../styles/Constants';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
@@ -110,6 +111,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 
 const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const [order, setOrder] = React.useState<Order>('asc');
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -156,6 +158,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     },
     onCompleted() {
       handleCloseConfirmDelete();
+      enqueueSnackbar('CCP deleted.');
     },
   });
 
