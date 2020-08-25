@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { Box, Button, Typography } from '@material-ui/core';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import CompleteBarcodeButton from './CompleteBarcodeButton';
+import { Colours } from '../../styles/Constants';
 
 import FormField from '../common/FormField';
 import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
@@ -42,28 +42,23 @@ const EnterBarcodePage = ({
   };
 
   return (
-    <div className="landing-wrapper">
-      <div className="landing-top-section">
-        <div className="landing-top-bar">
-          <Typography variant="h3">Enter Barcode</Typography>
-          <div className="user-icon">
-            <Button
-              variant="outlined"
-              color="secondary"
-              component={NavLink}
-              to={pathname.split('/manual')[0]}
-              style={{
-                minWidth: '18rem',
-                minHeight: '2.5rem',
-                fontSize: '18px',
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className="event-form">
+    <Box minHeight="100vh">
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        padding="56px 56px 36px 56px"
+        borderBottom={`1px solid ${Colours.BorderLightGray}`}
+      >
+        <Typography variant="h3">Enter Barcode</Typography>
+        <Button
+          color="secondary"
+          component={NavLink}
+          to={pathname.split('/manual')[0]}
+        >
+          Cancel
+        </Button>
+      </Box>
+      <Box padding="56px">
         <form>
           <FormField
             label="Barcode:"
@@ -73,9 +68,9 @@ const EnterBarcodePage = ({
             isValidated={false}
           />
         </form>
-      </div>
+      </Box>
       <CompleteBarcodeButton handleClick={handleEnterBarcode} />
-    </div>
+    </Box>
   );
 };
 
