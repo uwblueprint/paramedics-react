@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import '../styles/EventCreationPage.css';
 import { Box, Button, Typography } from '@material-ui/core';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
