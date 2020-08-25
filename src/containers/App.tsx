@@ -4,7 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 import { Theme } from '../styles/Theme';
 import EventsPage from '../components/EventOverview/EventsPage';
-import EventCreationPage from './EventCreationPage';
+import EventCreationPage from '../components/EventCreation/EventCreationPage';
 import EventDashboardPage from '../components/EventDashboard/EventDashboardPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcode/EnterBarcodePage';

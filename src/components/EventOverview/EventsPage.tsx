@@ -15,11 +15,11 @@ const useStyles = makeStyles({
     backgroundColor: Colours.BackgroundGray,
     minHeight: '100vh',
   },
-  landingTopSection: {
+  topSection: {
     padding: '56px 56px 0 56px',
     backgroundColor: Colours.White,
   },
-  landingTopBar: {
+  topBar: {
     display: 'flex',
     paddingBottom: '36px',
   },
@@ -75,8 +75,8 @@ const EventsPage = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.landingTopSection}>
-        <div className={classes.landingTopBar}>
+      <div className={classes.topSection}>
+        <div className={classes.topBar}>
           <Typography variant="h3">Mass Casualty Events</Typography>
           <div className={classes.userIcon}>
             <Typography
