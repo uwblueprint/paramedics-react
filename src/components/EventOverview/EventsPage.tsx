@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-apollo';
-import { Grid, Typography } from '@material-ui/core';
+import { makeStyles, Grid, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useHistory, useLocation } from 'react-router-dom';
 import MenuTabs from '../common/MenuTabs';
@@ -8,12 +8,42 @@ import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
-import '../../styles/HomeLandingPage.css';
+import { Colours } from '../../styles/Constants';
+
+const useStyles = makeStyles({
+  root: {
+    backgroundColor: Colours.BackgroundGray,
+    minHeight: '100vh',
+  },
+  landingTopSection: {
+    padding: '56px 56px 0 56px',
+    backgroundColor: Colours.White,
+  },
+  landingTopBar: {
+    display: 'flex',
+    paddingBottom: '36px',
+  },
+  userIcon: {
+    display: 'flex',
+    marginLeft: 'auto',
+    alignSelf: 'center',
+  },
+  landingBody: {
+    padding: '70px 56px 168px 56px',
+  },
+  addEventContainer: {
+    position: 'fixed',
+    bottom: '56px',
+    right: '56px',
+    padding: '12px 26px',
+  },
+});
 
 type LocationState = { addedEventId: string | null };
 
-const HomeLandingPage = () => {
+const EventsPage = () => {
   const history = useHistory();
+  const classes = useStyles();
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
@@ -44,11 +74,11 @@ const HomeLandingPage = () => {
   const events: Array<Event> = data ? data.events : [];
 
   return (
-    <div className="landing-wrapper">
-      <div className="landing-top-section">
-        <div className="landing-top-bar">
+    <div className={classes.root}>
+      <div className={classes.landingTopSection}>
+        <div className={classes.landingTopBar}>
           <Typography variant="h3">Mass Casualty Events</Typography>
-          <div className="user-icon">
+          <div className={classes.userIcon}>
             <Typography
               variant="h6"
               align="right"
@@ -65,7 +95,7 @@ const HomeLandingPage = () => {
           tabLabels={tabLabels}
         />
       </div>
-      <div className="landing-body">
+      <div className={classes.landingBody}>
         <Grid container direction="row" alignItems="center" spacing={3}>
           {events.map((event: Event) => (
             <Grid item key={event.id}>
@@ -80,7 +110,7 @@ const HomeLandingPage = () => {
             </Grid>
           ))}
         </Grid>
-        <div className="add-event-container">
+        <div className={classes.addEventContainer}>
           <AddEventButton />
         </div>
       </div>
@@ -88,4 +118,4 @@ const HomeLandingPage = () => {
   );
 };
 
-export default HomeLandingPage;
+export default EventsPage;

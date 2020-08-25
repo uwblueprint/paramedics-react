@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 import { Theme } from '../styles/Theme';
-import HomeLandingPage from '../components/HomeLandingPage/HomeLandingPage';
+import EventsPage from '../components/EventOverview/EventsPage';
 import EventCreationPage from './EventCreationPage';
 import EventDashboardPage from '../components/EventDashboard/EventDashboardPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
@@ -14,7 +14,6 @@ import ResourceOverviewPage from '../components/ResourceOverview/ResourceOvervie
 import HospitalFormPage from '../components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from '../components/ResourceForm/AmbulanceFormPage';
 import UserFormPage from '../components/ResourceForm/UserFormPage';
-import '../styles/App.css';
 
 function App() {
   return (
@@ -23,7 +22,7 @@ function App() {
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
         <Switch>
-          <Route exact path="/events" component={HomeLandingPage} />
+          <Route exact path="/events" component={EventsPage} />
           <Route exact path="/events/new" component={EventCreationPage} />
           <Route exact path="/events/:eventId" component={EventDashboardPage} />
           <Route
