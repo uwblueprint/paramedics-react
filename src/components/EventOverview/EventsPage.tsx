@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-apollo';
-import { makeStyles, Grid, Typography } from '@material-ui/core';
+import { makeStyles, Button, Box, Grid, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, NavLink } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
 import MenuTabs from '../common/MenuTabs';
-import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
@@ -22,16 +22,11 @@ const useStyles = makeStyles({
   topBar: {
     display: 'flex',
     paddingBottom: '36px',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  userIcon: {
-    display: 'flex',
-    marginLeft: 'auto',
-    alignSelf: 'center',
-  },
-  landingBody: {
-    padding: '70px 56px 168px 56px',
-  },
-  addEventContainer: {
+  addButton: {
+    borderRadius: '2000px',
     position: 'fixed',
     bottom: '56px',
     right: '56px',
@@ -74,28 +69,28 @@ const EventsPage = () => {
   const events: Array<Event> = data ? data.events : [];
 
   return (
-    <div className={classes.root}>
-      <div className={classes.topSection}>
-        <div className={classes.topBar}>
+    <Box className={classes.root}>
+      <Box className={classes.topSection}>
+        <Box className={classes.topBar}>
           <Typography variant="h3">Mass Casualty Events</Typography>
-          <div className={classes.userIcon}>
+          <Box display="flex" alignItems="center">
             <Typography
               variant="h6"
               align="right"
-              style={{ marginRight: '0.5em' }}
+              style={{ marginRight: '16px' }}
             >
               Joe Li
             </Typography>
             <AccountCircleIcon fontSize="large" color="secondary" />
-          </div>
-        </div>
+          </Box>
+        </Box>
         <MenuTabs
           handleChange={handleChange}
           currentTab={selectedTab}
           tabLabels={tabLabels}
         />
-      </div>
-      <div className={classes.landingBody}>
+      </Box>
+      <Box padding="70px 56px 168px 56px">
         <Grid container direction="row" alignItems="center" spacing={3}>
           {events.map((event: Event) => (
             <Grid item key={event.id}>
@@ -110,11 +105,18 @@ const EventsPage = () => {
             </Grid>
           ))}
         </Grid>
-        <div className={classes.addEventContainer}>
-          <AddEventButton />
-        </div>
-      </div>
-    </div>
+        <Button
+          component={NavLink}
+          to="/events/new"
+          variant="contained"
+          color="secondary"
+          startIcon={<AddIcon />}
+          className={classes.addButton}
+        >
+          Add New Event
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
