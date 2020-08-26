@@ -66,7 +66,7 @@ function App() {
           />
           <Route
             exact
-            path="/events/:eventId/ccps/:ccpId/patients/edit/:patientId"
+            path="/events/:eventId/ccps/:ccpId/patients/:patientId/edit"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
           <Route

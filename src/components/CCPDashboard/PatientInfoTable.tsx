@@ -193,7 +193,7 @@ export const PatientInfoTable = ({
   };
 
   const handleClickEdit = () => {
-    history.replace(
+    history.push(
       `/events/${eventId}/ccps/${ccpId}/patients/edit/${
         ((selectedPatient as unknown) as Patient).id
       }`
@@ -391,7 +391,7 @@ export const PatientInfoTable = ({
           >
             <Button
               onClick={() => {
-                history.replace(
+                history.push(
                   `/events/${eventId}/ccps/${ccpId}/patients/edit/${
                     ((selectedPatient as unknown) as Patient).id
                   }`

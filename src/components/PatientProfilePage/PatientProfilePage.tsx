@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, NavLink } from 'react-router-dom';
-import '../../styles/EventCreationPage.css';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
+import { useSnackbar } from 'notistack';
+import { Colours } from '../../styles/Constants';
 import FormField from '../common/FormField';
 import CompletePatientButton from './CompletePatientButton';
 import RadioSelector from '../common/RadioSelector';
@@ -27,7 +28,6 @@ import {
   GET_ALL_AMBULANCES,
 } from '../../graphql/queries/ambulances';
 import { CCP, GET_CPP_BY_ID } from '../../graphql/queries/ccps';
-import { useSnackbar } from 'notistack';
 
 interface FormFields {
   barcodeValue: string;
@@ -195,9 +195,7 @@ const PatientProfilePage = ({
 
   const action = () => (
     <>
-      <Button
-        style={{ color: '#28B2FF' }}
-      >
+      <Button style={{ color: Colours.SnackbarButtonBlue }}>
         View Patient Details
       </Button>
     </>
@@ -307,7 +305,7 @@ const PatientProfilePage = ({
       </div>
       <div className="event-form">
         <ValidatorForm onSubmit={handleComplete}>
-          <Typography variant="h5" style={{ marginBottom: 24 }}>
+          <Typography variant="h5" style={{ marginBottom: '24px' }}>
             Patient Information
           </Typography>
           <FormField
@@ -385,7 +383,7 @@ const PatientProfilePage = ({
             <>
               <Typography
                 variant="h5"
-                style={{ marginBottom: 24, marginTop: 30 }}
+                style={{ marginBottom: '24px', marginTop: '30px' }}
               >
                 Transport Information
               </Typography>
