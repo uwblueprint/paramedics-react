@@ -74,6 +74,9 @@ function App() {
             path="/events/:eventId/ccps/:ccpId/patients/:patientId"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
+          <Route path="/">
+            <Redirect to="/events" />
+          </Route>
         </Switch>
       </SnackbarProvider>
     </ThemeProvider>
