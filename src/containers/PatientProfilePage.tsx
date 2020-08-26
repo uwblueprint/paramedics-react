@@ -229,7 +229,7 @@ const PatientProfilePage = ({
             }}
           />
           <RadioSelector
-            labels={['Male', 'Female']}
+            labels={['M', 'F']}
             currentValue={formFields.gender}
             handleChange={(e: React.ChangeEvent<HTMLElement>) => {
               setFormFields({
