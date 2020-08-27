@@ -27,12 +27,12 @@ function App() {
           <Route exact path="/events" component={HomeLandingPage} />
           <Route
             exact
-            path="/events/:eventID/ccps/new"
+            path="/events/:eventId/ccps/new"
             component={(props) => <CCPFormPage mode="new" {...props} />}
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/edit"
+            path="/events/:eventId/ccps/:ccpId/edit"
             component={(props) => <CCPFormPage mode="edit" {...props} />}
           />
           <Route exact path="/events/new" component={EventCreationPage} />
@@ -62,12 +62,12 @@ function App() {
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/scan"
+            path="/events/:eventId/ccps/:ccpId/scan"
             component={ScanPatientPage}
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/scan/manual"
+            path="/events/:eventId/ccps/:ccpId/scan/manual"
             component={EnterBarcodePage}
           />
           <Route

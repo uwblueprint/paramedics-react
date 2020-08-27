@@ -61,12 +61,6 @@ const useStyles = makeStyles({
 });
 
 const useOptions = makeStyles({
-  root: {
-    textAlign: 'right',
-  },
-  menuCell: {
-    borderBottom: 0,
-  },
   menuDelete: {
     color: Colours.DangerHover,
   },
@@ -230,14 +224,13 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
 
   const options: Array<Option> = [
     {
-      styles: optionStyle.menuCell,
-      onClick: handleEdit,
       name: 'Edit',
+      onClick: handleEdit,
     },
     {
-      styles: optionStyle.menuDelete,
-      onClick: handleOpenConfirmDelete,
       name: 'Delete',
+      onClick: handleOpenConfirmDelete,
+      styles: optionStyle.menuDelete,
     },
   ];
 

@@ -10,10 +10,10 @@ import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const EnterBarcodePage = ({
   match: {
-    params: { ccpID },
+    params: { ccpId },
   },
 }: {
-  match: { params: { ccpID: string } };
+  match: { params: { ccpId: string } };
 }) => {
   const history = useHistory();
   const { pathname } = history.location;
@@ -35,10 +35,10 @@ const EnterBarcodePage = ({
         history.replace(`/patients/edit/${patientCCPId}/${id}`);
       } else {
         // No existing patient
-        history.replace(`/patients/new/${ccpID}/${barcode}`);
+        history.replace(`/patients/new/${ccpId}/${barcode}`);
       }
     }
-    history.replace(`/patients/new/${ccpID}/${barcode}`);
+    history.replace(`/patients/new/${ccpId}/${barcode}`);
   };
 
   return (

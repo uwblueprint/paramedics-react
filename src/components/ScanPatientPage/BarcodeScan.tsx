@@ -4,7 +4,7 @@ import Quagga from 'quagga';
 import { useQuery } from 'react-apollo';
 import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
 
-const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
+const BarcodeScan = ({ ccpId }: { ccpId: string }) => {
   const history = useHistory();
   const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>('');
@@ -26,7 +26,7 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
         history.replace(`/patients/edit/${patientCCPId}/${id}`);
       } else {
         // No existing patient
-        history.replace(`/patients/new/${ccpID}/${barcode}`);
+        history.replace(`/patients/new/${ccpId}/${barcode}`);
       }
     }
   }, [barcode]);
