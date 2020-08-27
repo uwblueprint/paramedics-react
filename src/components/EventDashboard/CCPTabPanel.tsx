@@ -200,7 +200,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   };
 
   const handleAdd = () => {
-    history.push(`/events/${eventId}/new`);
+    history.push(`/events/${eventId}/ccps/new`);
   };
 
   const handleEdit = () => {
