@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useQuery, useMutation } from 'react-apollo';
 import { Grid, Typography } from '@material-ui/core';
@@ -54,7 +54,7 @@ const HomeLandingPage = () => {
         query: FETCH_ALL_EVENTS,
       });
 
-      events = events.filter((event) => event.id !== selectedEvent!.id);
+      events = events.filter((event) => event.id !== selectedEvent?.id);
 
       cache.writeQuery({
         query: FETCH_ALL_EVENTS,
@@ -64,8 +64,18 @@ const HomeLandingPage = () => {
   });
   const events: Array<Event> = data ? data.events : [];
 
-  const handleArchiveEvent = async (event: Event) => {
-    await editEvent({
+  useEffect(() => {
+    if (selectedEvent) {
+      deleteEvent({
+        variables: {
+          id: selectedEvent?.id,
+        },
+      });
+    }
+  }, [selectedEvent]);
+
+  const handleArchiveEvent = (event: Event) => {
+    editEvent({
       variables: {
         id: event.id,
         name: event.name,
@@ -75,8 +85,8 @@ const HomeLandingPage = () => {
       },
     });
   };
-  const handleUnarchiveEvent = async (event: Event) => {
-    await editEvent({
+  const handleUnarchiveEvent = (event: Event) => {
+    editEvent({
       variables: {
         id: event.id,
         name: event.name,
@@ -87,13 +97,8 @@ const HomeLandingPage = () => {
     });
   };
 
-  const handleDeleteEvent = async (event: Event) => {
-    await setSelectedEvent(event);
-    await deleteEvent({
-      variables: {
-        id: event.id,
-      },
-    });
+  const handleDeleteEvent = (event: Event) => {
+    setSelectedEvent(event);
   };
 
   // Filters for inactive or active events
