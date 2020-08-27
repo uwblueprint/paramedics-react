@@ -144,7 +144,7 @@ const CCPFormPage = ({
         variables: {
           name: ccpName,
           eventId: eventId,
-          createdBy: 10,
+          createdBy: 4,
         },
       });
     }
