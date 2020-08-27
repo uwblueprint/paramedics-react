@@ -14,7 +14,10 @@ import {
 import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
+import { useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
+import OptionPopper, { Option } from '../common/OptionPopper';
+
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 
@@ -48,6 +51,18 @@ const useStyles = makeStyles({
   },
   buttonIcon: {
     marginRight: '13px',
+  },
+});
+
+const useOptions = makeStyles({
+  root: {
+    textAlign: 'right',
+  },
+  menuCell: {
+    borderBottom: 0,
+  },
+  menuDelete: {
+    color: Colours.DangerHover,
   },
 });
 
@@ -107,16 +122,49 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
+  const optionStyle = useOptions();
   const [order, setOrder] = React.useState<Order>('asc');
+  const [row, selectRow] = React.useState<string | null>('');
+  const [anchorEl, setAnchorEl] = React.useState<
+    null | (EventTarget & HTMLButtonElement)
+  >(null);
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
 
   const rows = data ? data.collectionPointsByEvent : [];
+  const open = Boolean(anchorEl);
+  const history = useHistory();
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+
+  const handleAdd = () => {
+    history.replace(`/events/${eventId}/new`);
+  };
+
+  const handleEdit = () => {
+    history.replace(`/events/${eventId}/ccps/${row}`);
+  };
+
+  // TODO: Implement deletion
+  const handleDelete = () => {
+    // TODO: handle delete here
+  };
+
+  const options: Array<Option> = [
+    {
+      styles: optionStyle.menuCell,
+      onClick: handleEdit,
+      name: 'Edit',
+    },
+    {
+      styles: optionStyle.menuDelete,
+      onClick: handleDelete,
+      name: 'Delete',
+    },
+  ];
 
   const tableRows = stableSort(
     rows as CCP[],
@@ -135,7 +183,14 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           width="48px"
           style={{ maxWidth: '48px', paddingTop: 0, paddingBottom: 0 }}
         >
-          <IconButton color="inherit">
+          <IconButton
+            data-id={row.id}
+            onClick={(e) => {
+              setAnchorEl(anchorEl ? null : e.currentTarget);
+              selectRow(e.currentTarget.getAttribute('data-id'));
+            }}
+            color="inherit"
+          >
             <MoreHoriz />
           </IconButton>
         </TableCell>
@@ -158,12 +213,22 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
       </TableContainer>
       <Button
         className={classes.addButton}
+        onClick={handleAdd}
         variant="contained"
         color="secondary"
       >
         <Add className={classes.buttonIcon} />
         Add CCP
       </Button>
+      <OptionPopper
+        id={row || ''}
+        open={open}
+        anchorEl={anchorEl}
+        onClickAway={() => {
+          setAnchorEl(null);
+        }}
+        options={options}
+      />
     </Box>
   );
 };

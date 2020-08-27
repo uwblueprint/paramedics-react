@@ -1,6 +1,5 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
-import Popper from '@material-ui/core/Popper';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -15,6 +14,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
+import OptionPopper, { Option } from '../common/OptionPopper';
+
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -59,7 +60,7 @@ const dataRow = makeStyles({
   },
 });
 
-const options = makeStyles({
+const optionStyles = makeStyles({
   root: {
     textAlign: 'right',
   },
@@ -143,7 +144,6 @@ const UserOverviewPage: React.FC = () => {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
 
   const handleClickDelete = () => {
     const memberId = selectedMember;
@@ -151,6 +151,10 @@ const UserOverviewPage: React.FC = () => {
     setOpenModal(false);
     setAnchorEl(null);
     enqueueSnackbar('Team member deleted.');
+  };
+
+  const handleDeleteOption = () => {
+    setOpenModal(true);
   };
 
   const handleClickCancel = () => {
@@ -163,7 +167,20 @@ const UserOverviewPage: React.FC = () => {
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
-  const optionBtn = options();
+  const optionStyle = optionStyles();
+
+  const options: Array<Option> = [
+    {
+      styles: optionStyle.menuCell,
+      onClick: handleClickEdit,
+      name: 'Edit',
+    },
+    {
+      styles: optionStyle.menuDelete,
+      onClick: handleDeleteOption,
+      name: 'Delete',
+    },
+  ];
 
   const cells = members.map((member: User) => {
     return (
@@ -176,7 +193,7 @@ const UserOverviewPage: React.FC = () => {
               member.accessLevel.substring(1).toLowerCase()
             : null}
         </TableCell>
-        <TableCell classes={{ root: optionBtn.root }}>
+        <TableCell classes={{ root: optionStyle.root }}>
           <IconButton data-id={member.id} onClick={handleClickOptions}>
             <MoreHorizIcon style={{ color: Colours.Black }} />
           </IconButton>
@@ -199,40 +216,20 @@ const UserOverviewPage: React.FC = () => {
               <TableCell classes={{ root: hRow.root }}>Name</TableCell>
               <TableCell classes={{ root: hRow.root }}>Email</TableCell>
               <TableCell classes={{ root: hRow.root }}>Role</TableCell>
-              <TableCell classes={{ root: optionBtn.root }} />
+              <TableCell classes={{ root: optionStyle.root }} />
             </TableRow>
           </TableHead>
           <TableBody>
             {cells}
-            <Popper
-              id={id}
+            <OptionPopper
+              id={String(selectedMember)}
               open={open}
-              popperOptions={{
-                modifiers: { offset: { enabled: true, offset: '-69.5,0' } },
-              }}
               anchorEl={anchorEl}
-            >
-              <div>
-                <Table className={classes.tablePopper}>
-                  <TableBody>
-                    <TableRow
-                      hover
-                      classes={{ hover: optionBtn.menuHover }}
-                      onClick={handleClickEdit}
-                    >
-                      <TableCell classes={{ root: optionBtn.menuCell }}>
-                        <Typography variant="body2">Edit</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow hover onClick={() => setOpenModal(true)}>
-                      <TableCell classes={{ root: optionBtn.menuDelete }}>
-                        <Typography variant="body2">Delete</Typography>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </Popper>
+              onClickAway={() => {
+                setAnchorEl(null);
+              }}
+              options={options}
+            />
           </TableBody>
         </Table>
       </TableContainer>
