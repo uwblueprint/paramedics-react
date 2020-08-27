@@ -23,7 +23,7 @@ const EnterBarcodePage = ({
   const handleEnterBarcode = () => {
     if (!loading && data) {
       const selectedPatient = data.patients.filter(
-        (patient) => patient.barcodeValue.toString() === barcode
+        (patient) => patient.barcodeValue === barcode
       );
       if (selectedPatient.length > 0) {
         // Found patient
@@ -35,17 +35,18 @@ const EnterBarcodePage = ({
           id,
         } = selectedPatient[0];
         // Redirect to patient profile
-        history.replace(
+        history.push(
           `/events/${patientEventId}/ccps/${patientCCPId}/patients/${id}`
         );
       } else {
         // No existing patient
-        history.replace(
+        history.push(
           `/events/${eventID}/ccps/${ccpID}/patients/new/${barcode}`
         );
       }
+    } else {
+      history.push(`/events/${eventID}/ccps/${ccpID}/patients/new/${barcode}`);
     }
-    history.replace(`/events/${eventID}/ccps/${ccpID}/patients/new/${barcode}`);
   };
 
   return (

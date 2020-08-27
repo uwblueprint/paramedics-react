@@ -46,6 +46,7 @@ export const GET_PATIENT_BY_ID = (id: string) => {
           id
           name
           eventId {
+            id
             name
             eventDate
           }
