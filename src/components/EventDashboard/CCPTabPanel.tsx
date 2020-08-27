@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   IconButton,
-  Menu,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -137,7 +135,6 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   );
   const [selectedCCP, setSelectedCCP] = React.useState<CCP | null>(null);
   const optionStyle = useOptions();
-  const [row, selectRow] = React.useState<string | null>('');
 
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
 
@@ -161,19 +158,19 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
       if (!deleteCollectionPoint) {
         return;
       }
-      let { collectionPointsByEvent } = cache.readQuery<any>({
+      const { collectionPointsByEvent } = cache.readQuery<any>({
         query: GET_CCPS_BY_EVENT_ID,
         variables: { eventId },
       });
 
-      const filtered = collectionPointsByEvent.filter(
+      const updatedCCPsList = collectionPointsByEvent.filter(
         (ccp) => ccp.id !== (selectedCCP as CCP).id
       );
-      collectionPointsByEvent = filtered;
+
       cache.writeQuery({
         query: GET_CCPS_BY_EVENT_ID,
         variables: { eventId },
-        data: { collectionPointsByEvent },
+        data: { collectionPointsByEvent: updatedCCPsList },
       });
     },
     onCompleted() {
@@ -203,16 +200,11 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   };
 
   const handleAdd = () => {
-    history.replace(`/events/${eventId}/new`);
+    history.push(`/events/${eventId}/new`);
   };
 
   const handleEdit = () => {
-    history.replace(`/events/${eventId}/ccps/${row}`);
-  };
-
-  // TODO: Implement deletion
-  const handleDelete = () => {
-    // TODO: handle delete here
+    history.push(`/events/${eventId}/ccps/${selectedCCP?.id}/edit`);
   };
 
   const options: Array<Option> = [
@@ -223,7 +215,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     },
     {
       styles: optionStyle.menuDelete,
-      onClick: handleDelete,
+      onClick: handleOpenConfirmDelete,
       name: 'Delete',
     },
   ];
@@ -247,29 +239,13 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         >
           <IconButton
             data-id={row.id}
-            onClick={(e) => {
-              setAnchorEl(anchorEl ? null : e.currentTarget);
-              selectRow(e.currentTarget.getAttribute('data-id'));
+            onClick={(event) => {
+              handleClickOptions(event, row);
             }}
             color="inherit"
           >
             <MoreHoriz />
           </IconButton>
-          <Menu
-            id="ccp-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleCloseMenu}
-          >
-            <MenuItem onClick={() => {}}>Edit</MenuItem>
-            <MenuItem
-              style={{ color: Colours.Danger }}
-              onClick={handleOpenConfirmDelete}
-            >
-              Delete
-            </MenuItem>
-          </Menu>
         </TableCell>
       </TableRow>
     );
@@ -315,12 +291,10 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         />
       )}
       <OptionPopper
-        id={row || ''}
+        id={selectedCCP?.id || ''}
         open={open}
         anchorEl={anchorEl}
-        onClickAway={() => {
-          setAnchorEl(null);
-        }}
+        onClickAway={handleCloseMenu}
         options={options}
       />
     </Box>
