@@ -19,7 +19,7 @@ const HomeLandingPage = () => {
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [eventToBeDeleted, setEventToBeDeleted] = useState<Event | null>(null);
 
   // Clear the addedEventId in location state now that it's been used
   window.history.pushState(
@@ -54,7 +54,7 @@ const HomeLandingPage = () => {
         query: FETCH_ALL_EVENTS,
       });
 
-      events = events.filter((event) => event.id !== selectedEvent?.id);
+      events = events.filter((event) => event.id !== eventToBeDeleted?.id);
 
       cache.writeQuery({
         query: FETCH_ALL_EVENTS,
@@ -65,14 +65,14 @@ const HomeLandingPage = () => {
   const events: Array<Event> = data ? data.events : [];
 
   useEffect(() => {
-    if (selectedEvent) {
+    if (eventToBeDeleted) {
       deleteEvent({
         variables: {
-          id: selectedEvent?.id,
+          id: eventToBeDeleted?.id,
         },
       });
     }
-  }, [selectedEvent]);
+  }, [eventToBeDeleted]);
 
   const handleArchiveEvent = (event: Event) => {
     editEvent({
@@ -98,7 +98,7 @@ const HomeLandingPage = () => {
   };
 
   const handleDeleteEvent = (event: Event) => {
-    setSelectedEvent(event);
+    setEventToBeDeleted(event);
   };
 
   // Filters for inactive or active events
