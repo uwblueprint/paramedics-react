@@ -50,13 +50,11 @@ const PatientProfilePage = ({
   mode: string;
 }) => {
   const history = useHistory();
-  const { data, loading, error } = useQuery(
+  const { data, loading } = useQuery(
     mode === 'edit' && patientId
       ? GET_PATIENT_BY_ID(patientId)
       : GET_ALL_PATIENTS
   );
-  // console.log(data);
-  // console.log(error);
   const patients: Array<Patient> = data ? data.patient : [];
 
   const [formFields, setFormFields] = useState<FormFields>({
