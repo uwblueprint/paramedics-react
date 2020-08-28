@@ -29,7 +29,7 @@ const EnterBarcodePage = ({
         // Found patient
         const {
           collectionPointId: {
-            id: patientCCPId,
+            id: patientCcpId,
             eventId: { id: patientEventId },
           },
           id,
