@@ -5,11 +5,11 @@ import { useQuery } from 'react-apollo';
 import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const BarcodeScan = ({
-  eventID,
-  ccpID,
+  eventId,
+  ccpId,
 }: {
-  eventID: string;
-  ccpID: string;
+  eventId: string;
+  ccpId: string;
 }) => {
   const history = useHistory();
   const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
@@ -38,7 +38,7 @@ const BarcodeScan = ({
       } else {
         // No existing patient
         history.replace(
-          `/events/${eventID}/ccps/${ccpID}/patients/new/${barcode}`
+          `/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`
         );
       }
     }
