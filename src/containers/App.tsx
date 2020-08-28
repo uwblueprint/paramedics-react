@@ -51,12 +51,12 @@ function App() {
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/scan"
+            path="/events/:eventId/ccps/:ccpId/scan"
             component={ScanPatientPage}
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/manual"
+            path="/events/:eventId/ccps/:ccpId/manual"
             component={EnterBarcodePage}
           />
           <Route

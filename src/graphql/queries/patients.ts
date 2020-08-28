@@ -106,6 +106,7 @@ export const GET_ALL_PATIENTS = gql`
         id
         name
         eventId {
+          id
           name
           eventDate
         }
