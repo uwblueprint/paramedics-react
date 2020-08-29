@@ -22,7 +22,7 @@ export interface Patient {
   gender: string;
   age: number;
   runNumber: number;
-  barcodeValue: number;
+  barcodeValue: string;
   collectionPointId: CCP;
   status: Status;
   triageCategory: number;
