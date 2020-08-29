@@ -4,15 +4,15 @@ import BarcodeScan from './BarcodeScan';
 
 const ScanPatientPage = ({
   match: {
-    params: { ccpId },
+    params: { eventId, ccpId },
   },
 }: {
-  match: { params: { ccpId: string } };
+  match: { params: { eventId: string; ccpId: string } };
 }) => {
   return (
     <>
       <ScanPatientTopBar />
-      <BarcodeScan ccpId={ccpId} />
+      <BarcodeScan eventId={eventId} ccpId={ccpId} />
     </>
   );
 };
