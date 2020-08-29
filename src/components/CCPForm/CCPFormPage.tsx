@@ -11,7 +11,6 @@ import CompleteButton from './CompleteButton';
 import Map from '../EventCreationPage/Map';
 import FormField from '../common/FormField';
 import {
-  GET_ALL_CCPS,
   GET_CCP_BY_ID,
   GET_CCPS_BY_EVENT_ID,
   CCP,
@@ -71,11 +70,10 @@ const CCPFormPage = ({
   const classes = useStyles();
   const history = useHistory();
 
-  const { data } = useQuery(mode === 'new' ? GET_ALL_CCPS : GET_CCP_BY_ID, {
-    variables: { id: ccpId },
+  const { data } = useQuery(ccpId ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID, {
+    variables: { id: ccpId, eventId },
   });
 
-  const collectionPoints: Array<CCP> = data ? data.collectionPoints : [];
   const collectionPoint: CCP = data ? data.collectionPoint : null;
 
   const [ccpName, setCCPName] = useState<string>('');
@@ -89,14 +87,6 @@ const CCPFormPage = ({
 
   const [addCCP] = useMutation(ADD_CCP, {
     update(cache, { data: { addCollectionPoint } }) {
-      // Update GET_ALL_CCPS
-      cache.writeQuery({
-        query: GET_ALL_CCPS,
-        data: {
-          collectionPoints: collectionPoints.concat([addCollectionPoint]),
-        },
-      });
-
       // Update GET_CCPS_BY_EVENT_ID
       const { collectionPointsByEvent } = cache.readQuery<any>({
         query: GET_CCPS_BY_EVENT_ID,
@@ -136,15 +126,15 @@ const CCPFormPage = ({
         variables: {
           id: ccpId,
           name: ccpName,
-          eventId: eventId,
+          eventId,
         },
       });
     } else {
       addCCP({
         variables: {
           name: ccpName,
-          eventId: eventId,
-          createdBy: 4,
+          eventId,
+          createdBy: 1,
         },
       });
     }

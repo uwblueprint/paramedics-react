@@ -19,11 +19,7 @@ import { useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
 import OptionPopper, { Option } from '../common/OptionPopper';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import {
-  CCP,
-  GET_CCPS_BY_EVENT_ID,
-  GET_ALL_CCPS,
-} from '../../graphql/queries/ccps';
+import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 import { DELETE_CCP } from '../../graphql/mutations/ccps';
 import ConfirmModal from '../common/ConfirmModal';
 
@@ -162,7 +158,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         variables: { eventId },
       });
 
-      let updatedCCPsList = collectionPointsByEvent.filter(
+      const updatedCCPsList = collectionPointsByEvent.filter(
         (ccp) => ccp.id !== (selectedCCP as CCP).id
       );
 
@@ -171,22 +167,6 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         variables: { eventId },
         data: { collectionPointsByEvent: updatedCCPsList },
       });
-
-      // Update GET_ALL_CCPS
-      const { collectionPoints } = cache.readQuery<any>({
-        query: GET_ALL_CCPS,
-      });
-
-      if (collectionPoints) {
-        updatedCCPsList = collectionPoints.filter(
-          (ccp) => ccp.id !== (selectedCCP as CCP).id
-        );
-
-        cache.writeQuery({
-          query: GET_ALL_CCPS,
-          data: { collectionPoints: updatedCCPsList },
-        });
-      }
     },
     onCompleted() {
       handleCloseConfirmDelete();
