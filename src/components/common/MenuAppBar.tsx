@@ -6,6 +6,7 @@ import {
   Typography,
   IconButton,
   Drawer,
+  Link,
   List,
   ListItem,
   ListItemIcon,
@@ -15,7 +16,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import { useQuery } from '@apollo/react-hooks';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { ScanIcon } from './ScanIcon';
 import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
@@ -34,6 +35,7 @@ const useStyles = makeStyles({
     flexGrow: 1,
   },
   list: {
+    height: '100%',
     width: '250px',
   },
   fullList: {
@@ -45,8 +47,10 @@ const useStyles = makeStyles({
   active: {
     backgroundColor: 'red',
   },
-  link: {
-    textDecoration: 'none',
+  viewEventsLink: {
+    position: 'absolute',
+    bottom: 0,
+    padding: '24px',
   },
 });
 
@@ -138,6 +142,15 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               </ListItem>
             ))}
           </List>
+          <Link
+            color="secondary"
+            variant="body2"
+            component={NavLink}
+            to="/events"
+            className={classes.viewEventsLink}
+          >
+            View other events
+          </Link>
         </div>
       </Drawer>
     </>
