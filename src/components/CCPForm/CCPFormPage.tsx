@@ -70,9 +70,12 @@ const CCPFormPage = ({
   const classes = useStyles();
   const history = useHistory();
 
-  const { data } = useQuery(ccpId ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID, {
-    variables: { id: ccpId, eventId },
-  });
+  const { data } = useQuery(
+    mode === 'edit' ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID,
+    {
+      variables: { id: ccpId, eventId },
+    }
+  );
 
   const collectionPoint: CCP = data ? data.collectionPoint : null;
 
