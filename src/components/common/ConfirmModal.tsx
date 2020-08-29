@@ -12,41 +12,41 @@ import { Colours } from '../../styles/Constants';
 
 const dialogStyles = makeStyles({
   paper: {
-    width: 485,
-    height: 280,
+    width: '485px',
+    height: '280px',
   },
   dialogContent: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
+    paddingLeft: '24px',
+    paddingTop: '24px',
+    paddingRight: '24px',
   },
   dialogTitle: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-    paddingBottom: 0,
+    paddingLeft: '24px',
+    paddingTop: '24px',
+    paddingRight: '24px',
+    paddingBottom: '0px',
     fontWeight: 500,
-    fontSize: 20,
+    fontSize: '20px',
   },
   dialogCancel: {
     color: Colours.Secondary,
-    height: 48,
-    width: 107,
+    height: '48px',
+    width: '107px',
   },
   dialogDelete: {
     color: Colours.Danger,
-    height: 48,
-    width: 107,
+    height: '48px',
+    width: '107px',
   },
   dialogConfirm: {
     color: Colours.Secondary,
-    height: 48,
-    width: 107,
+    height: '48px',
+    width: '107px',
   },
   dialogActionSpacing: {
-    paddingBottom: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingBottom: '8px',
+    paddingLeft: '16px',
+    paddingRight: '16px',
   },
 });
 
