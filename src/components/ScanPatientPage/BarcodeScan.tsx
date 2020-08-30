@@ -33,7 +33,7 @@ const BarcodeScan = ({
         } = selectedPatient[0];
         // Redirect to patient profile
         history.replace(
-          `/events/${patientEventId}/ccps/${patientCCPId}/patients/${id}/edit`
+          `/events/${patientEventId}/ccps/${patientCCPId}/patients/${id}`
         );
       } else {
         // No existing patient

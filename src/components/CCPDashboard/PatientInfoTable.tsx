@@ -174,7 +174,7 @@ export const PatientInfoTable = ({
     history.push(
       `/events/${eventId}/ccps/${ccpId}/patients/${
         ((selectedPatient as unknown) as Patient).id
-      }/edit`
+      }`
     );
   };
 
@@ -374,7 +374,7 @@ export const PatientInfoTable = ({
             <Button
               onClick={() => {
                 history.push(
-                  `/events/${eventId}/ccps/${ccpId}/patients/edit/${
+                  `/events/${eventId}/ccps/${ccpId}/patients/${
                     ((selectedPatient as unknown) as Patient).id
                   }`
                 );
