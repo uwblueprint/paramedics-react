@@ -22,7 +22,7 @@ import { Colours } from '../../styles/Constants';
 import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
-import DeletePatientDialog from './DeletePatientDialog';
+import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
 import { capitalize } from '../../utils/format';
 import { EDIT_PATIENT } from '../../graphql/mutations/patients';
@@ -399,11 +399,15 @@ export const PatientInfoTable = ({
           Delete patient
         </MenuItem>
       </Menu>
-      <DeletePatientDialog
+      <ConfirmModal
         open={openDeletePatient}
-        onClose={handleCancelDeletePatient}
-        handleConfirm={handleConfirmDeletePatient}
+        title="You are about to delete a patient"
+        body="Deleting a patient will remove all records of the patient."
+        actionLabel="Delete"
+        handleClickAction={handleConfirmDeletePatient}
+        handleClickCancel={handleCancelDeletePatient}
       />
     </Table>
   );
 };
+//
