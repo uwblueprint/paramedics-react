@@ -1,6 +1,12 @@
 import gql from 'graphql-tag';
 
-const ADD_CCP = gql`
+export const DELETE_CCP = gql`
+  mutation deleteCollectionPoint($id: ID!) {
+    deleteCollectionPoint(id: $id)
+  }
+`;
+
+export const ADD_CCP = gql`
   mutation addCollectionPoint($name: String!, $eventId: ID!, $createdBy: ID!) {
     addCollectionPoint(name: $name, eventId: $eventId, createdBy: $createdBy) {
       id
@@ -14,7 +20,7 @@ const ADD_CCP = gql`
   }
 `;
 
-const EDIT_CCP = gql`
+export const EDIT_CCP = gql`
   mutation updateCollectionPoint(
     $id: ID!
     $name: String
@@ -37,5 +43,3 @@ const EDIT_CCP = gql`
     }
   }
 `;
-
-export { ADD_CCP, EDIT_CCP };

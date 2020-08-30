@@ -10,7 +10,11 @@ import { Colours } from '../../styles/Constants';
 import CompleteButton from './CompleteButton';
 import Map from '../EventCreationPage/Map';
 import FormField from '../common/FormField';
-import { GET_ALL_CCPS, GET_CCP_BY_ID, CCP } from '../../graphql/queries/ccps';
+import {
+  GET_CCP_BY_ID,
+  GET_CCPS_BY_EVENT_ID,
+  CCP,
+} from '../../graphql/queries/ccps';
 import { ADD_CCP, EDIT_CCP } from '../../graphql/mutations/ccps';
 
 const useStyles = makeStyles({
@@ -51,14 +55,14 @@ const useStyles = makeStyles({
 
 const CCPFormPage = ({
   match: {
-    params: { eventID, ccpID },
+    params: { eventId, ccpId },
   },
   mode,
 }: {
   match: {
     params: {
-      eventID: string;
-      ccpID?: string;
+      eventId: string;
+      ccpId?: string;
     };
   };
   mode: string;
@@ -66,11 +70,13 @@ const CCPFormPage = ({
   const classes = useStyles();
   const history = useHistory();
 
-  const { data } = useQuery(mode === 'new' ? GET_ALL_CCPS : GET_CCP_BY_ID, {
-    variables: { id: ccpID },
-  });
+  const { data } = useQuery(
+    mode === 'edit' ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID,
+    {
+      variables: { id: ccpId, eventId },
+    }
+  );
 
-  const collectionPoints: Array<CCP> = data ? data.collectionPoints : [];
   const collectionPoint: CCP = data ? data.collectionPoint : null;
 
   const [ccpName, setCCPName] = useState<string>('');
@@ -84,10 +90,19 @@ const CCPFormPage = ({
 
   const [addCCP] = useMutation(ADD_CCP, {
     update(cache, { data: { addCollectionPoint } }) {
+      // Update GET_CCPS_BY_EVENT_ID
+      const { collectionPointsByEvent } = cache.readQuery<any>({
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
       cache.writeQuery({
-        query: GET_ALL_CCPS,
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
         data: {
-          collectionPoints: collectionPoints.concat([addCollectionPoint]),
+          collectionPointsByEvent: collectionPointsByEvent.concat([
+            addCollectionPoint,
+          ]),
         },
       });
     },
@@ -103,7 +118,7 @@ const CCPFormPage = ({
   };
 
   const handleCancel = () => {
-    history.replace(`/events/${eventID}`);
+    history.replace(`/events/${eventId}`);
   };
 
   const handleComplete = () => {
@@ -112,24 +127,24 @@ const CCPFormPage = ({
     if (mode === 'edit') {
       editCCP({
         variables: {
-          id: ccpID,
+          id: ccpId,
           name: ccpName,
-          eventId: eventID,
+          eventId,
         },
       });
     } else {
       addCCP({
         variables: {
           name: ccpName,
-          eventId: eventID,
-          createdBy: 4,
+          eventId,
+          createdBy: 1,
         },
       });
     }
 
-    // TODO: Check for valid eventID
+    // TODO: Check for valid eventId
 
-    history.replace(`/events/${eventID}`);
+    history.replace(`/events/${eventId}`);
   };
 
   const content = (

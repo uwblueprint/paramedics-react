@@ -60,7 +60,7 @@ const ConfirmModal = ({
   actionLabelStatus = 'danger',
 }: {
   title: string;
-  body: string;
+  body: string | JSX.Element;
   actionLabel: string;
   actionLabelStatus?: 'danger' | 'secondary';
   open: boolean;

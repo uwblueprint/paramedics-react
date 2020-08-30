@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { Typography, ClickAwayListener } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import Table from '@material-ui/core/Table';
@@ -17,9 +18,7 @@ const useOptions = makeStyles({
   },
   menuHover: {
     borderRadius: '4px 4px 4px 4px',
-  },
-  menuDelete: {
-    color: Colours.DangerHover,
+    cursor: 'pointer',
   },
 });
 
@@ -34,7 +33,7 @@ const useLayout = makeStyles({
 });
 
 export interface Option {
-  styles: any;
+  styles?: any;
   onClick: () => void;
   name: string;
 }
@@ -53,7 +52,7 @@ const OptionPopper = ({
   options: Array<Option>;
 }) => {
   const classes = useLayout();
-  const optionStyle = useOptions();
+  const optionStyles = useOptions();
 
   return (
     <Popper
@@ -76,13 +75,20 @@ const OptionPopper = ({
                 <TableRow
                   hover
                   key={id + String(index)}
-                  classes={{ hover: optionStyle.menuHover }}
+                  classes={{ hover: optionStyles.menuHover }}
                   onClick={(event) => {
                     event.stopPropagation();
                     option.onClick();
                   }}
                 >
-                  <TableCell classes={{ root: option.styles }}>
+                  <TableCell
+                    classes={{
+                      root: clsx({
+                        [optionStyles.menuCell]: true,
+                        [option.styles]: true,
+                      }),
+                    }}
+                  >
                     <Typography variant="body2">{option.name}</Typography>
                   </TableCell>
                 </TableRow>
