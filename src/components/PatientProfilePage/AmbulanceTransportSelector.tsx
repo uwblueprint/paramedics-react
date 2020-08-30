@@ -16,13 +16,13 @@ const AmbulanceTransportSelector = ({
 }) => {
   return (
     <>
-      <Typography variant="h6" style={{ marginBottom: 20 }}>
+      <Typography variant="h6" style={{ marginBottom: '20px' }}>
         Ambulance
       </Typography>
       <RadioGroup
         value={currentValue}
         onChange={handleChange}
-        style={{ marginBottom: 32 }}
+        style={{ marginBottom: '32px' }}
       >
         {options.map((ambulance) => (
           <FormControlLabel

@@ -16,13 +16,13 @@ const HospitalTransportSelector = ({
 }) => {
   return (
     <>
-      <Typography variant="h6" style={{ marginBottom: 20 }}>
+      <Typography variant="h6" style={{ marginBottom: '20px' }}>
         Hospital
       </Typography>
       <RadioGroup
         value={currentValue}
         onChange={handleChange}
-        style={{ marginBottom: 32 }}
+        style={{ marginBottom: '32px' }}
       >
         {options.map((hospital) => (
           <FormControlLabel

@@ -19,18 +19,13 @@ import {
 import { useMutation } from '@apollo/react-hooks';
 import { MoreHoriz } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
-import {
-  Patient,
-  TriageLevel,
-  Status,
-  GET_ALL_PATIENTS,
-} from '../../graphql/queries/patients';
+import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
 import DeletePatientDialog from './DeletePatientDialog';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
 import { capitalize } from '../../utils/format';
-import { DELETE_PATIENT } from '../../graphql/mutations/patients';
+import { EDIT_PATIENT } from '../../graphql/mutations/patients';
 
 const useStyles = makeStyles({
   visuallyHidden: {
@@ -158,24 +153,7 @@ export const PatientInfoTable = ({
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
 
-  const [deletePatient] = useMutation(DELETE_PATIENT, {
-    update(cache, { data: { deletePatient } }) {
-      if (!deletePatient) {
-        return;
-      }
-      let { patients } = cache.readQuery<any>({
-        query: GET_ALL_PATIENTS,
-      });
-      const filtered = patients.filter(
-        (patient) => patient.id !== ((selectedPatient as unknown) as Patient).id
-      );
-      patients = filtered;
-      cache.writeQuery({
-        query: GET_ALL_PATIENTS,
-        data: { patients },
-      });
-    },
-  });
+  const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleOpenDetails = (patient) => {
     setSelectedPatient(patient);
@@ -194,9 +172,9 @@ export const PatientInfoTable = ({
 
   const handleClickEdit = () => {
     history.push(
-      `/events/${eventId}/ccps/${ccpId}/patients/edit/${
+      `/events/${eventId}/ccps/${ccpId}/patients/${
         ((selectedPatient as unknown) as Patient).id
-      }`
+      }/edit`
     );
   };
 
@@ -206,8 +184,12 @@ export const PatientInfoTable = ({
   };
 
   const handleConfirmDeletePatient = () => {
-    deletePatient({
-      variables: { id: ((selectedPatient as unknown) as Patient).id },
+    editPatient({
+      variables: {
+        id: ((selectedPatient as unknown) as Patient).id,
+        status: Status.DELETED,
+        collectionPointId: ccpId,
+      },
     });
     setOpenDeletePatient(false);
   };

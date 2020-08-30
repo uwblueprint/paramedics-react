@@ -206,6 +206,10 @@ const PatientProfilePage = ({
       setOpenTransportModal(true);
       return;
     }
+    let transportTime;
+    if (transportingPatient && transportConfirmed) {
+      transportTime = new Date();
+    }
     if (mode === 'new') {
       addPatient({
         variables: {
@@ -219,6 +223,7 @@ const PatientProfilePage = ({
             : '',
           collectionPointId: ccpId,
           status: formFields.status,
+          transportTime,
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
@@ -241,6 +246,7 @@ const PatientProfilePage = ({
             : '',
           collectionPointId: ccpId,
           status: formFields.status,
+          transportTime,
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
