@@ -235,6 +235,7 @@ const UserOverviewPage: React.FC = () => {
       </TableContainer>
       <ConfirmModal
         open={openModal}
+        isDeleteConfirmation
         title="You are about to delete a team member."
         body="Deleted team members will no longer have access to any casualty collection points."
         actionLabel="Delete"

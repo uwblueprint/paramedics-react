@@ -77,13 +77,13 @@ function App() {
           />
           <Route
             exact
-            path="/events/:eventId/ccps/:ccpId/patients/:patientId/edit"
-            component={(props) => <PatientProfilePage mode="edit" {...props} />}
+            path="/events/:eventId/ccps/:ccpId/patients/new/:barcodeValue?"
+            component={(props) => <PatientProfilePage mode="new" {...props} />}
           />
           <Route
             exact
-            path="/events/:eventId/ccps/:ccpId/patients/new/:barcodeValue?"
-            component={(props) => <PatientProfilePage mode="new" {...props} />}
+            path="/events/:eventId/ccps/:ccpId/patients/:patientId"
+            component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
           <Route path="/">
             <Redirect to="/events" />

@@ -401,6 +401,7 @@ export const PatientInfoTable = ({
       </Menu>
       <ConfirmModal
         open={openDeletePatient}
+        isDeleteConfirmation
         title="You are about to delete a patient"
         body="Deleting a patient will remove all records of the patient."
         actionLabel="Delete"

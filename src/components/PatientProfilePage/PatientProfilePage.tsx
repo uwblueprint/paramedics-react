@@ -6,13 +6,13 @@ import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import { useSnackbar } from 'notistack';
+import ConfirmModal from '../common/ConfirmModal';
 import { Colours } from '../../styles/Constants';
 import FormField from '../common/FormField';
 import CompletePatientButton from './CompletePatientButton';
 import RadioSelector from '../common/RadioSelector';
 import TriagePills from './TriagePills';
 import StatusPills from './StatusPills';
-import PatientTransportDialog from './PatientTransportDialog';
 import PatientTransportPage from './PatientTransportPage';
 import {
   TriageLevel,
@@ -279,13 +279,32 @@ const PatientProfilePage = ({
         handleHospitalChange={handleHospitalChange}
         handleAmbulanceChange={handleAmbulanceChange}
       />
-      <PatientTransportDialog
+      <ConfirmModal
         open={openTransportModal}
-        handleClose={handleCloseDialog}
-        handleComplete={() => {
+        isDeleteConfirmation={false}
+        title="You are about to transport a patient to a hospital"
+        body={
+          <>
+            Transporting a patient will:
+            <ul>
+              <li>
+                Move a patient on scene to a selected hospital and ambulance.
+              </li>
+              <li>
+                All transported patients can be found in the hospital tab.
+              </li>
+              <li>
+                A run number needs to be manually added to transported patients.
+              </li>
+            </ul>
+          </>
+        }
+        actionLabel="Continue to transport"
+        handleClickAction={() => {
           setOpenTransportPage(true);
           setOpenTransportModal(false);
         }}
+        handleClickCancel={handleCloseDialog}
       />
       <div className="event-creation-top-section">
         <div className="landing-top-bar">

@@ -12,7 +12,7 @@ import { Colours } from '../../styles/Constants';
 
 const dialogStyles = makeStyles({
   paper: {
-    width: 485,
+    minWidth: 485,
     height: 280,
   },
   dialogContent: {
@@ -38,6 +38,11 @@ const dialogStyles = makeStyles({
     height: 48,
     width: 107,
   },
+  dialogAction: {
+    color: Colours.Secondary,
+    height: 48,
+    minWidth: 107,
+  },
   dialogActionSpacing: {
     paddingBottom: 8,
     paddingLeft: 16,
@@ -47,6 +52,7 @@ const dialogStyles = makeStyles({
 
 const ConfirmModal = ({
   open,
+  isDeleteConfirmation,
   handleClickCancel,
   handleClickAction,
   title,
@@ -57,6 +63,7 @@ const ConfirmModal = ({
   body: string | JSX.Element;
   actionLabel: string;
   open: boolean;
+  isDeleteConfirmation: boolean;
   handleClickCancel: () => void;
   handleClickAction: () => void;
 }) => {
@@ -78,7 +85,11 @@ const ConfirmModal = ({
           <Typography variant="body1">Cancel</Typography>
         </Button>
         <Button
-          classes={{ root: dialogStyle.dialogDelete }}
+          classes={{
+            root: isDeleteConfirmation
+              ? dialogStyle.dialogDelete
+              : dialogStyle.dialogAction,
+          }}
           onClick={handleClickAction}
         >
           <Typography variant="body1">{actionLabel}</Typography>
