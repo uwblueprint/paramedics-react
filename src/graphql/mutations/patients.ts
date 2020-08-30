@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const ADD_PATIENT = gql`
   mutation addPatient(
-    $gender: gender
+    $gender: Gender
     $age: Int
     $runNumber: Int
     $barcodeValue: String!
@@ -49,7 +49,7 @@ export const ADD_PATIENT = gql`
 export const EDIT_PATIENT = gql`
   mutation updatePatient(
     $id: ID!
-    $gender: gender
+    $gender: Gender
     $age: Int
     $runNumber: Int
     $barcodeValue: String
