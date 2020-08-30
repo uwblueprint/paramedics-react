@@ -36,7 +36,7 @@ const EnterBarcodePage = ({
         } = selectedPatient[0];
         // Redirect to patient profile
         history.push(
-          `/events/${patientEventId}/ccps/${patientCcpId}/patients/${id}`
+          `/events/${patientEventId}/ccps/${patientCcpId}/patients/${id}/edit`
         );
       } else {
         // No existing patient
