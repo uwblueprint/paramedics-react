@@ -206,10 +206,7 @@ const PatientProfilePage = ({
       setOpenTransportModal(true);
       return;
     }
-    let transportTime;
-    if (transportingPatient && transportConfirmed) {
-      transportTime = new Date();
-    }
+    const transportTime = transportingPatient && transportConfirmed ? new Date() : null;
     if (mode === 'new') {
       addPatient({
         variables: {
