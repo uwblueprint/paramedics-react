@@ -64,16 +64,6 @@ const HomeLandingPage = () => {
   });
   const events: Array<Event> = data ? data.events : [];
 
-  useEffect(() => {
-    if (eventToBeDeleted) {
-      deleteEvent({
-        variables: {
-          id: eventToBeDeleted?.id,
-        },
-      });
-    }
-  }, [eventToBeDeleted]);
-
   const handleArchiveEvent = (event: Event) => {
     editEvent({
       variables: {
@@ -97,8 +87,13 @@ const HomeLandingPage = () => {
     });
   };
 
-  const handleDeleteEvent = (event: Event) => {
-    setEventToBeDeleted(event);
+  const handleDeleteEvent = async (event: Event) => {
+    await setEventToBeDeleted(event);
+    deleteEvent({
+      variables: {
+        id: event.id,
+      },
+    });
   };
 
   // Filters for inactive or active events

@@ -48,7 +48,7 @@ const UserProfile = () => {
       tabIndex={0}
       role="button"
     >
-      <Typography variant="h6" align="right" style={{ marginRight: '0.5em' }}>
+      <Typography variant="h6" align="right" style={{ marginRight: '10px' }}>
         Joe Li
       </Typography>
       <AccountCircleIcon fontSize="large" color="secondary" />
