@@ -42,6 +42,7 @@ const PatientProfilePage = ({
 }: {
   match: {
     params: {
+      eventId: string;
       patientId?: string;
       ccpId: string;
       barcodeValue?: string;
@@ -50,7 +51,6 @@ const PatientProfilePage = ({
   mode: string;
 }) => {
   const history = useHistory();
-
   const { data, loading } = useQuery(
     mode === 'edit' && patientId
       ? GET_PATIENT_BY_ID(patientId)
@@ -58,7 +58,6 @@ const PatientProfilePage = ({
   );
   const patients: Array<Patient> = data ? data.patient : [];
 
-  // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
     triage: TriageLevel.GREEN,
@@ -123,8 +122,8 @@ const PatientProfilePage = ({
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber,
           barcodeValue: formFields.barcodeValue
-            ? parseInt(formFields.barcodeValue.toString())
-            : -1,
+            ? formFields.barcodeValue.toString()
+            : '',
           collectionPointId: ccpId,
           status: formFields.status,
           triageCategory: formFields.triageCategory,
@@ -142,8 +141,8 @@ const PatientProfilePage = ({
             ? parseInt(formFields.runNumber.toString())
             : -1,
           barcodeValue: formFields.barcodeValue
-            ? parseInt(formFields.barcodeValue.toString())
-            : -1,
+            ? formFields.barcodeValue.toString()
+            : '',
           collectionPointId: ccpId,
           status: formFields.status,
           triageCategory: formFields.triageCategory,

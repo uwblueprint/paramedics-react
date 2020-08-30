@@ -54,7 +54,7 @@ const ConfirmModal = ({
   actionLabel,
 }: {
   title: string;
-  body: string;
+  body: string | JSX.Element;
   actionLabel: string;
   open: boolean;
   handleClickCancel: () => void;

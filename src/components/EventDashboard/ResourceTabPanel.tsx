@@ -68,14 +68,6 @@ const useStyles = makeStyles({
   toolbar: {
     padding: '0 0 0 4px',
   },
-  addButton: {
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
-    borderRadius: '2000px',
-    position: 'fixed',
-    bottom: '56px',
-    right: '56px',
-    padding: '12px 26px',
-  },
   buttonCell: {
     paddingTop: 0,
     paddingBottom: 0,
@@ -484,14 +476,6 @@ const ResourceTabPanel = ({
           <TableBody>{tableRows}</TableBody>
         </Table>
       </TableContainer>
-      <Button
-        className={classes.addButton}
-        variant="contained"
-        color="secondary"
-      >
-        <Add className={classes.buttonIcon} />
-        {`Add ${type === TabOptions.Hospital ? 'Hospital' : 'Ambulance'}`}
-      </Button>
       <ActionConfirmationDialog
         open={open}
         type={type}

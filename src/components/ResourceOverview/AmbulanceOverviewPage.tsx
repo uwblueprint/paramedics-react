@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
-import Popper from '@material-ui/core/Popper';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,6 +14,8 @@ import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
+import OptionPopper, { Option } from '../common/OptionPopper';
+
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -62,7 +63,7 @@ const dataRow = makeStyles({
   },
 });
 
-const options = makeStyles({
+const optionStyles = makeStyles({
   root: {
     textAlign: 'right',
   },
@@ -153,20 +154,35 @@ const AmbulanceOverviewPage: React.FC = () => {
     enqueueSnackbar('Ambulance deleted.');
   };
 
+  const handleDeleteOption = () => {
+    setOpenModal(true);
+  };
+
   const handleClickCancel = () => {
     setAnchorEl(null);
     setOpenModal(false);
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
-
   const paraStyle = pStyles();
   const classes = useLayout();
   const hRow = headerRow();
   const table = tableStyles();
   const dRow = dataRow();
-  const optionBtn = options();
+  const optionStyle = optionStyles();
+
+  const options: Array<Option> = [
+    {
+      styles: optionStyle.menuCell,
+      onClick: handleClickEdit,
+      name: 'Edit',
+    },
+    {
+      styles: optionStyle.menuDelete,
+      onClick: handleDeleteOption,
+      name: 'Delete',
+    },
+  ];
 
   const cells = ambulances.map((ambulance: Ambulance) => {
     return (
@@ -174,7 +190,7 @@ const AmbulanceOverviewPage: React.FC = () => {
         <TableCell classes={{ root: dRow.root }}>
           {`#${ambulance.vehicleNumber}`}
         </TableCell>
-        <TableCell classes={{ root: optionBtn.root }}>
+        <TableCell classes={{ root: optionStyle.root }}>
           <IconButton data-id={ambulance.id} onClick={handleClickOptions}>
             <MoreHorizIcon style={{ color: Colours.Black }} />
           </IconButton>
@@ -201,35 +217,15 @@ const AmbulanceOverviewPage: React.FC = () => {
           </TableHead>
           <TableBody>
             {cells}
-            <Popper
-              id={id}
+            <OptionPopper
+              id={String(selectedAmbulance)}
               open={open}
-              popperOptions={{
-                modifiers: { offset: { enabled: true, offset: '-69.5,0' } },
-              }}
               anchorEl={anchorEl}
-            >
-              <div>
-                <Table className={classes.tablePopper}>
-                  <TableBody>
-                    <TableRow
-                      hover
-                      classes={{ hover: optionBtn.menuHover }}
-                      onClick={handleClickEdit}
-                    >
-                      <TableCell classes={{ root: optionBtn.menuCell }}>
-                        <Typography variant="body2">Edit</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow hover onClick={() => setOpenModal(true)}>
-                      <TableCell classes={{ root: optionBtn.menuDelete }}>
-                        <Typography variant="body2">Delete</Typography>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </Popper>
+              onClickAway={() => {
+                setAnchorEl(null);
+              }}
+              options={options}
+            />
           </TableBody>
         </Table>
       </TableContainer>

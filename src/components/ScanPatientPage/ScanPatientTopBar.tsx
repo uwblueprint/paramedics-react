@@ -52,7 +52,7 @@ const ScanPatientTopBar = () => {
             color="inherit"
             className={classes.enterCodeText}
             component={NavLink}
-            to={`${pathname}/manual`}
+            to={`${pathname.split('scan')[0]}manual`}
           >
             <Typography variant="h6">Enter code manually</Typography>
           </Button>
