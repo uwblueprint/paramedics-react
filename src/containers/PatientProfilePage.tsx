@@ -11,6 +11,7 @@ import CompletePatientButton from '../components/PatientCreation/CompletePatient
 import RadioSelector from '../components/common/RadioSelector';
 import TriagePills from '../components/PatientCreation/TriagePills';
 import StatusPills from '../components/PatientCreation/StatusPills';
+import DeletePatientButton from '../components/PatientCreation/DeletePatientButton';
 import {
   TriageLevel,
   Status,
@@ -264,6 +265,7 @@ const PatientProfilePage = ({
             isValidated={false}
           />
           <CompletePatientButton />
+          <DeletePatientButton />
         </ValidatorForm>
       </div>
     </div>
