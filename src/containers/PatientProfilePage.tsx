@@ -15,6 +15,7 @@ import {
   TriageLevel,
   Status,
   Patient,
+  Gender,
   GET_PATIENT_BY_ID,
   GET_ALL_PATIENTS,
 } from '../graphql/queries/patients';
@@ -23,7 +24,7 @@ import { ADD_PATIENT, EDIT_PATIENT } from '../graphql/mutations/patients';
 interface FormFields {
   barcodeValue: string;
   triage: TriageLevel | null;
-  gender: string;
+  gender: Gender;
   age: number | null;
   notes: string;
   runNumber?: number | null;
@@ -60,7 +61,7 @@ const PatientProfilePage = ({
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
     triage: TriageLevel.GREEN,
-    gender: 'Male',
+    gender: Gender.M,
     age: null,
     notes: '',
     status: Status.ON_SITE,
@@ -79,7 +80,7 @@ const PatientProfilePage = ({
       }: {
         barcodeValue: string;
         triageLevel: TriageLevel;
-        gender: string;
+        gender: Gender;
         age: number;
         notes: string;
         status: Status;
@@ -228,12 +229,12 @@ const PatientProfilePage = ({
             }}
           />
           <RadioSelector
-            labels={['Male', 'Female']}
+            labels={Object.keys(Gender)}
             currentValue={formFields.gender}
             handleChange={(e: React.ChangeEvent<HTMLElement>) => {
               setFormFields({
                 ...formFields,
-                gender: (e.target as HTMLInputElement).value,
+                gender: (e.target as HTMLInputElement).value as Gender,
               });
             }}
           />
