@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { useQuery, useMutation } from 'react-apollo';
 import { Grid, Typography } from '@material-ui/core';

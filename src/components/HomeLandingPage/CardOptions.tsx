@@ -129,37 +129,36 @@ const CardOptions: CardOptions = ({
         </Menu>
       </>
     );
-  } else {
-    return (
-      <>
-        <ConfirmModal
-          open={openUnarchiveDialog}
-          title="Are you sure you want to unarchive the following event?"
-          actionLabel="Unarchive"
-          actionLabelStatus="secondary"
-          handleClickAction={handleUnarchiveEvent}
-          handleClickCancel={() => setOpenUnarchiveDialog(false)}
-          body={`${eventTitle} will be moved into the Current Events tab.`}
-        />
-
-        <IconButton
-          onClick={handleClick}
-          classes={{ root: classes.iconButtonRoot }}
-        >
-          <MoreHorizIcon />
-        </IconButton>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleOpenUnarchiveDialog}>Unarchive</MenuItem>
-        </Menu>
-      </>
-    );
   }
+  return (
+    <>
+      <ConfirmModal
+        open={openUnarchiveDialog}
+        title="Are you sure you want to unarchive the following event?"
+        actionLabel="Unarchive"
+        actionLabelStatus="secondary"
+        handleClickAction={handleUnarchiveEvent}
+        handleClickCancel={() => setOpenUnarchiveDialog(false)}
+        body={`${eventTitle} will be moved into the Current Events tab.`}
+      />
+
+      <IconButton
+        onClick={handleClick}
+        classes={{ root: classes.iconButtonRoot }}
+      >
+        <MoreHorizIcon />
+      </IconButton>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleOpenUnarchiveDialog}>Unarchive</MenuItem>
+      </Menu>
+    </>
+  );
 };
 
 export default CardOptions;
