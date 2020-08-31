@@ -234,10 +234,7 @@ const PatientProfilePage = ({
             handleChange={(e: React.ChangeEvent<HTMLElement>) => {
               setFormFields({
                 ...formFields,
-                gender:
-                  (e.target as HTMLInputElement).value === Gender.M
-                    ? Gender.M
-                    : Gender.F,
+                gender: (e.target as HTMLInputElement).value as Gender,
               });
             }}
           />
