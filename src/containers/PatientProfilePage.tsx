@@ -235,7 +235,9 @@ const PatientProfilePage = ({
               setFormFields({
                 ...formFields,
                 gender:
-                  (e.target as HTMLInputElement).value
+                  (e.target as HTMLInputElement).value === Gender.M
+                    ? Gender.M
+                    : Gender.F,
               });
             }}
           />
