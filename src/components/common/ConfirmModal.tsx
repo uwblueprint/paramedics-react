@@ -58,7 +58,7 @@ const ConfirmModal = ({
   body: string | JSX.Element;
   actionLabel: string;
   open: boolean;
-  isDeleteConfirmation: boolean;
+  isDeleteConfirmation?: boolean;
   handleClickCancel: () => void;
   handleClickAction: () => void;
 }) => {
@@ -81,9 +81,10 @@ const ConfirmModal = ({
         </Button>
         <Button
           classes={{
-            root: isDeleteConfirmation
-              ? dialogStyle.dialogDelete
-              : dialogStyle.dialogButton,
+            root:
+              isDeleteConfirmation || false
+                ? dialogStyle.dialogDelete
+                : dialogStyle.dialogButton,
           }}
           onClick={handleClickAction}
         >

@@ -280,7 +280,6 @@ const PatientProfilePage = ({
       />
       <ConfirmModal
         open={openTransportModal}
-        isDeleteConfirmation={false}
         title="You are about to transport a patient to a hospital"
         body={
           <>
