@@ -3,6 +3,11 @@ import { CCP } from './ccps';
 import { Hospital } from './hospitals';
 import { Ambulance } from './ambulances';
 
+export enum Gender {
+  M = 'M',
+  F = 'F',
+}
+
 export enum TriageLevel {
   GREEN = 'GREEN',
   YELLOW = 'YELLOW',
