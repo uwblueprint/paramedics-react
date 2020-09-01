@@ -28,17 +28,12 @@ const dialogStyles = makeStyles({
     fontWeight: 500,
     fontSize: 20,
   },
-  dialogCancel: {
-    color: Colours.Secondary,
-    height: 48,
-    width: 107,
-  },
   dialogDelete: {
     color: Colours.Danger,
     height: 48,
     width: 107,
   },
-  dialogAction: {
+  dialogButton: {
     color: Colours.Secondary,
     height: 48,
     minWidth: 107,
@@ -79,7 +74,7 @@ const ConfirmModal = ({
       </DialogContent>
       <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
         <Button
-          classes={{ root: dialogStyle.dialogCancel }}
+          classes={{ root: dialogStyle.dialogButton }}
           onClick={handleClickCancel}
         >
           <Typography variant="body1">Cancel</Typography>
@@ -88,7 +83,7 @@ const ConfirmModal = ({
           classes={{
             root: isDeleteConfirmation
               ? dialogStyle.dialogDelete
-              : dialogStyle.dialogAction,
+              : dialogStyle.dialogButton,
           }}
           onClick={handleClickAction}
         >
