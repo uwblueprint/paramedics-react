@@ -112,10 +112,11 @@ export const FETCH_ALL_PATIENTS = gql`
 
 export const GET_ALL_PATIENTS = gql`
   query {
-    patients @client {
+    patients {
       id
       gender
       age
+      runNumber
       barcodeValue
       collectionPointId {
         id
@@ -127,6 +128,7 @@ export const GET_ALL_PATIENTS = gql`
         }
       }
       triageLevel
+      status
       notes
       updatedAt
       transportTime
