@@ -7,22 +7,23 @@ const useDeletePatientButtonStyles = makeStyles({
   root: {
     minWidth: '15rem',
     float: 'left',
-    color: Colours.Danger,
+    color: Colours.White,
+    backgroundColor: Colours.Danger,
     '&:hover': {
-      color: Colours.DangerHover,
+      backgroundColor: Colours.DangerHover,
     },
   },
 });
 
-const DeletePatientButton = () => {
+const DeletePatientButton = ({ handleClick }: { handleClick: () => void }) => {
   const classes = useDeletePatientButtonStyles();
   return (
     <Button
       variant="contained"
+      onClick={handleClick}
       classes={{
         root: classes.root,
       }}
-      type="submit"
     >
       Delete
     </Button>

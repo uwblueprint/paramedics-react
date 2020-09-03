@@ -12,6 +12,7 @@ import RadioSelector from '../components/common/RadioSelector';
 import TriagePills from '../components/PatientCreation/TriagePills';
 import StatusPills from '../components/PatientCreation/StatusPills';
 import DeletePatientButton from '../components/PatientCreation/DeletePatientButton';
+import ConfirmModal from '../components/common/ConfirmModal';
 import {
   TriageLevel,
   Status,
@@ -20,7 +21,11 @@ import {
   GET_PATIENT_BY_ID,
   GET_ALL_PATIENTS,
 } from '../graphql/queries/patients';
-import { ADD_PATIENT, EDIT_PATIENT } from '../graphql/mutations/patients';
+import {
+  ADD_PATIENT,
+  EDIT_PATIENT,
+  DELETE_PATIENT,
+} from '../graphql/mutations/patients';
 
 interface FormFields {
   barcodeValue: string;
@@ -58,6 +63,8 @@ const PatientProfilePage = ({
       : GET_ALL_PATIENTS
   );
   const patients: Array<Patient> = data ? data.patient : [];
+  const [deleteClicked, setDeleteClicked] = useState<boolean>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
@@ -103,7 +110,7 @@ const PatientProfilePage = ({
     if (mode === 'new' && barcodeValue) {
       setFormFields({ ...formFields, barcodeValue });
     }
-  }, []);
+  }, [data]);
 
   const [addPatient] = useMutation(ADD_PATIENT, {
     update(cache, { data: { newPatient } }) {
@@ -114,6 +121,7 @@ const PatientProfilePage = ({
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
+  const [deletePatient] = useMutation(DELETE_PATIENT);
 
   const handleComplete = () => {
     if (mode === 'new') {
@@ -149,6 +157,26 @@ const PatientProfilePage = ({
           triageCategory: formFields.triageCategory,
           triageLevel: formFields.triage,
           notes: formFields.notes,
+        },
+      });
+    }
+    history.replace('/');
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteOpen(false);
+    setDeleteClicked(false);
+  };
+
+  const handldeDeleteConfirm = () => {
+    if (mode === 'edit') {
+      deletePatient({
+        variables: {
+          id: patientId,
         },
       });
     }
@@ -266,7 +294,19 @@ const PatientProfilePage = ({
             isValidated={false}
           />
           <CompletePatientButton />
-          <DeletePatientButton />
+          {mode === 'edit' && (
+            <DeletePatientButton handleClick={handleDeleteClick} />
+          )}
+          {mode === 'edit' && (
+            <ConfirmModal
+              open={deleteOpen}
+              handleClickCancel={handleDeleteCancel}
+              handleClickAction={handldeDeleteConfirm}
+              title="You are about to delete a patient"
+              body="Deleting a patient will remove all records of the patient."
+              actionLabel="Delete"
+            />
+          )}
         </ValidatorForm>
       </div>
     </div>

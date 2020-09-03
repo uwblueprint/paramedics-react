@@ -93,3 +93,9 @@ export const EDIT_PATIENT = gql`
     }
   }
 `;
+
+export const DELETE_PATIENT = gql`
+  mutation deletePatient($id: ID!) {
+    deletePatient(id: $id)
+  }
+`;
