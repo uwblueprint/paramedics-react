@@ -25,7 +25,7 @@ const DeletePatientButton = ({ handleClick }: { handleClick: () => void }) => {
         root: classes.root,
       }}
     >
-      Delete
+      Delete Patient
     </Button>
   );
 };

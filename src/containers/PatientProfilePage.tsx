@@ -64,7 +64,6 @@ const PatientProfilePage = ({
   );
   const patients: Array<Patient> = data ? data.patient : [];
   const [deleteClicked, setDeleteClicked] = useState<boolean>(false);
-  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
@@ -164,11 +163,10 @@ const PatientProfilePage = ({
   };
 
   const handleDeleteClick = () => {
-    setDeleteOpen(true);
+    setDeleteClicked(true);
   };
 
   const handleDeleteCancel = () => {
-    setDeleteOpen(false);
     setDeleteClicked(false);
   };
 
@@ -299,7 +297,7 @@ const PatientProfilePage = ({
           )}
           {mode === 'edit' && (
             <ConfirmModal
-              open={deleteOpen}
+              open={deleteClicked}
               handleClickCancel={handleDeleteCancel}
               handleClickAction={handldeDeleteConfirm}
               title="You are about to delete a patient"
