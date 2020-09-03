@@ -40,11 +40,13 @@ export const ADD_PATIENT = gql`
         eventId {
           id
           name
+          eventDate
         }
       }
       triageLevel
       status
       notes
+      updatedAt
       transportTime
       hospitalId {
         id
@@ -100,11 +102,13 @@ export const EDIT_PATIENT = gql`
         eventId {
           id
           name
+          eventDate
         }
       }
       triageLevel
       status
       notes
+      updatedAt
       transportTime
       hospitalId {
         id

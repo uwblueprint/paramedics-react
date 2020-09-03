@@ -79,7 +79,7 @@ const PatientProfilePage = ({
       ? GET_PATIENT_BY_ID(patientId)
       : GET_ALL_PATIENTS
   );
-  const patients: Array<Patient> = data ? data.patient : [];
+  const patients: Array<Patient> = data ? data.patients : [];
   const { data: hospitalData } = useQuery(GET_ALL_HOSPITALS);
   const hospitals: Array<Hospital> = hospitalData ? hospitalData.hospitals : [];
   const { data: ambulanceData } = useQuery(GET_ALL_AMBULANCES);

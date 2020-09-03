@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Quagga from 'quagga';
 import { useQuery } from 'react-apollo';
-import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
+import { GET_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const BarcodeScan = ({
   eventId,
@@ -12,7 +12,7 @@ const BarcodeScan = ({
   ccpId: string;
 }) => {
   const history = useHistory();
-  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
+  const { data, loading, error } = useQuery(GET_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>('');
 
   useEffect(() => {

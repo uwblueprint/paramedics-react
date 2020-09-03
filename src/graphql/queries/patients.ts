@@ -76,40 +76,6 @@ export const GET_PATIENT_BY_ID = (id: string) => {
   `;
 };
 
-export const FETCH_ALL_PATIENTS = gql`
-  query {
-    patients {
-      id
-      gender
-      age
-      runNumber
-      barcodeValue
-      collectionPointId {
-        id
-        name
-        eventId {
-          id
-          name
-          eventDate
-        }
-      }
-      triageLevel
-      status
-      notes
-      updatedAt
-      transportTime
-      hospitalId {
-        id
-        name
-      }
-      ambulanceId {
-        id
-        vehicleNumber
-      }
-    }
-  }
-`;
-
 export const GET_ALL_PATIENTS = gql`
   query {
     patients {
