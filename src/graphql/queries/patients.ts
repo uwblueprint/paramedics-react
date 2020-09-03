@@ -2,6 +2,11 @@ import gql from 'graphql-tag';
 import { CCP } from './ccps';
 import { Hospital } from './hospitals';
 
+export enum Gender {
+  M = 'M',
+  F = 'F',
+}
+
 export enum TriageLevel {
   GREEN = 'GREEN',
   YELLOW = 'YELLOW',
