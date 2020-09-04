@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { useQuery, useMutation } from 'react-apollo';
 import { Grid, Typography } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router-dom';
