@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const ADD_PATIENT = gql`
   mutation addPatient(
-    $gender: String
+    $gender: Gender
     $age: Int
     $runNumber: Int
     $barcodeValue: String!
@@ -12,6 +12,8 @@ export const ADD_PATIENT = gql`
     $triageLevel: triageLevel!
     $notes: String
     $transportTime: DateTime
+    $hospitalId: ID
+    $ambulanceId: ID
   ) {
     addPatient(
       gender: $gender
@@ -24,6 +26,8 @@ export const ADD_PATIENT = gql`
       triageLevel: $triageLevel
       notes: $notes
       transportTime: $transportTime
+      hospitalId: $hospitalId
+      ambulanceId: $ambulanceId
     ) {
       id
       gender
@@ -36,12 +40,22 @@ export const ADD_PATIENT = gql`
         eventId {
           id
           name
+          eventDate
         }
       }
       triageLevel
       status
       notes
+      updatedAt
       transportTime
+      hospitalId {
+        id
+        name
+      }
+      ambulanceId {
+        id
+        vehicleNumber
+      }
     }
   }
 `;
@@ -49,7 +63,7 @@ export const ADD_PATIENT = gql`
 export const EDIT_PATIENT = gql`
   mutation updatePatient(
     $id: ID!
-    $gender: String
+    $gender: Gender
     $age: Int
     $runNumber: Int
     $barcodeValue: String
@@ -59,6 +73,8 @@ export const EDIT_PATIENT = gql`
     $triageLevel: triageLevel
     $notes: String
     $transportTime: DateTime
+    $hospitalId: ID
+    $ambulanceId: ID
   ) {
     updatePatient(
       id: $id
@@ -72,6 +88,8 @@ export const EDIT_PATIENT = gql`
       triageLevel: $triageLevel
       notes: $notes
       transportTime: $transportTime
+      hospitalId: $hospitalId
+      ambulanceId: $ambulanceId
     ) {
       id
       gender
@@ -84,12 +102,28 @@ export const EDIT_PATIENT = gql`
         eventId {
           id
           name
+          eventDate
         }
       }
       triageLevel
       status
       notes
+      updatedAt
       transportTime
+      hospitalId {
+        id
+        name
+      }
+      ambulanceId {
+        id
+        vehicleNumber
+      }
     }
+  }
+`;
+
+export const DELETE_PATIENT = gql`
+  mutation deletePatient($id: ID!) {
+    deletePatient(id: $id)
   }
 `;

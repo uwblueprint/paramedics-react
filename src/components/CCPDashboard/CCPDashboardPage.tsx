@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { Colours } from '../../styles/Constants';
 import {
-  FETCH_ALL_PATIENTS,
+  GET_ALL_PATIENTS,
   Patient,
   Status,
 } from '../../graphql/queries/patients';
@@ -93,7 +93,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   // Fetch events from backend
   useAllPatients();
   // Should switch to fetching patients from cache
-  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
+  const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const allPatients: Array<Patient> = data ? data.patients : [];
   const patients = React.useMemo(
     () =>

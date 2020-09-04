@@ -129,8 +129,12 @@ const statusFilters: FilterOptionObject = {
 
 export const PatientInfoTableWithFilters = ({
   patients,
+  eventId,
+  ccpId,
 }: {
   patients: Patient[];
+  eventId: string;
+  ccpId: string;
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -417,6 +421,8 @@ export const PatientInfoTableWithFilters = ({
         <PatientInfoTable
           patients={filteredPatients}
           type={CCPDashboardTabOptions.PatientOverview}
+          eventId={eventId}
+          ccpId={ccpId}
         />
       </TableContainer>
     </>

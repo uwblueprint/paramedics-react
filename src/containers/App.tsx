@@ -9,8 +9,8 @@ import EventDashboardPage from '../components/EventDashboard/EventDashboardPage'
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcode/EnterBarcodePage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
+import PatientProfilePage from '../components/PatientProfilePage/PatientProfilePage';
 import CCPFormPage from '../components/CCPForm/CCPFormPage';
-import PatientProfilePage from './PatientProfilePage';
 import ResourceOverviewPage from '../components/ResourceOverview/ResourceOverviewPage';
 import HospitalFormPage from '../components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from '../components/ResourceForm/AmbulanceFormPage';

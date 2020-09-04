@@ -12,7 +12,7 @@ import { Colours } from '../../styles/Constants';
 
 const dialogStyles = makeStyles({
   paper: {
-    width: '485px',
+    minWidth: '485px',
     height: '280px',
   },
   dialogContent: {
@@ -28,11 +28,6 @@ const dialogStyles = makeStyles({
     fontWeight: 500,
     fontSize: '20px',
   },
-  dialogCancel: {
-    color: Colours.Secondary,
-    height: '48px',
-    width: '107px',
-  },
   dialogDelete: {
     color: Colours.Danger,
     height: '48px',
@@ -43,6 +38,11 @@ const dialogStyles = makeStyles({
     height: '48px',
     width: '107px',
   },
+  dialogButton: {
+    color: Colours.Secondary,
+    height: '48px',
+    minWidth: '107px',
+  },
   dialogActionSpacing: {
     paddingBottom: '8px',
     paddingLeft: '16px',
@@ -52,18 +52,18 @@ const dialogStyles = makeStyles({
 
 const ConfirmModal = ({
   open,
+  isDeleteConfirmation,
   handleClickCancel,
   handleClickAction,
   title,
   body,
   actionLabel,
-  actionLabelStatus = 'danger',
 }: {
   title: string;
   body: string | JSX.Element;
   actionLabel: string;
-  actionLabelStatus?: 'danger' | 'secondary';
   open: boolean;
+  isDeleteConfirmation?: boolean;
   handleClickCancel: () => void;
   handleClickAction: () => void;
 }) => {
@@ -79,7 +79,7 @@ const ConfirmModal = ({
       </DialogContent>
       <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
         <Button
-          classes={{ root: dialogStyle.dialogCancel }}
+          classes={{ root: dialogStyle.dialogButton }}
           onClick={(event) => {
             event.stopPropagation();
             handleClickCancel();
@@ -89,10 +89,9 @@ const ConfirmModal = ({
         </Button>
         <Button
           classes={{
-            root:
-              actionLabelStatus === 'secondary'
-                ? dialogStyle.dialogConfirm
-                : dialogStyle.dialogDelete,
+            root: isDeleteConfirmation
+              ? dialogStyle.dialogDelete
+              : dialogStyle.dialogButton,
           }}
           onClick={(event) => {
             event.stopPropagation();

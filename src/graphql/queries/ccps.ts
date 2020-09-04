@@ -32,3 +32,17 @@ export const GET_CCPS_BY_EVENT_ID = gql`
     }
   }
 `;
+
+export const GET_CPP_BY_ID = (id: string) => {
+  return gql`
+  query {
+    collectionPoint(id: ${id}) {
+      id
+      name
+      eventId {
+        id
+      }
+    }
+  }
+`;
+};
