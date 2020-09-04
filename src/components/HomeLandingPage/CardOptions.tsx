@@ -97,7 +97,6 @@ const CardOptions: CardOptions = ({
           open={openArchiveDialog}
           title="Are you sure you want to archive the following event?"
           actionLabel="Archive"
-          actionLabelStatus="secondary"
           handleClickAction={handleArchiveEvent}
           handleClickCancel={() => setOpenArchiveDialog(false)}
           body={`${eventTitle} will be moved into the Archived Events tab.`}
@@ -105,6 +104,7 @@ const CardOptions: CardOptions = ({
         <ConfirmModal
           open={openDeleteDialog}
           title="Are you sure you want to delete the following event?"
+          isActionDelete
           actionLabel="Delete"
           handleClickAction={handleDeleteEvent}
           handleClickCancel={() => setOpenDeleteDialog(false)}
@@ -136,7 +136,6 @@ const CardOptions: CardOptions = ({
         open={openUnarchiveDialog}
         title="Are you sure you want to unarchive the following event?"
         actionLabel="Unarchive"
-        actionLabelStatus="secondary"
         handleClickAction={handleUnarchiveEvent}
         handleClickCancel={() => setOpenUnarchiveDialog(false)}
         body={`${eventTitle} will be moved into the Current Events tab.`}

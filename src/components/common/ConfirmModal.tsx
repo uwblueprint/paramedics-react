@@ -52,7 +52,7 @@ const dialogStyles = makeStyles({
 
 const ConfirmModal = ({
   open,
-  isDeleteConfirmation,
+  isActionDelete = false,
   handleClickCancel,
   handleClickAction,
   title,
@@ -63,7 +63,7 @@ const ConfirmModal = ({
   body: string | JSX.Element;
   actionLabel: string;
   open: boolean;
-  isDeleteConfirmation?: boolean;
+  isActionDelete?: boolean;
   handleClickCancel: () => void;
   handleClickAction: () => void;
 }) => {
@@ -89,7 +89,7 @@ const ConfirmModal = ({
         </Button>
         <Button
           classes={{
-            root: isDeleteConfirmation
+            root: isActionDelete
               ? dialogStyle.dialogDelete
               : dialogStyle.dialogButton,
           }}
