@@ -38,12 +38,13 @@ const useTextFieldStyles = makeStyles({
 const FormField: React.FC<{
   label: string;
   placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLElement>) => void;
-  value: string | number | null;
+  onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
+  value: string;
   handleFocus?: () => void;
   isValidated: boolean;
   validators?: Array<string>;
   errorMessages?: Array<string>;
+  readOnly?: boolean;
 }> = ({
   label,
   placeholder,
@@ -53,49 +54,54 @@ const FormField: React.FC<{
   isValidated,
   validators,
   errorMessages,
+  readOnly,
 }: {
   label: string;
   placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
   value: string | number | null;
   handleFocus?: () => void;
   isValidated: boolean;
   validators?: Array<string>;
   errorMessages?: Array<string>;
+  readOnly?: boolean;
 }) => {
-  const classes = useTextFieldStyles();
-  if (isValidated) {
+    const classes = useTextFieldStyles();
+    if (isValidated) {
+      return (
+        <TextValidator
+          label={label}
+          placeholder={placeholder}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          className={classes.root}
+          margin="normal"
+          onChange={onChange}
+          value={value}
+          onFocus={handleFocus}
+          validators={validators}
+          errorMessages={errorMessages}
+        />
+      );
+    }
     return (
-      <TextValidator
+      <TextField
         label={label}
         placeholder={placeholder}
         InputLabelProps={{
           shrink: true,
+        }}
+        InputProps={{
+          readOnly,
         }}
         className={classes.root}
         margin="normal"
         onChange={onChange}
         value={value}
         onFocus={handleFocus}
-        validators={validators}
-        errorMessages={errorMessages}
       />
     );
-  }
-  return (
-    <TextField
-      label={label}
-      placeholder={placeholder}
-      InputLabelProps={{
-        shrink: true,
-      }}
-      className={classes.root}
-      margin="normal"
-      onChange={onChange}
-      value={value}
-      onFocus={handleFocus}
-    />
-  );
-};
+  };
 
 export default FormField;

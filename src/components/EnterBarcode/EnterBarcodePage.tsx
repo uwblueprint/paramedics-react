@@ -6,7 +6,7 @@ import { useQuery } from 'react-apollo';
 import CompleteBarcodeButton from './CompleteBarcodeButton';
 
 import FormField from '../common/FormField';
-import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
+import { GET_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const EnterBarcodePage = ({
   match: {
@@ -17,7 +17,7 @@ const EnterBarcodePage = ({
 }) => {
   const history = useHistory();
   const { pathname } = history.location;
-  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
+  const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>('');
 
   const handleEnterBarcode = () => {

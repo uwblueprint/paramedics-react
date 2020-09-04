@@ -14,7 +14,7 @@ const useCompletePatientButtonStyles = makeStyles({
     borderRadius: '10px',
     backgroundColor: '#FFFFFF',
     padding: '0',
-    marginBottom: '10px',
+    marginBottom: '20px',
     maxHeight: '15vh',
     width: '100%',
     maxWidth: '100%',
@@ -158,9 +158,8 @@ const TriagePills = ({
               root: classes[`${level.toLowerCase()}pill`],
               selected:
                 classes[
-                  `selected${
-                    level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()
-                  }Pill`
+                `selected${level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()
+                }Pill`
                 ],
             }}
           >

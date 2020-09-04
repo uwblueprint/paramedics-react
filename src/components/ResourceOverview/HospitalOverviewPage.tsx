@@ -226,6 +226,7 @@ const HospitalOverviewPage: React.FC = () => {
       </TableContainer>
       <ConfirmModal
         open={openModal}
+        isDeleteConfirmation
         title="You are about to delete a hospital."
         body="Supervisors will no longer be able to transport patients at CCPS connected to this hospital."
         actionLabel="Delete"
