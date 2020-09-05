@@ -42,7 +42,7 @@ interface FormFields {
 
 const PatientProfilePage = ({
   match: {
-    params: { ccpId, patientId, barcodeValue },
+    params: { eventId, ccpId, patientId, barcodeValue },
   },
   mode,
 }: {
@@ -159,7 +159,7 @@ const PatientProfilePage = ({
         },
       });
     }
-    history.replace('/');
+    history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   const handleDeleteClick = () => {
@@ -178,7 +178,7 @@ const PatientProfilePage = ({
         },
       });
     }
-    history.replace('/');
+    history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   return (
