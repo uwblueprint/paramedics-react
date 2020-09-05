@@ -270,6 +270,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
       {selectedCCP && (
         <ConfirmModal
           open={openConfirmDelete}
+          isDeleteConfirmation
           title="Are you sure you want to delete the following CCP?"
           body={
             <>
