@@ -21,7 +21,8 @@ const BackButton = withStyles({
 
 const RefreshButton = withStyles({
   root: {
-    marginLeft: '70%',
+    position: 'absolute',
+    right: '16px',
     padding: 0,
   },
 })(IconButton);
@@ -76,7 +77,7 @@ const ResourceOverviewPage = ({
       break;
     default:
       index = 0;
-      history.replace('/manage/members');
+      history.push('/manage/members');
       break;
   }
 
@@ -115,7 +116,7 @@ const ResourceOverviewPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <span className={classes.titleBar}>
-        <BackButton>
+        <BackButton onClick={() => history.push('/')}>
           <ArrowBackIcon style={{ color: Colours.White }} />
         </BackButton>
         <Typography variant="h6">Resource Management</Typography>
