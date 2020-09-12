@@ -4,7 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 import { Theme } from '../styles/Theme';
 import HomeLandingPage from '../components/HomeLandingPage/HomeLandingPage';
-import EventCreationPage from './EventCreationPage';
+import EventCreationPage from '../components/EventCreationPage/EventCreationPage';
 import EventDashboardPage from '../components/EventDashboard/EventDashboardPage';
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcode/EnterBarcodePage';
@@ -27,6 +27,11 @@ function App() {
           <Route exact path="/events" component={HomeLandingPage} />
           <Route
             exact
+            path="/events/new"
+            component={(props) => <EventCreationPage mode="new" {...props} />}
+          />
+          <Route
+            exact
             path="/events/:eventId/ccps/new"
             component={(props) => <CCPFormPage mode="new" {...props} />}
           />
@@ -35,8 +40,12 @@ function App() {
             path="/events/:eventId/ccps/:ccpId/edit"
             component={(props) => <CCPFormPage mode="edit" {...props} />}
           />
-          <Route exact path="/events/new" component={EventCreationPage} />
           <Route exact path="/events/:eventId" component={EventDashboardPage} />
+          <Route
+            exact
+            path="/events/:eventId/edit"
+            component={(props) => <EventCreationPage mode="edit" {...props} />}
+          />
           <Route
             exact
             path="/manage/:resource"

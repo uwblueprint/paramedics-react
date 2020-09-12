@@ -231,7 +231,7 @@ const AmbulanceOverviewPage: React.FC = () => {
       </TableContainer>
       <ConfirmModal
         open={openModal}
-        isDeleteConfirmation
+        isActionDelete
         title="You are about to delete an ambulance."
         body="Supervisors will no longer be able to transport patients at CCPs using this vehicle."
         actionLabel="Delete"

@@ -1,24 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import '../styles/EventCreationPage.css';
+import '../../styles/EventCreationPage.css';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import CancelModal from '../components/EventCreationPage/CancelModal';
-import Map from '../components/EventCreationPage/Map';
-import NextButton from '../components/EventCreationPage/NextButton';
-import BackButton from '../components/EventCreationPage/BackButton';
-import FormField from '../components/common/FormField';
-import Stepper from '../components/EventCreationPage/Stepper';
-import SelectDateModal from '../components/EventCreationPage/SelectDateModal';
-import { ADD_EVENT } from '../graphql/mutations/events';
-import { Event, GET_ALL_EVENTS } from '../graphql/queries/events';
+import CancelModal from './CancelModal';
+import Map from './Map';
+import NextButton from './NextButton';
+import BackButton from './BackButton';
+import FormField from '../common/FormField';
+import Stepper from './Stepper';
+import SelectDateModal from './SelectDateModal';
+import { ADD_EVENT, EDIT_EVENT } from '../../graphql/mutations/events';
+import {
+  Event,
+  GET_ALL_EVENTS,
+  GET_EVENT_BY_ID,
+} from '../../graphql/queries/events';
 
-const EventCreationPage = () => {
+enum EventModes {
+  New = 'new',
+  Edit = 'edit',
+}
+
+const EventCreationPage = ({
+  match: {
+    params: { eventId },
+  },
+  mode,
+}: {
+  match: { params: { eventId?: string } };
+  mode: string;
+}) => {
   const history = useHistory();
 
-  const { data } = useQuery(GET_ALL_EVENTS);
+  const { data, loading } = useQuery(
+    mode === EventModes.Edit && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
+    {
+      variables: {
+        eventId,
+      },
+    }
+  );
   const events: Array<Event> = data ? data.events : [];
 
   const [addEvent] = useMutation(ADD_EVENT, {
@@ -35,6 +59,7 @@ const EventCreationPage = () => {
       history.replace('/events');
     },
   });
+  const [editEvent] = useMutation(EDIT_EVENT);
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -88,22 +113,58 @@ const EventCreationPage = () => {
     : {};
 
   const handleComplete = () => {
-    addEvent({
-      variables: {
-        name: eventName,
-        eventDate:
-          dateParts.year &&
-          dateParts.month &&
-          dateParts.day &&
-          `${dateParts.year}-${dateParts.month.padStart(
-            2,
-            '0'
-          )}-${dateParts.day.padStart(2, '0')}`,
-        createdBy: 1,
-        isActive: true,
-      },
-    });
+    if (mode === EventModes.New) {
+      addEvent({
+        variables: {
+          name: eventName,
+          eventDate:
+            dateParts.year &&
+            dateParts.month &&
+            dateParts.day &&
+            `${dateParts.year}-${dateParts.month.padStart(
+              2,
+              '0'
+            )}-${dateParts.day.padStart(2, '0')}`,
+          createdBy: 1, // TODO: change this to proper user
+          isActive: true,
+        },
+      });
+    } else if (mode === EventModes.Edit && eventId) {
+      editEvent({
+        variables: {
+          id: eventId,
+          name: eventName,
+          eventDate:
+            dateParts.year &&
+            dateParts.month &&
+            dateParts.day &&
+            `${dateParts.year}-${dateParts.month.padStart(
+              2,
+              '0'
+            )}-${dateParts.day.padStart(2, '0')}`,
+          createdBy: 1,
+          isActive: true,
+        },
+      });
+    }
+    history.replace('/events');
   };
+
+  useEffect(() => {
+    if (!loading && mode === EventModes.Edit) {
+      const {
+        name,
+        eventDate,
+      }: {
+        name: string;
+        eventDate: string;
+        id: string;
+      } = data.event;
+
+      setEventName(name);
+      setEventDate(new Date(eventDate));
+    }
+  }, [data, loading, mode]);
 
   const content =
     activeStep === 0 ? (
@@ -145,7 +206,9 @@ const EventCreationPage = () => {
     <div className="landing-wrapper">
       <div className="event-creation-top-section">
         <div className="landing-top-bar">
-          <Typography variant="h3">Create New Event</Typography>
+          <Typography variant="h3">
+            {mode === EventModes.New ? 'Create New Event' : 'Edit Event'}
+          </Typography>
           <div className="user-icon">
             <Button
               variant="outlined"
@@ -180,7 +243,13 @@ const EventCreationPage = () => {
             <NextButton
               handleClick={activeStep < 1 ? handleNext : handleComplete}
               disabled={eventName === '' || eventDate === null}
-              buttonText={activeStep < 1 ? 'Next' : 'Create'}
+              buttonText={
+                activeStep < 1
+                  ? 'Next'
+                  : mode === EventModes.New
+                  ? 'Create'
+                  : 'Save'
+              }
             />
           </div>
         }
