@@ -309,20 +309,13 @@ const PatientProfilePage = ({
         padding="56px 56px 36px 56px"
         borderBottom={`1px solid ${Colours.BorderLightGray}`}
       >
-        <Typography variant="h3">
+        <Typography variant="h4">
           {mode === 'new' ? 'Add a patient' : 'Edit patient'}
         </Typography>
-
         <Button
-          variant="outlined"
           color="secondary"
           component={NavLink}
           to={`/events/${eventId}/ccps/${ccpId}`}
-          style={{
-            minWidth: '18rem',
-            minHeight: '2.5rem',
-            fontSize: '18px',
-          }}
         >
           Cancel
         </Button>

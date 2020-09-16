@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from 'react-apollo';
 import { makeStyles, Button, Box, Grid, Typography } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useHistory, useLocation, NavLink } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
 import MenuTabs from '../common/MenuTabs';
@@ -132,7 +131,7 @@ const EventsPage = () => {
       <Box className={classes.topSection}>
         <Box className={classes.topBar}>
           <Typography variant="h3">Mass Casualty Events</Typography>
-          <Box display="flex" alignItems="center">
+          {/* <Box display="flex" alignItems="center">
             <Typography
               variant="h6"
               align="right"
@@ -141,9 +140,9 @@ const EventsPage = () => {
               Joe Li
             </Typography>
             <AccountCircleIcon fontSize="large" color="secondary" />
-          </Box>
+          </Box> */}
+          <UserProfile />
         </Box>
-        <UserProfile />
         <MenuTabs
           handleChange={handleChange}
           currentTab={selectedTab}
