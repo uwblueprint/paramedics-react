@@ -218,29 +218,6 @@ const EventCreationPage = ({
       </Box>
 
       <Box padding="56px">{content}</Box>
-      {/* <div className="landing-wrapper">
-      <div className="event-creation-top-section">
-        <div className="landing-top-bar">
-          <Typography variant="h3">
-            {mode === EventModes.New ? 'Create New Event' : 'Edit Event'}
-          </Typography>
-          <div className="user-icon">
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleOpenCancelModal}
-              style={{
-                minWidth: '18rem',
-                minHeight: '2.5rem',
-                fontSize: '18px',
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className="event-form">{content}</div> */}
       <CancelModal
         open={openCancelModal}
         handleClose={handleCloseCancelModal}
@@ -265,26 +242,6 @@ const EventCreationPage = ({
                 : 'Save'
             }
           />
-          //   <div className="next-container">
-          //     <NextButton
-          //       handleClick={activeStep < 1 ? handleNext : handleComplete}
-          //       disabled={eventName === '' || eventDate === null}
-          //       buttonText={
-          //         activeStep < 1
-          //           ? 'Next'
-          //           : mode === EventModes.New
-          //           ? 'Create'
-          //           : 'Save'
-          //       }
-          //     />
-          //   </div>
-          // }
-          // backButton={
-          //   activeStep === 1 ? (
-          //     <div className="back-container">
-          //       <BackButton handleClick={handleBack} />
-          //     </div>
-          //   ) : null
         }
       />
       {activeStep === 1 && (

@@ -131,16 +131,6 @@ const EventsPage = () => {
       <Box className={classes.topSection}>
         <Box className={classes.topBar}>
           <Typography variant="h3">Mass Casualty Events</Typography>
-          {/* <Box display="flex" alignItems="center">
-            <Typography
-              variant="h6"
-              align="right"
-              style={{ marginRight: '16px' }}
-            >
-              Joe Li
-            </Typography>
-            <AccountCircleIcon fontSize="large" color="secondary" />
-          </Box> */}
           <UserProfile />
         </Box>
         <MenuTabs
