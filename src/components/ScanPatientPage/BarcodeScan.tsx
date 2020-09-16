@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Quagga from 'quagga';
 import { useQuery } from 'react-apollo';
-import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
+import { GET_ALL_PATIENTS } from '../../graphql/queries/patients';
 
-const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
+const BarcodeScan = ({
+  eventId,
+  ccpId,
+}: {
+  eventId: string;
+  ccpId: string;
+}) => {
   const history = useHistory();
-  const { data, loading, error } = useQuery(FETCH_ALL_PATIENTS);
+  const { data, loading, error } = useQuery(GET_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>('');
 
   useEffect(() => {
@@ -19,14 +25,21 @@ const BarcodeScan = ({ ccpID }: { ccpID: string }) => {
       if (selectedPatient.length > 0) {
         // Found patient
         const {
-          collectionPointId: { id: patientCCPId },
+          collectionPointId: {
+            id: patientCCPId,
+            eventId: { id: patientEventId },
+          },
           id,
         } = selectedPatient[0];
         // Redirect to patient profile
-        history.replace(`/patients/edit/${patientCCPId}/${id}`);
+        history.replace(
+          `/events/${patientEventId}/ccps/${patientCCPId}/patients/${id}`
+        );
       } else {
         // No existing patient
-        history.replace(`/patients/new/${ccpID}/${barcode}`);
+        history.replace(
+          `/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`
+        );
       }
     }
   }, [barcode]);

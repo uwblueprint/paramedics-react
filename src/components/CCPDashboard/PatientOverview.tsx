@@ -72,7 +72,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { patients } = props;
+  const { patients, eventId, ccpId } = props;
 
   const createCategoryData = (
     category: string,
@@ -170,7 +170,11 @@ export const PatientOverview = (props: PatientOverviewProps) => {
         </Card>
       </Grid>
       <Card variant="outlined" className={classes.patientTableCard}>
-        <PatientInfoTableWithFilters patients={patients} />
+        <PatientInfoTableWithFilters
+          patients={patients}
+          eventId={eventId}
+          ccpId={ccpId}
+        />
       </Card>
       <ScanPatientButton />
     </Grid>

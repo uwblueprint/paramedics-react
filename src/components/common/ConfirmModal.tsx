@@ -12,41 +12,47 @@ import { Colours } from '../../styles/Constants';
 
 const dialogStyles = makeStyles({
   paper: {
-    width: 485,
-    height: 280,
+    minWidth: '485px',
+    height: '280px',
   },
   dialogContent: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
+    paddingLeft: '24px',
+    paddingTop: '24px',
+    paddingRight: '24px',
   },
   dialogTitle: {
-    paddingLeft: 24,
-    paddingTop: 24,
-    paddingRight: 24,
-    paddingBottom: 0,
+    paddingLeft: '24px',
+    paddingTop: '24px',
+    paddingRight: '24px',
+    paddingBottom: '0px',
     fontWeight: 500,
-    fontSize: 20,
-  },
-  dialogCancel: {
-    color: Colours.Secondary,
-    height: 48,
-    width: 107,
+    fontSize: '20px',
   },
   dialogDelete: {
     color: Colours.Danger,
-    height: 48,
-    width: 107,
+    height: '48px',
+    width: '107px',
+  },
+  dialogConfirm: {
+    color: Colours.Secondary,
+    height: '48px',
+    width: '107px',
+  },
+  dialogButton: {
+    color: Colours.Secondary,
+    height: '48px',
+    minWidth: '107px',
   },
   dialogActionSpacing: {
-    paddingBottom: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingBottom: '8px',
+    paddingLeft: '16px',
+    paddingRight: '16px',
   },
 });
 
 const ConfirmModal = ({
   open,
+  isActionDelete = false,
   handleClickCancel,
   handleClickAction,
   title,
@@ -54,9 +60,10 @@ const ConfirmModal = ({
   actionLabel,
 }: {
   title: string;
-  body: string;
+  body: string | JSX.Element;
   actionLabel: string;
   open: boolean;
+  isActionDelete?: boolean;
   handleClickCancel: () => void;
   handleClickAction: () => void;
 }) => {
@@ -72,14 +79,25 @@ const ConfirmModal = ({
       </DialogContent>
       <DialogActions classes={{ spacing: dialogStyle.dialogActionSpacing }}>
         <Button
-          classes={{ root: dialogStyle.dialogCancel }}
-          onClick={handleClickCancel}
+          classes={{ root: dialogStyle.dialogButton }}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleClickCancel();
+          }}
         >
           <Typography variant="body1">Cancel</Typography>
         </Button>
         <Button
-          classes={{ root: dialogStyle.dialogDelete }}
-          onClick={handleClickAction}
+          classes={{
+            root: isActionDelete
+              ? dialogStyle.dialogDelete
+              : dialogStyle.dialogButton,
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleClickAction();
+            handleClickCancel();
+          }}
         >
           <Typography variant="body1">{actionLabel}</Typography>
         </Button>

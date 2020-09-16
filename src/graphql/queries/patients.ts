@@ -1,6 +1,12 @@
 import gql from 'graphql-tag';
 import { CCP } from './ccps';
 import { Hospital } from './hospitals';
+import { Ambulance } from './ambulances';
+
+export enum Gender {
+  M = 'M',
+  F = 'F',
+}
 
 export enum TriageLevel {
   GREEN = 'GREEN',
@@ -22,7 +28,7 @@ export interface Patient {
   gender: string;
   age: number;
   runNumber: number;
-  barcodeValue: number;
+  barcodeValue: string;
   collectionPointId: CCP;
   status: Status;
   triageCategory: number;
@@ -31,6 +37,7 @@ export interface Patient {
   transportTime?: Date;
   updatedAt: Date;
   hospitalId: Hospital;
+  ambulanceId: Ambulance;
 }
 
 export const GET_PATIENT_BY_ID = (id: string) => {
@@ -46,6 +53,7 @@ export const GET_PATIENT_BY_ID = (id: string) => {
           id
           name
           eventId {
+            id
             name
             eventDate
           }
@@ -59,12 +67,16 @@ export const GET_PATIENT_BY_ID = (id: string) => {
           id
           name
         }
+        ambulanceId {
+          id
+          vehicleNumber
+        }
       }
     }
   `;
 };
 
-export const FETCH_ALL_PATIENTS = gql`
+export const GET_ALL_PATIENTS = gql`
   query {
     patients {
       id
@@ -76,6 +88,7 @@ export const FETCH_ALL_PATIENTS = gql`
         id
         name
         eventId {
+          id
           name
           eventDate
         }
@@ -89,32 +102,9 @@ export const FETCH_ALL_PATIENTS = gql`
         id
         name
       }
-    }
-  }
-`;
-
-export const GET_ALL_PATIENTS = gql`
-  query {
-    patients @client {
-      id
-      gender
-      age
-      barcodeValue
-      collectionPointId {
+      ambulanceId {
         id
-        name
-        eventId {
-          name
-          eventDate
-        }
-      }
-      triageLevel
-      notes
-      updatedAt
-      transportTime
-      hospitalId {
-        id
-        name
+        vehicleNumber
       }
     }
   }

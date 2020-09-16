@@ -48,7 +48,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
     { label: 'Hospital', value: patient.hospitalId?.name },
     { label: 'CCP', value: patient.collectionPointId.name },
     { label: 'Status', value: patient.status },
-    { label: 'Gender', value: patient.status },
+    { label: 'Gender', value: patient.gender },
     { label: 'Age', value: patient.age },
   ];
 

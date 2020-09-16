@@ -38,12 +38,13 @@ const useTextFieldStyles = makeStyles({
 const FormField: React.FC<{
   label: string;
   placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLElement>) => void;
-  value: string | number | null;
+  onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
+  value: string;
   handleFocus?: () => void;
   isValidated: boolean;
   validators?: Array<string>;
   errorMessages?: Array<string>;
+  readOnly?: boolean;
 }> = ({
   label,
   placeholder,
@@ -53,15 +54,17 @@ const FormField: React.FC<{
   isValidated,
   validators,
   errorMessages,
+  readOnly,
 }: {
   label: string;
   placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
   value: string | number | null;
   handleFocus?: () => void;
   isValidated: boolean;
   validators?: Array<string>;
   errorMessages?: Array<string>;
+  readOnly?: boolean;
 }) => {
   const classes = useTextFieldStyles();
   if (isValidated) {
@@ -88,6 +91,9 @@ const FormField: React.FC<{
       placeholder={placeholder}
       InputLabelProps={{
         shrink: true,
+      }}
+      InputProps={{
+        readOnly,
       }}
       className={classes.root}
       margin="normal"

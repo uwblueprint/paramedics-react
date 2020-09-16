@@ -9,7 +9,8 @@ import EventDashboardPage from '../components/EventDashboard/EventDashboardPage'
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcode/EnterBarcodePage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
-import PatientProfilePage from './PatientProfilePage';
+import PatientProfilePage from '../components/PatientProfilePage/PatientProfilePage';
+import CCPFormPage from '../components/CCPForm/CCPFormPage';
 import ResourceOverviewPage from '../components/ResourceOverview/ResourceOverviewPage';
 import HospitalFormPage from '../components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from '../components/ResourceForm/AmbulanceFormPage';
@@ -23,8 +24,27 @@ function App() {
       >
         <Switch>
           <Route exact path="/events" component={EventsPage} />
-          <Route exact path="/events/new" component={EventCreationPage} />
+          <Route
+            exact
+            path="/events/new"
+            component={(props) => <EventCreationPage mode="new" {...props} />}
+          />
+          <Route
+            exact
+            path="/events/:eventId/ccps/new"
+            component={(props) => <CCPFormPage mode="new" {...props} />}
+          />
+          <Route
+            exact
+            path="/events/:eventId/ccps/:ccpId/edit"
+            component={(props) => <CCPFormPage mode="edit" {...props} />}
+          />
           <Route exact path="/events/:eventId" component={EventDashboardPage} />
+          <Route
+            exact
+            path="/events/:eventId/edit"
+            component={(props) => <EventCreationPage mode="edit" {...props} />}
+          />
           <Route
             exact
             path="/manage/:resource"
@@ -50,12 +70,12 @@ function App() {
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/scan"
+            path="/events/:eventId/ccps/:ccpId/scan"
             component={ScanPatientPage}
           />
           <Route
             exact
-            path="/events/:eventID/ccps/:ccpID/scan/manual"
+            path="/events/:eventId/ccps/:ccpId/manual"
             component={EnterBarcodePage}
           />
           <Route
@@ -65,13 +85,13 @@ function App() {
           />
           <Route
             exact
-            path="/patients/edit/:ccpId/:patientId"
-            component={(props) => <PatientProfilePage mode="edit" {...props} />}
+            path="/events/:eventId/ccps/:ccpId/patients/new/:barcodeValue?"
+            component={(props) => <PatientProfilePage mode="new" {...props} />}
           />
           <Route
             exact
-            path="/patients/new/:ccpId/:barcodeValue?"
-            component={(props) => <PatientProfilePage mode="new" {...props} />}
+            path="/events/:eventId/ccps/:ccpId/patients/:patientId"
+            component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
           <Route path="/">
             <Redirect to="/events" />

@@ -13,10 +13,15 @@ import {
 } from '@material-ui/core';
 import { Add, MoreHoriz } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useSnackbar } from 'notistack';
+import { useHistory } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
+import OptionPopper, { Option } from '../common/OptionPopper';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
+import { DELETE_CCP } from '../../graphql/mutations/ccps';
+import ConfirmModal from '../common/ConfirmModal';
 
 const useStyles = makeStyles({
   root: {
@@ -48,6 +53,12 @@ const useStyles = makeStyles({
   },
   buttonIcon: {
     marginRight: '13px',
+  },
+});
+
+const useOptions = makeStyles({
+  menuDelete: {
+    color: Colours.DangerHover,
   },
 });
 
@@ -105,18 +116,103 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 };
 
 const CCPTabPanel = ({ eventId }: { eventId: string }) => {
-  const [orderBy, setOrderBy] = React.useState<string>('name');
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const [orderBy, setOrderBy] = React.useState<string>('name');
   const [order, setOrder] = React.useState<Order>('asc');
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const [openConfirmDelete, setOpenConfirmDelete] = React.useState<boolean>(
+    false
+  );
+  const [selectedCCP, setSelectedCCP] = React.useState<CCP | null>(null);
+  const optionStyle = useOptions();
+
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
 
   const rows = data ? data.collectionPointsByEvent : [];
+  const open = Boolean(anchorEl);
+  const history = useHistory();
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+    setSelectedCCP(null);
+  };
+
+  const handleCloseConfirmDelete = () => {
+    handleCloseMenu();
+    setOpenConfirmDelete(false);
+  };
+
+  //  Writing to cache when deleting ccp
+  const [deleteCCP] = useMutation(DELETE_CCP, {
+    update(cache, { data: { deleteCollectionPoint } }) {
+      if (!deleteCollectionPoint) {
+        return;
+      }
+
+      // Update GET_CCPS_BY_EVENT_ID
+      const { collectionPointsByEvent } = cache.readQuery<any>({
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      const updatedCCPsList = collectionPointsByEvent.filter(
+        (ccp) => ccp.id !== (selectedCCP as CCP).id
+      );
+
+      cache.writeQuery({
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { collectionPointsByEvent: updatedCCPsList },
+      });
+    },
+    onCompleted() {
+      handleCloseConfirmDelete();
+      enqueueSnackbar('CCP deleted.');
+    },
+  });
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+
+  const handleClickOptions = (event, row: CCP) => {
+    setSelectedCCP(row);
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleOpenConfirmDelete = () => {
+    setOpenConfirmDelete(true);
+  };
+
+  const handleClickDelete = () => {
+    const ccpId = (selectedCCP as CCP).id;
+    deleteCCP({ variables: { id: ccpId } });
+  };
+
+  const handleAdd = () => {
+    history.push(`/events/${eventId}/ccps/new`);
+  };
+
+  const handleEdit = () => {
+    history.push(`/events/${eventId}/ccps/${selectedCCP?.id}/edit`);
+  };
+
+  const options: Array<Option> = [
+    {
+      name: 'Edit',
+      onClick: handleEdit,
+    },
+    {
+      name: 'Delete',
+      onClick: handleOpenConfirmDelete,
+      styles: optionStyle.menuDelete,
+    },
+  ];
 
   const tableRows = stableSort(
     rows as CCP[],
@@ -135,7 +231,13 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           width="48px"
           style={{ maxWidth: '48px', paddingTop: 0, paddingBottom: 0 }}
         >
-          <IconButton color="inherit">
+          <IconButton
+            data-id={row.id}
+            onClick={(event) => {
+              handleClickOptions(event, row);
+            }}
+            color="inherit"
+          >
             <MoreHoriz />
           </IconButton>
         </TableCell>
@@ -158,12 +260,38 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
       </TableContainer>
       <Button
         className={classes.addButton}
+        onClick={handleAdd}
         variant="contained"
         color="secondary"
       >
         <Add className={classes.buttonIcon} />
         Add CCP
       </Button>
+      {selectedCCP && (
+        <ConfirmModal
+          open={openConfirmDelete}
+          isActionDelete
+          title="Are you sure you want to delete the following CCP?"
+          body={
+            <>
+              <span style={{ color: Colours.Secondary, fontWeight: 500 }}>
+                {(selectedCCP as CCP).name}
+              </span>
+              {' cannot be recovered when deleted.'}
+            </>
+          }
+          actionLabel="Delete"
+          handleClickAction={handleClickDelete}
+          handleClickCancel={handleCloseConfirmDelete}
+        />
+      )}
+      <OptionPopper
+        id={selectedCCP?.id || ''}
+        open={open}
+        anchorEl={anchorEl}
+        onClickAway={handleCloseMenu}
+        options={options}
+      />
     </Box>
   );
 };

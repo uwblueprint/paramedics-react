@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 import {
   makeStyles,
   Table,
@@ -12,14 +13,19 @@ import {
   IconButton,
   Dialog,
   DialogActions,
+  Menu,
+  MenuItem,
 } from '@material-ui/core';
+import { useMutation } from '@apollo/react-hooks';
 import { MoreHoriz } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
+import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
 import { capitalize } from '../../utils/format';
+import { EDIT_PATIENT } from '../../graphql/mutations/patients';
 
 const useStyles = makeStyles({
   visuallyHidden: {
@@ -128,9 +134,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 export const PatientInfoTable = ({
   patients,
   type,
+  eventId,
+  ccpId,
 }: {
   patients: Patient[];
   type: CCPDashboardTabOptions;
+  eventId: string;
+  ccpId: string;
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
@@ -138,11 +148,50 @@ export const PatientInfoTable = ({
     type === CCPDashboardTabOptions.Hospital ? 'transportTime' : 'updatedAt'
   );
   const [openDetails, setOpenDetails] = React.useState(false);
+  const [openDeletePatient, setOpenDeletePatient] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const history = useHistory();
+
+  const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleOpenDetails = (patient) => {
     setSelectedPatient(patient);
     setOpenDetails(true);
+  };
+
+  const handleClickOptions = (event, patient) => {
+    setSelectedPatient(patient);
+    event.stopPropagation();
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClickEdit = () => {
+    history.push(
+      `/events/${eventId}/ccps/${ccpId}/patients/${
+        ((selectedPatient as unknown) as Patient).id
+      }`
+    );
+  };
+
+  const handleClickDelete = () => {
+    setAnchorEl(null);
+    setOpenDeletePatient(true);
+  };
+
+  const handleConfirmDeletePatient = () => {
+    editPatient({
+      variables: {
+        id: ((selectedPatient as unknown) as Patient).id,
+        status: Status.DELETED,
+        collectionPointId: ccpId,
+      },
+    });
+    setOpenDeletePatient(false);
   };
 
   const handleRequestSort = (event: React.MouseEvent, property: string) => {
@@ -153,6 +202,10 @@ export const PatientInfoTable = ({
 
   const handleCloseDetails = () => {
     setOpenDetails(false);
+  };
+
+  const handleCancelDeletePatient = () => {
+    setOpenDeletePatient(false);
   };
 
   const tableRows = stableSort(patients, getComparator(order, orderBy)).map(
@@ -274,9 +327,11 @@ export const PatientInfoTable = ({
               </TableCell>
             </>
           )}
-
           <TableCell width="48px" style={{ maxWidth: '48px' }}>
-            <IconButton color="inherit">
+            <IconButton
+              color="inherit"
+              onClick={(e) => handleClickOptions(e, patient)}
+            >
               <MoreHoriz />
             </IconButton>
           </TableCell>
@@ -317,7 +372,13 @@ export const PatientInfoTable = ({
             }}
           >
             <Button
-              onClick={() => {}}
+              onClick={() => {
+                history.push(
+                  `/events/${eventId}/ccps/${ccpId}/patients/${
+                    ((selectedPatient as unknown) as Patient).id
+                  }`
+                );
+              }}
               color="secondary"
               className={classes.editButton}
             >
@@ -326,6 +387,28 @@ export const PatientInfoTable = ({
           </DialogActions>
         </Dialog>
       )}
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+      >
+        <MenuItem onClick={handleClickEdit}>Edit patient</MenuItem>
+        <MenuItem style={{ color: Colours.Danger }} onClick={handleClickDelete}>
+          Delete patient
+        </MenuItem>
+      </Menu>
+      <ConfirmModal
+        open={openDeletePatient}
+        isActionDelete
+        title="You are about to delete a patient"
+        body="Deleting a patient will remove all records of the patient."
+        actionLabel="Delete"
+        handleClickAction={handleConfirmDeletePatient}
+        handleClickCancel={handleCancelDeletePatient}
+      />
     </Table>
   );
 };
+//

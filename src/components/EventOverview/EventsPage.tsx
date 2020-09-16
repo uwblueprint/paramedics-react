@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
 import { makeStyles, Button, Box, Grid, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useHistory, useLocation, NavLink } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
 import MenuTabs from '../common/MenuTabs';
 import EventCard from './EventCard';
+import UserProfile from './UserProfile';
 import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
+import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
 import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
@@ -42,6 +44,7 @@ const EventsPage = () => {
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
+  const [eventToBeDeleted, setEventToBeDeleted] = useState<Event | null>(null);
 
   // Clear the addedEventId in location state now that it's been used
   window.history.pushState(
@@ -66,7 +69,63 @@ const EventsPage = () => {
 
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
+  const [editEvent] = useMutation(EDIT_EVENT);
+  const [deleteEvent] = useMutation(DELETE_EVENT, {
+    update(cache, { data: { deleteEvent } }) {
+      if (!deleteEvent) {
+        return;
+      }
+      let { events } = cache.readQuery<any>({
+        query: GET_ALL_EVENTS,
+      });
+
+      events = events.filter((event) => event.id !== eventToBeDeleted?.id);
+
+      cache.writeQuery({
+        query: GET_ALL_EVENTS,
+        data: { events },
+      });
+    },
+  });
   const events: Array<Event> = data ? data.events : [];
+
+  const handleArchiveEvent = (event: Event) => {
+    editEvent({
+      variables: {
+        id: event.id,
+        name: event.name,
+        eventDate: event.eventDate,
+        createdBy: event.createdBy.id,
+        isActive: false,
+      },
+    });
+  };
+  const handleUnarchiveEvent = (event: Event) => {
+    editEvent({
+      variables: {
+        id: event.id,
+        name: event.name,
+        eventDate: event.eventDate,
+        createdBy: event.createdBy.id,
+        isActive: true,
+      },
+    });
+  };
+
+  const handleDeleteEvent = async (event: Event) => {
+    await setEventToBeDeleted(event);
+    deleteEvent({
+      variables: {
+        id: event.id,
+      },
+    });
+  };
+
+  // Filters for inactive or active events
+  const filteredEvents = React.useMemo(
+    () => events.filter((event) => event.isActive === (selectedTab === 0)),
+    [events, selectedTab]
+  );
 
   return (
     <Box className={classes.root}>
@@ -84,6 +143,7 @@ const EventsPage = () => {
             <AccountCircleIcon fontSize="large" color="secondary" />
           </Box>
         </Box>
+        <UserProfile />
         <MenuTabs
           handleChange={handleChange}
           currentTab={selectedTab}
@@ -92,15 +152,20 @@ const EventsPage = () => {
       </Box>
       <Box padding="70px 56px 168px 56px">
         <Grid container direction="row" alignItems="center" spacing={3}>
-          {events.map((event: Event) => (
+          {filteredEvents.map((event: Event) => (
             <Grid item key={event.id}>
               <EventCard
                 key={event.id}
+                eventId={event.id}
                 date={event.eventDate}
                 eventTitle={event.name}
+                isActive={event.isActive}
                 isNew={event.id === addedEventId}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
+                handleArchiveEvent={() => handleArchiveEvent(event)}
+                handleUnarchiveEvent={() => handleUnarchiveEvent(event)}
+                handleDeleteEvent={() => handleDeleteEvent(event)}
               />
             </Grid>
           ))}

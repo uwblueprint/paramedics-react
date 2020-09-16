@@ -6,39 +6,47 @@ import CompleteBarcodeButton from './CompleteBarcodeButton';
 import { Colours } from '../../styles/Constants';
 
 import FormField from '../common/FormField';
-import { FETCH_ALL_PATIENTS } from '../../graphql/queries/patients';
+import { GET_ALL_PATIENTS } from '../../graphql/queries/patients';
 
 const EnterBarcodePage = ({
   match: {
-    params: { ccpID },
+    params: { eventId, ccpId },
   },
 }: {
-  match: { params: { ccpID: string } };
+  match: { params: { eventId: string; ccpId: string } };
 }) => {
   const history = useHistory();
   const { pathname } = history.location;
-  const { data, loading } = useQuery(FETCH_ALL_PATIENTS);
+  const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>('');
 
   const handleEnterBarcode = () => {
     if (!loading && data) {
       const selectedPatient = data.patients.filter(
-        (patient) => patient.barcodeValue.toString() === barcode
+        (patient) => patient.barcodeValue === barcode
       );
       if (selectedPatient.length > 0) {
         // Found patient
         const {
-          collectionPointId: { id: patientCCPId },
+          collectionPointId: {
+            id: patientCcpId,
+            eventId: { id: patientEventId },
+          },
           id,
         } = selectedPatient[0];
         // Redirect to patient profile
-        history.replace(`/patients/edit/${patientCCPId}/${id}`);
+        history.push(
+          `/events/${patientEventId}/ccps/${patientCcpId}/patients/${id}`
+        );
       } else {
         // No existing patient
-        history.replace(`/patients/new/${ccpID}/${barcode}`);
+        history.push(
+          `/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`
+        );
       }
+    } else {
+      history.push(`/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`);
     }
-    history.replace(`/patients/new/${ccpID}/${barcode}`);
   };
 
   return (

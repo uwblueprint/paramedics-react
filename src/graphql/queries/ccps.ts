@@ -7,13 +7,15 @@ export interface CCP {
   eventId: Event;
 }
 
-export const GET_ALL_CCPS = gql`
-  query {
-    collectionPoints {
+export const GET_CCP_BY_ID = gql`
+  query collectionPoint($id: ID!) {
+    collectionPoint(id: $id) {
       id
       name
       eventId {
         id
+        name
+        eventDate
       }
     }
   }
@@ -30,3 +32,17 @@ export const GET_CCPS_BY_EVENT_ID = gql`
     }
   }
 `;
+
+export const GET_CPP_BY_ID = (id: string) => {
+  return gql`
+  query {
+    collectionPoint(id: ${id}) {
+      id
+      name
+      eventId {
+        id
+      }
+    }
+  }
+`;
+};
