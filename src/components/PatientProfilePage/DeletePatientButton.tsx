@@ -5,8 +5,10 @@ import { Colours } from '../../styles/Constants';
 
 const useDeletePatientButtonStyles = makeStyles({
   root: {
-    minWidth: '15rem',
+    minWidth: '230px',
+    margin: '10px 0px',
     float: 'left',
+    display: 'flex',
     color: Colours.White,
     backgroundColor: Colours.Danger,
     '&:hover': {
