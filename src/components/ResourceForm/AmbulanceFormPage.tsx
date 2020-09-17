@@ -60,8 +60,15 @@ const AmbulanceFormPage = ({
         data: { ambulances: ambulances.concat([addAmbulance]) },
       });
     },
+    onCompleted() {
+      enqueueSnackbar('Ambulance added.');
+    },
   });
-  const [editAmbulance] = useMutation(EDIT_AMBULANCE);
+  const [editAmbulance] = useMutation(EDIT_AMBULANCE, {
+    onCompleted() {
+      enqueueSnackbar('Ambulance edited.');
+    },
+  });
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<string>('');
 
@@ -87,7 +94,6 @@ const AmbulanceFormPage = ({
           vehicleNumber: parseInt(ambulanceNumber),
         },
       });
-      enqueueSnackbar('Ambulance added.');
     } else if (mode === 'edit') {
       editAmbulance({
         variables: {
@@ -95,9 +101,8 @@ const AmbulanceFormPage = ({
           vehicleNumber: parseInt(ambulanceNumber),
         },
       });
-      enqueueSnackbar('Ambulance edited.');
     }
-    history.replace('/manage/ambulances');
+    history.push('/manage/ambulances');
   };
 
   const classes = useStyles();

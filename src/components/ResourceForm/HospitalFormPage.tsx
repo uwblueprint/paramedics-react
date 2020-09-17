@@ -58,8 +58,15 @@ const HospitalFormPage = ({
         data: { hospitals: hospitals.concat([addHospital]) },
       });
     },
+    onCompleted() {
+      enqueueSnackbar('Hospital added.');
+    },
   });
-  const [editHospital] = useMutation(EDIT_HOSPITAL);
+  const [editHospital] = useMutation(EDIT_HOSPITAL, {
+    onCompleted() {
+      enqueueSnackbar('Hospital edited.');
+    },
+  });
 
   const [hospitalName, setHospitalName] = useState<string>('');
 
@@ -85,7 +92,6 @@ const HospitalFormPage = ({
           name: hospitalName,
         },
       });
-      enqueueSnackbar('Hospital added.');
     } else if (mode === 'edit') {
       editHospital({
         variables: {
@@ -93,9 +99,8 @@ const HospitalFormPage = ({
           name: hospitalName,
         },
       });
-      enqueueSnackbar('Hospital edited.');
     }
-    history.replace('/manage/hospitals');
+    history.push('/manage/hospitals');
   };
 
   const classes = useStyles();
