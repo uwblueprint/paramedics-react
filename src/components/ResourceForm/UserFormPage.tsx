@@ -94,6 +94,13 @@ const UserFormPage = ({
     }
   }, [data, loading, mode]);
 
+  useEffect(() => {
+    ValidatorForm.addValidationRule('isUniqueEmail', () => {
+      const duplicateExists = users.filter((user) => user.email === email);
+      return duplicateExists.length === 0;
+    });
+  }, [email, users]);
+
   const handleNameChange = (e: any) => {
     setMemberName(e.target.value);
   };
@@ -130,8 +137,6 @@ const UserFormPage = ({
     history.push('/manage/members');
   };
 
-  // const checkDuplicateEmail = () => {};
-
   const classes = useStyles();
 
   return (
@@ -167,8 +172,12 @@ const UserFormPage = ({
           <FormField
             label="*Email:"
             isValidated
-            validators={['required', 'isEmail']}
-            errorMessages={['This is a mandatory field', 'Invalid email']}
+            validators={['required', 'isEmail', 'isUniqueEmail']}
+            errorMessages={[
+              'This is a mandatory field',
+              'Invalid email',
+              'Email is already in use',
+            ]}
             onChange={handleEmailChange}
             value={email}
           />
