@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useEventButtonStyles = makeStyles({
   root: {
-    minWidth: '15rem',
-    minHeight: '2.5rem',
+    minWidth: '228px',
+    minHeight: '48px',
     fontSize: '18px',
   },
   disabled: {
@@ -31,7 +31,7 @@ const NextButton: React.FC<{
   return (
     <Button
       variant="contained"
-      color="primary"
+      color="secondary"
       onClick={handleClick}
       classes={{
         root: classes.root,
