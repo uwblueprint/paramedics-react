@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const useCompletePatientButtonStyles = makeStyles({
   root: {
     minWidth: '230px',
-    margin: '10px 0px',
+    margin: '10px 0px 58px 0px',
     float: 'right',
     display: 'flex',
   },
