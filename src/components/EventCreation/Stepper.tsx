@@ -1,26 +1,26 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
+import { Colours } from '../../styles/Constants';
 
 const useStepperStyles = makeStyles({
   root: {
-    maxWidth: 400,
+    display: 'flex',
+    justifyContent: 'space-between',
     flexGrow: 1,
-    padding: 0,
-  },
-  dots: {
-    position: 'absolute',
-    left: '4rem',
-    bottom: '4rem',
+    padding: '0 88px 74px 88px',
+    background: 'none',
   },
   dot: {
-    width: '1rem',
-    height: '1rem',
-    backgroundColor: '#FFFFFF',
-    border: '3.6369px solid #05162F',
+    boxSizing: 'border-box',
+    width: '24px',
+    height: '24px',
+    marginRight: '24px',
+    backgroundColor: Colours.White,
+    border: `3.6369px solid ${Colours.Primary}`,
   },
   dotActive: {
-    backgroundColor: '#05162F',
+    backgroundColor: Colours.Secondary,
   },
 });
 
@@ -47,7 +47,6 @@ const Stepper: React.FC<{
       activeStep={activeStep}
       classes={{
         root: classes.root,
-        dots: classes.dots,
         dot: classes.dot,
         dotActive: classes.dotActive,
       }}

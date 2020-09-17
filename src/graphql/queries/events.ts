@@ -6,34 +6,25 @@ export interface Event {
   id: string;
   name: string;
   eventDate: Date;
+  isActive: boolean;
+  createdBy: {
+    id: string;
+  };
   ambulances: Ambulance[];
   hospitals: Hospital[];
 }
 
-export const FETCH_ALL_EVENTS = gql`
+export const GET_ALL_EVENTS = gql`
   query {
     events {
       id
       name
       eventDate
-      ambulances {
-        id
-        vehicleNumber
-      }
-      hospitals {
+      isActive
+      createdBy {
         id
         name
       }
-    }
-  }
-`;
-
-export const GET_ALL_EVENTS = gql`
-  query {
-    events @client {
-      id
-      name
-      eventDate
       ambulances {
         id
         vehicleNumber
@@ -51,6 +42,7 @@ export const GET_EVENT_BY_ID = gql`
     event(id: $eventId) {
       id
       name
+      isActive
       eventDate
       ambulances {
         id

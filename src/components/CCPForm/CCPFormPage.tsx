@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Colours } from '../../styles/Constants';
 import CompleteButton from './CompleteButton';
-import Map from '../EventCreationPage/Map';
+import Map from '../EventCreation/Map';
 import FormField from '../common/FormField';
 import {
   GET_CCP_BY_ID,
