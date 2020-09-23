@@ -6,7 +6,7 @@ import { useQuery } from 'react-apollo';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { Typography, makeStyles } from '@material-ui/core';
 import FormField from '../common/FormField';
-import BackLink from './BackLink';
+import BackLink from '../common/BackLink';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import AccessLevelSelector from './AccessLevelSelector';

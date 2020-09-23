@@ -75,9 +75,6 @@ const FormField: React.FC<{
         InputLabelProps={{
           shrink: true,
         }}
-        InputProps={{
-          readOnly,
-        }}
         className={classes.root}
         margin="normal"
         onChange={onChange}

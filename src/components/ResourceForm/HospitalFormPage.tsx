@@ -5,7 +5,7 @@ import { Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import FormField from '../common/FormField';
-import BackLink from './BackLink';
+import BackLink from '../common/BackLink';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
