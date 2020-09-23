@@ -15,7 +15,7 @@ import SelectDateModal from './SelectDateModal';
 import { ADD_EVENT, EDIT_EVENT } from '../../graphql/mutations/events';
 import {
   Event,
-  GET_ALL_EVENTS,
+  GET_EVENTS_FROM_CACHE,
   GET_EVENT_BY_ID,
 } from '../../graphql/queries/events';
 
@@ -36,7 +36,9 @@ const EventCreationPage = ({
   const history = useHistory();
 
   const { data, loading } = useQuery(
-    mode === EventModes.Edit && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
+    mode === EventModes.Edit && eventId
+      ? GET_EVENT_BY_ID
+      : GET_EVENTS_FROM_CACHE,
     {
       variables: {
         eventId,
@@ -48,7 +50,7 @@ const EventCreationPage = ({
   const [addEvent] = useMutation(ADD_EVENT, {
     update(cache, { data: { addEvent } }) {
       cache.writeQuery({
-        query: GET_ALL_EVENTS,
+        query: GET_EVENTS_FROM_CACHE,
         data: { events: events.concat([addEvent]) },
       });
     },
@@ -59,7 +61,11 @@ const EventCreationPage = ({
       history.replace('/events');
     },
   });
-  const [editEvent] = useMutation(EDIT_EVENT);
+  const [editEvent] = useMutation(EDIT_EVENT, {
+    onCompleted() {
+      history.replace('/events');
+    },
+  });
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -147,7 +153,6 @@ const EventCreationPage = ({
         },
       });
     }
-    history.replace('/events');
   };
 
   useEffect(() => {

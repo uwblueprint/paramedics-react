@@ -6,8 +6,8 @@ import MenuTabs from '../common/MenuTabs';
 import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import UserProfile from './UserProfile';
-import useAllEvents from '../../graphql/queries/hooks/events';
-import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
+import useAllEventsFromBackend from '../../graphql/queries/hooks/events';
+import { Event, GET_EVENTS_FROM_CACHE } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
 import '../../styles/HomeLandingPage.css';
 
@@ -39,10 +39,10 @@ const HomeLandingPage = () => {
   const tabLabels = ['Current Events', 'Archived Events'];
 
   // Fetch events from backend
-  useAllEvents();
+  useAllEventsFromBackend();
 
   // Fetch events from cache
-  const { data } = useQuery(GET_ALL_EVENTS);
+  const { data } = useQuery(GET_EVENTS_FROM_CACHE);
   const [editEvent] = useMutation(EDIT_EVENT);
   const [deleteEvent] = useMutation(DELETE_EVENT, {
     update(cache, { data: { deleteEvent } }) {
@@ -50,13 +50,13 @@ const HomeLandingPage = () => {
         return;
       }
       let { events } = cache.readQuery<any>({
-        query: GET_ALL_EVENTS,
+        query: GET_EVENTS_FROM_CACHE,
       });
 
       events = events.filter((event) => event.id !== eventToBeDeleted?.id);
 
       cache.writeQuery({
-        query: GET_ALL_EVENTS,
+        query: GET_EVENTS_FROM_CACHE,
         data: { events },
       });
     },
