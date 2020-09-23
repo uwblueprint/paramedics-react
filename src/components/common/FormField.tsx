@@ -81,7 +81,7 @@ const FormField: React.FC<{
         InputProps={{
           readOnly,
         }}
-        disabled
+        disabled={disabled}
         className={classes.root}
         margin="normal"
         onChange={onChange}
@@ -102,7 +102,7 @@ const FormField: React.FC<{
       InputProps={{
         readOnly,
       }}
-      disabled
+      disabled={disabled}
       className={classes.root}
       margin="normal"
       onChange={onChange}

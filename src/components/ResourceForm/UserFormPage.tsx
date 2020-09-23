@@ -97,10 +97,10 @@ const UserFormPage = ({
   useEffect(() => {
     if (!loading) {
       ValidatorForm.addValidationRule('isUniqueEmail', () => {
-        const duplicateExists = users
+        const isUnique = users
           ? users.filter((user) => user.email === email).length === 0
-          : false;
-        return !duplicateExists;
+          : true;
+        return isUnique;
       });
     }
   }, [email, users, loading]);
