@@ -176,7 +176,7 @@ const UserFormPage = ({
           <FormField
             label="*Email:"
             isValidated
-            readOnly={mode === 'edit'}
+            disabled={mode === 'edit'}
             validators={['required', 'isEmail', 'isUniqueEmail']}
             errorMessages={[
               'This is a mandatory field',
