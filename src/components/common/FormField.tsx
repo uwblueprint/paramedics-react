@@ -66,27 +66,10 @@ const FormField: React.FC<{
   errorMessages?: Array<string>;
   readOnly?: boolean;
 }) => {
-    const classes = useTextFieldStyles();
-    if (isValidated) {
-      return (
-        <TextValidator
-          label={label}
-          placeholder={placeholder}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          className={classes.root}
-          margin="normal"
-          onChange={onChange}
-          value={value}
-          onFocus={handleFocus}
-          validators={validators}
-          errorMessages={errorMessages}
-        />
-      );
-    }
+  const classes = useTextFieldStyles();
+  if (isValidated) {
     return (
-      <TextField
+      <TextValidator
         label={label}
         placeholder={placeholder}
         InputLabelProps={{
@@ -100,8 +83,28 @@ const FormField: React.FC<{
         onChange={onChange}
         value={value}
         onFocus={handleFocus}
+        validators={validators}
+        errorMessages={errorMessages}
       />
     );
-  };
+  }
+  return (
+    <TextField
+      label={label}
+      placeholder={placeholder}
+      InputLabelProps={{
+        shrink: true,
+      }}
+      InputProps={{
+        readOnly,
+      }}
+      className={classes.root}
+      margin="normal"
+      onChange={onChange}
+      value={value}
+      onFocus={handleFocus}
+    />
+  );
+};
 
 export default FormField;

@@ -95,11 +95,15 @@ const UserFormPage = ({
   }, [data, loading, mode]);
 
   useEffect(() => {
-    ValidatorForm.addValidationRule('isUniqueEmail', () => {
-      const duplicateExists = users.filter((user) => user.email === email);
-      return duplicateExists.length === 0;
-    });
-  }, [email, users]);
+    if (!loading) {
+      ValidatorForm.addValidationRule('isUniqueEmail', () => {
+        const duplicateExists = users
+          ? users.filter((user) => user.email === email).length === 0
+          : false;
+        return !duplicateExists;
+      });
+    }
+  }, [email, users, loading]);
 
   const handleNameChange = (e: any) => {
     setMemberName(e.target.value);
@@ -172,6 +176,7 @@ const UserFormPage = ({
           <FormField
             label="*Email:"
             isValidated
+            readOnly={mode === 'edit'}
             validators={['required', 'isEmail', 'isUniqueEmail']}
             errorMessages={[
               'This is a mandatory field',
