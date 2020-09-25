@@ -1,20 +1,45 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from 'react-apollo';
-import { Grid, Typography } from '@material-ui/core';
-import { useHistory, useLocation } from 'react-router-dom';
+import { makeStyles, Button, Box, Grid, Typography } from '@material-ui/core';
+import { useHistory, useLocation, NavLink } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
 import MenuTabs from '../common/MenuTabs';
-import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import UserProfile from './UserProfile';
 import useAllEventsFromBackend from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
-import '../../styles/HomeLandingPage.css';
+import { Colours } from '../../styles/Constants';
+
+const useStyles = makeStyles({
+  root: {
+    backgroundColor: Colours.BackgroundGray,
+    minHeight: '100vh',
+  },
+  topSection: {
+    padding: '56px 56px 0 56px',
+    backgroundColor: Colours.White,
+  },
+  topBar: {
+    display: 'flex',
+    paddingBottom: '36px',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  addButton: {
+    borderRadius: '2000px',
+    position: 'fixed',
+    bottom: '56px',
+    right: '56px',
+    padding: '12px 26px',
+  },
+});
 
 type LocationState = { addedEventId: string | null };
 
-const HomeLandingPage = () => {
+const EventsPage = () => {
   const history = useHistory();
+  const classes = useStyles();
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
   const [selectedTab, setTab] = useState(0);
@@ -102,19 +127,19 @@ const HomeLandingPage = () => {
   );
 
   return (
-    <div className="landing-wrapper">
-      <div className="landing-top-section">
-        <div className="landing-top-bar">
+    <Box className={classes.root}>
+      <Box className={classes.topSection}>
+        <Box className={classes.topBar}>
           <Typography variant="h3">Mass Casualty Events</Typography>
           <UserProfile />
-        </div>
+        </Box>
         <MenuTabs
           handleChange={handleChange}
           currentTab={selectedTab}
           tabLabels={tabLabels}
         />
-      </div>
-      <div className="landing-body">
+      </Box>
+      <Box padding="70px 56px 168px 56px">
         <Grid container direction="row" alignItems="center" spacing={3}>
           {filteredEvents.map((event: Event) => (
             <Grid item key={event.id}>
@@ -134,12 +159,19 @@ const HomeLandingPage = () => {
             </Grid>
           ))}
         </Grid>
-        <div className="add-event-container">
-          <AddEventButton />
-        </div>
-      </div>
-    </div>
+        <Button
+          component={NavLink}
+          to="/events/new"
+          variant="contained"
+          color="secondary"
+          startIcon={<AddIcon />}
+          className={classes.addButton}
+        >
+          Add New Event
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
-export default HomeLandingPage;
+export default EventsPage;
