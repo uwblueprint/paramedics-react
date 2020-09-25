@@ -15,7 +15,7 @@ import SelectDateModal from './SelectDateModal';
 import { ADD_EVENT, EDIT_EVENT } from '../../graphql/mutations/events';
 import {
   Event,
-  GET_EVENTS_FROM_CACHE,
+  GET_ALL_EVENTS,
   GET_EVENT_BY_ID,
 } from '../../graphql/queries/events';
 
@@ -36,9 +36,7 @@ const EventCreationPage = ({
   const history = useHistory();
 
   const { data, loading } = useQuery(
-    mode === EventModes.Edit && eventId
-      ? GET_EVENT_BY_ID
-      : GET_EVENTS_FROM_CACHE,
+    mode === EventModes.Edit && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
     {
       variables: {
         eventId,
@@ -50,7 +48,7 @@ const EventCreationPage = ({
   const [addEvent] = useMutation(ADD_EVENT, {
     update(cache, { data: { addEvent } }) {
       cache.writeQuery({
-        query: GET_EVENTS_FROM_CACHE,
+        query: GET_ALL_EVENTS,
         data: { events: events.concat([addEvent]) },
       });
     },

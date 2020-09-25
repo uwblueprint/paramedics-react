@@ -7,7 +7,7 @@ import AddEventButton from './AddEventButton';
 import EventCard from './EventCard';
 import UserProfile from './UserProfile';
 import useAllEventsFromBackend from '../../graphql/queries/hooks/events';
-import { Event, GET_EVENTS_FROM_CACHE } from '../../graphql/queries/events';
+import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
 import '../../styles/HomeLandingPage.css';
 
@@ -42,7 +42,7 @@ const HomeLandingPage = () => {
   useAllEventsFromBackend();
 
   // Fetch events from cache
-  const { data } = useQuery(GET_EVENTS_FROM_CACHE);
+  const { data } = useQuery(GET_ALL_EVENTS);
   const [editEvent] = useMutation(EDIT_EVENT);
   const [deleteEvent] = useMutation(DELETE_EVENT, {
     update(cache, { data: { deleteEvent } }) {
@@ -50,13 +50,13 @@ const HomeLandingPage = () => {
         return;
       }
       let { events } = cache.readQuery<any>({
-        query: GET_EVENTS_FROM_CACHE,
+        query: GET_ALL_EVENTS,
       });
 
       events = events.filter((event) => event.id !== eventToBeDeleted?.id);
 
       cache.writeQuery({
-        query: GET_EVENTS_FROM_CACHE,
+        query: GET_ALL_EVENTS,
         data: { events },
       });
     },
