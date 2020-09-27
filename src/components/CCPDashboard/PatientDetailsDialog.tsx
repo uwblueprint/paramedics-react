@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Typography,
   Box,
   makeStyles,
   DialogContent,
   IconButton,
+  Dialog,
+  DialogActions,
+  Button,
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { useQuery } from '@apollo/react-hooks';
+
 import { Close } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
-import { Patient } from '../../graphql/queries/patients';
+import {
+  Patient,
+  GET_PATIENT_BY_ID,
+  GET_ALL_PATIENTS,
+} from '../../graphql/queries/patients';
 import { capitalize } from '../../utils/format';
 
 const useStyles = makeStyles({
@@ -20,6 +30,13 @@ const useStyles = makeStyles({
     top: '6px',
     right: '6px',
     color: Colours.Black,
+  },
+  editButton: {
+    marginRight: '14px',
+    marginBottom: '12px',
+  },
+  detailsDialog: {
+    width: '662px',
   },
 });
 
@@ -33,6 +50,68 @@ interface PatientDetail {
   value: string | number;
   styles?: object;
 }
+
+interface TParams {
+  eventId: string;
+  ccpId: string;
+}
+
+export const PatientDetailsDialogRouting = ({
+  match: {
+    params: { eventId, ccpId, patientId },
+  },
+}: {
+  match: {
+    params: {
+      eventId: string;
+      patientId?: string;
+      ccpId: string;
+    };
+  };
+}) => {
+  const [openDetails, setOpenDetails] = React.useState(true);
+  const history = useHistory();
+  const classes = useStyles();
+
+  const { data } = useQuery(
+    patientId ? GET_PATIENT_BY_ID(patientId) : GET_ALL_PATIENTS
+  );
+
+  const patient: Patient = data ? data.patient : undefined;
+
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
+  };
+
+  return (
+    <Dialog
+      open={openDetails}
+      onClose={handleCloseDetails}
+      PaperProps={{ className: classes.detailsDialog }}
+    >
+      <PatientDetailsDialog patient={patient} onClose={handleCloseDetails} />
+      <DialogActions
+        style={{
+          borderLeft: `16px solid ${
+            Colours[`Triage${capitalize(patient.triageLevel)}`]
+          }`,
+        }}
+      >
+        <Button
+          onClick={() => {
+            history.push(
+              `/events/${eventId}/ccps/${ccpId}/patients/${patientId}`
+            );
+          }}
+          color="secondary"
+          className={classes.editButton}
+        >
+          Edit
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
   const { patient, onClose } = props;

@@ -9,6 +9,7 @@ import EventDashboardPage from '../components/EventDashboard/EventDashboardPage'
 import ScanPatientPage from '../components/ScanPatientPage/ScanPatientPage';
 import EnterBarcodePage from '../components/EnterBarcode/EnterBarcodePage';
 import CCPDashboardPage from '../components/CCPDashboard/CCPDashboardPage';
+import { PatientDetailsDialogRouting } from '../components/CCPDashboard/PatientDetailsDialog';
 import PatientProfilePage from '../components/PatientProfilePage/PatientProfilePage';
 import CCPFormPage from '../components/CCPForm/CCPFormPage';
 import ResourceOverviewPage from '../components/ResourceOverview/ResourceOverviewPage';
@@ -84,6 +85,12 @@ function App() {
             exact
             path="/events/:eventId/ccps/:ccpId/patients/:patientId"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
+          />
+
+          <Route
+            exact
+            path="/events/:eventId/ccps/:ccpId/patients/:patientId/open"
+            component={(props) => <PatientDetailsDialogRouting {...props} />}
           />
           <Route path="/">
             <Redirect to="/events" />

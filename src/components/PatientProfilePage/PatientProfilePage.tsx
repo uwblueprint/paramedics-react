@@ -14,6 +14,7 @@ import RadioSelector from '../common/RadioSelector';
 import TriagePills from './TriagePills';
 import StatusPills from './StatusPills';
 import PatientTransportPage from './PatientTransportPage';
+
 import {
   TriageLevel,
   Status,
@@ -65,6 +66,8 @@ const PatientProfilePage = ({
   const [openTransportPage, setOpenTransportPage] = useState(false);
   const [transportConfirmed, setTransportConfirmed] = useState(false);
   const [transportingPatient, setTransportingPatient] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
   const [selectedHospital, setSelectedHospital] = useState<Hospital>({
     id: '',
     name: '',
@@ -194,9 +197,16 @@ const PatientProfilePage = ({
     });
   };
 
+  const openPatientDialog = () => {
+    history.push(`/events/${eventId}/ccps/${ccpId}/patients/${patientId}/open`);
+  };
+
   const action = () => (
     <>
-      <Button style={{ color: Colours.SnackbarButtonBlue }}>
+      <Button
+        onClick={() => openPatientDialog()}
+        style={{ color: Colours.SnackbarButtonBlue }}
+      >
         View Patient Details
       </Button>
     </>
