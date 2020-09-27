@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, NavLink } from 'react-router-dom';
+import { useHistory, NavLink, Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ValidatorForm } from 'react-material-ui-form-validator';
@@ -197,19 +197,21 @@ const PatientProfilePage = ({
     });
   };
 
-  const openPatientDialog = () => {
-    history.push(`/events/${eventId}/ccps/${ccpId}/patients/${patientId}/open`);
-  };
-
   const action = () => (
-    <>
+    <Link
+      to={{
+        pathname: `/events/${eventId}/ccps/${ccpId}/patientDetails/${patientId}`,
+        state: { modal: true },
+      }}
+      className="link"
+    >
       <Button
-        onClick={() => openPatientDialog()}
+        onClick={() => console.log('click')}
         style={{ color: Colours.SnackbarButtonBlue }}
       >
         View Patient Details
       </Button>
-    </>
+    </Link>
   );
 
   const handleComplete = () => {

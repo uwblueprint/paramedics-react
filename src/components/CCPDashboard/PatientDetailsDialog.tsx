@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import { Close } from '@material-ui/icons';
@@ -58,7 +58,7 @@ interface TParams {
 
 export const PatientDetailsDialogRouting = ({
   match: {
-    params: { eventId, ccpId, patientId },
+    params: { eventId, patientId, ccpId },
   },
 }: {
   match: {
@@ -81,6 +81,7 @@ export const PatientDetailsDialogRouting = ({
 
   const handleCloseDetails = () => {
     setOpenDetails(false);
+    history.push(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   return (
@@ -99,9 +100,7 @@ export const PatientDetailsDialogRouting = ({
       >
         <Button
           onClick={() => {
-            history.push(
-              `/events/${eventId}/ccps/${ccpId}/patients/${patientId}`
-            );
+            history.push(`/patients/${patientId}`);
           }}
           color="secondary"
           className={classes.editButton}

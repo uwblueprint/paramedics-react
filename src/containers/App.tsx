@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 import { Theme } from '../styles/Theme';
@@ -88,8 +88,7 @@ function App() {
           />
 
           <Route
-            exact
-            path="/events/:eventId/ccps/:ccpId/patients/:patientId/open"
+            path="/events/:eventId/ccps/:ccpId/patientDetails/:patientId"
             component={(props) => <PatientDetailsDialogRouting {...props} />}
           />
           <Route path="/">
