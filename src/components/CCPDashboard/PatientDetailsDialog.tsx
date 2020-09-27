@@ -9,7 +9,7 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import { Close } from '@material-ui/icons';
@@ -51,11 +51,6 @@ interface PatientDetail {
   styles?: object;
 }
 
-interface TParams {
-  eventId: string;
-  ccpId: string;
-}
-
 export const PatientDetailsDialogRouting = ({
   match: {
     params: { eventId, patientId, ccpId },
@@ -85,30 +80,43 @@ export const PatientDetailsDialogRouting = ({
   };
 
   return (
-    <Dialog
-      open={openDetails}
-      onClose={handleCloseDetails}
-      PaperProps={{ className: classes.detailsDialog }}
-    >
-      <PatientDetailsDialog patient={patient} onClose={handleCloseDetails} />
-      <DialogActions
-        style={{
-          borderLeft: `16px solid ${
-            Colours[`Triage${capitalize(patient.triageLevel)}`]
-          }`,
-        }}
-      >
-        <Button
-          onClick={() => {
-            history.push(`/patients/${patientId}`);
-          }}
-          color="secondary"
-          className={classes.editButton}
+    <div>
+      {patient ? (
+        <Dialog
+          open={openDetails}
+          onClose={handleCloseDetails}
+          PaperProps={{ className: classes.detailsDialog }}
         >
-          Edit
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <PatientDetailsDialog
+            patient={patient}
+            onClose={handleCloseDetails}
+          />
+          <DialogActions
+            style={{
+              borderLeft: `16px solid ${
+                Colours[`Triage${capitalize(patient.triageLevel)}`]
+              }`,
+            }}
+          >
+            <Button
+              onClick={() => {
+                history.push(
+                  `/events/${eventId}/ccps/${ccpId}/patients/${patientId}`
+                );
+              }}
+              color="secondary"
+              className={classes.editButton}
+            >
+              Edit
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        <Redirect
+          to={`/events/${eventId}/ccps/${ccpId}/patients/${patientId}`}
+        />
+      )}
+    </div>
   );
 };
 
