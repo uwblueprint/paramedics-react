@@ -145,13 +145,13 @@ const PatientProfilePage = ({
       if (ambulanceId) setSelectedAmbulance(ambulanceId);
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
-  }, [data, loading, mode]);
+  }, [formFields, data, loading, mode]);
 
   useEffect(() => {
     if (mode === 'new' && barcodeValue) {
       setFormFields({ ...formFields, barcodeValue });
     }
-  }, [mode, barcodeValue]);
+  }, [mode, barcodeValue, formFields]);
 
   const handleCloseDialog = () => {
     setOpenTransportModal(false);
@@ -345,7 +345,9 @@ const PatientProfilePage = ({
               e: React.MouseEvent<HTMLElement>,
               newStatus: Status
             ) => {
-              setFormFields({ ...formFields, status: newStatus });
+              if (newStatus) {
+                setFormFields({ ...formFields, status: newStatus });
+              }
               setTransportingPatient(newStatus === Status.TRANSPORTED);
             }}
           />
@@ -393,7 +395,7 @@ const PatientProfilePage = ({
                 notes: (e.target as HTMLInputElement).value,
               });
             }}
-            value={formFields.notes}
+            value={!formFields.notes ? '' : formFields.notes}
             isValidated={false}
           />
           {transportConfirmed === true && (
