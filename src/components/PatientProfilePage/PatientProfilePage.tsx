@@ -65,7 +65,6 @@ const PatientProfilePage = ({
   const [openTransportPage, setOpenTransportPage] = useState(false);
   const [transportConfirmed, setTransportConfirmed] = useState(false);
   const [transportingPatient, setTransportingPatient] = useState(false);
-
   const [selectedHospital, setSelectedHospital] = useState<Hospital>({
     id: '',
     name: '',

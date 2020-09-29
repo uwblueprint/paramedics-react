@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core';
 import { useHistory, Redirect } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-
 import { Close } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import {
