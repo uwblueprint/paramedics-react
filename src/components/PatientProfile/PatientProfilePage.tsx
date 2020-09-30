@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, NavLink, Link } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { Box, Button, Typography } from '@material-ui/core';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -270,7 +269,7 @@ const PatientProfilePage = ({
   };
 
   return (
-    <div className="landing-wrapper">
+    <Box>
       <PatientTransportPage
         open={openTransportPage}
         patientBarcode={mode === 'edit' ? formFields.barcodeValue : null}
@@ -310,29 +309,24 @@ const PatientProfilePage = ({
         }}
         handleClickCancel={handleCloseDialog}
       />
-      <div className="event-creation-top-section">
-        <div className="landing-top-bar">
-          <Typography variant="h3">
-            {mode === 'new' ? 'Add a patient' : 'Edit patient'}
-          </Typography>
-          <div className="user-icon">
-            <Button
-              variant="outlined"
-              color="secondary"
-              component={NavLink}
-              to={`/events/${eventId}/ccps/${ccpId}`}
-              style={{
-                minWidth: '18rem',
-                minHeight: '2.5rem',
-                fontSize: '18px',
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className="event-form">
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        padding="56px 56px 36px 56px"
+        borderBottom={`1px solid ${Colours.BorderLightGray}`}
+      >
+        <Typography variant="h4">
+          {mode === 'new' ? 'Add a patient' : 'Edit patient'}
+        </Typography>
+        <Button
+          color="secondary"
+          component={NavLink}
+          to={`/events/${eventId}/ccps/${ccpId}`}
+        >
+          Cancel
+        </Button>
+      </Box>
+      <Box padding="56px">
         <ValidatorForm onSubmit={handleComplete}>
           <Typography variant="h5" style={{ marginBottom: '24px' }}>
             Patient Information
@@ -446,8 +440,8 @@ const PatientProfilePage = ({
           )}
           <CompletePatientButton />
         </ValidatorForm>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

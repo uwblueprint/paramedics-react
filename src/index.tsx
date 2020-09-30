@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './styles/index.css';
 import { ApolloProvider } from '@apollo/react-hooks';
 import * as Sentry from '@sentry/browser';
-import App from './containers/App';
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import client from './graphql/apollo/client';

@@ -10,10 +10,15 @@ import { Colours } from '../../styles/Constants';
 
 interface EventCardProps {
   date: Date;
+  eventId: string;
   eventTitle: string;
   isNew: boolean;
   address: string;
   handleClick: () => void;
+  handleArchiveEvent: () => void;
+  handleUnarchiveEvent: () => void;
+  handleDeleteEvent: () => void;
+  isActive: boolean;
 }
 
 type EventCard = ({
@@ -51,6 +56,11 @@ const EventCard: EventCard = ({
   isNew,
   address,
   handleClick,
+  eventId,
+  handleArchiveEvent,
+  handleUnarchiveEvent,
+  handleDeleteEvent,
+  isActive,
 }: EventCardProps) => {
   const classes = useEventCardStyles();
   return (
@@ -65,7 +75,14 @@ const EventCard: EventCard = ({
         <Box display="flex">
           <Typography color="textSecondary">{date}</Typography>
           <Box ml="auto">
-            <CardOptions />
+            <CardOptions
+              eventId={eventId}
+              eventTitle={eventTitle}
+              handleArchiveEvent={handleArchiveEvent}
+              handleUnarchiveEvent={handleUnarchiveEvent}
+              handleDeleteEvent={handleDeleteEvent}
+              isActive={isActive}
+            />
           </Box>
         </Box>
         <Typography
