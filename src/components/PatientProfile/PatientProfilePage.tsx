@@ -105,20 +105,21 @@ const PatientProfilePage = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
   const [deletePatient] = useMutation(DELETE_PATIENT, {
     update(cache, { data: { deletePatient } }) {
-      if (!deletePatient) {
-        return;
+      if (mode === 'edit' && patientId) {
+        if (!deletePatient) {
+          return;
+        }
+        const { patient } = cache.readQuery<any>({
+          query: GET_PATIENT_BY_ID(patientId),
+        });
+
+        patient.status = Status.DELETED;
+
+        cache.writeQuery({
+          query: GET_PATIENT_BY_ID(patientId),
+          data: { patient },
+        });
       }
-      let { patient } = cache.readQuery<any>({
-        query: GET_PATIENT_BY_ID(patientId),
-      });
-
-      console.log(patient);
-      patient.status = Status.DELETED;
-
-      cache.writeQuery({
-        query: GET_PATIENT_BY_ID(patientId),
-        data: { patient },
-      });
     },
   });
 
