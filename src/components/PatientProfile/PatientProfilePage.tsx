@@ -103,7 +103,24 @@ const PatientProfilePage = ({
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
-  const [deletePatient] = useMutation(DELETE_PATIENT);
+  const [deletePatient] = useMutation(DELETE_PATIENT, {
+    update(cache, { data: { deletePatient } }) {
+      if (!deletePatient) {
+        return;
+      }
+      let { patient } = cache.readQuery<any>({
+        query: GET_PATIENT_BY_ID(patientId),
+      });
+
+      console.log(patient);
+      patient.status = Status.DELETED;
+
+      cache.writeQuery({
+        query: GET_PATIENT_BY_ID(patientId),
+        data: { patient },
+      });
+    },
+  });
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
@@ -167,7 +184,7 @@ const PatientProfilePage = ({
     setDeleteClicked(false);
   };
 
-  const handldeDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (mode === 'edit') {
       deletePatient({
         variables: {
@@ -465,7 +482,7 @@ const PatientProfilePage = ({
             <ConfirmModal
               open={deleteClicked}
               handleClickCancel={handleDeleteCancel}
-              handleClickAction={handldeDeleteConfirm}
+              handleClickAction={handleDeleteConfirm}
               title="You are about to delete a patient"
               body="Deleting a patient will remove all records of the patient."
               actionLabel="Delete"
