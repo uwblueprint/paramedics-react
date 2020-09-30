@@ -202,10 +202,7 @@ const PatientProfilePage = ({
       }}
       className="link"
     >
-      <Button
-        onClick={() => console.log('click')}
-        style={{ color: Colours.SnackbarButtonBlue }}
-      >
+      <Button style={{ color: Colours.SnackbarButtonBlue }}>
         View Patient Details
       </Button>
     </Link>

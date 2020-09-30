@@ -158,8 +158,9 @@ const TriagePills = ({
               root: classes[`${level.toLowerCase()}pill`],
               selected:
                 classes[
-                `selected${level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()
-                }Pill`
+                  `selected${
+                    level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()
+                  }Pill`
                 ],
             }}
           >
