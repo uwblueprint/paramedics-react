@@ -169,13 +169,13 @@ const PatientProfilePage = ({
       if (ambulanceId) setSelectedAmbulance(ambulanceId);
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
-  }, [data, loading, mode]);
+  }, [formFields, data, loading, mode]);
 
   useEffect(() => {
     if (mode === 'new' && barcodeValue) {
       setFormFields({ ...formFields, barcodeValue });
     }
-  }, [mode, barcodeValue]);
+  }, [mode, barcodeValue, formFields]);
 
   const handleDeleteClick = () => {
     setDeleteClicked(true);
@@ -185,7 +185,7 @@ const PatientProfilePage = ({
     setDeleteClicked(false);
   };
 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = () => {
     if (mode === 'edit') {
       deletePatient({
         variables: {
@@ -477,17 +477,17 @@ const PatientProfilePage = ({
           )}
           <CompletePatientButton />
           {mode === 'edit' && (
-            <DeletePatientButton handleClick={handleDeleteClick} />
-          )}
-          {mode === 'edit' && (
-            <ConfirmModal
-              open={deleteClicked}
-              handleClickCancel={handleDeleteCancel}
-              handleClickAction={handleDeleteConfirm}
-              title="You are about to delete a patient"
-              body="Deleting a patient will remove all records of the patient."
-              actionLabel="Delete"
-            />
+            <>
+              <DeletePatientButton handleClick={handleDeleteClick} />
+              <ConfirmModal
+                open={deleteClicked}
+                handleClickCancel={handleDeleteCancel}
+                handleClickAction={handleDeleteConfirm}
+                title="You are about to delete a patient"
+                body="Deleting a patient will remove all records of the patient."
+                actionLabel="Delete"
+              />
+            </>
           )}
         </ValidatorForm>
       </Box>
