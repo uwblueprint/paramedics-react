@@ -94,7 +94,6 @@ function App() {
             path="/events/:eventId/ccps/:ccpId/patients/:patientId"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
-
           <Route
             path="/events/:eventId/ccps/:ccpId/patientDetails/:patientId"
             component={(props) => <PatientDetailsDialogRouting {...props} />}

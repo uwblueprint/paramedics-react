@@ -71,7 +71,7 @@ export const PatientDetailsDialogRouting = ({
     patientId ? GET_PATIENT_BY_ID(patientId) : GET_ALL_PATIENTS
   );
 
-  const patient: Patient = data ? data.patient : undefined;
+  const patient: Patient = data ? data.patient : null;
 
   const handleCloseDetails = () => {
     setOpenDetails(false);
@@ -111,9 +111,7 @@ export const PatientDetailsDialogRouting = ({
           </DialogActions>
         </Dialog>
       ) : (
-        <Redirect
-          to={`/events/${eventId}/ccps/${ccpId}/patients/${patientId}`}
-        />
+        <Redirect to="/events" />
       )}
     </div>
   );

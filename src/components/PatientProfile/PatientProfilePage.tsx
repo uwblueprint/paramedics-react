@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, NavLink, Link } from 'react-router-dom';
+import { useHistory, NavLink } from 'react-router-dom';
 import { Box, Button, Typography } from '@material-ui/core';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
@@ -194,17 +194,16 @@ const PatientProfilePage = ({
   };
 
   const action = () => (
-    <Link
-      to={{
-        pathname: `/events/${eventId}/ccps/${ccpId}/patientDetails/${patientId}`,
-        state: { modal: true },
-      }}
-      className="link"
+    <Button
+      onClick={() =>
+        history.push(
+          `/events/${eventId}/ccps/${ccpId}/patientDetails/${patientId}`
+        )
+      }
+      style={{ color: Colours.SnackbarButtonBlue }}
     >
-      <Button style={{ color: Colours.SnackbarButtonBlue }}>
-        View Patient Details
-      </Button>
-    </Link>
+      View Patient Details
+    </Button>
   );
 
   const handleComplete = () => {
