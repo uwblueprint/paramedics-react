@@ -155,27 +155,26 @@ const PatientProfilePage = ({
         hospitalId: Hospital;
         ambulanceId: Ambulance;
       } = data.patient;
-      setFormFields({
-        ...formFields,
-        barcodeValue,
+      setFormFields(() => ({
+        barcodeValue: barcodeValue,
         triage: triageLevel,
-        gender,
-        age,
-        notes,
-        status,
-        runNumber,
-      });
+        gender: gender,
+        age: age,
+        notes: notes,
+        status: status,
+        runNumber: runNumber,
+      }));
       if (hospitalId) setSelectedHospital(hospitalId);
       if (ambulanceId) setSelectedAmbulance(ambulanceId);
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
-  }, [formFields, data, loading, mode]);
+  }, [data, loading, mode]);
 
   useEffect(() => {
     if (mode === 'new' && barcodeValue) {
-      setFormFields({ ...formFields, barcodeValue });
+      setFormFields({ ...formFields, barcodeValue: barcodeValue });
     }
-  }, [mode, barcodeValue, formFields]);
+  }, [mode, barcodeValue]);
 
   const handleDeleteClick = () => {
     setDeleteClicked(true);
