@@ -131,8 +131,7 @@ const PatientProfilePage = ({
         hospitalId: Hospital;
         ambulanceId: Ambulance;
       } = data.patient;
-      setFormFields({
-        ...formFields,
+      setFormFields(() => ({
         barcodeValue,
         triage: triageLevel,
         gender,
@@ -140,18 +139,18 @@ const PatientProfilePage = ({
         notes,
         status,
         runNumber,
-      });
+      }));
       if (hospitalId) setSelectedHospital(hospitalId);
       if (ambulanceId) setSelectedAmbulance(ambulanceId);
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
-  }, [formFields, data, loading, mode]);
+  }, [data, loading, mode]);
 
   useEffect(() => {
     if (mode === 'new' && barcodeValue) {
-      setFormFields({ ...formFields, barcodeValue });
+      setFormFields(() => ({ barcodeValue }));
     }
-  }, [mode, barcodeValue, formFields]);
+  }, [mode, barcodeValue]);
 
   const handleCloseDialog = () => {
     setOpenTransportModal(false);
