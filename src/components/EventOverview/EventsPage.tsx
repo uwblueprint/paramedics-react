@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import MenuTabs from '../common/MenuTabs';
 import EventCard from './EventCard';
 import UserProfile from './UserProfile';
-import useAllEventsFromBackend from '../../graphql/queries/hooks/events';
+import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
 import { Colours } from '../../styles/Constants';
@@ -64,7 +64,7 @@ const EventsPage = () => {
   const tabLabels = ['Current Events', 'Archived Events'];
 
   // Fetch events from backend
-  useAllEventsFromBackend();
+  useAllEvents();
 
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
