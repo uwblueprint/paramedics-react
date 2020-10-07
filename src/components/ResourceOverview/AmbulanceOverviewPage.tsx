@@ -102,7 +102,9 @@ const AmbulanceOverviewPage: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedAmbulance, selectAmbulance] = React.useState<number>(-1);
+  const [selectedAmbulance, setSelectedAmbulance] = React.useState<
+    number | null
+  >(null);
 
   // Update cache
   useAllAmbulances();
@@ -111,6 +113,12 @@ const AmbulanceOverviewPage: React.FC = () => {
   const { data } = useQuery(GET_ALL_AMBULANCES);
 
   const ambulances: Array<Ambulance> = data ? data.ambulances : [];
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setOpenModal(false);
+    setSelectedAmbulance(null);
+  };
 
   //  Writing to cache when deleting user
   const [deleteAmbulance] = useMutation(DELETE_AMBULANCE, {
@@ -122,10 +130,8 @@ const AmbulanceOverviewPage: React.FC = () => {
         query: GET_ALL_AMBULANCES,
       });
 
-      setAnchorEl(null);
-
       const filtered = ambulances.filter(
-        (ambulance) => ambulance.id !== selectedAmbulance
+        (ambulance) => ambulance.id !== deleteAmbulance
       );
       ambulances = filtered;
       cache.writeQuery({
@@ -133,10 +139,14 @@ const AmbulanceOverviewPage: React.FC = () => {
         data: { ambulances },
       });
     },
+    onCompleted() {
+      handleClose();
+      enqueueSnackbar('Ambulance deleted.');
+    },
   });
 
   const handleClickOptions = (event) => {
-    selectAmbulance(event.currentTarget.getAttribute('data-id'));
+    setSelectedAmbulance(event.currentTarget.getAttribute('data-id'));
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
@@ -146,21 +156,13 @@ const AmbulanceOverviewPage: React.FC = () => {
     history.replace(`/manage/ambulances/edit/${ambulanceId}`);
   };
 
-  const handleClickDelete = () => {
+  const handleConfirmDelete = () => {
     const ambulanceId = selectedAmbulance;
     deleteAmbulance({ variables: { id: ambulanceId } });
-    setAnchorEl(null);
-    setOpenModal(false);
-    enqueueSnackbar('Ambulance deleted.');
   };
 
-  const handleDeleteOption = () => {
+  const handleClickDelete = () => {
     setOpenModal(true);
-  };
-
-  const handleClickCancel = () => {
-    setAnchorEl(null);
-    setOpenModal(false);
   };
 
   const open = Boolean(anchorEl);
@@ -179,7 +181,7 @@ const AmbulanceOverviewPage: React.FC = () => {
     },
     {
       styles: optionStyle.menuDelete,
-      onClick: handleDeleteOption,
+      onClick: handleClickDelete,
       name: 'Delete',
     },
   ];
@@ -221,9 +223,7 @@ const AmbulanceOverviewPage: React.FC = () => {
               id={String(selectedAmbulance)}
               open={open}
               anchorEl={anchorEl}
-              onClickAway={() => {
-                setAnchorEl(null);
-              }}
+              onClickAway={handleClose}
               options={options}
             />
           </TableBody>
@@ -235,8 +235,8 @@ const AmbulanceOverviewPage: React.FC = () => {
         title="You are about to delete an ambulance."
         body="Supervisors will no longer be able to transport patients at CCPs using this vehicle."
         actionLabel="Delete"
-        handleClickAction={handleClickDelete}
-        handleClickCancel={handleClickCancel}
+        handleClickAction={handleConfirmDelete}
+        handleClickCancel={handleClose}
       />
       <div className={classes.addResourceContainer}>
         <AddResourceButton
