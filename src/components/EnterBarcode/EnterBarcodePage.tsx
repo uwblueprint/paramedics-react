@@ -67,12 +67,11 @@ const EnterBarcodePage = ({
         </Button>
       </Box>
       <Box padding="56px">
-        <form>
+        <form onSubmit={handleEnterBarcode}>
           <FormField
             label="Barcode:"
             placeholder="Enter barcode here"
             onChange={(e: any) => setBarcode(e.target.value)}
-            onKeyPress={(e: any) => e.key === 'Enter' && handleEnterBarcode()}
             value={barcode}
             isValidated={false}
           />
