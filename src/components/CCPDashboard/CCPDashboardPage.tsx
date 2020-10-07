@@ -12,6 +12,7 @@ import {
 import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
+import MenuAppBar from '../common/MenuAppBar';
 
 interface TParams {
   eventId: string;
@@ -41,7 +42,7 @@ const useStyles = makeStyles({
   },
   tabs: {
     background: Colours.White,
-    padding: '0 56px',
+    padding: '0 205px',
   },
   fullHeightGridItem: {
     display: 'flex',
@@ -125,6 +126,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   }
   return (
     <Box className={classes.root}>
+      <MenuAppBar pageTitle="Directory" eventId={eventId} selectedCcp={ccpId} />
       <Tabs
         className={classes.tabs}
         value={tab}
