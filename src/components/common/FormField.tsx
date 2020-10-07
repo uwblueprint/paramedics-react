@@ -39,6 +39,7 @@ const FormField: React.FC<{
   label: string;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   value: string;
   handleFocus?: () => void;
   isValidated: boolean;
@@ -49,6 +50,7 @@ const FormField: React.FC<{
   label,
   placeholder,
   onChange,
+  onKeyPress,
   value,
   handleFocus,
   isValidated,
@@ -59,6 +61,7 @@ const FormField: React.FC<{
   label: string;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   value: string | number | null;
   handleFocus?: () => void;
   isValidated: boolean;
@@ -98,6 +101,7 @@ const FormField: React.FC<{
       className={classes.root}
       margin="normal"
       onChange={onChange}
+      onKeyPress={onKeyPress}
       value={value}
       onFocus={handleFocus}
     />
