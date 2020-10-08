@@ -417,7 +417,7 @@ const PatientProfilePage = ({
                 notes: (e.target as HTMLInputElement).value,
               });
             }}
-            value={formFields.notes}
+            value={formFields.notes ? formFields.notes : ''}
             isValidated={false}
           />
           {transportConfirmed === true && (
