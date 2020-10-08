@@ -63,8 +63,15 @@ const UserFormPage = ({
         data: { users: users.concat([addUser]) },
       });
     },
+    onCompleted() {
+      enqueueSnackbar('Team member added.');
+    },
   });
-  const [editUser] = useMutation(EDIT_USER);
+  const [editUser] = useMutation(EDIT_USER, {
+    onCompleted() {
+      enqueueSnackbar('Team member edited.');
+    },
+  });
 
   const [memberName, setMemberName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -86,6 +93,17 @@ const UserFormPage = ({
       setRole(accessLevel);
     }
   }, [data, loading, mode]);
+
+  useEffect(() => {
+    if (!loading) {
+      ValidatorForm.addValidationRule('isUniqueEmail', () => {
+        const isUnique = users
+          ? users.filter((user) => user.email === email).length === 0
+          : true;
+        return isUnique;
+      });
+    }
+  }, [email, users, loading]);
 
   const handleNameChange = (e: any) => {
     setMemberName(e.target.value);
@@ -110,7 +128,6 @@ const UserFormPage = ({
           emergencyContact: '1234567890',
         },
       });
-      enqueueSnackbar('Team member added.');
     } else if (mode === 'edit') {
       editUser({
         variables: {
@@ -120,9 +137,8 @@ const UserFormPage = ({
           accessLevel: role,
         },
       });
-      enqueueSnackbar('Team member edited.');
     }
-    history.replace('/manage/members');
+    history.push('/manage/members');
   };
 
   const classes = useStyles();
@@ -160,8 +176,13 @@ const UserFormPage = ({
           <FormField
             label="*Email:"
             isValidated
-            validators={['required', 'isEmail']}
-            errorMessages={['This is a mandatory field', 'Invalid email']}
+            disabled={mode === 'edit'}
+            validators={['required', 'isEmail', 'isUniqueEmail']}
+            errorMessages={[
+              'This is a mandatory field',
+              'Invalid email',
+              'Email is already in use',
+            ]}
             onChange={handleEmailChange}
             value={email}
           />
