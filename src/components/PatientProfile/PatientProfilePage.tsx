@@ -103,25 +103,7 @@ const PatientProfilePage = ({
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
-  const [deletePatient] = useMutation(DELETE_PATIENT, {
-    update(cache, { data: { deletePatient } }) {
-      if (mode === 'edit' && patientId) {
-        if (!deletePatient) {
-          return;
-        }
-        const { patient } = cache.readQuery<any>({
-          query: GET_PATIENT_BY_ID(patientId),
-        });
-
-        patient.status = Status.DELETED;
-
-        cache.writeQuery({
-          query: GET_PATIENT_BY_ID(patientId),
-          data: { patient },
-        });
-      }
-    },
-  });
+  const [deletePatient] = useMutation(DELETE_PATIENT);
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
@@ -156,13 +138,13 @@ const PatientProfilePage = ({
         ambulanceId: Ambulance;
       } = data.patient;
       setFormFields(() => ({
-        barcodeValue: barcodeValue,
+        barcodeValue,
         triage: triageLevel,
-        gender: gender,
-        age: age,
-        notes: notes,
-        status: status,
-        runNumber: runNumber,
+        gender,
+        age,
+        notes,
+        status,
+        runNumber,
       }));
       if (hospitalId) setSelectedHospital(hospitalId);
       if (ambulanceId) setSelectedAmbulance(ambulanceId);
@@ -172,7 +154,7 @@ const PatientProfilePage = ({
 
   useEffect(() => {
     if (mode === 'new' && barcodeValue) {
-      setFormFields({ ...formFields, barcodeValue: barcodeValue });
+      setFormFields({ ...formFields, barcodeValue });
     }
   }, [mode, barcodeValue]);
 
