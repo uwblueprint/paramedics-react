@@ -16,6 +16,11 @@ export const ADD_EVENT = gql`
       id
       name
       eventDate
+      isActive
+      createdBy {
+        id
+        name
+      }
     }
   }
 `;
