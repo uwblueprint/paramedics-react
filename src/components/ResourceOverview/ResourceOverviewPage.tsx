@@ -21,7 +21,8 @@ const BackButton = withStyles({
 
 const RefreshButton = withStyles({
   root: {
-    marginLeft: '70%',
+    position: 'absolute',
+    right: '16px',
     padding: 0,
   },
 })(IconButton);
@@ -30,6 +31,10 @@ const useLayout = makeStyles({
   resourceWrapper: {
     backgroundColor: '#f0f0f0',
     minHeight: '100vh',
+  },
+  fixedBars: {
+    position: 'fixed',
+    width: '100%',
   },
   titleBar: {
     display: 'flex',
@@ -76,7 +81,7 @@ const ResourceOverviewPage = ({
       break;
     default:
       index = 0;
-      history.replace('/manage/members');
+      history.push('/manage/members');
       break;
   }
 
@@ -114,27 +119,28 @@ const ResourceOverviewPage = ({
 
   return (
     <div className={classes.resourceWrapper}>
-      <span className={classes.titleBar}>
-        <BackButton>
-          <ArrowBackIcon style={{ color: Colours.White }} />
-        </BackButton>
-        <Typography variant="h6">Resource Management</Typography>
-
-        <RefreshButton
-          onClick={() => {
-            window.location.reload();
-          }}
-        >
-          <RefreshIcon style={{ color: Colours.White }} />
-        </RefreshButton>
-      </span>
-      <div className={classes.resourceTopSection}>
-        <div className={classes.resourceTopBar} />
-        <ResourceMenuTabs
-          handleChange={handleChange}
-          currentTab={selectedTab}
-          tabLabels={tabLabels}
-        />
+      <div className={classes.fixedBars}>
+        <span className={classes.titleBar}>
+          <BackButton onClick={() => history.push('/')}>
+            <ArrowBackIcon style={{ color: Colours.White }} />
+          </BackButton>
+          <Typography variant="h6">Resource Management</Typography>
+          <RefreshButton
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            <RefreshIcon style={{ color: Colours.White }} />
+          </RefreshButton>
+        </span>
+        <div className={classes.resourceTopSection}>
+          <div className={classes.resourceTopBar} />
+          <ResourceMenuTabs
+            handleChange={handleChange}
+            currentTab={selectedTab}
+            tabLabels={tabLabels}
+          />
+        </div>
       </div>
       {overview}
     </div>
