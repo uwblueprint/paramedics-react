@@ -382,8 +382,12 @@ const PatientProfilePage = ({
             }}
             value={formFields.age ? formFields.age.toString() : ''}
             isValidated
-            validators={['minNumber:1', 'matchRegexp:^[0-9]*$']}
-            errorMessages={['Invalid age']}
+            validators={['minNumber:1', 'matchRegexp:^[0-9]*$', 'required']}
+            errorMessages={[
+              'Invalid age',
+              'Invalid age',
+              'This is a mandatory field',
+            ]}
           />
           <FormField
             label="Notes:"
