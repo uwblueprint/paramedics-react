@@ -114,6 +114,7 @@ const PatientProfilePage = ({
     status: Status.ON_SITE,
     runNumber: null,
   });
+
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
