@@ -126,32 +126,13 @@ export const DELETE_PATIENT = gql`
   mutation deletePatient($id: ID!) {
     deletePatient(id: $id) {
       id
-      gender
-      age
-      runNumber
-      barcodeValue
       collectionPointId {
         id
-        name
         eventId {
           id
-          name
-          eventDate
         }
       }
-      triageLevel
       status
-      notes
-      updatedAt
-      transportTime
-      hospitalId {
-        id
-        name
-      }
-      ambulanceId {
-        id
-        vehicleNumber
-      }
     }
   }
 `;
