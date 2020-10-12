@@ -63,7 +63,6 @@ const StatusPills = ({
     { val: Status.ON_SITE, description: 'On Site' },
     { val: Status.RELEASED, description: 'Released' },
     { val: Status.TRANSPORTED, description: 'Transport' },
-    { val: Status.DELETED, description: 'Deleted' },
   ];
   return (
     <Container className={classes.root}>
