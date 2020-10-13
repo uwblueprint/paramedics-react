@@ -82,7 +82,7 @@ const useLayout = makeStyles({
   wrapper: {
     backgroundColor: '#f0f0f0',
     padding: '56px',
-    minHeight: '100vh',
+    paddingTop: '180px',
   },
   tablePopper: {
     minWidth: '159px',
