@@ -114,10 +114,14 @@ const AmbulanceOverviewPage: React.FC = () => {
 
   const ambulances: Array<Ambulance> = data ? data.ambulances : [];
 
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
-    setOpenModal(false);
     setSelectedAmbulance(null);
+  };
+
+  const handleCloseConfirmDelete = () => {
+    handleCloseMenu();
+    setOpenModal(false);
   };
 
   //  Writing to cache when deleting user
@@ -140,7 +144,7 @@ const AmbulanceOverviewPage: React.FC = () => {
       });
     },
     onCompleted() {
-      handleClose();
+      handleCloseConfirmDelete();
       enqueueSnackbar('Ambulance deleted.');
     },
   });
@@ -223,7 +227,7 @@ const AmbulanceOverviewPage: React.FC = () => {
               id={String(selectedAmbulance)}
               open={open}
               anchorEl={anchorEl}
-              onClickAway={handleClose}
+              onClickAway={handleCloseMenu}
               options={options}
             />
           </TableBody>
@@ -236,7 +240,7 @@ const AmbulanceOverviewPage: React.FC = () => {
         body="Supervisors will no longer be able to transport patients at CCPs using this vehicle."
         actionLabel="Delete"
         handleClickAction={handleConfirmDelete}
-        handleClickCancel={handleClose}
+        handleClickCancel={handleCloseConfirmDelete}
       />
       <div className={classes.addResourceContainer}>
         <AddResourceButton
