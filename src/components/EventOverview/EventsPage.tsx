@@ -42,6 +42,7 @@ const EventsPage = () => {
   const classes = useStyles();
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
+  const [archivedEventId, setArchivedEventId] = useState('');
   const [selectedTab, setTab] = useState(0);
   const [eventToBeDeleted, setEventToBeDeleted] = useState<Event | null>(null);
 
@@ -88,8 +89,8 @@ const EventsPage = () => {
   });
   const events: Array<Event> = data ? data.events : [];
 
-  const handleArchiveEvent = (event: Event) => {
-    editEvent({
+  const handleArchiveEvent = async (event: Event) => {
+    await editEvent({
       variables: {
         id: event.id,
         name: event.name,
@@ -98,9 +99,12 @@ const EventsPage = () => {
         isActive: false,
       },
     });
+    setArchivedEventId(event.id);
+    setTab(1);
   };
-  const handleUnarchiveEvent = (event: Event) => {
-    editEvent({
+
+  const handleUnarchiveEvent = async (event: Event) => {
+    await editEvent({
       variables: {
         id: event.id,
         name: event.name,
@@ -109,6 +113,8 @@ const EventsPage = () => {
         isActive: true,
       },
     });
+    setArchivedEventId(event.id);
+    setTab(0);
   };
 
   const handleDeleteEvent = async (event: Event) => {
@@ -149,7 +155,9 @@ const EventsPage = () => {
                 date={event.eventDate}
                 eventTitle={event.name}
                 isActive={event.isActive}
-                isNew={event.id === addedEventId}
+                isNew={
+                  event.id === addedEventId || event.id === archivedEventId
+                }
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
                 handleArchiveEvent={() => handleArchiveEvent(event)}
