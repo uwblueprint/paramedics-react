@@ -77,7 +77,10 @@ const EnterBarcodePage = ({
           />
         </form>
       </Box>
-      <CompleteBarcodeButton handleClick={handleEnterBarcode} />
+      <CompleteBarcodeButton
+        handleClick={handleEnterBarcode}
+        isEmpty={barcode === ''}
+      />
     </Box>
   );
 };
