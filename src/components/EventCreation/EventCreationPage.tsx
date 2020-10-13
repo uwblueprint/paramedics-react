@@ -58,7 +58,11 @@ const EventCreationPage = ({
       history.replace('/events');
     },
   });
-  const [editEvent] = useMutation(EDIT_EVENT);
+  const [editEvent] = useMutation(EDIT_EVENT, {
+    onCompleted() {
+      history.replace('/events');
+    },
+  });
 
   const [openCancelModal, setOpenHandleModal] = useState(false);
   const [openDateModal, setOpenDateModal] = useState(false);
@@ -146,7 +150,6 @@ const EventCreationPage = ({
         },
       });
     }
-    history.replace('/events');
   };
 
   useEffect(() => {

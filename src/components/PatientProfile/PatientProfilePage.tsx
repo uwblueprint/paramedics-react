@@ -12,6 +12,7 @@ import CompletePatientButton from './CompletePatientButton';
 import RadioSelector from '../common/RadioSelector';
 import TriagePills from './TriagePills';
 import StatusPills from './StatusPills';
+import DeletePatientButton from './DeletePatientButton';
 import PatientTransportPage from './PatientTransportPage';
 import {
   TriageLevel,
@@ -21,7 +22,11 @@ import {
   GET_PATIENT_BY_ID,
   GET_ALL_PATIENTS,
 } from '../../graphql/queries/patients';
-import { ADD_PATIENT, EDIT_PATIENT } from '../../graphql/mutations/patients';
+import {
+  ADD_PATIENT,
+  EDIT_PATIENT,
+  DELETE_PATIENT,
+} from '../../graphql/mutations/patients';
 import { Hospital, GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import {
   Ambulance,
@@ -64,6 +69,7 @@ const PatientProfilePage = ({
   const [openTransportPage, setOpenTransportPage] = useState(false);
   const [transportConfirmed, setTransportConfirmed] = useState(false);
   const [transportingPatient, setTransportingPatient] = useState(false);
+  const [deleteClicked, setDeleteClicked] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital>({
     id: '',
     name: '',
@@ -97,8 +103,8 @@ const PatientProfilePage = ({
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
+  const [deletePatient] = useMutation(DELETE_PATIENT);
 
-  // We need the CCP passed in!
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
     triage: TriageLevel.GREEN,
@@ -108,6 +114,7 @@ const PatientProfilePage = ({
     status: Status.ON_SITE,
     runNumber: null,
   });
+
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
@@ -151,6 +158,25 @@ const PatientProfilePage = ({
       setFormFields({ ...formFields, barcodeValue });
     }
   }, [mode, barcodeValue]);
+
+  const handleDeleteClick = () => {
+    setDeleteClicked(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteClicked(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (mode === 'edit') {
+      deletePatient({
+        variables: {
+          id: patientId,
+        },
+      });
+    }
+    history.replace(`/events/${eventId}/ccps/${ccpId}`);
+  };
 
   const handleCloseDialog = () => {
     setOpenTransportModal(false);
@@ -398,7 +424,7 @@ const PatientProfilePage = ({
                 notes: (e.target as HTMLInputElement).value,
               });
             }}
-            value={!formFields.notes ? '' : formFields.notes}
+            value={formFields.notes || ''}
             isValidated={false}
           />
           {transportConfirmed === true && (
@@ -438,6 +464,20 @@ const PatientProfilePage = ({
             </>
           )}
           <CompletePatientButton />
+          {mode === 'edit' && (
+            <>
+              <DeletePatientButton handleClick={handleDeleteClick} />
+              <ConfirmModal
+                open={deleteClicked}
+                handleClickCancel={handleDeleteCancel}
+                handleClickAction={handleDeleteConfirm}
+                title="You are about to delete a patient"
+                body="Deleting a patient will remove all records of the patient."
+                actionLabel="Delete"
+                isActionDelete
+              />
+            </>
+          )}
         </ValidatorForm>
       </Box>
     </Box>
