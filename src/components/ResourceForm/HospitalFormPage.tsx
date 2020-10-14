@@ -60,11 +60,13 @@ const HospitalFormPage = ({
     },
     onCompleted() {
       enqueueSnackbar('Hospital added.');
+      history.replace('/manage/hospitals');
     },
   });
   const [editHospital] = useMutation(EDIT_HOSPITAL, {
     onCompleted() {
       enqueueSnackbar('Hospital edited.');
+      history.replace('/manage/hospitals');
     },
   });
 
@@ -100,7 +102,6 @@ const HospitalFormPage = ({
         },
       });
     }
-    history.push('/manage/hospitals');
   };
 
   const classes = useStyles();
