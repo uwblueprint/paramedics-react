@@ -414,6 +414,7 @@ const PatientProfilePage = ({
               'Invalid age',
               'This is a mandatory field',
             ]}
+            numeric
           />
           <FormField
             label="Notes:"
