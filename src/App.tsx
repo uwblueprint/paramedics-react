@@ -94,11 +94,7 @@ function App() {
             path="/events/:eventId/ccps/:ccpId/patients/:patientId"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
-          <Route 
-            exact
-            path = "/events/:eventId/map"
-            component = {MapPage}
-          />
+          <Route exact path="/events/:eventId/map" component={MapPage} />
           <Route path="/">
             <Redirect to="/events" />
           </Route>
