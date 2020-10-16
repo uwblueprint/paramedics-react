@@ -24,7 +24,7 @@ import { Colours } from '../../styles/Constants';
 
 interface MenuAppBarProps {
   eventId: string;
-  pageTitle: string;
+  pageTitle: string | React.ReactNode;
   selectedCcp?: string;
 }
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Tabs, Tab, makeStyles } from '@material-ui/core';
+import { Box, Tabs, Tab, makeStyles, Typography } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
 import { useQuery } from '@apollo/react-hooks';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
+import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
 import {
   GET_ALL_PATIENTS,
@@ -13,6 +14,7 @@ import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 
 interface TParams {
   eventId: string;
@@ -71,6 +73,13 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
   },
+  menuBarTitle: {
+    display: 'inline-block',
+  },
+  locationIcon: {
+    fontSize: '20px',
+    marginLeft: '16px',
+  },
 });
 
 const TabPanel = (props: TabPanelProps) => {
@@ -95,6 +104,9 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useAllPatients();
   // Should switch to fetching patients from cache
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
+  const { loading: ccpLoading, data: ccpInfo } = useQuery(GET_CCP_BY_ID, {
+    variables: { id: ccpId },
+  });
   const allPatients: Array<Patient> = data ? data.patients : [];
   const patients = React.useMemo(
     () =>
@@ -121,12 +133,31 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [patients]
   );
 
-  if (loading) {
+  if (loading || ccpLoading) {
     return <LoadingState />;
   }
+
+  const currentCcp = ccpInfo.collectionPoint;
+
+  const menuBarTitle = (
+    <>
+      {currentCcp.name}
+      <div className={classes.menuBarTitle}>
+        <LocationOnOutlinedIcon className={classes.locationIcon} />
+        <Typography variant="caption" className={classes.menuBarTitle}>
+          100 University
+        </Typography>
+      </div>
+    </>
+  );
+
   return (
     <Box className={classes.root}>
-      <MenuAppBar pageTitle="Directory" eventId={eventId} selectedCcp={ccpId} />
+      <MenuAppBar
+        pageTitle={menuBarTitle}
+        eventId={eventId}
+        selectedCcp={ccpId}
+      />
       <Tabs
         className={classes.tabs}
         value={tab}
