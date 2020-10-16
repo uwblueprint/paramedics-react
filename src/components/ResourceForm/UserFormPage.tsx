@@ -14,7 +14,6 @@ import { Colours } from '../../styles/Constants';
 import { ADD_USER, EDIT_USER } from '../../graphql/mutations/users';
 import {
   User,
-  AccessLevel,
   GET_ALL_USERS,
   GET_USER_BY_ID,
 } from '../../graphql/queries/users';
@@ -75,22 +74,22 @@ const UserFormPage = ({
 
   const [memberName, setMemberName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
+  const [role, setRole] = useState<number>(2);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
         name,
         email,
-        accessLevel,
+        roleId,
       }: {
         name: string;
         email: string;
-        accessLevel: AccessLevel;
+        roleId: number;
       } = data.user;
       setMemberName(name);
       setEmail(email);
-      setRole(accessLevel);
+      setRole(roleId);
     }
   }, [data, loading, mode]);
 
@@ -114,7 +113,7 @@ const UserFormPage = ({
   };
 
   const handleRoleChange = (e: any) => {
-    setRole(e.target.value);
+    setRole(Number(e.target.value));
   };
 
   const handleComplete = () => {
@@ -124,7 +123,7 @@ const UserFormPage = ({
           name: memberName,
           email,
           password: 'password',
-          accessLevel: role,
+          roleId: role,
           emergencyContact: '1234567890',
         },
       });
@@ -134,7 +133,7 @@ const UserFormPage = ({
           id: userId,
           name: memberName,
           email,
-          accessLevel: role,
+          roleId: role,
         },
       });
     }
@@ -142,6 +141,7 @@ const UserFormPage = ({
   };
 
   const classes = useStyles();
+
 
   return (
     <div className={classes.resourceWrapper}>
@@ -187,7 +187,7 @@ const UserFormPage = ({
             value={email}
           />
           <AccessLevelSelector
-            currentValue={role}
+            currentValue={role.toString()}
             handleChange={handleRoleChange}
           />
           <Typography

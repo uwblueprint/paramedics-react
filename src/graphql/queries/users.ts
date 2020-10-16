@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 export enum AccessLevel {
   COMMANDER = 'COMMANDER',
   SUPERVISOR = 'SUPERVISOR',
-  ADMIN = 'ADMIN',
+  DISPATCH = 'DISPATCH',
 }
 
 export interface User {
@@ -11,7 +11,7 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  accessLevel: AccessLevel;
+  roleId: number;
   emergencyContact: string;
 }
 
@@ -22,7 +22,7 @@ export const GET_USER_BY_ID = (id: string) => {
           id
           name
           email
-          accessLevel
+          roleId
         }
       }
     `;
@@ -34,7 +34,7 @@ export const GET_ALL_USERS = gql`
       id
       name
       email
-      accessLevel
+      roleId
     }
   }
 `;

@@ -51,9 +51,9 @@ const AccessLevelSelector = ({
 }) => {
   const classes = useRadioStyles();
   const accessLevels = [
-    { val: AccessLevel.ADMIN, label: 'Admin' },
-    { val: AccessLevel.SUPERVISOR, label: 'CCP Supervisor' },
-    { val: AccessLevel.COMMANDER, label: 'Dispatch Coordinator' },
+    { val: AccessLevel.COMMANDER, label: 'Commander', roleId: 1 },
+    { val: AccessLevel.SUPERVISOR, label: 'Supervisor', roleId: 2 },
+    { val: AccessLevel.DISPATCH, label: 'Dispatch', roleId: 3 },
   ];
   return (
     <Container className={classes.root}>
@@ -68,11 +68,11 @@ const AccessLevelSelector = ({
       >
         {accessLevels.map((accessLevel) => (
           <FormControlLabel
-            value={accessLevel.val}
+            value={accessLevel.roleId.toString()}
             control={<Radio color="secondary" />}
             label={accessLevel.label}
             labelPlacement="end"
-            key={accessLevel.label}
+            key={accessLevel.roleId}
           />
         ))}
       </RadioGroup>
