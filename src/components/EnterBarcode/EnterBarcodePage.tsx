@@ -49,6 +49,10 @@ const EnterBarcodePage = ({
     }
   };
 
+  const handleFormSubmit = (e) => {
+    return barcode !== '' ? handleEnterBarcode() : e.preventDefault();
+  };
+
   return (
     <Box minHeight="100vh">
       <Box
@@ -67,11 +71,7 @@ const EnterBarcodePage = ({
         </Button>
       </Box>
       <Box padding="56px">
-        <form
-          onSubmit={(e) =>
-            barcode !== '' ? handleEnterBarcode() : e.preventDefault()
-          }
-        >
+        <form onSubmit={handleFormSubmit}>
           <FormField
             label="Barcode:"
             placeholder="Enter barcode here"
