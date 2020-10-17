@@ -15,7 +15,7 @@ import ResourceOverviewPage from './components/ResourceOverview/ResourceOverview
 import HospitalFormPage from './components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from './components/ResourceForm/AmbulanceFormPage';
 import UserFormPage from './components/ResourceForm/UserFormPage';
-import { PatientDetailsDialogRouting } from './components/CCPDashboard/PatientDetailsDialog';
+import { PatientDetailsDialog } from './components/CCPDashboard/PatientDetailsDialog';
 
 function App() {
   return (
@@ -85,6 +85,10 @@ function App() {
             component={CCPDashboardPage}
           />
           <Route
+            path="/events/:eventId/ccps/:ccpId/:patientId/view"
+            component={(props) => <PatientDetailsDialog {...props} />}
+          />
+          <Route
             exact
             path="/events/:eventId/ccps/:ccpId/patients/new/:barcodeValue?"
             component={(props) => <PatientProfilePage mode="new" {...props} />}
@@ -94,10 +98,7 @@ function App() {
             path="/events/:eventId/ccps/:ccpId/patients/:patientId"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
-          <Route
-            path="/events/:eventId/ccps/:ccpId/patientDetails/:patientId"
-            component={(props) => <PatientDetailsDialogRouting {...props} />}
-          />
+
           <Route path="/">
             <Redirect to="/events" />
           </Route>

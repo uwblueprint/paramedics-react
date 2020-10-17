@@ -196,9 +196,7 @@ const PatientProfilePage = ({
   const action = () => (
     <Button
       onClick={() =>
-        history.push(
-          `/events/${eventId}/ccps/${ccpId}/patientDetails/${patientId}`
-        )
+        history.push(`/events/${eventId}/ccps/${ccpId}/${patientId}/view`)
       }
       style={{ color: Colours.SnackbarButtonBlue }}
     >

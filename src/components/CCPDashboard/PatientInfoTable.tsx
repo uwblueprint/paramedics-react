@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import {
   makeStyles,
   Table,
@@ -9,10 +9,7 @@ import {
   TableRow,
   TableCell,
   TableSortLabel,
-  Button,
   IconButton,
-  Dialog,
-  DialogActions,
   Menu,
   MenuItem,
 } from '@material-ui/core';
@@ -21,10 +18,8 @@ import { MoreHoriz } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import { PatientDetailsDialog } from './PatientDetailsDialog';
 import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
-import { capitalize } from '../../utils/format';
 import { EDIT_PATIENT } from '../../graphql/mutations/patients';
 
 const useStyles = makeStyles({
@@ -147,7 +142,6 @@ export const PatientInfoTable = ({
   const [orderBy, setOrderBy] = React.useState<string>(
     type === CCPDashboardTabOptions.Hospital ? 'transportTime' : 'updatedAt'
   );
-  const [openDetails, setOpenDetails] = React.useState(false);
   const [openDeletePatient, setOpenDeletePatient] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -157,7 +151,6 @@ export const PatientInfoTable = ({
 
   const handleOpenDetails = (patient) => {
     setSelectedPatient(patient);
-    setOpenDetails(true);
   };
 
   const handleClickOptions = (event, patient) => {
@@ -200,9 +193,9 @@ export const PatientInfoTable = ({
     setOrderBy(property);
   };
 
-  const handleCloseDetails = () => {
-    setOpenDetails(false);
-  };
+  // const handleCloseDetails = () => {
+  //   setOpenDetails(false);
+  // };
 
   const handleCancelDeletePatient = () => {
     setOpenDeletePatient(false);
@@ -351,41 +344,11 @@ export const PatientInfoTable = ({
       />
       <TableBody>{tableRows}</TableBody>
       {selectedPatient && (
-        <Dialog
-          open={openDetails}
-          onClose={handleCloseDetails}
-          PaperProps={{ className: classes.detailsDialog }}
-        >
-          <PatientDetailsDialog
-            patient={(selectedPatient as unknown) as Patient}
-            onClose={handleCloseDetails}
-          />
-          <DialogActions
-            style={{
-              borderLeft: `16px solid ${
-                Colours[
-                  `Triage${capitalize(
-                    ((selectedPatient as unknown) as Patient).triageLevel
-                  )}`
-                ]
-              }`,
-            }}
-          >
-            <Button
-              onClick={() => {
-                history.push(
-                  `/events/${eventId}/ccps/${ccpId}/patients/${
-                    ((selectedPatient as unknown) as Patient).id
-                  }`
-                );
-              }}
-              color="secondary"
-              className={classes.editButton}
-            >
-              Edit
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <Redirect
+          to={`/events/${eventId}/ccps/${ccpId}/${
+            ((selectedPatient as unknown) as Patient).id
+          }/view`}
+        />
       )}
       <Menu
         id="simple-menu"
