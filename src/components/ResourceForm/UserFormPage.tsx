@@ -142,7 +142,6 @@ const UserFormPage = ({
 
   const classes = useStyles();
 
-
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>

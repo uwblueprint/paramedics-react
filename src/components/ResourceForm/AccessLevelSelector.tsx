@@ -5,7 +5,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
-import { AccessLevel } from '../../graphql/queries/users';
 
 const useRadioStyles = makeStyles({
   root: {
@@ -51,9 +50,9 @@ const AccessLevelSelector = ({
 }) => {
   const classes = useRadioStyles();
   const accessLevels = [
-    { val: AccessLevel.COMMANDER, label: 'Commander', roleId: 1 },
-    { val: AccessLevel.SUPERVISOR, label: 'Supervisor', roleId: 2 },
-    { val: AccessLevel.DISPATCH, label: 'Dispatch', roleId: 3 },
+    { label: 'Commander', roleId: 1 },
+    { label: 'Supervisor', roleId: 2 },
+    { label: 'Dispatch', roleId: 3 },
   ];
   return (
     <Container className={classes.root}>
