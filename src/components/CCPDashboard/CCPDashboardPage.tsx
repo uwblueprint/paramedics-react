@@ -78,6 +78,7 @@ const useStyles = makeStyles({
   },
   locationIcon: {
     fontSize: '20px',
+    verticalAlign: 'middle',
     marginLeft: '16px',
   },
 });
