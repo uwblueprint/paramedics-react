@@ -42,7 +42,7 @@ const BarcodeScan = ({
         );
       }
     }
-  }, [barcode]);
+  }, [barcode, ccpId, data.patients, error, eventId, loading, history]);
 
   useEffect(() => {
     Quagga.init(
