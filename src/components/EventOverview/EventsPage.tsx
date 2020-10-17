@@ -42,7 +42,7 @@ const EventsPage = () => {
   const classes = useStyles();
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
-  const [archivedEventId, setArchivedEventId] = useState('');
+  const [lastUpdatedEventId, setLastUpdatedEventId] = useState(addedEventId);
   const [selectedTab, setTab] = useState(0);
   const [eventToBeDeleted, setEventToBeDeleted] = useState<Event | null>(null);
 
@@ -59,6 +59,7 @@ const EventsPage = () => {
     event: React.ChangeEvent<unknown>,
     newValue: number
   ) => {
+    setLastUpdatedEventId(null);
     setTab(newValue);
   };
 
@@ -99,7 +100,7 @@ const EventsPage = () => {
         isActive: false,
       },
     });
-    setArchivedEventId(event.id);
+    setLastUpdatedEventId(event.id);
     setTab(1);
   };
 
@@ -113,7 +114,7 @@ const EventsPage = () => {
         isActive: true,
       },
     });
-    setArchivedEventId(event.id);
+    setLastUpdatedEventId(event.id);
     setTab(0);
   };
 
@@ -155,9 +156,7 @@ const EventsPage = () => {
                 date={event.eventDate}
                 eventTitle={event.name}
                 isActive={event.isActive}
-                isNew={
-                  event.id === addedEventId || event.id === archivedEventId
-                }
+                isNew={event.id === lastUpdatedEventId}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
                 handleArchiveEvent={() => handleArchiveEvent(event)}
