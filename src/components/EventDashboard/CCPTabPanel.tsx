@@ -187,6 +187,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
 
   const handleClickDelete = () => {
     setOpenConfirmDelete(true);
+    setAnchorEl(null);
   };
 
   const handleConfirmDelete = () => {

@@ -154,13 +154,14 @@ const UserOverviewPage: React.FC = () => {
 
   const open = Boolean(anchorEl);
 
-  const handleClickDelete = () => {
+  const handleConfirmDelete = () => {
     const memberId = selectedMember;
     deleteUser({ variables: { id: memberId } });
   };
 
-  const handleDeleteOption = () => {
+  const handleClickDelete = () => {
     setOpenModal(true);
+    setAnchorEl(null);
   };
 
   const paraStyle = pStyles();
@@ -178,7 +179,7 @@ const UserOverviewPage: React.FC = () => {
     },
     {
       styles: optionStyle.menuDelete,
-      onClick: handleDeleteOption,
+      onClick: handleClickDelete,
       name: 'Delete',
     },
   ];
@@ -240,7 +241,7 @@ const UserOverviewPage: React.FC = () => {
         title="You are about to delete a team member."
         body="Deleted team members will no longer have access to any casualty collection points."
         actionLabel="Delete"
-        handleClickAction={handleClickDelete}
+        handleClickAction={handleConfirmDelete}
         handleClickCancel={handleCloseConfirmDelete}
       />
       <div className={classes.addResourceContainer}>
