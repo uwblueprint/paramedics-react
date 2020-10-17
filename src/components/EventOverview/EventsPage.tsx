@@ -110,7 +110,7 @@ const EventsPage = () => {
     });
   };
 
-  const handleDeleteEvent = async (event: Event) => {
+  const handleDeleteEvent = (event: Event) => {
     deleteEvent({
       variables: {
         id: event.id,
