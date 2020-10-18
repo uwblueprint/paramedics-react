@@ -103,7 +103,11 @@ const PatientProfilePage = ({
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
-  const [deletePatient] = useMutation(DELETE_PATIENT);
+  const [deletePatient] = useMutation(DELETE_PATIENT, {
+    onCompleted() {
+      history.replace(`/events/${eventId}/ccps/${ccpId}`);
+    },
+  });
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
@@ -175,7 +179,6 @@ const PatientProfilePage = ({
         },
       });
     }
-    history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   const handleCloseDialog = () => {

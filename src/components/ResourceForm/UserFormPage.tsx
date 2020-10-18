@@ -65,11 +65,13 @@ const UserFormPage = ({
     },
     onCompleted() {
       enqueueSnackbar('Team member added.');
+      history.replace('/manage/members');
     },
   });
   const [editUser] = useMutation(EDIT_USER, {
     onCompleted() {
       enqueueSnackbar('Team member edited.');
+      history.replace('/manage/members');
     },
   });
 
@@ -138,7 +140,6 @@ const UserFormPage = ({
         },
       });
     }
-    history.push('/manage/members');
   };
 
   const classes = useStyles();
