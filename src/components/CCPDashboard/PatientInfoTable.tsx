@@ -9,23 +9,23 @@ import {
   TableRow,
   TableCell,
   TableSortLabel,
-  Button,
   IconButton,
-  Dialog,
-  DialogActions,
   Menu,
   MenuItem,
+  Dialog,
+  DialogActions,
+  Button,
 } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { MoreHoriz } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
-import { PatientDetailsDialog } from './PatientDetailsDialog';
 import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
-import { capitalize } from '../../utils/format';
 import { EDIT_PATIENT } from '../../graphql/mutations/patients';
+import { PatientDetailsDialog } from './PatientDetailsDialog';
+import { capitalize } from '../../utils/format';
 
 const useStyles = makeStyles({
   visuallyHidden: {
@@ -136,27 +136,31 @@ export const PatientInfoTable = ({
   type,
   eventId,
   ccpId,
+  patientId,
 }: {
   patients: Patient[];
   type: CCPDashboardTabOptions;
   eventId: string;
   ccpId: string;
+  patientId?: string;
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<string>(
     type === CCPDashboardTabOptions.Hospital ? 'transportTime' : 'updatedAt'
   );
-  const [openDetails, setOpenDetails] = React.useState(false);
+  const [openDetails, setOpenDetails] = React.useState(!!patientId);
   const [openDeletePatient, setOpenDeletePatient] = React.useState(false);
-  const [selectedPatient, setSelectedPatient] = React.useState(null);
+  const [selectedPatient, setSelectedPatient] = React.useState(
+    patients.find((x) => x.id === patientId)
+  );
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
 
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleOpenDetails = (patient) => {
-    setSelectedPatient(patient);
+    history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`);
     setOpenDetails(true);
   };
 
@@ -201,7 +205,7 @@ export const PatientInfoTable = ({
   };
 
   const handleCloseDetails = () => {
-    setOpenDetails(false);
+    history.push(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   const handleCancelDeletePatient = () => {
@@ -358,7 +362,8 @@ export const PatientInfoTable = ({
         >
           <PatientDetailsDialog
             patient={(selectedPatient as unknown) as Patient}
-            onClose={handleCloseDetails}
+            eventId={eventId}
+            ccpId={ccpId}
           />
           <DialogActions
             style={{

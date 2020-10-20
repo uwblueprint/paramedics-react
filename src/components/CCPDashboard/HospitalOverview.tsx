@@ -22,6 +22,7 @@ interface HospitalOverviewProps {
   // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
+  patientId?: string;
 }
 
 const useStyles = makeStyles({
@@ -48,7 +49,7 @@ const useStyles = makeStyles({
 });
 
 export const HospitalOverview = (props: HospitalOverviewProps) => {
-  const { patients, eventId, ccpId } = props;
+  const { patients, eventId, ccpId, patientId } = props;
   const classes = useStyles();
 
   const [selectedHospital, setSelectedHospital] = React.useState<string>(
@@ -145,6 +146,7 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
           type={CCPDashboardTabOptions.Hospital}
           eventId={eventId}
           ccpId={ccpId}
+          patientId={patientId}
         />
       </Card>
       <ScanPatientButton />

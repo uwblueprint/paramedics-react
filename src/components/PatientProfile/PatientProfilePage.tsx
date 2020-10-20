@@ -222,11 +222,14 @@ const PatientProfilePage = ({
   };
 
   const action = () => (
-    <>
-      <Button style={{ color: Colours.SnackbarButtonBlue }}>
-        View Patient Details
-      </Button>
-    </>
+    <Button
+      onClick={() =>
+        history.push(`/events/${eventId}/ccps/${ccpId}/open/${patientId}`)
+      }
+      style={{ color: Colours.SnackbarButtonBlue }}
+    >
+      View Patient Details
+    </Button>
   );
 
   const handleComplete = () => {

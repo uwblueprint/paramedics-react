@@ -19,6 +19,7 @@ import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 interface TParams {
   eventId: string;
   ccpId: string;
+  patientId?: string;
 }
 
 export enum CCPDashboardTabOptions {
@@ -99,7 +100,7 @@ const TabPanel = (props: TabPanelProps) => {
 
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
-  const { eventId, ccpId } = match.params;
+  const { eventId, ccpId, patientId } = match.params;
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients();
@@ -176,7 +177,12 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         index={CCPDashboardTabOptions.PatientOverview}
         className={classes.tabPanel}
       >
-        <PatientOverview eventId={eventId} ccpId={ccpId} patients={patients} />
+        <PatientOverview
+          eventId={eventId}
+          ccpId={ccpId}
+          patients={patients}
+          patientId={patientId}
+        />
       </TabPanel>
       <TabPanel
         value={tab}
@@ -187,6 +193,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           eventId={eventId}
           ccpId={ccpId}
           patients={transportPatients}
+          patientId={patientId}
         />
       </TabPanel>
     </Box>

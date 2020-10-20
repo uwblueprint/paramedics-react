@@ -6,6 +6,7 @@ import {
   DialogContent,
   IconButton,
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import { Close } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import { Patient } from '../../graphql/queries/patients';
@@ -21,12 +22,14 @@ const useStyles = makeStyles({
     right: '6px',
     color: Colours.Black,
   },
+  editButton: {
+    marginRight: '14px',
+    marginBottom: '12px',
+  },
+  detailsDialog: {
+    width: '662px',
+  },
 });
-
-interface PatientDetailsDialogProps {
-  patient: Patient;
-  onClose: () => void;
-}
 
 interface PatientDetail {
   label: string;
@@ -34,15 +37,26 @@ interface PatientDetail {
   styles?: object;
 }
 
+interface PatientDetailsDialogProps {
+  patient: Patient;
+  eventId: string;
+  ccpId: string;
+}
+
 export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
-  const { patient, onClose } = props;
+  const { patient, eventId, ccpId } = props;
+
+  const history = useHistory();
   const classes = useStyles();
+
   const patientDetails: PatientDetail[] = [
     { label: 'Barcode Number', value: patient.barcodeValue },
     {
       label: 'Triage',
       value: patient.triageLevel,
-      styles: { color: Colours[`Triage${capitalize(patient.triageLevel)}`] },
+      styles: {
+        color: Colours[`Triage${capitalize(patient.triageLevel)}`],
+      },
     },
     { label: 'Run Number', value: patient.runNumber },
     { label: 'Hospital', value: patient.hospitalId?.name },
@@ -51,6 +65,10 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
     { label: 'Gender', value: patient.gender },
     { label: 'Age', value: patient.age },
   ];
+
+  const handleCloseDetails = () => {
+    history.push(`/events/${eventId}/ccps/${ccpId}`);
+  };
 
   return (
     <DialogContent
@@ -63,7 +81,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
       <IconButton
         aria-label="close"
         className={classes.closeButton}
-        onClick={onClose}
+        onClick={handleCloseDetails}
       >
         <Close />
       </IconButton>
