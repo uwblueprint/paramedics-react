@@ -1,19 +1,10 @@
 import React from 'react';
 import { useQuery } from 'react-apollo';
 import GoogleMapReact from 'google-map-react';
-import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
 
 import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
-
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-    maxHeight: '90vh',
-  },
-});
 
 const MapPage = ({
   match: {
@@ -73,20 +64,31 @@ const MapPage = ({
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
 
   const initMaps = (map, maps) => {
+    let prevMarker;
+    map.addListener('click', () => {
+      console.log("Clicked map");
+      setInfoWindowOpen(false);
+      setInterestPinLocation('');
+      setInterestPinTitle('');
+      if (prevMarker) {
+        prevMarker.setIcon(
+          'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        );
+      }
+    });
     pins.map((pin) => {
       const marker = new maps.Marker({
         position: { lat: pin.latitude, lng: pin.longitude },
         map,
         title: pin.label,
-      });
-
-      map.addListener('click', () => {
-        setInfoWindowOpen(false);
-        setInterestPinLocation('');
-        setInterestPinTitle('');
+        icon: {
+          url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        },
       });
 
       marker.addListener('click', () => {
+        prevMarker = marker;
+        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
         map.setCenter(marker.getPosition());
         setInfoWindowOpen(true);
         setInterestPinLocation(pin.address);
@@ -116,8 +118,8 @@ const MapPage = ({
   };
 
   return (
-    <div>
-      <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps={true}/>
+    <>
+      <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
       <InfoWindow
         title={interestPinTitle}
         address={interestPinLocation}
@@ -136,7 +138,7 @@ const MapPage = ({
           {}
         </GoogleMapReact>
       </div>
-    </div>
+    </>
   );
 };
 

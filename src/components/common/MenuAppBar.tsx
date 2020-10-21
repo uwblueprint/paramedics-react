@@ -60,7 +60,7 @@ const useStyles = makeStyles({
     '&:hover': {
       backgroundColor: Colours.Secondary,
     },
-  }
+  },
 });
 
 export default function MenuAppBar(props: MenuAppBarProps) {
@@ -91,7 +91,7 @@ export default function MenuAppBar(props: MenuAppBarProps) {
 
   const handleMapClick = () => {
     history.push(`/events/${eventId}/map`);
-  }
+  };
 
   return (
     <>
@@ -133,11 +133,16 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               </ListItemIcon>
               <Typography variant="body2">Directory</Typography>
             </ListItem>
-            <ListItem button key = "maps" onClick={handleMapClick} className={selectedMaps ? classes.activeMap : ''}>
+            <ListItem
+              button
+              key="maps"
+              onClick={handleMapClick}
+              className={selectedMaps ? classes.activeMap : ''}
+            >
               <ListItemIcon>
-                <MapIcon className = {selectedMaps ? classes.activeMap : ''}/>
+                <MapIcon className={selectedMaps ? classes.activeMap : ''} />
               </ListItemIcon>
-              <Typography variant = "body2">Maps</Typography>
+              <Typography variant="body2">Maps</Typography>
             </ListItem>
           </List>
           <Divider />
