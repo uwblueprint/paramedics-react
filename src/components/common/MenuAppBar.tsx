@@ -14,6 +14,7 @@ import {
   Divider,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import MapIcon from '@material-ui/icons/Map';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import { useQuery } from '@apollo/react-hooks';
 import { NavLink, useHistory } from 'react-router-dom';
@@ -25,6 +26,7 @@ import { Colours } from '../../styles/Constants';
 interface MenuAppBarProps {
   eventId: string;
   pageTitle: string;
+  selectedMaps?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -52,10 +54,17 @@ const useStyles = makeStyles({
     bottom: 0,
     padding: '24px',
   },
+  activeMap: {
+    color: Colours.White,
+    backgroundColor: Colours.Secondary,
+    '&:hover': {
+      backgroundColor: Colours.Secondary,
+    },
+  }
 });
 
 export default function MenuAppBar(props: MenuAppBarProps) {
-  const { pageTitle, eventId } = props;
+  const { pageTitle, eventId, selectedMaps } = props;
   const history = useHistory();
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -79,6 +88,10 @@ export default function MenuAppBar(props: MenuAppBarProps) {
   const handleCCPClick = (ccpId) => {
     history.push(`/events/${eventId}/ccps/${ccpId}`);
   };
+
+  const handleMapClick = () => {
+    history.push(`/events/${eventId}/map`);
+  }
 
   return (
     <>
@@ -119,6 +132,12 @@ export default function MenuAppBar(props: MenuAppBarProps) {
                 <ScanIcon colour={Colours.Black} />
               </ListItemIcon>
               <Typography variant="body2">Directory</Typography>
+            </ListItem>
+            <ListItem button key = "maps" onClick={handleMapClick} className={selectedMaps ? classes.activeMap : ''}>
+              <ListItemIcon>
+                <MapIcon className = {selectedMaps ? classes.activeMap : ''}/>
+              </ListItemIcon>
+              <Typography variant = "body2">Maps</Typography>
             </ListItem>
           </List>
           <Divider />

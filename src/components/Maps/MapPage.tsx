@@ -8,12 +8,12 @@ import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
 
-const useStyles = makeStyles (
-  {root: {
+const useStyles = makeStyles({
+  root: {
     width: '100%',
     maxHeight: '90vh',
-  },}
-)
+  },
+});
 
 const MapPage = ({
   match: {
@@ -96,49 +96,45 @@ const MapPage = ({
       return marker;
     });
 
-    if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position: Position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
 
-          const marker = new maps.Marker({
-            position: pos,
-            map,
-            title: "Current position",
-            icon: {
-              url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-            },
-          });
-        }
-      )
+        const marker = new maps.Marker({
+          position: pos,
+          map,
+          title: 'Current position',
+          icon: {
+            url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+          },
+        });
+      });
     }
   };
 
-  const classes = useStyles();
-
   return (
     <div>
-      <MenuAppBar pageTitle="Map" eventId={eventId} />
+      <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps={true}/>
       <InfoWindow
         title={interestPinTitle}
         address={interestPinLocation}
         open={infoWindowOpen}
         handleClose={() => setInfoWindowOpen(false)}
       />
-      <div style = {{ height: '94vh', width: '100%' }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}
-        defaultCenter={defaultMap.center}
-        defaultZoom={defaultMap.zoom}
-        options={getMapOptions}
-        yesIWantToUseGoogleMapApiInternals
-        onGoogleApiLoaded={({ map, maps }) => initMaps(map, maps)}
-      >
-        {}
-      </GoogleMapReact>
+      <div style={{ height: '94vh', width: '100%' }}>
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}
+          defaultCenter={defaultMap.center}
+          defaultZoom={defaultMap.zoom}
+          options={getMapOptions}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => initMaps(map, maps)}
+        >
+          {}
+        </GoogleMapReact>
       </div>
     </div>
   );
