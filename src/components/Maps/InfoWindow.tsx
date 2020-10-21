@@ -41,8 +41,13 @@ const InfoWindow = ({
   const infoStyles = useStyles();
 
   return (
-    <Dialog classes={{root: infoStyles.root}} open={open} onClose={handleClose} BackdropProps={{ style: { backgroundColor: "transparent" } }}>
-      <DialogContent style={{overflow: "hidden"}}>
+    <Dialog
+      classes={{ root: infoStyles.root }}
+      open={open}
+      onClose={handleClose}
+      BackdropProps={{ style: { backgroundColor: 'transparent' } }}
+    >
+      <DialogContent style={{ overflow: 'hidden' }}>
         <Typography variant="body1" color="textSecondary">
           Name:
           <Typography display="inline" color="textPrimary">
