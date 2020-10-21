@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import React from 'react';
 import { useQuery } from 'react-apollo';
 import GoogleMapReact from 'google-map-react';
 
@@ -13,22 +13,20 @@ const MapPage = ({
 }: {
   match: { params: { eventId: string } };
 }) => {
-  // Default coordinates and zoom centred at the Univerity of Waterloo
   const defaultMap = {
     center: { lat: 43.470846, lng: -80.538473 },
     zoom: 11,
   };
 
-  // Getting existing pins
   const { data, loading } = useQuery(GET_PINS_BY_EVENT_ID, {
     variables: { eventId },
   });
-  const pins: Array<LocationPin> = data && !loading ? data.pinsForEvent : [];
-  const [infoWindowOpen, setInfoWindowOpen] = useState(false);
-  const [interestPinTitle, setInterestPinTitle] = useState('');
-  const [interestPinLocation, setInterestPinLocation] = useState('');
 
-  // Rendering pins
+  const pins: Array<LocationPin> = data && !loading ? data.pinsForEvent : [];
+  const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
+  const [interestPinTitle, setInterestPinTitle] = React.useState('');
+  const [interestPinLocation, setInterestPinLocation] = React.useState('');
+
   const renderMarkers = (map, maps) => {
     pins.map((pin) => {
       const marker = new maps.Marker({
@@ -56,6 +54,12 @@ const MapPage = ({
   return (
     <div style={{ height: '100vh', width: '100%' }}>
       <MenuAppBar pageTitle="Map" eventId={eventId} />
+      <InfoWindow
+        title={interestPinTitle}
+        address={interestPinLocation}
+        open={infoWindowOpen}
+        handleClose={() => setInfoWindowOpen(false)}
+      />
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}
         defaultCenter={defaultMap.center}
@@ -63,9 +67,7 @@ const MapPage = ({
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map, maps }) => renderMarkers(map, maps)}
       >
-        {infoWindowOpen === true && (
-          <InfoWindow title={interestPinTitle} address={interestPinLocation} />
-        )}
+        {}
       </GoogleMapReact>
     </div>
   );
