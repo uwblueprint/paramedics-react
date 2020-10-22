@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Tabs, Tab, makeStyles } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
 import { useQuery } from '@apollo/react-hooks';
+// import { useSubscription } from '@apollo/react-hooks';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { Colours } from '../../styles/Constants';
 import {
@@ -12,6 +13,7 @@ import {
 import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
+import patientAdded from '../../graphql/subscriptions/patients';
 
 interface TParams {
   eventId: string;
@@ -103,6 +105,9 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [allPatients, ccpId]
   );
 
+  const patientChange = () => {
+    patientAdded()
+  }
   const [tab, setTab] = React.useState(CCPDashboardTabOptions.PatientOverview);
 
   const handleChange = (
@@ -125,6 +130,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   }
   return (
     <Box className={classes.root}>
+      {patientChange()}
       <Tabs
         className={classes.tabs}
         value={tab}
