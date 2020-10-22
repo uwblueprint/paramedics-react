@@ -103,7 +103,11 @@ const PatientProfilePage = ({
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
-  const [deletePatient] = useMutation(DELETE_PATIENT);
+  const [deletePatient] = useMutation(DELETE_PATIENT, {
+    onCompleted() {
+      history.replace(`/events/${eventId}/ccps/${ccpId}`);
+    },
+  });
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: '',
@@ -175,7 +179,6 @@ const PatientProfilePage = ({
         },
       });
     }
-    history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   const handleCloseDialog = () => {
@@ -219,11 +222,14 @@ const PatientProfilePage = ({
   };
 
   const action = () => (
-    <>
-      <Button style={{ color: Colours.SnackbarButtonBlue }}>
-        View Patient Details
-      </Button>
-    </>
+    <Button
+      onClick={() =>
+        history.push(`/events/${eventId}/ccps/${ccpId}/open/${patientId}`)
+      }
+      style={{ color: Colours.SnackbarButtonBlue }}
+    >
+      View Patient Details
+    </Button>
   );
 
   const handleComplete = () => {
@@ -370,7 +376,9 @@ const PatientProfilePage = ({
               e: React.MouseEvent<HTMLElement>,
               newStatus: Status
             ) => {
-              setFormFields({ ...formFields, status: newStatus });
+              if (newStatus) {
+                setFormFields({ ...formFields, status: newStatus });
+              }
               setTransportingPatient(newStatus === Status.TRANSPORTED);
             }}
           />
@@ -406,8 +414,13 @@ const PatientProfilePage = ({
             }}
             value={formFields.age ? formFields.age.toString() : ''}
             isValidated
-            validators={['minNumber:1', 'matchRegexp:^[0-9]*$']}
-            errorMessages={['Invalid age']}
+            validators={['minNumber:1', 'matchRegexp:^[0-9]*$', 'required']}
+            errorMessages={[
+              'Invalid age',
+              'Invalid age',
+              'This is a mandatory field',
+            ]}
+            numeric
           />
           <FormField
             label="Notes:"

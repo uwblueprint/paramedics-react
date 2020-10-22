@@ -159,7 +159,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
       });
 
       const updatedCCPsList = collectionPointsByEvent.filter(
-        (ccp) => ccp.id !== (selectedCCP as CCP).id
+        (ccp) => ccp.id !== deleteCollectionPoint
       );
 
       cache.writeQuery({
@@ -185,11 +185,12 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const handleOpenConfirmDelete = () => {
+  const handleClickDelete = () => {
     setOpenConfirmDelete(true);
+    setAnchorEl(null);
   };
 
-  const handleClickDelete = () => {
+  const handleConfirmDelete = () => {
     const ccpId = (selectedCCP as CCP).id;
     deleteCCP({ variables: { id: ccpId } });
   };
@@ -198,18 +199,18 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     history.push(`/events/${eventId}/ccps/new`);
   };
 
-  const handleEdit = () => {
+  const handleClickEdit = () => {
     history.push(`/events/${eventId}/ccps/${selectedCCP?.id}/edit`);
   };
 
   const options: Array<Option> = [
     {
       name: 'Edit',
-      onClick: handleEdit,
+      onClick: handleClickEdit,
     },
     {
       name: 'Delete',
-      onClick: handleOpenConfirmDelete,
+      onClick: handleClickDelete,
       styles: optionStyle.menuDelete,
     },
   ];
@@ -281,7 +282,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
             </>
           }
           actionLabel="Delete"
-          handleClickAction={handleClickDelete}
+          handleClickAction={handleConfirmDelete}
           handleClickCancel={handleCloseConfirmDelete}
         />
       )}

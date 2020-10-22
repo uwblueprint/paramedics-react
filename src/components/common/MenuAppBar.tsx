@@ -25,8 +25,9 @@ import { Colours } from '../../styles/Constants';
 
 interface MenuAppBarProps {
   eventId: string;
-  pageTitle: string;
+  pageTitle: string | React.ReactNode;
   selectedMaps?: boolean;
+  selectedCcp?: string;
 }
 
 const useStyles = makeStyles({
@@ -49,6 +50,13 @@ const useStyles = makeStyles({
   active: {
     backgroundColor: 'red',
   },
+  activeCcp: {
+    color: Colours.White,
+    backgroundColor: Colours.Secondary,
+    '&:hover': {
+      backgroundColor: Colours.Secondary,
+    },
+  },
   viewEventsLink: {
     position: 'absolute',
     bottom: 0,
@@ -64,7 +72,7 @@ const useStyles = makeStyles({
 });
 
 export default function MenuAppBar(props: MenuAppBarProps) {
-  const { pageTitle, eventId, selectedMaps } = props;
+  const { pageTitle, eventId, selectedMaps, selectedCcp } = props;
   const history = useHistory();
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -158,9 +166,18 @@ export default function MenuAppBar(props: MenuAppBarProps) {
                 button
                 key={ccp.name}
                 onClick={() => handleCCPClick(ccp.id)}
+                className={
+                  selectedCcp && selectedCcp === ccp.id ? classes.activeCcp : ''
+                }
               >
                 <ListItemIcon>
-                  <RoomOutlinedIcon />
+                  <RoomOutlinedIcon
+                    className={
+                      selectedCcp && selectedCcp === ccp.id
+                        ? classes.activeCcp
+                        : ''
+                    }
+                  />
                 </ListItemIcon>
                 <Typography variant="body2">{ccp.name}</Typography>
               </ListItem>

@@ -13,8 +13,10 @@ const useCompleteBarcodeButtonStyles = makeStyles({
 
 const CompleteBarcodeButton = ({
   handleClick,
+  isEmpty,
 }: {
   handleClick: () => any | null;
+  isEmpty: boolean;
 }) => {
   const classes = useCompleteBarcodeButtonStyles();
   return (
@@ -26,6 +28,7 @@ const CompleteBarcodeButton = ({
       }}
       type="submit"
       onClick={handleClick}
+      disabled={isEmpty}
     >
       Next
     </Button>

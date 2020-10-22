@@ -86,6 +86,11 @@ function App() {
           />
           <Route
             exact
+            path="/events/:eventId/ccps/:ccpId/open/:patientId"
+            component={(props) => <CCPDashboardPage {...props} />}
+          />
+          <Route
+            exact
             path="/events/:eventId/ccps/:ccpId/patients/new/:barcodeValue?"
             component={(props) => <PatientProfilePage mode="new" {...props} />}
           />
