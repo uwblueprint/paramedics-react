@@ -50,13 +50,19 @@ const InfoWindow = ({
       <DialogContent style={{ overflow: 'hidden' }}>
         <Typography variant="body1" color="textSecondary">
           Name:
-          <span style={{display: "inline", color: "#000000"}} color="textPrimary">
+          <span
+            style={{ display: 'inline', color: '#000000' }}
+            color="textPrimary"
+          >
             {` ${title} `}
           </span>
         </Typography>
         <Typography variant="body1" color="textSecondary">
           Location:
-          <span style={{display: "inline", color: "#000000"}} color="textPrimary">
+          <span
+            style={{ display: 'inline', color: '#000000' }}
+            color="textPrimary"
+          >
             {` ${address} `}
           </span>
         </Typography>

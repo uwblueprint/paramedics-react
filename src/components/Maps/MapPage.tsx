@@ -64,56 +64,47 @@ const MapPage = ({
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
 
   const initMaps = (map, maps) => {
-    let prevMarker;
-    map.addListener('click', () => {
-      console.log("Clicked map");
-      setInfoWindowOpen(false);
-      setInterestPinLocation('');
-      setInterestPinTitle('');
-      if (prevMarker) {
-        prevMarker.setIcon(
-          'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-        );
-      }
-    });
-    pins.map((pin) => {
-      const marker = new maps.Marker({
-        position: { lat: pin.latitude, lng: pin.longitude },
-        map,
-        title: pin.label,
-        icon: {
-          url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-        },
+    if (!loading) {
+      map.addListener('click', () => {
+        setInfoWindowOpen(false);
+        setInterestPinLocation('');
+        setInterestPinTitle('');
       });
-
-      marker.addListener('click', () => {
-        prevMarker = marker;
-        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
-        map.setCenter(marker.getPosition());
-        setInfoWindowOpen(true);
-        setInterestPinLocation(pin.address);
-        setInterestPinTitle(pin.label);
-      });
-
-      return marker;
-    });
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-
+      pins.map((pin) => {
         const marker = new maps.Marker({
-          position: pos,
+          position: { lat: pin.latitude, lng: pin.longitude },
           map,
-          title: 'Current position',
-          icon: {
-            url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-          },
+          title: pin.label,
         });
+
+        marker.addListener('click', () => {
+          map.setCenter(marker.getPosition());
+          setInfoWindowOpen(true);
+          setInterestPinLocation(pin.address);
+          setInterestPinTitle(pin.label);
+        });
+
+        return marker;
       });
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position: Position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          const marker = new maps.Marker({
+            position: pos,
+            map,
+            title: 'Current position',
+          });
+
+          marker.setIcon(
+            'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+          );
+        });
+      }
     }
   };
 
