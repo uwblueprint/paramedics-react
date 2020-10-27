@@ -149,8 +149,12 @@ export const PatientInfoTable = ({
   );
   const [openDetails, setOpenDetails] = React.useState(false);
   const [openDeletePatient, setOpenDeletePatient] = React.useState(false);
+  const [openRestorePatient, setOpenRestorePatient] = React.useState(false);
   const [selectedPatient, setSelectedPatient] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElRestore, setAnchorElRestore] = React.useState(null);
+  const deletedPatients = patients.filter((patient, i) => patient.status === Status.DELETED)
+  const activePatients = patients.filter((patient, i) => patient.status !== Status.DELETED)
   const history = useHistory();
 
   const [editPatient] = useMutation(EDIT_PATIENT);
@@ -165,6 +169,13 @@ export const PatientInfoTable = ({
     event.stopPropagation();
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
+
+  const handleClickRestoreMenu = (event, patient) => {
+    setSelectedPatient(patient);
+    event.stopPropagation();
+    setAnchorElRestore(anchorElRestore ? null : event.currentTarget);
+  };
+
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
@@ -208,7 +219,24 @@ export const PatientInfoTable = ({
     setOpenDeletePatient(false);
   };
 
-  const tableRows = stableSort(patients, getComparator(order, orderBy)).map(
+  const handleRestorePatient = () => {
+    setOpenRestorePatient(true);
+  };
+
+  const handleCancelRestorePatient = () => {
+    setOpenRestorePatient(false);
+  };
+
+  const handleClickRestore = () => {
+    setAnchorEl(null);
+    setOpenRestorePatient(true);
+  };
+
+
+
+
+
+  const tableRows = stableSort(activePatients, getComparator(order, orderBy)).map(
     (patient: Patient) => {
       const triageLevels = {
         [TriageLevel.GREEN]: {
@@ -266,7 +294,7 @@ export const PatientInfoTable = ({
           <TableCell
             className={classes.tableCell}
             width="94px"
-            style={{ maxWidth: '94px' }}
+            style={ { maxWidth: '94px' } }
           >
             {patient.barcodeValue}
           </TableCell>
@@ -340,6 +368,139 @@ export const PatientInfoTable = ({
     }
   );
 
+  const deletedTableRows = stableSort(deletedPatients, getComparator(order, orderBy)).map(
+    (patient: Patient) => {
+      const triageLevels = {
+        [TriageLevel.GREEN]: {
+          colour: Colours.TriageGreen,
+          triageLevel: TriageLevel.GREEN,
+          label: 'Green',
+        },
+        [TriageLevel.YELLOW]: {
+          colour: Colours.TriageYellow,
+          triageLevel: TriageLevel.YELLOW,
+          label: 'Yellow',
+        },
+        [TriageLevel.RED]: {
+          colour: Colours.TriageRed,
+          triageLevel: TriageLevel.RED,
+          label: 'Red',
+        },
+        [TriageLevel.BLACK]: {
+          colour: Colours.Black,
+          triageLevel: TriageLevel.BLACK,
+          label: 'Black',
+        },
+        [TriageLevel.WHITE]: {
+          colour: Colours.BorderLightGray,
+          triageLevel: TriageLevel.WHITE,
+          label: 'White',
+        },
+      };
+
+      const statusLabels = {
+        [Status.ON_SITE]: 'On Scene',
+        [Status.TRANSPORTED]: 'Transported',
+        [Status.RELEASED]: 'Released',
+        [Status.DELETED]: 'Omitted/Deleted',
+      };
+
+      return (
+        <TableRow
+          hover
+          key={patient.id}
+          onClick={() => handleOpenDetails(patient)}
+        >
+          <TableCell
+            className={classes.tableCell}
+            style={{
+              width: '78px',
+              maxWidth: '78px',
+              borderLeft: `0px solid ${
+                triageLevels[patient.triageLevel].colour
+              }`,
+              color: Colours.InactiveGrey,
+            }}
+          >
+            {triageLevels[patient.triageLevel].label}
+          </TableCell>
+          <TableCell
+            className={classes.tableCell}
+            width="94px"
+            style={{ maxWidth: '94px', color: Colours.InactiveGrey } }
+          >
+            {patient.barcodeValue}
+          </TableCell>
+          <TableCell
+            className={classes.tableCell}
+            width="72px"
+            style={{ maxWidth: '72px', color: Colours.InactiveGrey }}
+          >
+            {patient.gender}
+          </TableCell>
+          <TableCell
+            className={classes.tableCell}
+            width="34px"
+            style={{ maxWidth: '34px', color: Colours.InactiveGrey }}
+          >
+            {patient.age}
+          </TableCell>
+          <TableCell
+            className={classes.tableCell}
+            width="104px"
+            style={{ maxWidth: '104px', color: Colours.InactiveGrey }}
+          >
+            {statusLabels[patient.status]}
+          </TableCell>
+          {type === CCPDashboardTabOptions.PatientOverview && (
+            <>
+              <TableCell
+                className={classes.tableCell}
+                width="128px"
+                style={{ maxWidth: '128px', color: Colours.InactiveGrey }}
+              >
+                {patient.hospitalId?.name}
+              </TableCell>
+              <TableCell
+                className={classes.tableCell}
+                width="192px"
+                style={{ maxWidth: '192px', color: Colours.InactiveGrey }}
+              >
+                {moment(patient.updatedAt).format('MMM D YYYY, h:mm A')}
+              </TableCell>
+            </>
+          )}
+          {type === CCPDashboardTabOptions.Hospital && (
+            <>
+              <TableCell
+                className={classes.tableCell}
+                width="132px"
+                style={{ maxWidth: '132px', color: Colours.InactiveGrey }}
+              >
+                {patient.runNumber}
+              </TableCell>
+              <TableCell
+                className={classes.tableCell}
+                width="192px"
+                style={{ maxWidth: '192px', color: Colours.InactiveGrey }}
+              >
+                {moment(patient.transportTime).format('MMM D YYYY, h:mm A')}
+              </TableCell>
+            </>
+          )}
+          <TableCell width="48px" style={{ maxWidth: '48px', color: Colours.InactiveGrey }}>
+            <IconButton
+              color="inherit"
+              onClick={(e) => handleClickRestoreMenu(e, patient)}
+            >
+              <MoreHoriz />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      );
+    }
+  );
+
   return (
     <Table>
       <EnhancedTableHead
@@ -349,7 +510,7 @@ export const PatientInfoTable = ({
         onRequestSort={handleRequestSort}
         type={type}
       />
-      <TableBody>{tableRows}</TableBody>
+      <TableBody>{tableRows}{deletedTableRows}</TableBody>
       {selectedPatient && (
         <Dialog
           open={openDetails}
@@ -399,6 +560,17 @@ export const PatientInfoTable = ({
           Delete patient
         </MenuItem>
       </Menu>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorElRestore}
+        keepMounted
+        open={Boolean(anchorElRestore)}
+        onClose={handleCloseMenu}
+      >
+        <MenuItem style={{ color: Colours.InactiveGrey }} onClick={handleClickRestore}>
+            Restore patient
+        </MenuItem>
+      </Menu>
       <ConfirmModal
         open={openDeletePatient}
         isActionDelete
@@ -407,6 +579,14 @@ export const PatientInfoTable = ({
         actionLabel="Delete"
         handleClickAction={handleConfirmDeletePatient}
         handleClickCancel={handleCancelDeletePatient}
+      />
+      <ConfirmModal
+        open={openRestorePatient}
+        title="You are about to restore a patient"
+        body="Are you sure you want to restore patient #1234?"
+        actionLabel="Confirm Restore"
+        handleClickAction={handleRestorePatient}
+        handleClickCancel={handleCancelRestorePatient}
       />
     </Table>
   );
