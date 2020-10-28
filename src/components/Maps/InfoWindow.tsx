@@ -36,7 +36,7 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     padding: '0px 18px 15px 18px',
-  }
+  },
 });
 
 const InfoWindow = ({
@@ -60,29 +60,32 @@ const InfoWindow = ({
       BackdropProps={{ style: { backgroundColor: 'transparent' } }}
     >
       <Container classes={{ root: infoStyles.flexContainerContent }}>
-        <DialogContent style={{ overflow: 'hidden', paddingLeft: '0px'}}>
-            <Typography variant="body1" color="textSecondary">
-              Name:
-              <span
-                style={{ display: 'inline', color: Colours.Black }}
-                color="textPrimary"
-              >
-                {` ${title} `}
-              </span>
-            </Typography>
-            <Typography variant="body1" color="textSecondary">
-              Location:
-              <span
-                style={{ display: 'inline', color: Colours.Black }}
-                color="textPrimary"
-              >
-                {` ${address} `}
-              </span>
-            </Typography>
+        <DialogContent style={{ overflow: 'hidden', paddingLeft: '0px' }}>
+          <Typography variant="body1" color="textSecondary">
+            Name:
+            <span
+              style={{ display: 'inline', color: Colours.Black }}
+              color="textPrimary"
+            >
+              {` ${title} `}
+            </span>
+          </Typography>
+          <Typography variant="body1" color="textSecondary">
+            Location:
+            <span
+              style={{ display: 'inline', color: Colours.Black }}
+              color="textPrimary"
+            >
+              {` ${address} `}
+            </span>
+          </Typography>
         </DialogContent>
-        <CloseIcon onClick={handleClose} classes={{ root: infoStyles.closeButton }}/>
+        <CloseIcon
+          onClick={handleClose}
+          classes={{ root: infoStyles.closeButton }}
+        />
       </Container>
-      <DialogActions style = {{ padding: '0px'}}>
+      <DialogActions style={{ padding: '0px' }}>
         <Container classes={{ root: infoStyles.flexContainerButtons }}>
           <Button size="small" style={{ color: Colours.Danger }}>
             Delete

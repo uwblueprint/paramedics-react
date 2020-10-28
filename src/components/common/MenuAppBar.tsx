@@ -148,7 +148,10 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               className={selectedMaps ? classes.activeMap : ''}
             >
               <ListItemIcon>
-                <MapOutlinedIcon style={{ color: Colours.Black }} className={selectedMaps ? classes.activeMap : ''} />
+                <MapOutlinedIcon
+                  style={{ color: Colours.Black }}
+                  className={selectedMaps ? classes.activeMap : ''}
+                />
               </ListItemIcon>
               <Typography variant="body2">Maps</Typography>
             </ListItem>
