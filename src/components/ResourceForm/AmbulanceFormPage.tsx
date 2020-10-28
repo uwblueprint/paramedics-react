@@ -62,11 +62,13 @@ const AmbulanceFormPage = ({
     },
     onCompleted() {
       enqueueSnackbar('Ambulance added.');
+      history.replace('/manage/ambulances');
     },
   });
   const [editAmbulance] = useMutation(EDIT_AMBULANCE, {
     onCompleted() {
       enqueueSnackbar('Ambulance edited.');
+      history.replace('/manage/ambulances');
     },
   });
 
@@ -102,7 +104,6 @@ const AmbulanceFormPage = ({
         },
       });
     }
-    history.push('/manage/ambulances');
   };
 
   const classes = useStyles();
