@@ -12,7 +12,7 @@ import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: '345px',
+    maxWidth: '400px',
     marginLeft: '5px',
     width: '446px',
     height: '200px',
@@ -28,10 +28,15 @@ const useStyles = makeStyles({
     height: '24px',
     width: '24px',
   },
-  flexContainer: {
+  flexContainerContent: {
     display: 'flex',
     justifyContent: 'space-between',
   },
+  flexContainerButtons: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '0px 18px',
+  }
 });
 
 const InfoWindow = ({
@@ -54,8 +59,8 @@ const InfoWindow = ({
       onClose={handleClose}
       BackdropProps={{ style: { backgroundColor: 'transparent' } }}
     >
-      <Container classes={{ root: infoStyles.flexContainer }}>
-        <DialogContent style={{ overflow: 'hidden', paddingLeft: '0px' }}>
+      <Container classes={{ root: infoStyles.flexContainerContent }}>
+        <DialogContent style={{ overflow: 'hidden', paddingLeft: '0px'}}>
             <Typography variant="body1" color="textSecondary">
               Name:
               <span
@@ -78,7 +83,7 @@ const InfoWindow = ({
         <CloseIcon onClick={handleClose} classes={{ root: infoStyles.closeButton }}/>
       </Container>
       <DialogActions style = {{ padding: '0px'}}>
-        <Container classes={{ root: infoStyles.flexContainer }}>
+        <Container classes={{ root: infoStyles.flexContainerButtons }}>
           <Button size="small" style={{ color: Colours.Danger }}>
             Delete
           </Button>
