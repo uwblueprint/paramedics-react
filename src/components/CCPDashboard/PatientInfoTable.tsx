@@ -23,7 +23,7 @@ import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
-import { EDIT_PATIENT } from '../../graphql/mutations/patients';
+import { EDIT_PATIENT, RESTORE_PATIENT } from '../../graphql/mutations/patients';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
 import { capitalize } from '../../utils/format';
 
@@ -161,6 +161,7 @@ export const PatientInfoTable = ({
   const activePatients = patients.filter((patient, i) => patient.status !== Status.DELETED)
   const history = useHistory();
 
+  const [restorePatient] = useMutation(RESTORE_PATIENT);
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleOpenDetails = (patient) => {
@@ -184,6 +185,10 @@ export const PatientInfoTable = ({
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  const handleCloseRestoreMenu = () => {
+    setAnchorElRestore(null);
+  }
 
   const handleClickEdit = () => {
     history.push(
@@ -223,8 +228,18 @@ export const PatientInfoTable = ({
     setOpenDeletePatient(false);
   };
 
-  const handleRestorePatient = () => {
-    setOpenRestorePatient(true);
+  const handleConfirmRestorePatient = () => {
+    restorePatient({
+      variables: {
+        id: ((selectedPatient as unknown) as Patient).id
+      },
+    });
+    history.push(
+      `/events/${eventId}/ccps/${ccpId}/patients/${
+        ((selectedPatient as unknown) as Patient).id
+      }`);
+    setOpenRestorePatient(false);
+
   };
 
   const handleCancelRestorePatient = () => {
@@ -232,7 +247,7 @@ export const PatientInfoTable = ({
   };
 
   const handleClickRestore = () => {
-    setAnchorEl(null);
+    setAnchorElRestore(null);
     setOpenRestorePatient(true);
   };
 
@@ -570,9 +585,9 @@ export const PatientInfoTable = ({
         anchorEl={anchorElRestore}
         keepMounted
         open={Boolean(anchorElRestore)}
-        onClose={handleCloseMenu}
+        onClose={handleCloseRestoreMenu}
       >
-        <MenuItem style={{ color: Colours.InactiveGrey }} onClick={handleClickRestore}>
+        <MenuItem style={{ color: Colours.Black }} onClick={handleClickRestore}>
             Restore patient
         </MenuItem>
       </Menu>
@@ -588,9 +603,9 @@ export const PatientInfoTable = ({
       <ConfirmModal
         open={openRestorePatient}
         title="You are about to restore a patient"
-        body="Are you sure you want to restore patient #1234?"
+        body={`Are you sure you want to restore patient #${selectedPatient != undefined ? selectedPatient.barcodeValue : ""}`}
         actionLabel="Confirm Restore"
-        handleClickAction={handleRestorePatient}
+        handleClickAction={handleConfirmRestorePatient}
         handleClickCancel={handleCancelRestorePatient}
       />
     </Table>

@@ -155,3 +155,43 @@ export const DELETE_PATIENT = gql`
     }
   }
 `;
+
+export const RESTORE_PATIENT = gql`
+
+  mutation restorePatient($id: ID!) {
+    restorePatient(id: $id) {
+      id
+      gender
+      age
+      runNumber
+      barcodeValue
+      collectionPointId {
+        id
+        name
+        eventId {
+          id
+          name
+          eventDate
+        }
+      }
+      triageLevel
+      status
+      notes
+      updatedAt
+      transportTime
+      hospitalId {
+        id
+        name
+      }
+      ambulanceId {
+        id
+        vehicleNumber
+      }
+
+    }
+
+  }
+
+
+
+`;
