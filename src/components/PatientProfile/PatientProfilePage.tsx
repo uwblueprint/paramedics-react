@@ -70,6 +70,7 @@ const PatientProfilePage = ({
   const [transportConfirmed, setTransportConfirmed] = useState(false);
   const [transportingPatient, setTransportingPatient] = useState(false);
   const [deleteClicked, setDeleteClicked] = useState(false);
+  const [isRestore, setRestore] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital>({
     id: '',
     name: '',
@@ -78,6 +79,7 @@ const PatientProfilePage = ({
     id: '',
     vehicleNumber: 0,
   });
+
 
   const { data, loading } = useQuery(
     mode === 'edit' && patientId
@@ -154,6 +156,7 @@ const PatientProfilePage = ({
       if (hospitalId) setSelectedHospital(hospitalId);
       if (ambulanceId) setSelectedAmbulance(ambulanceId);
       setTransportConfirmed(status === Status.TRANSPORTED);
+      setRestore(status === Status.DELETED);
     }
   }, [data, loading, mode]);
 
@@ -262,6 +265,11 @@ const PatientProfilePage = ({
         },
       });
     } else if (mode === 'edit') {
+
+      if (isRestore && formFields.status != Status.DELETED) {
+        enqueueSnackbar(`Patient #${formFields.barcodeValue} restored.`);
+      }
+
       editPatient({
         variables: {
           id: patientId,

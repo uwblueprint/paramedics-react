@@ -23,7 +23,7 @@ import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
-import { EDIT_PATIENT, RESTORE_PATIENT } from '../../graphql/mutations/patients';
+import { EDIT_PATIENT } from '../../graphql/mutations/patients';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
 import { capitalize } from '../../utils/format';
 
@@ -157,11 +157,10 @@ export const PatientInfoTable = ({
   );
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElRestore, setAnchorElRestore] = React.useState(null);
-  const deletedPatients = patients.filter((patient, i) => patient.status === Status.DELETED)
-  const activePatients = patients.filter((patient, i) => patient.status !== Status.DELETED)
+  const deletedPatients = patients.filter((patient, i) => patient.status === Status.DELETED);
+  const activePatients = patients.filter((patient, i) => patient.status !== Status.DELETED);;
   const history = useHistory();
 
-  const [restorePatient] = useMutation(RESTORE_PATIENT);
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleOpenDetails = (patient) => {
@@ -229,11 +228,6 @@ export const PatientInfoTable = ({
   };
 
   const handleConfirmRestorePatient = () => {
-    restorePatient({
-      variables: {
-        id: ((selectedPatient as unknown) as Patient).id
-      },
-    });
     history.push(
       `/events/${eventId}/ccps/${ccpId}/patients/${
         ((selectedPatient as unknown) as Patient).id
