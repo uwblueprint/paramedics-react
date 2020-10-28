@@ -3,12 +3,14 @@ import { Box, Tabs, Tab, makeStyles } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
 import { useQuery } from '@apollo/react-hooks';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
+
 import { Colours } from '../../styles/Constants';
 import {
   GET_ALL_PATIENTS,
   Patient,
   Status,
 } from '../../graphql/queries/patients';
+import { CCPRealtime } from './CCPRealtime';
 import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
@@ -93,6 +95,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   // Fetch events from backend
   useAllPatients();
   // Should switch to fetching patients from cache
+
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const allPatients: Array<Patient> = data ? data.patients : [];
   const patients = React.useMemo(
@@ -155,6 +158,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           patients={transportPatients}
         />
       </TabPanel>
+      <CCPRealtime collectionPointId={ccpId} />
     </Box>
   );
 };
