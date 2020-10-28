@@ -45,7 +45,7 @@ const AccessLevelSelector = ({
   currentValue,
   handleChange,
 }: {
-  currentValue: string;
+  currentValue: number;
   handleChange: (e: any) => any;
 }) => {
   const classes = useRadioStyles();

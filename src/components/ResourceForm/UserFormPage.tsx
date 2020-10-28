@@ -16,6 +16,7 @@ import {
   User,
   GET_ALL_USERS,
   GET_USER_BY_ID,
+  AccessLevel,
 } from '../../graphql/queries/users';
 
 const useStyles = makeStyles({
@@ -74,7 +75,7 @@ const UserFormPage = ({
 
   const [memberName, setMemberName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [role, setRole] = useState<number>(2);
+  const [role, setRole] = useState<number>(AccessLevel.SUPERVISOR);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -113,7 +114,7 @@ const UserFormPage = ({
   };
 
   const handleRoleChange = (e: any) => {
-    setRole(Number(e.target.value));
+    setRole(e.target.value);
   };
 
   const handleComplete = () => {
@@ -186,7 +187,7 @@ const UserFormPage = ({
             value={email}
           />
           <AccessLevelSelector
-            currentValue={role.toString()}
+            currentValue={role}
             handleChange={handleRoleChange}
           />
           <Typography
