@@ -117,7 +117,7 @@ const MapPage = ({
         open={infoWindowOpen}
         handleClose={() => setInfoWindowOpen(false)}
       />
-      <div style={{ height: '94vh', width: '100%' }}>
+      <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}
           defaultCenter={defaultMap.center}
