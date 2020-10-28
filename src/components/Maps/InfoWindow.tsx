@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   flexContainerButtons: {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: '0px 18px',
+    padding: '0px 18px 15px 18px',
   }
 });
 
