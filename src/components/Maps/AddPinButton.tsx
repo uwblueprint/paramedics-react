@@ -4,9 +4,6 @@ import AddIcon from '@material-ui/icons/Add';
 import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
-  icon: {
-    marginRight: '9px',
-  },
   addButton: {
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
     borderRadius: '2000px',
@@ -26,7 +23,7 @@ export const AddPinButton = ({ handleClick }: { handleClick: () => void }) => {
       color="secondary"
       onClick={handleClick}
     >
-      <AddIcon colour={Colours.White} classes={classes.icon} />
+      <AddIcon colour={Colours.White} styles={{ marginRight: '9px' }} />
       Add Pin
     </Button>
   );
