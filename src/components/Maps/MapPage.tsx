@@ -4,6 +4,7 @@ import GoogleMapReact from 'google-map-react';
 
 import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
+import AddPinButton from './AddPinButton';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
 
 const MapPage = ({
@@ -62,6 +63,7 @@ const MapPage = ({
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
+  const [openSidebar, setOpenSidebar] = React.useState(false);
 
   const initMaps = (map, maps) => {
     if (!loading) {
@@ -129,6 +131,7 @@ const MapPage = ({
           {}
         </GoogleMapReact>
       </div>
+      <AddPinButton handleClick={() => setOpenSidebar(true)}/>
     </>
   );
 };
