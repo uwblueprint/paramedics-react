@@ -140,6 +140,8 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         />
         <Tab label="Hospital" id={`tab-${CCPDashboardTabOptions.Hospital}`} />
       </Tabs>
+      <CCPRealtime collectionPointId={ccpId} />
+
       <TabPanel
         value={tab}
         index={CCPDashboardTabOptions.PatientOverview}
@@ -158,7 +160,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           patients={transportPatients}
         />
       </TabPanel>
-      <CCPRealtime collectionPointId={ccpId} />
     </Box>
   );
 };

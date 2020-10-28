@@ -16,7 +16,7 @@ export const CCPRealtime = (props: Props) => {
 
   return (
     <div>
-      <p>{loading ? 'Loading...' : id}</p>
+      <p>{loading ? 'Updates Loading...' : id}</p>
     </div>
   );
 };
