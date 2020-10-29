@@ -7,11 +7,6 @@ import InfoWindow from './InfoWindow';
 import Marker from './Marker';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
 
-interface Marker {
-  lat: number;
-  lng: number;
-}
-
 const MapPage = ({
   match: {
     params: { eventId },
@@ -60,7 +55,10 @@ const MapPage = ({
   });
 
   const pins: Array<LocationPin> = data && !loading ? data.pinsForEvent : [];
-  const [currentLocationPin, setCurrentLocationPin] = React.useState({ lat: 0, lng: 0});
+  const [currentLocationPin, setCurrentLocationPin] = React.useState({
+    lat: 0,
+    lng: 0,
+  });
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
@@ -69,14 +67,14 @@ const MapPage = ({
 
   useEffect(() => {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position: Position) => {
-          setCurrentLocationPin({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        setCurrentLocationPin({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
-      }
-  })
+      });
+    }
+  });
 
   const onMarkerClick = (pin) => {
     setInfoWindowOpen(true);
@@ -109,9 +107,11 @@ const MapPage = ({
           {pins.map((pin) => (
             <Marker
               key={pin.id}
-              lat={pin.latitude} 
+              lat={pin.latitude}
               lng={pin.longitude}
-              onClick={() => { onMarkerClick(pin) }}
+              onClick={() => {
+                onMarkerClick(pin);
+              }}
             />
           ))}
           <Marker
