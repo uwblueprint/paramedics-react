@@ -31,6 +31,7 @@ const useStyles = makeStyles({
   flexContainerContent: {
     display: 'flex',
     justifyContent: 'space-between',
+    paddingRight: '10px',
   },
   flexContainerButtons: {
     display: 'flex',
@@ -58,6 +59,8 @@ const InfoWindow = ({
       open={open}
       onClose={handleClose}
       BackdropProps={{ style: { backgroundColor: 'transparent' } }}
+      hideBackdrop
+      disableEnforceFocus
     >
       <Container classes={{ root: infoStyles.flexContainerContent }}>
         <DialogContent style={{ overflow: 'hidden', paddingLeft: '0px' }}>

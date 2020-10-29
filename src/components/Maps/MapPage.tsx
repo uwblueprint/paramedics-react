@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from 'react-apollo';
 import GoogleMapReact from 'google-map-react';
 
 import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
+import Marker from './Marker';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
+
+interface Marker {
+  lat: number;
+  lng: number;
+}
 
 const MapPage = ({
   match: {
@@ -13,11 +19,6 @@ const MapPage = ({
 }: {
   match: { params: { eventId: string } };
 }) => {
-  const defaultMap = {
-    center: { lat: 43.470846, lng: -80.538473 },
-    zoom: 11,
-  };
-
   const getMapOptions = (maps) => {
     return {
       streetViewControl: false,
@@ -59,53 +60,32 @@ const MapPage = ({
   });
 
   const pins: Array<LocationPin> = data && !loading ? data.pinsForEvent : [];
+  const [currentLocationPin, setCurrentLocationPin] = React.useState({ lat: 0, lng: 0});
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
+  const [center, setCenter] = React.useState([43.470846, -80.538473]);
+  const zoom = 11;
 
-  const initMaps = (map, maps) => {
-    if (!loading) {
-      map.addListener('click', () => {
-        setInfoWindowOpen(false);
-        setInterestPinLocation('');
-        setInterestPinTitle('');
-      });
-      pins.map((pin) => {
-        const marker = new maps.Marker({
-          position: { lat: pin.latitude, lng: pin.longitude },
-          map,
-          title: pin.label,
-        });
-
-        marker.addListener('click', () => {
-          map.setCenter(marker.getPosition());
-          setInfoWindowOpen(true);
-          setInterestPinLocation(pin.address);
-          setInterestPinTitle(pin.label);
-        });
-
-        return marker;
-      });
-
-      if (navigator.geolocation) {
+  useEffect(() => {
+    if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position: Position) => {
-          const pos = {
+          setCurrentLocationPin({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          };
-
-          const marker = new maps.Marker({
-            position: pos,
-            map,
-            title: 'Current position',
           });
-
-          marker.setIcon(
-            'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-          );
         });
       }
-    }
+  })
+
+  const onMarkerClick = (pin) => {
+    setInfoWindowOpen(true);
+    setInterestPinLocation(pin.address);
+    setInterestPinTitle(pin.label);
+  };
+
+  const onMapChildClick = (key, childProps) => {
+    setCenter([childProps.lat, childProps.lng]);
   };
 
   return (
@@ -120,13 +100,25 @@ const MapPage = ({
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}
-          defaultCenter={defaultMap.center}
-          defaultZoom={defaultMap.zoom}
+          center={center}
+          zoom={zoom}
           options={getMapOptions}
           yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => initMaps(map, maps)}
+          onChildClick={onMapChildClick}
         >
-          {}
+          {pins.map((pin) => (
+            <Marker
+              key={pin.id}
+              lat={pin.latitude} 
+              lng={pin.longitude}
+              onClick={() => { onMarkerClick(pin) }}
+            />
+          ))}
+          <Marker
+            lat={currentLocationPin.lat}
+            lng={currentLocationPin.lng}
+            isCurrentLocation
+          />
         </GoogleMapReact>
       </div>
     </>
