@@ -4,6 +4,7 @@ import GoogleMapReact from 'google-map-react';
 
 import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
+import Sidebar from './Sidebar';
 import AddPinButton from './AddPinButton';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
 
@@ -110,6 +111,10 @@ const MapPage = ({
     }
   };
 
+  const onSidebarClose = () => {
+    setOpenSidebar(false);
+  };
+
   return (
     <>
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
@@ -119,6 +124,7 @@ const MapPage = ({
         open={infoWindowOpen}
         handleClose={() => setInfoWindowOpen(false)}
       />
+      <Sidebar open={openSidebar} />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}
