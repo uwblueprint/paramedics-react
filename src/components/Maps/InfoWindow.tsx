@@ -12,12 +12,13 @@ import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: '400px',
+    maxWidth: '450px',
     marginLeft: '5px',
     width: '446px',
-    height: '200px',
+    height: '225px',
     marginTop: '50px',
     overflow: 'hidden',
+    boxShadow: 'none',
   },
   closeButton: {
     color: Colours.Black,
@@ -58,12 +59,16 @@ const InfoWindow = ({
       classes={{ root: infoStyles.root }}
       open={open}
       onClose={handleClose}
-      BackdropProps={{ style: { backgroundColor: 'transparent' } }}
+      PaperProps={{
+        elevation: 6,
+      }}
       hideBackdrop
       disableEnforceFocus
     >
       <Container classes={{ root: infoStyles.flexContainerContent }}>
-        <DialogContent style={{ overflow: 'hidden', paddingLeft: '0px' }}>
+        <DialogContent
+          style={{ overflow: 'hidden', paddingLeft: '0px', boxShadow: 'none' }}
+        >
           <Typography variant="body1" color="textSecondary">
             Name:
             <span
@@ -88,7 +93,7 @@ const InfoWindow = ({
           classes={{ root: infoStyles.closeButton }}
         />
       </Container>
-      <DialogActions style={{ padding: '0px' }}>
+      <DialogActions style={{ padding: '0px', boxShadow: 'none' }}>
         <Container classes={{ root: infoStyles.flexContainerButtons }}>
           <Button size="small" style={{ color: Colours.Danger }}>
             Delete

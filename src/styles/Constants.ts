@@ -27,4 +27,5 @@ export enum Colours {
   TriageSelectedBlack = '#BFBFBF',
   SnackbarButtonBlue = '#28B2FF',
   Marker = '#EE502E',
+  CurrentLocationMarker = '#2F80ED',
 }
