@@ -12,22 +12,22 @@ const useStyles = makeStyles({
   currentLocation: {
     color: Colours.CurrentLocationMarker,
   },
-  clicked: {
-    color: Colours.TriageGreen,
-  },
+  notClicked: {
+    color: Colours.MarkerNotClicked,
+  }
 });
 
 const Marker = ({
   lat,
   lng,
   isCurrentLocation,
-  isClicked,
+  otherClicked,
   onClick,
 }: {
   lat: number;
   lng: number;
   isCurrentLocation?: boolean;
-  isClicked?: boolean;
+  otherClicked?: boolean;
   onClick?: () => void;
 }) => {
   const styles = useStyles();
@@ -38,7 +38,7 @@ const Marker = ({
     <RoomIcon
       onClick={onClick}
       fontSize="large"
-      className={isClicked ? styles.clicked : styles.root}
+      className={otherClicked ? styles.notClicked : styles.root}
     />
   );
 };
