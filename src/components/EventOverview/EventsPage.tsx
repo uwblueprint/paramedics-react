@@ -42,8 +42,8 @@ const EventsPage = () => {
   const classes = useStyles();
   const location = useLocation<LocationState>();
   const { addedEventId } = location.state || { addedEventId: null };
+  const [lastUpdatedEventId, setLastUpdatedEventId] = useState(addedEventId);
   const [selectedTab, setTab] = useState(0);
-  const [eventToBeDeleted, setEventToBeDeleted] = useState<Event | null>(null);
 
   // Clear the addedEventId in location state now that it's been used
   window.history.pushState(
@@ -58,6 +58,7 @@ const EventsPage = () => {
     event: React.ChangeEvent<unknown>,
     newValue: number
   ) => {
+    setLastUpdatedEventId(null);
     setTab(newValue);
   };
 
@@ -78,7 +79,7 @@ const EventsPage = () => {
         query: GET_ALL_EVENTS,
       });
 
-      events = events.filter((event) => event.id !== eventToBeDeleted?.id);
+      events = events.filter((event) => event.id !== deleteEvent);
 
       cache.writeQuery({
         query: GET_ALL_EVENTS,
@@ -88,8 +89,8 @@ const EventsPage = () => {
   });
   const events: Array<Event> = data ? data.events : [];
 
-  const handleArchiveEvent = (event: Event) => {
-    editEvent({
+  const handleArchiveEvent = async (event: Event) => {
+    await editEvent({
       variables: {
         id: event.id,
         name: event.name,
@@ -98,9 +99,12 @@ const EventsPage = () => {
         isActive: false,
       },
     });
+    setLastUpdatedEventId(event.id);
+    setTab(1);
   };
-  const handleUnarchiveEvent = (event: Event) => {
-    editEvent({
+
+  const handleUnarchiveEvent = async (event: Event) => {
+    await editEvent({
       variables: {
         id: event.id,
         name: event.name,
@@ -109,10 +113,11 @@ const EventsPage = () => {
         isActive: true,
       },
     });
+    setLastUpdatedEventId(event.id);
+    setTab(0);
   };
 
-  const handleDeleteEvent = async (event: Event) => {
-    await setEventToBeDeleted(event);
+  const handleDeleteEvent = (event: Event) => {
     deleteEvent({
       variables: {
         id: event.id,
@@ -149,7 +154,7 @@ const EventsPage = () => {
                 date={event.eventDate}
                 eventTitle={event.name}
                 isActive={event.isActive}
-                isNew={event.id === addedEventId}
+                isNew={event.id === lastUpdatedEventId}
                 address="N/A"
                 handleClick={() => history.push(`/events/${event.id}`)}
                 handleArchiveEvent={() => handleArchiveEvent(event)}

@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
@@ -69,6 +70,7 @@ const CCPFormPage = ({
 }) => {
   const classes = useStyles();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { data } = useQuery(
     mode === 'edit' ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID,
@@ -106,9 +108,20 @@ const CCPFormPage = ({
         },
       });
     },
+    onCompleted() {
+      enqueueSnackbar('CCP added.');
+      // TODO: Check for valid eventId
+      history.replace(`/events/${eventId}`);
+    },
   });
 
-  const [editCCP] = useMutation(EDIT_CCP);
+  const [editCCP] = useMutation(EDIT_CCP, {
+    onCompleted() {
+      enqueueSnackbar('CCP edited.');
+      // TODO: Check for valid eventId
+      history.replace(`/events/${eventId}`);
+    },
+  });
 
   const handleNameChange = (e: any) => {
     setCCPName(e.target.value);
@@ -141,10 +154,6 @@ const CCPFormPage = ({
         },
       });
     }
-
-    // TODO: Check for valid eventId
-
-    history.replace(`/events/${eventId}`);
   };
 
   const content = (

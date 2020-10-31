@@ -46,6 +46,7 @@ const FormField: React.FC<{
   errorMessages?: Array<string>;
   readOnly?: boolean;
   disabled?: boolean;
+  numeric?: boolean;
 }> = ({
   label,
   placeholder,
@@ -57,6 +58,7 @@ const FormField: React.FC<{
   errorMessages,
   readOnly,
   disabled,
+  numeric,
 }: {
   label: string;
   placeholder?: string;
@@ -68,6 +70,7 @@ const FormField: React.FC<{
   errorMessages?: Array<string>;
   readOnly?: boolean;
   disabled?: boolean;
+  numeric?: boolean;
 }) => {
   const classes = useTextFieldStyles();
   if (isValidated) {
@@ -101,6 +104,7 @@ const FormField: React.FC<{
       }}
       InputProps={{
         readOnly,
+        inputMode: numeric ? 'numeric' : 'text',
       }}
       disabled={disabled}
       className={classes.root}

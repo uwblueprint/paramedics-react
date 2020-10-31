@@ -96,6 +96,7 @@ const useLayout = makeStyles({
 });
 
 const HospitalOverviewPage: React.FC = () => {
+  const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -118,6 +119,11 @@ const HospitalOverviewPage: React.FC = () => {
   const dRow = dataRow();
   const optionStyle = optionStyles();
 
+  const handleCloseConfirmDelete = () => {
+    setAnchorEl(null);
+    setOpenModal(false);
+  };
+
   //  Writing to cache when deleting user
   const [deleteHospital] = useMutation(DELETE_HOSPITAL, {
     update(cache, { data: { deleteHospital } }) {
@@ -131,13 +137,17 @@ const HospitalOverviewPage: React.FC = () => {
       setAnchorEl(null);
 
       const filtered = hospitals.filter(
-        (hospital) => hospital.id !== selectedHospital
+        (hospital) => hospital.id !== deleteHospital
       );
       hospitals = filtered;
       cache.writeQuery({
         query: GET_ALL_HOSPITALS,
         data: { hospitals },
       });
+    },
+    onCompleted() {
+      handleCloseConfirmDelete();
+      enqueueSnackbar('Hospital deleted.');
     },
   });
 
@@ -146,27 +156,19 @@ const HospitalOverviewPage: React.FC = () => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const history = useHistory();
   const handleClickEdit = () => {
     const hospitalId = selectedHospital;
     history.replace(`/manage/hospitals/edit/${hospitalId}`);
   };
 
-  const handleClickDelete = () => {
+  const handleConfirmDelete = () => {
     const hospitalId = selectedHospital;
     deleteHospital({ variables: { id: hospitalId } });
-    setOpenModal(false);
-    setAnchorEl(null);
-    enqueueSnackbar('Hospital deleted.');
   };
 
-  const handleDeleteOption = () => {
+  const handleClickDelete = () => {
     setOpenModal(true);
-  };
-
-  const handleClickCancel = () => {
     setAnchorEl(null);
-    setOpenModal(false);
   };
 
   const options: Array<Option> = [
@@ -177,7 +179,7 @@ const HospitalOverviewPage: React.FC = () => {
     },
     {
       styles: optionStyle.menuDelete,
-      onClick: handleDeleteOption,
+      onClick: handleClickDelete,
       name: 'Delete',
     },
   ];
@@ -230,8 +232,8 @@ const HospitalOverviewPage: React.FC = () => {
         title="You are about to delete a hospital."
         body="Supervisors will no longer be able to transport patients at CCPS connected to this hospital."
         actionLabel="Delete"
-        handleClickAction={handleClickDelete}
-        handleClickCancel={handleClickCancel}
+        handleClickAction={handleConfirmDelete}
+        handleClickCancel={handleCloseConfirmDelete}
       />
       <div className={classes.addResourceContainer}>
         <AddResourceButton label="Add Hospital" route="/manage/hospitals/new" />
