@@ -80,7 +80,6 @@ const PatientProfilePage = ({
     vehicleNumber: 0,
   });
 
-
   const { data, loading } = useQuery(
     mode === 'edit' && patientId
       ? GET_PATIENT_BY_ID(patientId)
@@ -265,8 +264,7 @@ const PatientProfilePage = ({
         },
       });
     } else if (mode === 'edit') {
-
-      if (isRestore && formFields.status != Status.DELETED) {
+      if (isRestore && formFields.status !== Status.DELETED) {
         enqueueSnackbar(`Patient #${formFields.barcodeValue} restored.`);
       }
 

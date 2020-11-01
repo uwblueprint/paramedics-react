@@ -10,7 +10,6 @@ const comparator = (a, b, orderBy: string, descending: boolean) => {
     bValue =
       b[maybeNestedOrderBy[0]] &&
       b[maybeNestedOrderBy[0]][maybeNestedOrderBy[1]];
-
   } else {
     aValue = a[orderBy];
     bValue = b[orderBy];
@@ -47,7 +46,6 @@ export const getComparator = (order: Order, orderBy) => {
 export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
-    console.log(a, b);
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
