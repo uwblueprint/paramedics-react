@@ -137,7 +137,7 @@ const MapPage = ({
           {}
         </GoogleMapReact>
       </div>
-      <AddPinButton handleClick={() => setOpenSidebar(true)}/>
+      <AddPinButton handleClick={() => setOpenSidebar(true)} />
     </>
   );
 };
