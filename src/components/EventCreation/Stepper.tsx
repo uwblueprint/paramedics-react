@@ -8,7 +8,7 @@ const useStepperStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     flexGrow: 1,
-    padding: '0 88px 74px 88px',
+    padding: '0',
     background: 'none',
   },
   dot: {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Typography, makeStyles } from '@material-ui/core';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import CompleteBarcodeButton from './CompleteBarcodeButton';
@@ -8,6 +8,14 @@ import { Colours } from '../../styles/Constants';
 import FormField from '../common/FormField';
 import { GET_ALL_PATIENTS } from '../../graphql/queries/patients';
 
+const useStyles = makeStyles({
+  barcodeCancelBtn: {
+    minWidth: '228px',
+    margin: '10px 0',
+    display: 'flex',
+  },
+});
+
 const EnterBarcodePage = ({
   match: {
     params: { eventId, ccpId },
@@ -15,6 +23,7 @@ const EnterBarcodePage = ({
 }: {
   match: { params: { eventId: string; ccpId: string } };
 }) => {
+  const classes = useStyles();
   const history = useHistory();
   const { pathname } = history.location;
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
@@ -61,10 +70,12 @@ const EnterBarcodePage = ({
         padding="56px 56px 36px 56px"
         borderBottom={`1px solid ${Colours.BorderLightGray}`}
       >
-        <Typography variant="h3">Enter Barcode</Typography>
+        <Typography variant="h4">Enter Barcode</Typography>
         <Button
           color="secondary"
+          variant="outlined"
           component={NavLink}
+          className={classes.barcodeCancelBtn}
           to={pathname.split('/manual')[0]}
         >
           Cancel
