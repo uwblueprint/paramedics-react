@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import RoomIcon from '@material-ui/icons/Room';
@@ -14,12 +13,14 @@ const useStyles = makeStyles({
   },
   notClicked: {
     color: Colours.MarkerNotClicked,
-  }
+  },
 });
 
 const Marker = ({
+  /* eslint-disable */
   lat,
   lng,
+  /* eslint-enable */
   isCurrentLocation,
   otherClicked,
   onClick,

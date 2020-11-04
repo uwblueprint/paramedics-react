@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import { useQuery } from 'react-apollo';
 import GoogleMapReact from 'google-map-react';
@@ -35,7 +34,7 @@ const MapPage = ({
   const defaultMap = {
     zoom: 11,
     center: {
-      lat: 43.470846, 
+      lat: 43.470846,
       lng: -80.538473,
     },
   };
@@ -127,7 +126,9 @@ const MapPage = ({
               key={pin.id}
               lat={pin.latitude}
               lng={pin.longitude}
-              otherClicked={interestPinTitle !== '' && interestPinTitle !== pin.label}
+              otherClicked={
+                interestPinTitle !== '' && interestPinTitle !== pin.label
+              }
               onClick={() => {
                 onMarkerClick(pin);
               }}

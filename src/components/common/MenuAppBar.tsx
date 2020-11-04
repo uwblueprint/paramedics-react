@@ -153,7 +153,7 @@ export default function MenuAppBar(props: MenuAppBarProps) {
                   className={selectedMaps ? classes.activeMap : ''}
                 />
               </ListItemIcon>
-              <Typography variant="body2">Maps</Typography>
+              <Typography variant="body2">Map</Typography>
             </ListItem>
           </List>
           <Divider />
