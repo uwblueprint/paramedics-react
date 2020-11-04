@@ -106,13 +106,17 @@ const EventCreationPage = ({
     day?: string;
     literal?: string;
   } = eventDate
-    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
-        (obj, currentPart) => ({
-          ...obj,
-          [currentPart.type]: currentPart.value,
-        }),
-        {}
-      )
+    ? new Intl.DateTimeFormat('en-us', {
+        timeZone: 'UTC',
+      })
+        .formatToParts(eventDate)
+        .reduce(
+          (obj, currentPart) => ({
+            ...obj,
+            [currentPart.type]: currentPart.value,
+          }),
+          {}
+        )
     : {};
 
   const handleComplete = () => {
