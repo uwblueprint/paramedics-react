@@ -12,7 +12,7 @@ export const CCPRealtime = (props: Props) => {
     variables: { collectionPointId },
   });
 
-  const id: string = data ? data.id : '';
+  const id: string = data ? data.patientUpdated.id : '';
 
   return (
     <div>
