@@ -124,7 +124,7 @@ const MapPage = ({
         open={infoWindowOpen}
         handleClose={() => setInfoWindowOpen(false)}
       />
-      <Sidebar open={openSidebar} />
+      <Sidebar open={openSidebar} onClose={onSidebarClose} title="Add Pin" />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}

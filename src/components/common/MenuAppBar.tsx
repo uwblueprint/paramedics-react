@@ -14,7 +14,7 @@ import {
   Divider,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import MapIcon from '@material-ui/icons/Map';
+import MapOutlinedIcon from '@material-ui/icons/MapOutlined';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import { useQuery } from '@apollo/react-hooks';
 import { NavLink, useHistory } from 'react-router-dom';
@@ -148,12 +148,12 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               className={selectedMaps ? classes.activeMap : ''}
             >
               <ListItemIcon>
-                <MapIcon
-                  colour={Colours.Black}
+                <MapOutlinedIcon
+                  style={{ color: Colours.Black }}
                   className={selectedMaps ? classes.activeMap : ''}
                 />
               </ListItemIcon>
-              <Typography variant="body2">Maps</Typography>
+              <Typography variant="body2">Map</Typography>
             </ListItem>
           </List>
           <Divider />

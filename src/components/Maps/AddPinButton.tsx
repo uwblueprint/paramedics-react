@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const AddPinButton = ({ handleClick }: { handleClick: () => void }) => {
+const AddPinButton = ({ handleClick }: { handleClick: () => void }) => {
   const classes = useStyles();
   return (
     <Button
@@ -23,8 +23,10 @@ export const AddPinButton = ({ handleClick }: { handleClick: () => void }) => {
       color="secondary"
       onClick={handleClick}
     >
-      <AddIcon colour={Colours.White} styles={{ marginRight: '9px' }} />
+      <AddIcon style={{ color: Colours.White, marginRight: '9px' }} />
       Add Pin
     </Button>
   );
 };
+
+export default AddPinButton;

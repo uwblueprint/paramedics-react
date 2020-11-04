@@ -2,12 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
 
 import FormField from '../common/FormField';
+import SearchBar from './SearchBar';
 
 const Sidebar = ({
   open,
@@ -19,30 +16,31 @@ const Sidebar = ({
   onClose: () => void;
 }) => {
   const [address, setAddress] = React.useState('');
-  const [title, setTitle] = React.useState('');
+  const [label, setLabel] = React.useState('');
 
-  const handleAddressChange = (address) => {
-    setAddress(address);
-  };
+  // const handleAddressChange = (address) => {
+  //   setAddress(address);
+  // };
 
-  const handleAddressSelect = (address) => {
-    geocodeByAddress(address).then((results) => getLatLng(results[0]));
-  };
+  // const handleAddressSelect = (address) => {
+  //   geocodeByAddress(address).then((results) => getLatLng(results[0]));
+  // };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLElement>) => {
-    setTitle((e.target as HTMLInputElement).value);
+  const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
+    setLabel((e.target as HTMLInputElement).value);
   };
 
   return (
     <Drawer open={open} onClose={onClose}>
       <Typography>{title}</Typography>
-      <FormField
+      {/* <FormField
         label="Pin Label: "
         placeholder="Enter label"
-        onChange={handleTitleChange}
+        onChange={handleLabelChange}
         value={title || ''}
-        isValidated={true}
-      />
+        isValidated={false}
+      /> */}
+      <SearchBar />
     </Drawer>
   );
 };
