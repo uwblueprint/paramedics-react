@@ -164,7 +164,6 @@ export const PatientInfoTable = ({
   const [runNumber, setRunNumber] = React.useState<number | null>(
     selectedPatient ? selectedPatient.runNumber : null
   );
-  const [isNewRunNumber, setIsNewRunNumber] = React.useState<boolean>(false);
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -233,8 +232,6 @@ export const PatientInfoTable = ({
 
   const handleRunNumber = (newRunNumber) => {
     const convertedRunNumber = newRunNumber ? parseInt(newRunNumber) : null;
-    const oldRunNumber = selectedPatient ? selectedPatient.runNumber : null;
-    setIsNewRunNumber(convertedRunNumber !== oldRunNumber);
     setRunNumber(convertedRunNumber);
   };
 
@@ -246,7 +243,6 @@ export const PatientInfoTable = ({
         collectionPointId: ccpId,
       },
     });
-    setIsNewRunNumber(false);
     enqueueSnackbar(`Patient ${selectedPatient?.barcodeValue} edited.`);
   };
 
@@ -416,7 +412,7 @@ export const PatientInfoTable = ({
               }`,
             }}
           >
-            {isNewRunNumber ? (
+            {runNumber !== selectedPatient?.runNumber ? (
               <Button
                 onClick={handleClickSave}
                 color="secondary"
