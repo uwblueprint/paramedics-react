@@ -25,6 +25,7 @@ interface PatientOverviewProps {
   // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
+  patientId?: string;
 }
 
 interface TableRowData {
@@ -72,7 +73,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { patients, eventId, ccpId } = props;
+  const { patients, eventId, ccpId, patientId } = props;
 
   const createCategoryData = (
     category: string,
@@ -174,6 +175,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
           patients={patients}
           eventId={eventId}
           ccpId={ccpId}
+          patientId={patientId}
         />
       </Card>
       <ScanPatientButton />

@@ -131,10 +131,12 @@ export const PatientInfoTableWithFilters = ({
   patients,
   eventId,
   ccpId,
+  patientId,
 }: {
   patients: Patient[];
   eventId: string;
   ccpId: string;
+  patientId?: string;
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -423,6 +425,7 @@ export const PatientInfoTableWithFilters = ({
           type={CCPDashboardTabOptions.PatientOverview}
           eventId={eventId}
           ccpId={ccpId}
+          patientId={patientId}
         />
       </TableContainer>
     </>

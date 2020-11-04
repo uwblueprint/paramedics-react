@@ -111,6 +111,11 @@ const UserOverviewPage: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedMember, selectMember] = React.useState<number>(-1);
 
+  const handleCloseConfirmDelete = () => {
+    setAnchorEl(null);
+    setOpenModal(false);
+  };
+
   //  Writing to cache when deleting user
   const [deleteUser] = useMutation(DELETE_USER, {
     update(cache, { data: { deleteUser } }) {
@@ -123,12 +128,16 @@ const UserOverviewPage: React.FC = () => {
 
       setAnchorEl(null);
 
-      const filtered = users.filter((user) => user.id !== selectedMember);
+      const filtered = users.filter((user) => user.id !== deleteUser);
       users = filtered;
       cache.writeQuery({
         query: GET_ALL_USERS,
         data: { users },
       });
+    },
+    onCompleted() {
+      handleCloseConfirmDelete();
+      enqueueSnackbar('Team member deleted.');
     },
   });
 
@@ -145,21 +154,14 @@ const UserOverviewPage: React.FC = () => {
 
   const open = Boolean(anchorEl);
 
-  const handleClickDelete = () => {
+  const handleConfirmDelete = () => {
     const memberId = selectedMember;
     deleteUser({ variables: { id: memberId } });
-    setOpenModal(false);
-    setAnchorEl(null);
-    enqueueSnackbar('Team member deleted.');
   };
 
-  const handleDeleteOption = () => {
+  const handleClickDelete = () => {
     setOpenModal(true);
-  };
-
-  const handleClickCancel = () => {
     setAnchorEl(null);
-    setOpenModal(false);
   };
 
   const paraStyle = pStyles();
@@ -177,7 +179,7 @@ const UserOverviewPage: React.FC = () => {
     },
     {
       styles: optionStyle.menuDelete,
-      onClick: handleDeleteOption,
+      onClick: handleClickDelete,
       name: 'Delete',
     },
   ];
@@ -239,8 +241,8 @@ const UserOverviewPage: React.FC = () => {
         title="You are about to delete a team member."
         body="Deleted team members will no longer have access to any casualty collection points."
         actionLabel="Delete"
-        handleClickAction={handleClickDelete}
-        handleClickCancel={handleClickCancel}
+        handleClickAction={handleConfirmDelete}
+        handleClickCancel={handleCloseConfirmDelete}
       />
       <div className={classes.addResourceContainer}>
         <AddResourceButton
