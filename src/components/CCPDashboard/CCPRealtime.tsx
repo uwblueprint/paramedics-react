@@ -4,16 +4,17 @@ import { PATIENTS_SUBSCRIPTION } from '../../graphql/subscriptions/patients';
 
 interface Props {
   collectionPointId: string;
+  handleUpdates: () => void;
 }
 
 export const CCPRealtime = (props: Props) => {
-  const [numUpdates, setNumUpdates] = useState(0);
   const [listUpdates, setListUpdates] = useState([]);
-  const { collectionPointId } = props;
+  const { collectionPointId, handleUpdates } = props;
+
   const { data, loading } = useSubscription(PATIENTS_SUBSCRIPTION, {
     variables: { collectionPointId },
     onSubscriptionData: ({ subscriptionData: { data } }) => {
-      setNumUpdates(numUpdates + 1);
+      handleUpdates();
       //setListUpdates([...listUpdates, data]);
     },
   });
@@ -22,8 +23,7 @@ export const CCPRealtime = (props: Props) => {
 
   return (
     <div>
-      <p>new updates: {numUpdates}</p>
-      <p>{loading ? '' : 'patient ' + id + ' updated'}</p>
+      <p>{loading ? '' : `patient ${id} updated`}</p>
     </div>
   );
 };

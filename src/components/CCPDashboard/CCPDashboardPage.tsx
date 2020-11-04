@@ -1,7 +1,17 @@
 import React from 'react';
-import { Box, Tabs, Tab, makeStyles, Typography } from '@material-ui/core';
+import {
+  Box,
+  Tabs,
+  Tab,
+  makeStyles,
+  Typography,
+  IconButton,
+  Badge,
+} from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import { RouteComponentProps } from 'react-router';
 import { useQuery } from '@apollo/react-hooks';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
@@ -15,7 +25,6 @@ import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 
 interface TParams {
   eventId: string;
@@ -83,6 +92,11 @@ const useStyles = makeStyles({
     verticalAlign: 'middle',
     marginLeft: '16px',
   },
+  refreshButton: {
+    position: 'absolute',
+    right: '16px',
+    padding: 0,
+  },
 });
 
 const TabPanel = (props: TabPanelProps) => {
@@ -102,6 +116,7 @@ const TabPanel = (props: TabPanelProps) => {
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
   const { eventId, ccpId, patientId } = match.params;
+  const [numUpdates, setNumUpdates] = React.useState(0);
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients();
@@ -151,6 +166,23 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         <Typography variant="caption" className={classes.menuBarTitle}>
           100 University
         </Typography>
+        <IconButton
+          className={classes.refreshButton}
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          <Badge
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            badgeContent={numUpdates}
+            color="error"
+          >
+            <RefreshIcon style={{ color: Colours.White }} />
+          </Badge>
+        </IconButton>
       </div>
     </>
   );
@@ -174,8 +206,10 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         />
         <Tab label="Hospital" id={`tab-${CCPDashboardTabOptions.Hospital}`} />
       </Tabs>
-      <CCPRealtime collectionPointId={ccpId} />
-
+      <CCPRealtime
+        collectionPointId={ccpId}
+        handleUpdates={() => setNumUpdates(numUpdates + 1)}
+      />
       <TabPanel
         value={tab}
         index={CCPDashboardTabOptions.PatientOverview}
