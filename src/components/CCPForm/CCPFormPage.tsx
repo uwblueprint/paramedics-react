@@ -166,7 +166,7 @@ const CCPFormPage = ({
         value={ccpName}
       />
       <FormField
-        label="Event Location:"
+        label="CCP Location:"
         placeholder="Enter Location Here"
         isValidated
         onChange={handleLocationChange}

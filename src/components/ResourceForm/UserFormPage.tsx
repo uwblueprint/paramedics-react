@@ -14,9 +14,9 @@ import { Colours } from '../../styles/Constants';
 import { ADD_USER, EDIT_USER } from '../../graphql/mutations/users';
 import {
   User,
-  AccessLevel,
   GET_ALL_USERS,
   GET_USER_BY_ID,
+  AccessLevel,
 } from '../../graphql/queries/users';
 
 const useStyles = makeStyles({
@@ -77,22 +77,22 @@ const UserFormPage = ({
 
   const [memberName, setMemberName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
+  const [role, setRole] = useState<number>(AccessLevel.SUPERVISOR);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
         name,
         email,
-        accessLevel,
+        roleId,
       }: {
         name: string;
         email: string;
-        accessLevel: AccessLevel;
+        roleId: number;
       } = data.user;
       setMemberName(name);
       setEmail(email);
-      setRole(accessLevel);
+      setRole(roleId);
     }
   }, [data, loading, mode]);
 
@@ -126,7 +126,7 @@ const UserFormPage = ({
           name: memberName,
           email,
           password: 'password',
-          accessLevel: role,
+          roleId: role,
           emergencyContact: '1234567890',
         },
       });
@@ -136,7 +136,7 @@ const UserFormPage = ({
           id: userId,
           name: memberName,
           email,
-          accessLevel: role,
+          roleId: role,
         },
       });
     }
