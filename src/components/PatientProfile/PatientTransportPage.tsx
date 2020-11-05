@@ -95,14 +95,6 @@ const PatientTransportPage = ({
     <Dialog fullScreen open={open} onClose={handleClose}>
       <AppBar position="relative" className={classes.appBar}>
         <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-          >
-            <ArrowBackIcon />
-          </IconButton>
           <Typography variant="h6" className={classes.appBarText}>
             {ccp.name}
           </Typography>
@@ -115,19 +107,13 @@ const PatientTransportPage = ({
       <div className={classes.resourceWrapper}>
         <Button
           color="secondary"
+          variant="outlined"
           onClick={handleClose}
           className={classes.cancelButton}
         >
           Cancel
         </Button>
         <div className={classes.resourceCreationTopSection}>
-          <Button
-            onClick={handleClose}
-            color="secondary"
-            style={{ textTransform: 'none' }}
-          >
-            &#60; Back
-          </Button>
           <div className={classes.resourceHeader}>
             <Typography variant="h4">Patient Transport</Typography>
           </div>
