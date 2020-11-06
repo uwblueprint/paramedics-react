@@ -137,12 +137,14 @@ export const PatientInfoTable = ({
   eventId,
   ccpId,
   patientId,
+  numUpdates,
 }: {
   patients: Patient[];
   type: CCPDashboardTabOptions;
   eventId: string;
   ccpId: string;
   patientId?: string;
+  numUpdates?: number;
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
@@ -160,7 +162,9 @@ export const PatientInfoTable = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
 
   const handleOpenDetails = (patient) => {
-    history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`);
+    history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`, {
+      numUpdates,
+    });
     setOpenDetails(true);
   };
 
@@ -205,7 +209,7 @@ export const PatientInfoTable = ({
   };
 
   const handleCloseDetails = () => {
-    history.push(`/events/${eventId}/ccps/${ccpId}`);
+    history.push(`/events/${eventId}/ccps/${ccpId}`, { numUpdates });
   };
 
   const handleCancelDeletePatient = () => {
@@ -364,6 +368,7 @@ export const PatientInfoTable = ({
             patient={(selectedPatient as unknown) as Patient}
             eventId={eventId}
             ccpId={ccpId}
+            numUpdates={numUpdates}
           />
           <DialogActions
             style={{

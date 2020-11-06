@@ -23,6 +23,7 @@ interface HospitalOverviewProps {
   ccpId: string;
   patients: Patient[];
   patientId?: string;
+  numUpdates?: number;
 }
 
 const useStyles = makeStyles({
@@ -49,7 +50,7 @@ const useStyles = makeStyles({
 });
 
 export const HospitalOverview = (props: HospitalOverviewProps) => {
-  const { patients, eventId, ccpId, patientId } = props;
+  const { patients, eventId, ccpId, patientId, numUpdates } = props;
   const classes = useStyles();
 
   const [selectedHospital, setSelectedHospital] = React.useState<string>(
@@ -147,6 +148,7 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
           eventId={eventId}
           ccpId={ccpId}
           patientId={patientId}
+          numUpdates={numUpdates}
         />
       </Card>
       <ScanPatientButton />

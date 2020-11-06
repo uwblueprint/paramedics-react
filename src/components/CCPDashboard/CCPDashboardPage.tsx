@@ -10,7 +10,8 @@ import {
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { RouteComponentProps } from 'react-router';
-import { useQuery } from '@apollo/react-hooks';
+import { useLocation } from 'react-router-dom';
+import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
@@ -20,11 +21,11 @@ import {
   Patient,
   Status,
 } from '../../graphql/queries/patients';
-import { CCPRealtime } from './CCPRealtime';
 import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
+import { PATIENTS_SUBSCRIPTION } from '../../graphql/subscriptions/patients';
 
 interface TParams {
   eventId: string;
@@ -113,19 +114,48 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
+type LocationState = { numUpdates: number };
+
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
+  const location = useLocation<LocationState>();
+
   const { eventId, ccpId, patientId } = match.params;
-  const [numUpdates, setNumUpdates] = React.useState(0);
+  const { numUpdates } = location.state || { numUpdates: 0 };
+
+  const [lastNumUpdates, setLastNumUpdates] = React.useState(numUpdates);
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients();
   // Should switch to fetching patients from cache
 
+  window.history.pushState(
+    {
+      ...location.state,
+      numUpdates: 0,
+    },
+    ''
+  );
+
+  useSubscription(PATIENTS_SUBSCRIPTION, {
+    variables: { collectionPointId: ccpId },
+    onSubscriptionData: () => {
+      setLastNumUpdates(lastNumUpdates + 1);
+      window.history.pushState(
+        {
+          ...location.state,
+          numUpdates: lastNumUpdates,
+        },
+        ''
+      );
+    },
+  });
+
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const { loading: ccpLoading, data: ccpInfo } = useQuery(GET_CCP_BY_ID, {
     variables: { id: ccpId },
   });
+
   const allPatients: Array<Patient> = data ? data.patients : [];
   const patients = React.useMemo(
     () =>
@@ -177,7 +207,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
               vertical: 'bottom',
               horizontal: 'left',
             }}
-            badgeContent={numUpdates}
+            badgeContent={lastNumUpdates}
             color="error"
           >
             <RefreshIcon style={{ color: Colours.White }} />
@@ -206,10 +236,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         />
         <Tab label="Hospital" id={`tab-${CCPDashboardTabOptions.Hospital}`} />
       </Tabs>
-      <CCPRealtime
-        collectionPointId={ccpId}
-        handleUpdates={() => setNumUpdates(numUpdates + 1)}
-      />
       <TabPanel
         value={tab}
         index={CCPDashboardTabOptions.PatientOverview}
@@ -220,6 +246,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           ccpId={ccpId}
           patients={patients}
           patientId={patientId}
+          numUpdates={lastNumUpdates}
         />
       </TabPanel>
       <TabPanel
@@ -232,6 +259,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           ccpId={ccpId}
           patients={transportPatients}
           patientId={patientId}
+          numUpdates={lastNumUpdates}
         />
       </TabPanel>
     </Box>
