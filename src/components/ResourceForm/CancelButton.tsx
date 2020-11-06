@@ -8,9 +8,7 @@ const useCancelButtonStyles = makeStyles({
     minWidth: '160px',
     minHeight: '40px',
     fontSize: '18px',
-    marginTop: '10px',
-    position: 'absolute',
-    left: '56px',
+    alignSelf: 'center',
   },
 });
 
@@ -19,6 +17,7 @@ const CancelButton = ({ to }: { to: string }) => {
   return (
     <Button
       color="secondary"
+      variant="outlined"
       classes={{
         root: classes.root,
       }}

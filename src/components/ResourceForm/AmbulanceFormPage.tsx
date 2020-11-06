@@ -14,7 +14,6 @@ import {
   GET_AMBULANCE_BY_ID,
 } from '../../graphql/queries/ambulances';
 import FormField from '../common/FormField';
-import BackLink from '../common/BackLink';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
@@ -31,6 +30,7 @@ const useStyles = makeStyles({
   resourceHeader: {
     display: 'flex',
     padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
     padding: '30px',
@@ -111,11 +111,11 @@ const AmbulanceFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage/ambulances" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new ambulance' : 'Edit Ambulance'}
           </Typography>
+          <CancelButton to="/manage/ambulances" />
         </div>
       </div>
       <div className={classes.resourceForm}>
@@ -135,7 +135,6 @@ const AmbulanceFormPage = ({
         handleClick={handleComplete}
         disabled={ambulanceNumber === ''}
       />
-      <CancelButton to="/manage/ambulances" />
     </div>
   );
 };

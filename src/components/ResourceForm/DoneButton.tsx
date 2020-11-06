@@ -9,7 +9,7 @@ const useDoneButtonStyles = makeStyles({
     fontSize: '18px',
     marginTop: '10px',
     position: 'absolute',
-    right: '56px',
+    right: '30px',
   },
   disabled: {
     cursor: 'not-allowed !important',

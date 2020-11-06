@@ -6,7 +6,6 @@ import { useQuery } from 'react-apollo';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { Typography, makeStyles } from '@material-ui/core';
 import FormField from '../common/FormField';
-import BackLink from '../common/BackLink';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import AccessLevelSelector from './AccessLevelSelector';
@@ -31,6 +30,7 @@ const useStyles = makeStyles({
   resourceHeader: {
     display: 'flex',
     padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
     padding: '30px',
@@ -147,11 +147,11 @@ const UserFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage/members" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new team member' : 'Edit team member'}
           </Typography>
+          <CancelButton to="/manage/members" />
         </div>
         {mode === 'new' ? (
           <div className={classes.caption}>
@@ -200,7 +200,6 @@ const UserFormPage = ({
         </div>
         <DoneButton disabled={memberName === '' || email === ''} />
       </ValidatorForm>
-      <CancelButton to="/manage/members" />
     </div>
   );
 };

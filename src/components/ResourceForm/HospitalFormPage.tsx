@@ -5,7 +5,6 @@ import { Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import FormField from '../common/FormField';
-import BackLink from '../common/BackLink';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
@@ -28,6 +27,7 @@ const useStyles = makeStyles({
   resourceHeader: {
     display: 'flex',
     padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
     padding: '30px',
@@ -109,11 +109,11 @@ const HospitalFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage/hospitals" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new hospital' : 'Edit Hospital'}
           </Typography>
+          <CancelButton to="/manage/hospitals" />
         </div>
       </div>
       <div className={classes.resourceForm}>
@@ -130,7 +130,6 @@ const HospitalFormPage = ({
         </Typography>
       </div>
       <DoneButton handleClick={handleComplete} disabled={hospitalName === ''} />
-      <CancelButton to="/manage/hospitals" />
     </div>
   );
 };
