@@ -41,7 +41,7 @@ const useStyles = makeStyles({
     fontSize: '18px',
     margin: '10px 0px 60px 0px',
     position: 'absolute',
-    right: '56px',
+    right: '30px',
   },
   cancelButton: {
     minWidth: '228px',
