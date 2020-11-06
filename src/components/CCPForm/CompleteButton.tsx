@@ -6,7 +6,6 @@ import { Colours } from '../../styles/Constants';
 const useEventButtonStyles = makeStyles({
   root: {
     minWidth: '228px',
-    margin: '10px 0',
     fontSize: '18px',
     color: Colours.White,
     backgroundColor: Colours.Secondary,

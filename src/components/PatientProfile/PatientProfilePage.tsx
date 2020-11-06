@@ -50,7 +50,7 @@ interface FormFields {
 const useStyles = makeStyles({
   patientCancelBtn: {
     minWidth: '228px',
-    margin: '10px 0',
+    alignSelf: 'center',
     display: 'flex',
   },
 });

@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
   ccpCancelBtn: {
     minWidth: '228px',
-    margin: '10px 0',
+    alignSelf: 'center',
     fontSize: '18px',
     fontWeight: 500,
     color: Colours.Secondary,

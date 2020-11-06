@@ -11,7 +11,7 @@ import { GET_ALL_PATIENTS } from '../../graphql/queries/patients';
 const useStyles = makeStyles({
   barcodeCancelBtn: {
     minWidth: '228px',
-    margin: '10px 0',
+    alignSelf: 'center',
     display: 'flex',
   },
 });

@@ -26,7 +26,7 @@ enum EventModes {
 const useStyles = makeStyles({
   eventCancelBtn: {
     minWidth: '228px',
-    margin: '10px 0',
+    alignSelf: 'center',
     display: 'flex',
   },
 });
