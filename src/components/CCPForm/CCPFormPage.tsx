@@ -168,7 +168,7 @@ const CCPFormPage = ({
         borderBottom={`1px solid ${Colours.BorderLightGray}`}
       >
         <Typography variant="h4">
-          {mode === 'new' ? 'Add a CCP' : 'Edit CCP'}
+          {mode === 'new' ? 'Add New CCP' : 'Edit CCP'}
         </Typography>
         <Button
           color="secondary"
