@@ -184,16 +184,19 @@ const UserOverviewPage: React.FC = () => {
     },
   ];
 
+  const roleMap = {
+    1: 'Commander',
+    2: 'Supervisor',
+    3: 'Dispatch',
+  };
+
   const cells = members.map((member: User) => {
     return (
       <TableRow key={member.id}>
         <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
         <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
         <TableCell classes={{ root: dRow.root }}>
-          {member.accessLevel
-            ? member.accessLevel.charAt(0).toUpperCase() +
-              member.accessLevel.substring(1).toLowerCase()
-            : null}
+          {member.roleId ? roleMap[member.roleId] : null}
         </TableCell>
         <TableCell classes={{ root: optionStyle.root }}>
           <IconButton data-id={member.id} onClick={handleClickOptions}>

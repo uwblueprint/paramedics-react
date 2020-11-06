@@ -5,20 +5,20 @@ export const ADD_USER = gql`
     $name: String!
     $email: String!
     $password: String!
-    $accessLevel: accessLevel!
+    $roleId: ID!
     $emergencyContact: String!
   ) {
     addUser(
       name: $name
       email: $email
       password: $password
-      accessLevel: $accessLevel
+      roleId: $roleId
       emergencyContact: $emergencyContact
     ) {
       id
       name
       email
-      accessLevel
+      roleId
     }
   }
 `;
@@ -28,20 +28,20 @@ export const EDIT_USER = gql`
     $id: ID!
     $name: String
     $email: String
-    $accessLevel: accessLevel
+    $roleId: ID
     $emergencyContact: String
   ) {
     updateUser(
       id: $id
       name: $name
       email: $email
-      accessLevel: $accessLevel
+      roleId: $roleId
       emergencyContact: $emergencyContact
     ) {
       id
       name
       email
-      accessLevel
+      roleId
     }
   }
 `;

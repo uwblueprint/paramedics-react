@@ -1,5 +1,7 @@
 [Notion ticket](https://www.notion.so/uwblueprintexecs/9224caeb21ce4350b8a1dc378d393323?v=43f44ac04d734394b7f7edc636c523b4)
 
+[Figma link](https://www.figma.com/file/IpOPyv79gBwEohvOJvPV6f/%F0%9F%9A%91-Designs-for-Development-(S20%2C-F20)?node-id=1972%3A36028)
+
 ## Changes
 - 
 
@@ -19,6 +21,7 @@ before opening PR
 filling out PR
 - [ ] descriptive title
 - [ ] update `notion ticket` link
+- [ ] update `figma link`
 - [ ] fill out `Changes`
   - [ ] \(optional) add inline comments in diff
 - [ ] fill out `Testing`
