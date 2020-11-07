@@ -25,7 +25,7 @@ import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
-import { PATIENTS_SUBSCRIPTION } from '../../graphql/subscriptions/patients';
+import { PATIENT_ADDED, PATIENT_UPDATED } from '../../graphql/subscriptions/patients';
 
 interface TParams {
   eventId: string;
@@ -137,7 +137,21 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     ''
   );
 
-  useSubscription(PATIENTS_SUBSCRIPTION, {
+  useSubscription(PATIENT_UPDATED, {
+    variables: { collectionPointId: ccpId },
+    onSubscriptionData: () => {
+      setLastNumUpdates(lastNumUpdates + 1);
+      window.history.pushState(
+        {
+          ...location.state,
+          numUpdates: lastNumUpdates,
+        },
+        ''
+      );
+    },
+  });
+
+  useSubscription(PATIENT_ADDED, {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: () => {
       setLastNumUpdates(lastNumUpdates + 1);
