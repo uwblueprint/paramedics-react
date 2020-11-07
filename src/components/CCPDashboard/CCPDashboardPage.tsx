@@ -26,6 +26,8 @@ import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
 import { PATIENT_ADDED, PATIENT_UPDATED } from '../../graphql/subscriptions/patients';
+import client from '../../graphql/apollo/client';
+import gql from 'graphql-tag';
 
 interface TParams {
   eventId: string;
@@ -140,6 +142,15 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useSubscription(PATIENT_UPDATED, {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: () => {
+      // cache.modify({
+      //   id: cache.identify(myObject),
+      //   fields: {
+      //     name(cachedName) {
+      //       return cachedName.toUpperCase();
+      //     },
+      //   },
+      //   /* broadcast: false // Include this to prevent automatic query refresh */
+      // });
       setLastNumUpdates(lastNumUpdates + 1);
       window.history.pushState(
         {
@@ -151,9 +162,9 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     },
   });
 
-  useSubscription(PATIENT_ADDED, {
+  const { data: newPatient } = useSubscription(PATIENT_ADDED, {
     variables: { collectionPointId: ccpId },
-    onSubscriptionData: () => {
+    onSubscriptionData: ({ subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
       window.history.pushState(
         {
@@ -163,6 +174,28 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         ''
       );
     },
+    client: () => {
+      client.cache.modify({
+        fields: {
+          patients(existingPatients = patients, { readField }) {
+            const newPatientRef = client.cache.writeFragment({
+              data: newPatient.patientAdded,
+              fragment: gql`
+                fragment NewPatient on Patient {
+                  id
+                }
+              `
+            });
+            if (existingPatients.some(
+              ref => readField('id', ref) === newPatient.patientAdded.id
+            )) {
+              return existingPatients;
+            }
+            return [...existingPatients, newPatientRef];
+          }
+        }
+      });
+    }
   });
 
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
