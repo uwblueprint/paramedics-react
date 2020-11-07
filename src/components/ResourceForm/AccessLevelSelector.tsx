@@ -61,7 +61,7 @@ const AccessLevelSelector = ({
         row
         aria-label="position"
         name="position"
-        value={currentValue}
+        value={currentValue.toString()}
         onChange={handleChange}
         className={classes.radioGroup}
       >

@@ -76,6 +76,7 @@ const UserFormPage = ({
   });
 
   const [memberName, setMemberName] = useState<string>('');
+  const [validForm, setValidForm] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [role, setRole] = useState<number>(AccessLevel.SUPERVISOR);
 
@@ -117,6 +118,10 @@ const UserFormPage = ({
 
   const handleRoleChange = (e: any) => {
     setRole(e.target.value);
+  };
+
+  const handleWhenValid = (result: boolean) => {
+    setValidForm(result && memberName !== '' && email !== '');
   };
 
   const handleComplete = () => {
@@ -186,6 +191,7 @@ const UserFormPage = ({
             ]}
             onChange={handleEmailChange}
             value={email}
+            whenValid={handleWhenValid}
           />
           <AccessLevelSelector
             currentValue={role}
@@ -198,7 +204,7 @@ const UserFormPage = ({
             *Denotes a required field
           </Typography>
         </div>
-        <DoneButton disabled={memberName === '' || email === ''} />
+        <DoneButton disabled={!validForm} />
       </ValidatorForm>
       <CancelButton to="/manage/members" />
     </div>
