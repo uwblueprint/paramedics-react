@@ -9,6 +9,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 
 const useModalStyles = makeStyles({
   root: {
@@ -60,8 +61,8 @@ const datePickerTheme = createMuiTheme({
 const SelectDateModal: React.FC<{
   open: boolean;
   handleClose: () => void;
-  eventDate: Date | null;
-  setEventDate: (date: Date | null) => void;
+  eventDate: moment.Moment | null;
+  setEventDate: (date: moment.Moment | null) => void;
 }> = ({
   open,
   handleClose,
@@ -70,11 +71,11 @@ const SelectDateModal: React.FC<{
 }: {
   open: boolean;
   handleClose: () => void;
-  eventDate: Date | null;
-  setEventDate: (date: Date | null) => void;
+  eventDate: moment.Moment | null;
+  setEventDate: (date: moment.Moment | null) => void;
 }) => {
   const classes = useModalStyles();
-  const [date, setDate] = useState<Date | null>(eventDate);
+  const [date, setDate] = useState<moment.Moment | null>(eventDate);
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
@@ -91,7 +92,7 @@ const SelectDateModal: React.FC<{
               id="date-picker-inline"
               label="Date picker inline"
               value={date}
-              onChange={setDate}
+              onChange={(date) => setDate(moment.utc(date))}
               fullWidth
             />
           </MuiPickersUtilsProvider>
