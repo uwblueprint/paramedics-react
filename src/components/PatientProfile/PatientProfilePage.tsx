@@ -266,7 +266,7 @@ const PatientProfilePage = ({
         },
       });
     } else if (mode === 'edit') {
-      if (isRestore && formFields.status !== Status.DELETED) {
+      if (isRestore) {
         enqueueSnackbar(`Patient #${formFields.barcodeValue} restored.`);
       }
 
