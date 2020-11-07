@@ -11,6 +11,7 @@ import {
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { RouteComponentProps } from 'react-router';
 import { useLocation } from 'react-router-dom';
+import { useApolloClient } from '@apollo/client';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
@@ -25,8 +26,11 @@ import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
-import { PATIENT_ADDED, PATIENT_UPDATED } from '../../graphql/subscriptions/patients';
-import client from '../../graphql/apollo/client';
+import {
+  PATIENT_ADDED,
+  PATIENT_UPDATED,
+} from '../../graphql/subscriptions/patients';
+
 import gql from 'graphql-tag';
 
 interface TParams {
@@ -121,6 +125,7 @@ type LocationState = { numUpdates: number };
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
   const location = useLocation<LocationState>();
+  const client = useApolloClient();
 
   const { eventId, ccpId, patientId } = match.params;
   const { numUpdates } = location.state || { numUpdates: 0 };
@@ -162,7 +167,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     },
   });
 
-  const { data: newPatient } = useSubscription(PATIENT_ADDED, {
+  useSubscription(PATIENT_ADDED, {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
@@ -173,29 +178,30 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         },
         ''
       );
-    },
-    client: () => {
+
       client.cache.modify({
         fields: {
           patients(existingPatients = patients, { readField }) {
             const newPatientRef = client.cache.writeFragment({
-              data: newPatient.patientAdded,
+              data: data.patientAdded,
               fragment: gql`
                 fragment NewPatient on Patient {
                   id
                 }
-              `
+              `,
             });
-            if (existingPatients.some(
-              ref => readField('id', ref) === newPatient.patientAdded.id
-            )) {
+            if (
+              existingPatients.some(
+                (ref) => readField('id', ref) === data.patientAdded.id
+              )
+            ) {
               return existingPatients;
             }
             return [...existingPatients, newPatientRef];
-          }
-        }
+          },
+        },
       });
-    }
+    },
   });
 
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
