@@ -245,6 +245,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           <IconButton
             data-id={row.id}
             onClick={(event) => {
+              event.stopPropagation();
               handleClickOptions(event, row);
             }}
             color="inherit"
