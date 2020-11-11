@@ -12,6 +12,10 @@ export const PATIENT_ADDED = gql`
   subscription OnPatientAdded($collectionPointId: ID!) {
     patientAdded(collectionPointId: $collectionPointId) {
       id
+      gender
+      age
+      runNumber
+      barcodeValue
     }
   }
 `;

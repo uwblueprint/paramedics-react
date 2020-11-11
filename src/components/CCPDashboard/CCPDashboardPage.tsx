@@ -11,8 +11,11 @@ import {
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { RouteComponentProps } from 'react-router';
 import { useLocation } from 'react-router-dom';
-import { useApolloClient } from '@apollo/client';
-import { useQuery, useSubscription } from '@apollo/react-hooks';
+import {
+  useQuery,
+  useSubscription,
+  useApolloClient,
+} from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
@@ -30,8 +33,6 @@ import {
   PATIENT_ADDED,
   PATIENT_UPDATED,
 } from '../../graphql/subscriptions/patients';
-
-import gql from 'graphql-tag';
 
 interface TParams {
   eventId: string;
@@ -144,66 +145,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     ''
   );
 
-  useSubscription(PATIENT_UPDATED, {
-    variables: { collectionPointId: ccpId },
-    onSubscriptionData: () => {
-      // cache.modify({
-      //   id: cache.identify(myObject),
-      //   fields: {
-      //     name(cachedName) {
-      //       return cachedName.toUpperCase();
-      //     },
-      //   },
-      //   /* broadcast: false // Include this to prevent automatic query refresh */
-      // });
-      setLastNumUpdates(lastNumUpdates + 1);
-      window.history.pushState(
-        {
-          ...location.state,
-          numUpdates: lastNumUpdates,
-        },
-        ''
-      );
-    },
-  });
-
-  useSubscription(PATIENT_ADDED, {
-    variables: { collectionPointId: ccpId },
-    onSubscriptionData: ({ subscriptionData: { data } }) => {
-      setLastNumUpdates(lastNumUpdates + 1);
-      window.history.pushState(
-        {
-          ...location.state,
-          numUpdates: lastNumUpdates,
-        },
-        ''
-      );
-
-      client.cache.modify({
-        fields: {
-          patients(existingPatients = patients, { readField }) {
-            const newPatientRef = client.cache.writeFragment({
-              data: data.patientAdded,
-              fragment: gql`
-                fragment NewPatient on Patient {
-                  id
-                }
-              `,
-            });
-            if (
-              existingPatients.some(
-                (ref) => readField('id', ref) === data.patientAdded.id
-              )
-            ) {
-              return existingPatients;
-            }
-            return [...existingPatients, newPatientRef];
-          },
-        },
-      });
-    },
-  });
-
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const { loading: ccpLoading, data: ccpInfo } = useQuery(GET_CCP_BY_ID, {
     variables: { id: ccpId },
@@ -217,6 +158,26 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       ),
     [allPatients, ccpId]
   );
+
+  useSubscription(PATIENT_UPDATED, {
+    variables: { collectionPointId: ccpId },
+    onSubscriptionData: () => {
+      setLastNumUpdates(lastNumUpdates + 1);
+    },
+  });
+
+  useSubscription(PATIENT_ADDED, {
+    variables: { collectionPointId: ccpId },
+    onSubscriptionData: ({ subscriptionData: { data } }) => {
+      setLastNumUpdates(lastNumUpdates + 1);
+      // eslint-disable-next-line no-console
+      console.log('new data: ', data.patientAdded);
+      client.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: [...patients, data.patientAdded],
+      });
+    },
+  });
 
   const [tab, setTab] = React.useState(CCPDashboardTabOptions.PatientOverview);
 
