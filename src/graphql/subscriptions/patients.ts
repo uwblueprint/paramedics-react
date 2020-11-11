@@ -16,6 +16,28 @@ export const PATIENT_ADDED = gql`
       age
       runNumber
       barcodeValue
+      collectionPointId {
+        id
+        name
+        eventId {
+          id
+          name
+          eventDate
+        }
+      }
+      triageLevel
+      status
+      notes
+      updatedAt
+      transportTime
+      hospitalId {
+        id
+        name
+      }
+      ambulanceId {
+        id
+        vehicleNumber
+      }
     }
   }
 `;

@@ -11,12 +11,9 @@ import {
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { RouteComponentProps } from 'react-router';
 import { useLocation } from 'react-router-dom';
-import {
-  useQuery,
-  useSubscription,
-  useApolloClient,
-} from '@apollo/react-hooks';
+import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+import { cloneDeep } from 'lodash';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
@@ -126,7 +123,6 @@ type LocationState = { numUpdates: number };
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
   const location = useLocation<LocationState>();
-  const client = useApolloClient();
 
   const { eventId, ccpId, patientId } = match.params;
   const { numUpdates } = location.state || { numUpdates: 0 };
@@ -168,13 +164,23 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   useSubscription(PATIENT_ADDED, {
     variables: { collectionPointId: ccpId },
-    onSubscriptionData: ({ subscriptionData: { data } }) => {
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
-      // eslint-disable-next-line no-console
-      console.log('new data: ', data.patientAdded);
+
+      // const newPatients = cloneDeep(patients);
+      // newPatients.push(data.patientAdded);
+      // client.writeQuery({
+      //   query: GET_ALL_PATIENTS,
+      //   data: {
+      //     patients: newPatients,
+      //   },
+      // });
+
       client.writeQuery({
         query: GET_ALL_PATIENTS,
-        data: [...patients, data.patientAdded],
+        data: {
+          patients: [...patients, data.patientAdded],
+        },
       });
     },
   });
