@@ -33,6 +33,7 @@ const MapPage = ({
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
+  const [openSidebar, setOpenSidebar] = React.useState(false);
   const defaultMap = {
     zoom: 11,
     center: {

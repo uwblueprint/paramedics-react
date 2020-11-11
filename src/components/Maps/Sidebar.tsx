@@ -6,6 +6,12 @@ import Drawer from '@material-ui/core/Drawer';
 import FormField from '../common/FormField';
 import SearchBar from './SearchBar';
 
+const useStyles = makeStyles({
+  root: {
+    width: '300px',
+  },
+});
+
 const Sidebar = ({
   open,
   title,
@@ -17,6 +23,7 @@ const Sidebar = ({
 }) => {
   const [address, setAddress] = React.useState('');
   const [label, setLabel] = React.useState('');
+  const styles = useStyles();
 
   // const handleAddressChange = (address) => {
   //   setAddress(address);
@@ -31,7 +38,11 @@ const Sidebar = ({
   };
 
   return (
-    <Drawer open={open} onClose={onClose}>
+    <Drawer
+      open={open}
+      onClose={onClose}
+      PaperProps={{ style: { width: '300px' } }}
+    >
       <Typography>{title}</Typography>
       {/* <FormField
         label="Pin Label: "

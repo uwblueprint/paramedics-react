@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -37,52 +40,39 @@ const SearchBar = () => {
       .then((results) => getLatLng(results[0]))
       .then((latLng) => console.log(latLng));
   };
-  
-  if(loaded) {
+
+  if (loaded) {
     return (
-    <PlacesAutocomplete
-      value={address}
-      onChange={handleChange}
-      onSelect={handleSelect}
-    >
-      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-        <div>
-          <input
-            {...getInputProps({
-              placeholder: 'Search Places ...',
-              className: 'location-search-input',
-            })}
-          />
-          <div className="autocomplete-dropdown-container">
-            {loading && <div>Loading...</div>}
-            {suggestions.map((suggestion) => {
-              const className = suggestion.active
-                ? 'suggestion-item--active'
-                : 'suggestion-item';
-              // inline style for demonstration purpose
-              const style = suggestion.active
-                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                : { backgroundColor: '#ffffff', cursor: 'pointer' };
-              return (
-                <div
-                  {...getSuggestionItemProps(suggestion, {
-                    className,
-                    style,
-                  })}
-                >
-                  <span>{suggestion.description}</span>
-                </div>
-              );
-            })}
+      <PlacesAutocomplete
+        value={address}
+        onChange={handleChange}
+      >
+        {({ getInputProps, suggestions, loading }) => (
+          <div>
+            <TextField
+              inputProps={getInputProps({
+                placeholder: 'Search Places ...',
+                className: 'location-search-input',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map((suggestion) => {
+                <MenuItem onClick={(suggestion) => handleSelect(suggestion.description)}>
+                  <Typography noWrap={true}>
+                    {' '}
+                    {suggestion.description}
+                    {' '}
+                  </Typography>
+                </MenuItem>
+              })}
+            </div>
           </div>
-        </div>
-      )}
-    </PlacesAutocomplete>
-  );
-  }
-  else 
-  {
-    return (<div> Loading ... </div>);
+        )}
+      </PlacesAutocomplete>
+    );
+  } else {
+    return <div> Loading ... </div>;
   }
 };
 
