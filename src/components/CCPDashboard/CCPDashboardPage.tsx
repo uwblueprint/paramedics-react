@@ -13,7 +13,7 @@ import { RouteComponentProps } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
-import { cloneDeep } from 'lodash';
+import gql from 'graphql-tag';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
@@ -157,8 +157,36 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   useSubscription(PATIENT_UPDATED, {
     variables: { collectionPointId: ccpId },
-    onSubscriptionData: () => {
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
+      // note: transport data changes (ex. ambulance and hospital and ccp) is not supported
+      client.writeFragment({
+        id: `Patient:${data.patientUpdated.id}`,
+        fragment: gql`
+          fragment NewPatient on Patient {
+            gender
+            age
+            runNumber
+            barcodeValue
+            triageLevel
+            status
+            notes
+            updatedAt
+            transportTime
+          }
+        `,
+        data: {
+          gender: data.patientUpdated.gender,
+          age: data.patientUpdated.age,
+          runNumber: data.patientUpdated.runNumber,
+          barcodeValue: data.patientUpdated.barcodeValue,
+          triageLevel: data.patientUpdated.triageLevel,
+          status: data.patientUpdated.status,
+          notes: data.patientUpdated.notes,
+          updatedAt: data.patientUpdated.updatedAt,
+          transportTime: data.patientUpdated.transportTime,
+        },
+      });
     },
   });
 
@@ -166,15 +194,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
-
-      // const newPatients = cloneDeep(patients);
-      // newPatients.push(data.patientAdded);
-      // client.writeQuery({
-      //   query: GET_ALL_PATIENTS,
-      //   data: {
-      //     patients: newPatients,
-      //   },
-      // });
 
       client.writeQuery({
         query: GET_ALL_PATIENTS,
