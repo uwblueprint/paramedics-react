@@ -216,8 +216,6 @@ export const PatientInfoTable = ({
     setOpenDeletePatient(false);
   };
 
-  React.useEffect(() => {}, [patients]);
-
   const tableRows = stableSort(patients, getComparator(order, orderBy)).map(
     (patient: Patient) => {
       const triageLevels = {
