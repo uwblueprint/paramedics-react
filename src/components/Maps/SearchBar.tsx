@@ -1,35 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import Popover from '@material-ui/core/Popover';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+import { makeStyles } from '@material-ui/core/styles';
 
-const loadScript = (url, callback) => {
-  if (!document.querySelectorAll(`[src="${url}"]`).length) {
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.onload = () => callback();
-    script.src = url;
-    document.querySelector('body')?.insertAdjacentElement('beforeend', script);
-    console.log(document.getElementsByTagName('script'));
-  } else {
-    callback();
-  }
-};
+const useStyles = makeStyles({
+  sidebarOptions: {
+    width: '250px',
+  },
+  sidebarTextField: {
+    width: '250px',
+    marginLeft: '10px',
+  },
+  sidebarList: {
+    width: '240px',
+  },
+});
 
 const SearchBar = () => {
-  const [loaded, setLoaded] = useState(false);
   const [address, setAddress] = useState('');
-
-  useEffect(() => {
-    loadScript(
-      `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GMAPS}&libraries=places`,
-      () => setLoaded(true)
-    );
-  }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
+  let latitude = 0;
+  let longitude = 0;
+  const styles = useStyles();
+  const inputEl = useRef(null);
 
   const handleChange = (address) => {
     setAddress(address);
@@ -38,42 +38,64 @@ const SearchBar = () => {
   const handleSelect = (address) => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
-      .then((latLng) => console.log(latLng));
+      .then((latLng) => {
+        latitude = latLng.latitude;
+        longitude = latLng.longitude;
+      });
+    setMenuOpen(false);
+    setAddress(address);
   };
 
-  if (loaded) {
-    return (
-      <PlacesAutocomplete
-        value={address}
-        onChange={handleChange}
-      >
-        {({ getInputProps, suggestions, loading }) => (
-          <div>
-            <TextField
-              inputProps={getInputProps({
-                placeholder: 'Search Places ...',
-                className: 'location-search-input',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
+  return (
+    <PlacesAutocomplete
+      value={address}
+      onChange={handleChange}
+      onSelect={handleSelect}
+    >
+      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+        <div>
+          <TextField
+            inputProps={getInputProps({
+              placeholder: 'Find Location',
+            })}
+            ref={inputEl}
+            onFocus={() => {
+              setMenuOpen(true);
+            }}
+            className={styles.sidebarTextField}
+          />
+          <Popover
+            open={menuOpen && suggestions.length > 0}
+            onClose={() => setMenuOpen(false)}
+            anchorEl={inputEl.current}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            disableAutoFocus
+            disableEnforceFocus
+          >
+            <List classes={{ root: styles.sidebarList}}>
               {loading && <div>Loading...</div>}
-              {suggestions.map((suggestion) => {
-                <MenuItem onClick={(suggestion) => handleSelect(suggestion.description)}>
-                  <Typography noWrap={true}>
-                    {' '}
-                    {suggestion.description}
-                    {' '}
-                  </Typography>
-                </MenuItem>
-              })}
-            </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-    );
-  } else {
-    return <div> Loading ... </div>;
-  }
+              {suggestions.map((suggestion) => (
+                <ListItem
+                  key={suggestion.id}
+                  onClick={(event: React.MouseEvent<HTMLElement>) =>
+                    handleSelect(suggestion.description)
+                  }
+                  classes={{ root: styles.sidebarOptions }}
+                >
+                  <div {...getSuggestionItemProps(suggestion)}>
+                    <Typography>{suggestion.description}</Typography>
+                  </div>
+                </ListItem>
+              ))}
+            </List>
+          </Popover>
+        </div>
+      )}
+    </PlacesAutocomplete>
+  );
 };
 
 export default SearchBar;
