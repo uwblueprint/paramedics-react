@@ -34,17 +34,27 @@ const Sidebar = ({
   open,
   title,
   onClose,
+  onComplete,
 }: {
   open: boolean;
   title: string;
   onClose: () => void;
+  onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
   const [address, setAddress] = React.useState('');
+  const [latitude, setLatitude] = React.useState(0);
+  const [longitude, setLongitude] = React.useState(0);
   const [label, setLabel] = React.useState('');
   const styles = useStyles();
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
     setLabel((e.target as HTMLInputElement).value);
+  };
+
+  const handleGeocodeSelection = ({ lat, lng, address }) => {
+    setLatitude(lat);
+    setLongitude(lng);
+    setAddress(address);
   };
 
   return (
@@ -56,26 +66,55 @@ const Sidebar = ({
       <Typography variant="h4" classes={{ root: styles.title }}>
         {title}
       </Typography>
-      <Typography variant="body1" classes={{ root: styles.label }}>
-        {' '}
-        Name:
-      </Typography>
-      <TextField
-        placeholder="Pin name here"
-        onChange={handleLabelChange}
-        value={label}
-        className={styles.pinLabelField}
-        required
-      />
-      <Typography variant="body1" classes={{ root: styles.label }}>
-        {' '}
-        Pin Location:
-      </Typography>
-      <SearchBar />
-      <Container classes={{ root: styles.buttonContainer }}>
-        <Button style={{ color: Colours.Secondary }}> Cancel </Button>
-        <Button variant="contained" color="secondary">Complete</Button>
-      </Container>
+      <form
+        onSubmit={(e) => {
+          onComplete({
+            label,
+            latitude,
+            longitude,
+            address,
+          });
+          setAddress('');
+          setLabel('');
+          e.preventDefault();
+        }}
+      >
+        <Typography variant="body1" classes={{ root: styles.label }}>
+          {' '}
+          Name:
+        </Typography>
+        <TextField
+          placeholder="Pin name here"
+          onChange={handleLabelChange}
+          value={label}
+          className={styles.pinLabelField}
+          required
+        />
+        <Typography variant="body1" classes={{ root: styles.label }}>
+          {' '}
+          Pin Location:
+        </Typography>
+        <SearchBar
+          onComplete={({ latitude, longitude, address }) =>
+            handleGeocodeSelection({
+              lat: latitude,
+              lng: longitude,
+              address,
+            })
+          }
+        />
+        <Container classes={{ root: styles.buttonContainer }}>
+          <Button
+            style={{ color: Colours.Secondary }}
+            onClick={(e) => onClose()}
+          >
+            Cancel
+          </Button>
+          <Button variant="contained" color="secondary" type="submit">
+            Complete
+          </Button>
+        </Container>
+      </form>
     </Drawer>
   );
 };

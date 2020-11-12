@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useQuery } from 'react-apollo';
+import { useMutation } from '@apollo/react-hooks';
 import GoogleMapReact from 'google-map-react';
 
 import MenuAppBar from '../common/MenuAppBar';
@@ -8,6 +9,7 @@ import Sidebar from './Sidebar';
 import AddPinButton from './AddPinButton';
 import Marker from './Marker';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
+import { ADD_PIN } from '../../graphql/mutations/maps';
 
 enum MapTypes {
   ROADMAP = 'roadmap',
@@ -88,6 +90,21 @@ const MapPage = ({
     }
   });
 
+  const [addPin] = useMutation(ADD_PIN, {
+    update(cache, { data: { addLocationPin } }) {
+      const { pinsForEvent } = cache.readQuery<any>({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      cache.writeQuery({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
+      });
+    },
+  });
+
   const onMarkerClick = (pin) => {
     setInfoWindowOpen(true);
     setInterestPinLocation(pin.address);
@@ -110,6 +127,19 @@ const MapPage = ({
     setOpenSidebar(false);
   };
 
+  const onAddPinComplete = ({ label, lat, lng, address }) => {
+    addPin({
+      variables: {
+        label,
+        eventId,
+        latitude: lat,
+        longitude: lng,
+        address,
+      },
+    });
+    setOpenSidebar(false);
+  };
+
   return (
     <>
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
@@ -123,6 +153,14 @@ const MapPage = ({
         open={openSidebar}
         onClose={onSidebarClose}
         title="Add a location pin"
+        onComplete={({ label, latitude, longitude, address }) =>
+          onAddPinComplete({
+            label: label,
+            lat: latitude,
+            lng: longitude,
+            address: address,
+          })
+        }
       />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact

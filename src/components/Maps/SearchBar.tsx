@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
@@ -26,11 +26,13 @@ const useStyles = makeStyles({
   },
 });
 
-const SearchBar = () => {
+const SearchBar = ({
+  onComplete,
+}: {
+  onComplete: ({ latitude, longitude, address }) => void;
+}) => {
   const [address, setAddress] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  let latitude = 0;
-  let longitude = 0;
   const styles = useStyles();
   const inputEl = useRef(null);
 
@@ -42,8 +44,11 @@ const SearchBar = () => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
       .then((latLng) => {
-        latitude = latLng.latitude;
-        longitude = latLng.longitude;
+        onComplete({
+          latitude: latLng.lat,
+          longitude: latLng.lng,
+          address,
+        });
       });
     setMenuOpen(false);
     setAddress(address);
