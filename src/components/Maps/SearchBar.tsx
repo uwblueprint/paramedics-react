@@ -4,6 +4,9 @@ import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -12,14 +15,14 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   sidebarOptions: {
-    width: '250px',
+    width: '334px',
   },
   sidebarTextField: {
-    width: '250px',
-    marginLeft: '10px',
+    width: '334px',
+    marginLeft: '16px',
   },
   sidebarList: {
-    width: '240px',
+    width: '324px',
   },
 });
 
@@ -58,6 +61,16 @@ const SearchBar = () => {
             inputProps={getInputProps({
               placeholder: 'Find Location',
             })}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            required
             ref={inputEl}
             onFocus={() => {
               setMenuOpen(true);
@@ -75,7 +88,7 @@ const SearchBar = () => {
             disableAutoFocus
             disableEnforceFocus
           >
-            <List classes={{ root: styles.sidebarList}}>
+            <List classes={{ root: styles.sidebarList }}>
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion) => (
                 <ListItem

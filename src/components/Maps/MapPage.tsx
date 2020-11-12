@@ -119,12 +119,16 @@ const MapPage = ({
         open={infoWindowOpen}
         handleClose={onInfoWindowClose}
       />
-      <Sidebar open={openSidebar} onClose={onSidebarClose} title="Add Pin" />
+      <Sidebar
+        open={openSidebar}
+        onClose={onSidebarClose}
+        title="Add a location pin"
+      />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ 
+          bootstrapURLKeys={{
             key: process.env.REACT_APP_GMAPS,
-            libraries: ['places'], 
+            libraries: ['places'],
           }}
           center={[defaultMap.center.lat, defaultMap.center.lng]}
           zoom={defaultMap.zoom}
