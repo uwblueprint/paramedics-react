@@ -128,6 +128,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const { numUpdates } = location.state || { numUpdates: 0 };
 
   const [lastNumUpdates, setLastNumUpdates] = React.useState(numUpdates);
+  const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState("");
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients();
@@ -159,6 +160,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
+      setLastUpdatedPatient(data.patientUpdated.id);
       // note: transport data changes (ex. ambulance and hospital and ccp) is not supported
       client.writeFragment({
         id: `Patient:${data.patientUpdated.id}`,
@@ -194,7 +196,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
-
+      setLastUpdatedPatient(data.patientAdded.id);
       client.writeQuery({
         query: GET_ALL_PATIENTS,
         data: {
@@ -284,6 +286,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           eventId={eventId}
           ccpId={ccpId}
           patients={patients}
+          lastUpdatedPatient={lastUpdatedPatient}
           patientId={patientId}
           numUpdates={lastNumUpdates}
         />
@@ -297,6 +300,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           eventId={eventId}
           ccpId={ccpId}
           patients={transportPatients}
+          lastUpdatedPatient={lastUpdatedPatient}
           patientId={patientId}
           numUpdates={lastNumUpdates}
         />

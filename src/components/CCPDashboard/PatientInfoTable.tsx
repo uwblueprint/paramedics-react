@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
 import {
   makeStyles,
   Table,
@@ -50,6 +51,9 @@ const useStyles = makeStyles({
   },
   detailsDialog: {
     width: '662px',
+  },
+  highlighted: {
+    backgroundColor: Colours.Blue,
   },
 });
 
@@ -138,6 +142,7 @@ export const PatientInfoTable = ({
   ccpId,
   patientId,
   numUpdates,
+  lastUpdatedPatient,
 }: {
   patients: Patient[];
   type: CCPDashboardTabOptions;
@@ -145,6 +150,7 @@ export const PatientInfoTable = ({
   ccpId: string;
   patientId?: string;
   numUpdates?: number;
+  lastUpdatedPatient?: string;
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
@@ -257,6 +263,9 @@ export const PatientInfoTable = ({
         <TableRow
           hover
           key={patient.id}
+          className={clsx({
+            [classes.highlighted]: patient.id === lastUpdatedPatient,
+          })}
           onClick={() => handleOpenDetails(patient)}
         >
           <TableCell

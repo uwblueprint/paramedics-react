@@ -27,6 +27,7 @@ interface PatientOverviewProps {
   patients: Patient[];
   patientId?: string;
   numUpdates?: number;
+  lastUpdatedPatient?: string;
 }
 
 interface TableRowData {
@@ -74,7 +75,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { patients, eventId, ccpId, patientId, numUpdates } = props;
+  const { patients, eventId, ccpId, patientId, numUpdates, lastUpdatedPatient } = props;
 
   const createCategoryData = (
     category: string,
@@ -178,6 +179,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
           ccpId={ccpId}
           patientId={patientId}
           numUpdates={numUpdates}
+          lastUpdatedPatient={lastUpdatedPatient}
         />
       </Card>
       <ScanPatientButton />
