@@ -107,7 +107,11 @@ const Sidebar = ({
         <Container classes={{ root: styles.buttonContainer }}>
           <Button
             style={{ color: Colours.Secondary }}
-            onClick={() => onClose()}
+            onClick={() => {
+              setLabel('');
+              setAddress('');
+              onClose();}
+            }
           >
             Cancel
           </Button>
