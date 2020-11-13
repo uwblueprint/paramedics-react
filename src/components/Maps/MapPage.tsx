@@ -43,6 +43,7 @@ const MapPage = ({
       lng: -80.538473,
     },
   };
+  const geolocationErrorCallback = undefined;
 
   const getMapOptions = (maps) => {
     return {
@@ -81,12 +82,16 @@ const MapPage = ({
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
-        setCurrentLocationPin({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position: Position) => {
+          setCurrentLocationPin({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        geolocationErrorCallback,
+        { enableHighAccuracy: true }
+      );
     }
   });
 
@@ -155,10 +160,10 @@ const MapPage = ({
         title="Add a location pin"
         onComplete={({ label, latitude, longitude, address }) =>
           onAddPinComplete({
-            label: label,
+            label,
             lat: latitude,
             lng: longitude,
-            address: address,
+            address,
           })
         }
       />

@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
-import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
@@ -108,7 +107,7 @@ const Sidebar = ({
         <Container classes={{ root: styles.buttonContainer }}>
           <Button
             style={{ color: Colours.Secondary }}
-            onClick={(e) => onClose()}
+            onClick={() => onClose()}
           >
             Cancel
           </Button>

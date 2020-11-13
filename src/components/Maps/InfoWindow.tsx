@@ -64,6 +64,7 @@ const InfoWindow = ({
       }}
       hideBackdrop
       disableEnforceFocus
+      disableScrollLock
     >
       <Container classes={{ root: infoStyles.flexContainerContent }}>
         <DialogContent

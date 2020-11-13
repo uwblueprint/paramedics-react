@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -37,6 +36,12 @@ const SearchBar = ({
   const styles = useStyles();
   const inputEl = useRef(null);
 
+  const searchOptions = {
+    componentRestrictions: {
+      country: ['CA'],
+    },
+  };
+
   const handleChange = (address) => {
     setAddress(address);
   };
@@ -60,14 +65,12 @@ const SearchBar = ({
       value={address}
       onChange={handleChange}
       onSelect={handleSelect}
+      searchOptions={searchOptions}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div>
-          <div ref={inputEl}> 
+          <div ref={inputEl}>
             <TextValidator
-              inputProps={getInputProps({
-                placeholder: 'Find Location',
-              })}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -76,10 +79,14 @@ const SearchBar = ({
                     </IconButton>
                   </InputAdornment>
                 ),
+                inputProps: getInputProps({
+                  placeholder: 'Find Location',
+                }),
               }}
               onFocus={() => {
                 setMenuOpen(true);
               }}
+              value={address}
               className={styles.sidebarTextField}
               validators={['required']}
               errorMessages={['An address is required']}
@@ -102,7 +109,7 @@ const SearchBar = ({
                 <ListItem
                   key={suggestion.description}
                   onClick={(event: React.MouseEvent<HTMLElement>) =>
-                    handleSelect(suggestion.description)
+                    handleSelect((event.target as HTMLInputElement).value)
                   }
                   classes={{ root: styles.sidebarOptions }}
                 >
