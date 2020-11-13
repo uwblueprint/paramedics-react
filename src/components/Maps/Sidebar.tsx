@@ -110,8 +110,8 @@ const Sidebar = ({
             onClick={() => {
               setLabel('');
               setAddress('');
-              onClose();}
-            }
+              onClose();
+            }}
           >
             Cancel
           </Button>

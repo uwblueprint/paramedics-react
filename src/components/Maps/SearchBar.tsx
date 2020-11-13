@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     width: '334px',
     '&:hover': {
       backgroundColor: Colours.BackgroundGray,
-    }
+    },
   },
   sidebarTextField: {
     width: '334px',
