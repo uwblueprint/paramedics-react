@@ -12,10 +12,14 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import { TextValidator } from 'react-material-ui-form-validator';
 import { makeStyles } from '@material-ui/core/styles';
+import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
   sidebarOptions: {
     width: '334px',
+    '&:hover': {
+      backgroundColor: Colours.BackgroundGray,
+    }
   },
   sidebarTextField: {
     width: '334px',
