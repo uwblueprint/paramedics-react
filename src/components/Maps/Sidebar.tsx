@@ -62,6 +62,7 @@ const Sidebar = ({
       open={open}
       onClose={onClose}
       PaperProps={{ style: { width: '400px' } }}
+      disableScrollLock
     >
       <Typography variant="h4" classes={{ root: styles.title }}>
         {title}
