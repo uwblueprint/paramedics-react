@@ -50,18 +50,18 @@ const SearchBar = ({
     setAddress(address);
   };
 
-  const handleSelect = (address) => {
-    geocodeByAddress(address)
+  const handleSelect = (selectedAddress) => {
+    geocodeByAddress(selectedAddress)
       .then((results) => getLatLng(results[0]))
       .then((latLng) => {
         onComplete({
           latitude: latLng.lat,
           longitude: latLng.lng,
-          address,
+          address: selectedAddress,
         });
       });
     setMenuOpen(false);
-    setAddress(address);
+    setAddress(selectedAddress);
   };
 
   return (
@@ -112,9 +112,6 @@ const SearchBar = ({
               {suggestions.map((suggestion) => (
                 <ListItem
                   key={suggestion.description}
-                  onClick={(event: React.MouseEvent<HTMLElement>) =>
-                    handleSelect((event.target as HTMLInputElement).value)
-                  }
                   classes={{ root: styles.sidebarOptions }}
                 >
                   <div {...getSuggestionItemProps(suggestion)}>
