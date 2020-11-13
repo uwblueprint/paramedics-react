@@ -11,6 +11,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+import { TextValidator } from 'react-material-ui-form-validator';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -62,26 +63,28 @@ const SearchBar = ({
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div>
-          <TextField
-            inputProps={getInputProps({
-              placeholder: 'Find Location',
-            })}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton>
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            required
-            ref={inputEl}
-            onFocus={() => {
-              setMenuOpen(true);
-            }}
-            className={styles.sidebarTextField}
-          />
+          <div ref={inputEl}> 
+            <TextValidator
+              inputProps={getInputProps({
+                placeholder: 'Find Location',
+              })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              onFocus={() => {
+                setMenuOpen(true);
+              }}
+              className={styles.sidebarTextField}
+              validators={['required']}
+              errorMessages={['An address is required']}
+            />
+          </div>
           <Popover
             open={menuOpen && suggestions.length > 0}
             onClose={() => setMenuOpen(false)}
@@ -97,7 +100,7 @@ const SearchBar = ({
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion) => (
                 <ListItem
-                  key={suggestion.id}
+                  key={suggestion.description}
                   onClick={(event: React.MouseEvent<HTMLElement>) =>
                     handleSelect(suggestion.description)
                   }

@@ -5,7 +5,7 @@ import Drawer from '@material-ui/core/Drawer';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import SearchBar from './SearchBar';
 import { Colours } from '../../styles/Constants';
 
@@ -66,7 +66,7 @@ const Sidebar = ({
       <Typography variant="h4" classes={{ root: styles.title }}>
         {title}
       </Typography>
-      <form
+      <ValidatorForm
         onSubmit={(e) => {
           onComplete({
             label,
@@ -83,12 +83,13 @@ const Sidebar = ({
           {' '}
           Name:
         </Typography>
-        <TextField
-          placeholder="Pin name here"
+        <TextValidator
+          placeholder="Pin name"
           onChange={handleLabelChange}
           value={label}
+          validators={['required']}
+          errorMessages={['A pin name is required']}
           className={styles.pinLabelField}
-          required
         />
         <Typography variant="body1" classes={{ root: styles.label }}>
           {' '}
@@ -114,7 +115,7 @@ const Sidebar = ({
             Complete
           </Button>
         </Container>
-      </form>
+      </ValidatorForm>
     </Drawer>
   );
 };

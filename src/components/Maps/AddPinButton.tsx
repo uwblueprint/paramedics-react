@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Add } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
@@ -12,20 +12,25 @@ const useStyles = makeStyles({
     right: '56px',
     padding: '12px 26px',
   },
+  buttonIcon: {
+    marginRight: '13px',
+  },
 });
 
 const AddPinButton = ({ handleClick }: { handleClick: () => void }) => {
   const classes = useStyles();
   return (
-    <Button
-      className={classes.addButton}
-      variant="contained"
-      color="secondary"
-      onClick={handleClick}
-    >
-      <AddIcon style={{ color: Colours.White, marginRight: '9px' }} />
-      Add Pin
-    </Button>
+    <div>
+      <Button
+        className={classes.addButton}
+        variant="contained"
+        color="secondary"
+        onClick={handleClick}
+      >
+        <Add className={classes.buttonIcon} />
+        Add Pin
+      </Button>
+    </div>
   );
 };
 
