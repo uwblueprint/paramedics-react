@@ -22,6 +22,10 @@ const useStepperStyles = makeStyles({
   dotActive: {
     backgroundColor: Colours.Secondary,
   },
+  dots: {
+    order: -1,
+    flexGrow: 1,
+  },
 });
 
 const Stepper: React.FC<{
@@ -49,6 +53,7 @@ const Stepper: React.FC<{
         root: classes.root,
         dot: classes.dot,
         dotActive: classes.dotActive,
+        dots: classes.dots,
       }}
       nextButton={nextButton}
       backButton={backButton}
