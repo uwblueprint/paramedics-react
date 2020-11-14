@@ -262,11 +262,6 @@ const EventCreationPage = ({
             />
           }
         />
-        {activeStep === 1 && (
-          <Box position="absolute" top="24px" left="56px">
-            <BackButton onClick={handleBack} />
-          </Box>
-        )}
       </Box>
     </Box>
   );

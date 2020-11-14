@@ -5,8 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useCancelButtonStyles = makeStyles({
   root: {
-    minWidth: '160px',
-    minHeight: '40px',
+    minWidth: '228px',
     fontSize: '18px',
     alignSelf: 'center',
   },
