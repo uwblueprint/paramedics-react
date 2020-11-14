@@ -6,7 +6,6 @@ import { useQuery } from 'react-apollo';
 import CancelModal from './CancelModal';
 import Map from './Map';
 import NextButton from './NextButton';
-import { BackButton } from '../common/BackLink';
 import FormField from '../common/FormField';
 import Stepper from './Stepper';
 import SelectDateModal from './SelectDateModal';
@@ -103,10 +102,6 @@ const EventCreationPage = ({
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
-  };
-  const handleBack = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-    return null;
   };
 
   const dateParts: {
