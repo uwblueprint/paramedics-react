@@ -12,6 +12,8 @@ import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
   root: {
+    position: 'fixed',
+    top: '24px',
     maxWidth: '450px',
     marginLeft: '5px',
     width: '446px',

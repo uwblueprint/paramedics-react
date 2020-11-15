@@ -80,7 +80,6 @@ const Sidebar = ({
         }}
       >
         <Typography variant="body1" classes={{ root: styles.label }}>
-          {' '}
           Name:
         </Typography>
         <TextValidator
@@ -92,7 +91,6 @@ const Sidebar = ({
           className={styles.pinLabelField}
         />
         <Typography variant="body1" classes={{ root: styles.label }}>
-          {' '}
           Pin Location:
         </Typography>
         <SearchBar

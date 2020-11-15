@@ -50,6 +50,10 @@ const SearchBar = ({
     setAddress(address);
   };
 
+  const handleError = (status, clearSuggestions) => {
+    clearSuggestions();
+  };
+
   const handleSelect = (selectedAddress) => {
     geocodeByAddress(selectedAddress)
       .then((results) => getLatLng(results[0]))
@@ -59,6 +63,9 @@ const SearchBar = ({
           longitude: latLng.lng,
           address: selectedAddress,
         });
+      })
+      .catch((e) => { // eslint-disable-line
+        // handle errors
       });
     setMenuOpen(false);
     setAddress(selectedAddress);
@@ -70,6 +77,7 @@ const SearchBar = ({
       onChange={handleChange}
       onSelect={handleSelect}
       searchOptions={searchOptions}
+      onError={handleError}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div>
