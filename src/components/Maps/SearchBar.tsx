@@ -31,11 +31,13 @@ const useStyles = makeStyles({
 });
 
 const SearchBar = ({
+  editAddress,
   onComplete,
 }: {
+  editAddress?: string;
   onComplete: ({ latitude, longitude, address }) => void;
 }) => {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState('' || editAddress);
   const [menuOpen, setMenuOpen] = useState(false);
   const styles = useStyles();
   const inputEl = useRef(null);

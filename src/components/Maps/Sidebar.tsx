@@ -32,18 +32,22 @@ const useStyles = makeStyles({
 const Sidebar = ({
   open,
   title,
+  editLabel,
+  editAddress,
   onClose,
   onComplete,
 }: {
   open: boolean;
   title: string;
+  editLabel?: string;
+  editAddress?: string;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
-  const [address, setAddress] = React.useState('');
+  const [address, setAddress] = React.useState('' || editAddress);
   const [latitude, setLatitude] = React.useState(0);
   const [longitude, setLongitude] = React.useState(0);
-  const [label, setLabel] = React.useState('');
+  const [label, setLabel] = React.useState('' || editLabel);
   const styles = useStyles();
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
@@ -94,6 +98,7 @@ const Sidebar = ({
           Pin Location:
         </Typography>
         <SearchBar
+          editAddress={address}
           onComplete={({ latitude, longitude, address }) =>
             handleGeocodeSelection({
               lat: latitude,
