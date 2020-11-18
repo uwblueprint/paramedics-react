@@ -1,47 +1,23 @@
 import gql from 'graphql-tag';
 
 export const ADD_USER = gql`
-  mutation addUser(
-    $name: String!
-    $email: String!
-    $password: String!
-    $accessLevel: accessLevel!
-    $emergencyContact: String!
-  ) {
-    addUser(
-      name: $name
-      email: $email
-      password: $password
-      accessLevel: $accessLevel
-      emergencyContact: $emergencyContact
-    ) {
+  mutation addUser($name: String!, $email: String!, $roleId: ID!) {
+    addUser(name: $name, email: $email, roleId: $roleId) {
       id
       name
       email
-      accessLevel
+      roleId
     }
   }
 `;
 
 export const EDIT_USER = gql`
-  mutation updateUser(
-    $id: ID!
-    $name: String
-    $email: String
-    $accessLevel: accessLevel
-    $emergencyContact: String
-  ) {
-    updateUser(
-      id: $id
-      name: $name
-      email: $email
-      accessLevel: $accessLevel
-      emergencyContact: $emergencyContact
-    ) {
+  mutation updateUser($id: ID!, $name: String, $email: String, $roleId: ID) {
+    updateUser(id: $id, name: $name, email: $email, roleId: $roleId) {
       id
       name
       email
-      accessLevel
+      roleId
     }
   }
 `;

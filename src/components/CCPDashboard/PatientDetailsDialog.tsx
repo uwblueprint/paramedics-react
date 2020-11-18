@@ -5,6 +5,7 @@ import {
   makeStyles,
   DialogContent,
   IconButton,
+  TextField,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { Close } from '@material-ui/icons';
@@ -41,11 +42,13 @@ interface PatientDetailsDialogProps {
   patient: Patient;
   eventId: string;
   ccpId: string;
+  runNumber: number | null;
+  updateRunNumber: (runNumber: number) => void;
   numUpdates?: number;
 }
 
 export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
-  const { patient, eventId, ccpId, numUpdates } = props;
+  const { patient, eventId, ccpId, runNumber, updateRunNumber, numUpdates } = props;
 
   const history = useHistory();
   const classes = useStyles();
@@ -95,9 +98,17 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
           >
             {`${d.label}:`}
           </Typography>
-          <Typography variant="body1" style={d.styles}>
-            {d.value}
-          </Typography>
+          {d.label === 'Run Number' ? (
+            <TextField
+              type="number"
+              onChange={(e: any) => updateRunNumber(e.target.value)}
+              value={runNumber === null ? '' : runNumber}
+            />
+          ) : (
+            <Typography variant="body1" style={d.styles}>
+              {d.value}
+            </Typography>
+          )}
         </Box>
       ))}
       <Box display="flex" flexDirection="column" marginBottom="12px">

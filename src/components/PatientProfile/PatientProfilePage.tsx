@@ -110,7 +110,7 @@ const PatientProfilePage = ({
   });
 
   const [formFields, setFormFields] = useState<FormFields>({
-    barcodeValue: '',
+    barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
     triage: TriageLevel.GREEN,
     gender: Gender.M,
     age: null,
@@ -156,12 +156,6 @@ const PatientProfilePage = ({
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
   }, [data, loading, mode]);
-
-  useEffect(() => {
-    if (mode === 'new' && barcodeValue) {
-      setFormFields({ ...formFields, barcodeValue });
-    }
-  }, [mode, barcodeValue]);
 
   const handleDeleteClick = () => {
     setDeleteClicked(true);
