@@ -121,7 +121,7 @@ const UserFormPage = ({
   };
 
   const handleWhenValid = (result: boolean) => {
-    setValidForm(result && memberName !== '' && email !== '');
+    setValidForm(result && email !== '');
   };
 
   const handleComplete = () => {
@@ -204,7 +204,7 @@ const UserFormPage = ({
             *Denotes a required field
           </Typography>
         </div>
-        <DoneButton disabled={!validForm} />
+        <DoneButton disabled={memberName === '' || !validForm} />
       </ValidatorForm>
       <CancelButton to="/manage/members" />
     </div>
