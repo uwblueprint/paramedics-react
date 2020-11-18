@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import { useQuery } from 'react-apollo';
+import { useMutation } from '@apollo/react-hooks';
 import GoogleMapReact from 'google-map-react';
 
 import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
+import Sidebar from './Sidebar';
+import AddPinButton from './AddPinButton';
 import Marker from './Marker';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
+import { ADD_PIN } from '../../graphql/mutations/maps';
 
 enum MapTypes {
   ROADMAP = 'roadmap',
@@ -31,6 +35,7 @@ const MapPage = ({
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
+  const [openSidebar, setOpenSidebar] = React.useState(false);
   const defaultMap = {
     zoom: 11,
     center: {
@@ -38,6 +43,7 @@ const MapPage = ({
       lng: -80.538473,
     },
   };
+  const geolocationErrorCallback = undefined;
 
   const getMapOptions = (maps) => {
     return {
@@ -76,13 +82,32 @@ const MapPage = ({
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: Position) => {
-        setCurrentLocationPin({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position: Position) => {
+          setCurrentLocationPin({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        geolocationErrorCallback,
+        { enableHighAccuracy: true }
+      );
     }
+  });
+
+  const [addPin] = useMutation(ADD_PIN, {
+    update(cache, { data: { addLocationPin } }) {
+      const { pinsForEvent } = cache.readQuery<any>({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      cache.writeQuery({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
+      });
+    },
   });
 
   const onMarkerClick = (pin) => {
@@ -103,6 +128,23 @@ const MapPage = ({
     });
   };
 
+  const onSidebarClose = () => {
+    setOpenSidebar(false);
+  };
+
+  const onAddPinComplete = ({ label, lat, lng, address }) => {
+    addPin({
+      variables: {
+        label,
+        eventId,
+        latitude: lat,
+        longitude: lng,
+        address,
+      },
+    });
+    setOpenSidebar(false);
+  };
+
   return (
     <>
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
@@ -112,9 +154,25 @@ const MapPage = ({
         open={infoWindowOpen}
         handleClose={onInfoWindowClose}
       />
+      <Sidebar
+        open={openSidebar}
+        onClose={onSidebarClose}
+        title="Add a location pin"
+        onComplete={({ label, latitude, longitude, address }) =>
+          onAddPinComplete({
+            label,
+            lat: latitude,
+            lng: longitude,
+            address,
+          })
+        }
+      />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: process.env.REACT_APP_GMAPS }}
+          bootstrapURLKeys={{
+            key: process.env.REACT_APP_GMAPS,
+            libraries: ['places'],
+          }}
           center={[defaultMap.center.lat, defaultMap.center.lng]}
           zoom={defaultMap.zoom}
           options={getMapOptions}
@@ -141,6 +199,7 @@ const MapPage = ({
           />
         </GoogleMapReact>
       </div>
+      <AddPinButton handleClick={() => setOpenSidebar(true)} />
     </>
   );
 };
