@@ -121,7 +121,12 @@ const PatientProfilePage = ({
     runNumber: null,
   });
 
-  const headerLabel = mode === 'new' ? 'Add a patient' : (isRestore ? 'Restore patient' : 'Edit patient');
+  const headerLabel =
+    mode === 'new'
+      ? 'Add a patient'
+      : isRestore
+      ? 'Restore patient'
+      : 'Edit patient';
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -348,9 +353,7 @@ const PatientProfilePage = ({
         padding="56px 56px 36px 56px"
         borderBottom={`1px solid ${Colours.BorderLightGray}`}
       >
-        <Typography variant="h4">
-          {headerLabel}
-        </Typography>
+        <Typography variant="h4">{headerLabel}</Typography>
         <Button
           color="secondary"
           component={NavLink}
@@ -481,7 +484,7 @@ const PatientProfilePage = ({
           <CompletePatientButton />
           {mode === 'edit' && (
             <>
-              {isRestore && (
+              {!isRestore && (
                 <DeletePatientButton handleClick={handleDeleteClick} />
               )}
               <ConfirmModal
