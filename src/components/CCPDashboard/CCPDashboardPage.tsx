@@ -128,7 +128,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const { numUpdates } = location.state || { numUpdates: 0 };
 
   const [lastNumUpdates, setLastNumUpdates] = React.useState(numUpdates);
-  const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState("");
+  const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState('');
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients();
@@ -159,6 +159,8 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useSubscription(PATIENT_UPDATED, {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      // eslint-disable-next-line no-console
+      console.log(data);
       setLastNumUpdates(lastNumUpdates + 1);
       setLastUpdatedPatient(data.patientUpdated.id);
       client.writeFragment({
