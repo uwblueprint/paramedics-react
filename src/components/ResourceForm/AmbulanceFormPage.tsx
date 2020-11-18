@@ -11,10 +11,10 @@ import {
 import {
   Ambulance,
   GET_ALL_AMBULANCES,
-  GET_AMBULANCE_BY_ID,
 } from '../../graphql/queries/ambulances';
 import FormField from '../common/FormField';
 import BackLink from '../common/BackLink';
+import ConfirmModal from '../common/ConfirmModal';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
@@ -46,12 +46,7 @@ const AmbulanceFormPage = ({
 }) => {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const { data, loading } = useQuery(
-    mode === 'edit' && ambulanceId
-      ? GET_AMBULANCE_BY_ID(ambulanceId)
-      : GET_ALL_AMBULANCES
-  );
-
+  const { data, loading } = useQuery(GET_ALL_AMBULANCES);
   const ambulances: Array<Ambulance> = data ? data.ambulances : [];
   const [addAmbulance] = useMutation(ADD_AMBULANCE, {
     update(cache, { data: { addAmbulance } }) {
@@ -73,6 +68,9 @@ const AmbulanceFormPage = ({
   });
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<string>('');
+  const [openValidationError, setOpenValidationError] = useState<boolean>(
+    false
+  );
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -80,7 +78,7 @@ const AmbulanceFormPage = ({
         vehicleNumber,
       }: {
         vehicleNumber: number;
-      } = data.ambulance;
+      } = data.ambulances.find((ambulance) => ambulance.id === ambulanceId);
       setAmbulanceNumber(vehicleNumber.toString());
     }
   }, [data, loading, mode]);
@@ -89,8 +87,21 @@ const AmbulanceFormPage = ({
     setAmbulanceNumber(e.target.value);
   };
 
+  const openErrorModal = () => {
+    setOpenValidationError(true);
+  };
+
+  const closeErrorModal = () => {
+    setOpenValidationError(false);
+  };
+
   const handleComplete = () => {
-    if (mode === 'new') {
+    const duplicateExists = ambulances.some(
+      (ambulance) => ambulance.vehicleNumber.toString() === ambulanceNumber
+    );
+    if (duplicateExists) {
+      openErrorModal();
+    } else if (mode === 'new') {
       addAmbulance({
         variables: {
           vehicleNumber: parseInt(ambulanceNumber),
@@ -136,6 +147,14 @@ const AmbulanceFormPage = ({
         disabled={ambulanceNumber === ''}
       />
       <CancelButton to="/manage/ambulances" />
+      <ConfirmModal
+        open={openValidationError}
+        title="Duplicate Ambulance"
+        body="You cannot add this ambulance as this ambulance already exists in the system."
+        actionLabel="Okay"
+        handleClickAction={closeErrorModal}
+        handleClickCancel={closeErrorModal}
+      />
     </div>
   );
 };
