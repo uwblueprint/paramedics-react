@@ -10,9 +10,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  password: string;
   roleId: AccessLevel;
-  emergencyContact: string;
 }
 
 export const GET_USER_BY_ID = (id: string) => {
