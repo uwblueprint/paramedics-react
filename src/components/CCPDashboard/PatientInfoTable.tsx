@@ -18,8 +18,14 @@ import {
 } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { MoreHoriz } from '@material-ui/icons';
+import { useSnackbar } from 'notistack';
 import { Colours } from '../../styles/Constants';
-import { Patient, TriageLevel, Status } from '../../graphql/queries/patients';
+import {
+  Patient,
+  TriageLevel,
+  Status,
+  GET_ALL_PATIENTS,
+} from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
@@ -157,15 +163,50 @@ export const PatientInfoTable = ({
   );
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElRestore, setAnchorElRestore] = React.useState(null);
-  const deletedPatients = patients.filter(
-    (patient) => patient.status === Status.DELETED
-  );
-  const activePatients = patients.filter(
-    (patient) => patient.status !== Status.DELETED
+
+
+
+  const [runNumber, setRunNumber] = React.useState<number | null>(
+    selectedPatient ? selectedPatient.runNumber : null
   );
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [editPatient] = useMutation(EDIT_PATIENT);
+  const [editPatient] = useMutation(EDIT_PATIENT, {
+    update(cache) {
+      const patientId = ((selectedPatient as unknown) as Patient).id;
+      const { patients } = cache.readQuery<any>({
+        query: GET_ALL_PATIENTS,
+      });
+      setSelectedPatient(patients.find((x) => x.id === patientId));
+    },
+  });
+
+  let deletedPatients: Patient[] = [];
+  let activePatients: Patient[] = [];
+  for (const patient of patients) {
+    if (patient.status === Status.DELETED) {
+      deletedPatients.push(patient);
+    } else {
+      activePatients.push(patient);
+    }
+  }
+
+  const handleRunNumber = (newRunNumber) => {
+    const convertedRunNumber = newRunNumber ? parseInt(newRunNumber) : null;
+    setRunNumber(convertedRunNumber);
+  };
+
+  const handleClickSave = () => {
+    editPatient({
+      variables: {
+        id: ((selectedPatient as unknown) as Patient).id,
+        runNumber,
+        collectionPointId: ccpId,
+      },
+    });
+    enqueueSnackbar(`Patient ${selectedPatient?.barcodeValue} edited.`);
+  };
 
   const handleOpenDetails = (patient) => {
     history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`);
@@ -279,7 +320,7 @@ export const PatientInfoTable = ({
         label: 'White',
       },
     };
-
+ 
     const statusLabels = {
       [Status.ON_SITE]: 'On Scene',
       [Status.TRANSPORTED]: 'Transported',
@@ -539,6 +580,8 @@ export const PatientInfoTable = ({
             patient={(selectedPatient as unknown) as Patient}
             eventId={eventId}
             ccpId={ccpId}
+            runNumber={runNumber}
+            updateRunNumber={handleRunNumber}
           />
           <DialogActions
             style={{
@@ -551,19 +594,29 @@ export const PatientInfoTable = ({
               }`,
             }}
           >
-            <Button
-              onClick={() => {
-                history.push(
-                  `/events/${eventId}/ccps/${ccpId}/patients/${
-                    ((selectedPatient as unknown) as Patient).id
-                  }`
-                );
-              }}
-              color="secondary"
-              className={classes.editButton}
-            >
-              Edit
-            </Button>
+            {runNumber !== selectedPatient?.runNumber ? (
+              <Button
+                onClick={handleClickSave}
+                color="secondary"
+                className={classes.editButton}
+              >
+                Save Changes
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  history.push(
+                    `/events/${eventId}/ccps/${ccpId}/patients/${
+                      ((selectedPatient as unknown) as Patient).id
+                    }`
+                  );
+                }}
+                color="secondary"
+                className={classes.editButton}
+              >
+                Edit
+              </Button>
+            )}
           </DialogActions>
         </Dialog>
       )}
