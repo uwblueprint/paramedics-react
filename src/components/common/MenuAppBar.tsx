@@ -119,7 +119,12 @@ export default function MenuAppBar(props: MenuAppBarProps) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer anchor="left" open={isMenuOpen} onClose={toggleMenu}>
+      <Drawer
+        anchor="left"
+        open={isMenuOpen}
+        onClose={toggleMenu}
+        disableScrollLock
+      >
         <div
           className={classes.list}
           role="presentation"

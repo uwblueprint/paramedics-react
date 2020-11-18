@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Colours } from '../../styles/Constants';
 import CompleteButton from './CompleteButton';
@@ -19,21 +19,6 @@ import {
 import { ADD_CCP, EDIT_CCP } from '../../graphql/mutations/ccps';
 
 const useStyles = makeStyles({
-  ccpWrapper: {
-    backgroundColor: 'white',
-  },
-  ccpFormTopSection: {
-    margin: '48px 30px 0px 30px',
-    backgroundColor: 'white',
-    borderBottom: '1px solid #c4c4c4',
-  },
-  ccpHeader: {
-    display: 'flex',
-    padding: '16px 0px',
-  },
-  ccpForm: {
-    padding: '56px 56px 101px 56px',
-  },
   ccpCompleteDiv: {
     marginBottom: 71,
     marginTop: 31,
@@ -41,16 +26,11 @@ const useStyles = makeStyles({
     justifyContent: 'flex-end',
   },
   ccpCancelBtn: {
-    minWidth: '107px',
-    minHeight: '48px',
+    minWidth: '228px',
+    alignSelf: 'center',
     fontSize: '18px',
     fontWeight: 500,
     color: Colours.Secondary,
-  },
-  ccpBtnPosition: {
-    display: 'flex',
-    marginLeft: 'auto',
-    alignSelf: 'center',
   },
 });
 
@@ -180,25 +160,27 @@ const CCPFormPage = ({
   );
 
   return (
-    <div className={classes.ccpWrapper}>
-      <div className={classes.ccpFormTopSection}>
-        <div className={classes.ccpHeader}>
-          <Typography variant="h3">
-            {mode === 'new' ? 'Create a CCP' : 'Edit CCP'}
-          </Typography>
-          <div className={classes.ccpBtnPosition}>
-            <Button
-              color="primary"
-              className={classes.ccpCancelBtn}
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className={classes.ccpForm}>{content}</div>
-    </div>
+    <Box minHeight="100vh">
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        padding="56px 56px 36px 56px"
+        borderBottom={`1px solid ${Colours.BorderLightGray}`}
+      >
+        <Typography variant="h4">
+          {mode === 'new' ? 'Add New CCP' : 'Edit CCP'}
+        </Typography>
+        <Button
+          color="secondary"
+          variant="outlined"
+          className={classes.ccpCancelBtn}
+          onClick={handleCancel}
+        >
+          Cancel
+        </Button>
+      </Box>
+      <Box padding="56px">{content}</Box>
+    </Box>
   );
 };
 
