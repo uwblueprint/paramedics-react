@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Tabs, Tab, makeStyles, Typography } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router';
 import { useQuery } from '@apollo/react-hooks';
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
@@ -15,6 +14,7 @@ import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 
 interface TParams {
   eventId: string;

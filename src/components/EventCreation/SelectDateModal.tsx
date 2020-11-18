@@ -9,7 +9,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Typography from '@material-ui/core/Typography';
-import moment from 'moment';
+import { zonedTimeToUtc, format, toDate } from 'date-fns-tz';
 
 const useModalStyles = makeStyles({
   root: {
@@ -61,8 +61,8 @@ const datePickerTheme = createMuiTheme({
 const SelectDateModal: React.FC<{
   open: boolean;
   handleClose: () => void;
-  eventDate: moment.Moment | null;
-  setEventDate: (date: moment.Moment | null) => void;
+  eventDate: Date | null;
+  setEventDate: (date: Date | null) => void;
 }> = ({
   open,
   handleClose,
@@ -71,11 +71,11 @@ const SelectDateModal: React.FC<{
 }: {
   open: boolean;
   handleClose: () => void;
-  eventDate: moment.Moment | null;
-  setEventDate: (date: moment.Moment | null) => void;
+  eventDate: Date | null;
+  setEventDate: (date: Date | null) => void;
 }) => {
   const classes = useModalStyles();
-  const [date, setDate] = useState<moment.Moment | null>(eventDate);
+  const [date, setDate] = useState<Date | null>(eventDate);
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
@@ -92,7 +92,21 @@ const SelectDateModal: React.FC<{
               id="date-picker-inline"
               label="Date picker inline"
               value={date}
-              onChange={(date) => setDate(moment.utc(date))}
+              onChange={(date) => {
+                if (date) {
+                  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                  const day = date.getDate().toString().padStart(2, '0');
+                  const year = date.getFullYear().toString();
+                  const newDate = year.concat(
+                    '-',
+                    month,
+                    '-',
+                    day,
+                    'T00:00:00'
+                  );
+                  setDate(toDate(newDate, { timeZone: 'UTC' }));
+                }
+              }}
               fullWidth
             />
           </MuiPickersUtilsProvider>

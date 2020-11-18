@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { Box, Button, Typography } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
-import moment from 'moment';
 import CancelModal from './CancelModal';
 import Map from './Map';
 import NextButton from './NextButton';
@@ -18,6 +17,7 @@ import {
   GET_EVENT_BY_ID,
 } from '../../graphql/queries/events';
 import { Colours } from '../../styles/Constants';
+import { zonedTimeToUtc, format } from 'date-fns-tz';
 
 enum EventModes {
   New = 'new',
@@ -69,7 +69,7 @@ const EventCreationPage = ({
   const [openDateModal, setOpenDateModal] = useState(false);
 
   const [eventName, setEventName] = useState<string>('');
-  const [eventDate, setEventDate] = useState<moment.Moment | null>(null);
+  const [eventDate, setEventDate] = useState<Date | null>(null);
   const [eventLocation, setEventLocation] = useState<string>('');
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -102,23 +102,34 @@ const EventCreationPage = ({
   };
 
   const dateParts: {
-    years?: number;
-    months?: number;
-    date?: number;
-  } = eventDate ? (eventDate.toObject() ? eventDate.toObject() : {}) : {};
+    year?: string;
+    month?: string;
+    day?: string;
+    literal?: string;
+  } = eventDate
+    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
+        (obj, currentPart) => ({
+          ...obj,
+          [currentPart.type]: currentPart.value,
+        }),
+        {}
+      )
+    : {};
 
+  console.log("eventDate outside useEffect", eventDate)
   const handleComplete = () => {
     if (mode === EventModes.New) {
       addEvent({
         variables: {
           name: eventName,
           eventDate:
-            dateParts.years &&
-            dateParts.months &&
-            dateParts.date &&
-            `${dateParts.years.toString()}-${(dateParts.months + 1)
-              .toString()
-              .padStart(2, '0')}-${dateParts.date.toString().padStart(2, '0')}`,
+            dateParts.year &&
+            dateParts.month &&
+            dateParts.day &&
+            `${dateParts.year}-${dateParts.month.padStart(
+              2,
+              '0'
+            )}-${dateParts.day.padStart(2, '0')}`,
           createdBy: 1, // TODO: change this to proper user
           isActive: true,
         },
@@ -129,12 +140,13 @@ const EventCreationPage = ({
           id: eventId,
           name: eventName,
           eventDate:
-            dateParts.years &&
-            dateParts.months &&
-            dateParts.date &&
-            `${dateParts.years.toString()}-${(dateParts.months + 1)
-              .toString()
-              .padStart(2, '0')}-${dateParts.date.toString().padStart(2, '0')}`,
+            dateParts.year &&
+            dateParts.month &&
+            dateParts.day &&
+            `${dateParts.year}-${dateParts.month.padStart(
+              2, 
+              '0'
+            )}-${dateParts.day.padStart(2, '0')}`,
           createdBy: 1,
           isActive: true,
         },
@@ -153,8 +165,9 @@ const EventCreationPage = ({
         id: string;
       } = data.event;
 
+      console.log("eventDate", eventDate)
       setEventName(name);
-      setEventDate(moment.utc(eventDate));
+      setEventDate(new Date(eventDate));
     }
   }, [data, loading, mode]);
 
@@ -173,10 +186,8 @@ const EventCreationPage = ({
           placeholder="YYYY:MM:DD"
           onChange={handleDateChange}
           value={
-            dateParts && dateParts.years && dateParts.months && dateParts.date
-              ? `${dateParts.years.toString()}:${(
-                  dateParts.months + 1
-                ).toString()}:${dateParts.date.toString()}`
+            eventDate
+              ? `${dateParts.year}:${dateParts.month}:${dateParts.day}`
               : ''
           }
           handleFocus={handleOpenDateModal}
