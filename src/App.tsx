@@ -15,6 +15,7 @@ import ResourceOverviewPage from './components/ResourceOverview/ResourceOverview
 import HospitalFormPage from './components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from './components/ResourceForm/AmbulanceFormPage';
 import UserFormPage from './components/ResourceForm/UserFormPage';
+import LoginPage from './components/Login/LoginPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
         <Switch>
+          <Route exact path="/login" component={LoginPage} />
           <Route exact path="/events" component={EventsPage} />
           <Route
             exact
