@@ -116,8 +116,7 @@ const SearchBar = ({
             disableEnforceFocus
           >
             <List classes={{ root: styles.sidebarList }}>
-              {loading && <div>Loading...</div>}
-              {suggestions.map((suggestion) => (
+              {!loading && suggestions.map((suggestion) => (
                 <ListItem
                   key={suggestion.description}
                   classes={{ root: styles.sidebarOptions }}
