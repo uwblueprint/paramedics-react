@@ -161,7 +161,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastNumUpdates(lastNumUpdates + 1);
       setLastUpdatedPatient(data.patientUpdated.id);
-      // note: transport data changes (ex. ambulance and hospital and ccp) is not supported
       client.writeFragment({
         id: `Patient:${data.patientUpdated.id}`,
         fragment: gql`
@@ -175,6 +174,14 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
             notes
             updatedAt
             transportTime
+            hospitalId {
+              id
+              name
+            }
+            ambulanceId {
+              id
+              vehicleNumber
+            }
           }
         `,
         data: {
@@ -187,6 +194,8 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           notes: data.patientUpdated.notes,
           updatedAt: data.patientUpdated.updatedAt,
           transportTime: data.patientUpdated.transportTime,
+          hospitalId: data.patientUpdated.hospitalId,
+          ambulanceId: data.patientUpdated.ambulanceId,
         },
       });
     },
