@@ -184,19 +184,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
             }
           }
         `,
-        data: {
-          gender: data.patientUpdated.gender,
-          age: data.patientUpdated.age,
-          runNumber: data.patientUpdated.runNumber,
-          barcodeValue: data.patientUpdated.barcodeValue,
-          triageLevel: data.patientUpdated.triageLevel,
-          status: data.patientUpdated.status,
-          notes: data.patientUpdated.notes,
-          updatedAt: data.patientUpdated.updatedAt,
-          transportTime: data.patientUpdated.transportTime,
-          hospitalId: data.patientUpdated.hospitalId,
-          ambulanceId: data.patientUpdated.ambulanceId,
-        },
+        data: data.patientUpdated,
       });
     },
   });
