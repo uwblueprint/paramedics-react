@@ -132,14 +132,12 @@ export const PatientInfoTableWithFilters = ({
   eventId,
   ccpId,
   patientId,
-  numUpdates,
   lastUpdatedPatient,
 }: {
   patients: Patient[];
   eventId: string;
   ccpId: string;
   patientId?: string;
-  numUpdates?: number;
   lastUpdatedPatient?: string;
 }) => {
   const classes = useStyles();
@@ -430,7 +428,6 @@ export const PatientInfoTableWithFilters = ({
           eventId={eventId}
           ccpId={ccpId}
           patientId={patientId}
-          numUpdates={numUpdates}
           lastUpdatedPatient={lastUpdatedPatient}
         />
       </TableContainer>

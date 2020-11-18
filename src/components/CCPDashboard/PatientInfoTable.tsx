@@ -147,7 +147,6 @@ export const PatientInfoTable = ({
   eventId,
   ccpId,
   patientId,
-  numUpdates,
   lastUpdatedPatient,
 }: {
   patients: Patient[];
@@ -155,7 +154,6 @@ export const PatientInfoTable = ({
   eventId: string;
   ccpId: string;
   patientId?: string;
-  numUpdates?: number;
   lastUpdatedPatient?: string;
 }) => {
   const classes = useStyles();
@@ -186,9 +184,7 @@ export const PatientInfoTable = ({
   });
 
   const handleOpenDetails = (patient) => {
-    history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`, {
-      numUpdates,
-    });
+    history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`);
     setOpenDetails(true);
   };
 
@@ -233,7 +229,7 @@ export const PatientInfoTable = ({
   };
 
   const handleCloseDetails = () => {
-    history.push(`/events/${eventId}/ccps/${ccpId}`, { numUpdates });
+    history.push(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   const handleCancelDeletePatient = () => {
@@ -411,7 +407,6 @@ export const PatientInfoTable = ({
             patient={(selectedPatient as unknown) as Patient}
             eventId={eventId}
             ccpId={ccpId}
-            numUpdates={numUpdates}
             runNumber={runNumber}
             updateRunNumber={handleRunNumber}
           />

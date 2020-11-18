@@ -6,11 +6,9 @@ import {
   makeStyles,
   Typography,
   IconButton,
-  Badge,
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { RouteComponentProps } from 'react-router';
-import { useLocation } from 'react-router-dom';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import gql from 'graphql-tag';
@@ -118,29 +116,16 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-type LocationState = { numUpdates: number };
-
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
-  const location = useLocation<LocationState>();
 
   const { eventId, ccpId, patientId } = match.params;
-  const { numUpdates } = location.state || { numUpdates: 0 };
 
-  const [lastNumUpdates, setLastNumUpdates] = React.useState(numUpdates);
   const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState("");
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients();
   // Should switch to fetching patients from cache
-
-  window.history.pushState(
-    {
-      ...location.state,
-      numUpdates: 0,
-    },
-    ''
-  );
 
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const { loading: ccpLoading, data: ccpInfo } = useQuery(GET_CCP_BY_ID, {
@@ -159,7 +144,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useSubscription(PATIENT_UPDATED, {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
-      setLastNumUpdates(lastNumUpdates + 1);
       setLastUpdatedPatient(data.patientUpdated.id);
       client.writeFragment({
         id: `Patient:${data.patientUpdated.id}`,
@@ -192,7 +176,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useSubscription(PATIENT_ADDED, {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
-      setLastNumUpdates(lastNumUpdates + 1);
       setLastUpdatedPatient(data.patientAdded.id);
       client.writeQuery({
         query: GET_ALL_PATIENTS,
@@ -240,16 +223,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
             window.location.reload();
           }}
         >
-          <Badge
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            badgeContent={lastNumUpdates}
-            color="error"
-          >
-            <RefreshIcon style={{ color: Colours.White }} />
-          </Badge>
+          <RefreshIcon style={{ color: Colours.White }} />
         </IconButton>
       </div>
     </>
@@ -285,7 +259,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           patients={patients}
           lastUpdatedPatient={lastUpdatedPatient}
           patientId={patientId}
-          numUpdates={lastNumUpdates}
         />
       </TabPanel>
       <TabPanel
@@ -299,7 +272,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           patients={transportPatients}
           lastUpdatedPatient={lastUpdatedPatient}
           patientId={patientId}
-          numUpdates={lastNumUpdates}
         />
       </TabPanel>
     </Box>

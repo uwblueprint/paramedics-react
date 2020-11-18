@@ -26,7 +26,6 @@ interface PatientOverviewProps {
   ccpId: string;
   patients: Patient[];
   patientId?: string;
-  numUpdates?: number;
   lastUpdatedPatient?: string;
 }
 
@@ -75,7 +74,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { patients, eventId, ccpId, patientId, numUpdates, lastUpdatedPatient } = props;
+  const { patients, eventId, ccpId, patientId, lastUpdatedPatient } = props;
 
   const createCategoryData = (
     category: string,
@@ -178,7 +177,6 @@ export const PatientOverview = (props: PatientOverviewProps) => {
           eventId={eventId}
           ccpId={ccpId}
           patientId={patientId}
-          numUpdates={numUpdates}
           lastUpdatedPatient={lastUpdatedPatient}
         />
       </Card>
