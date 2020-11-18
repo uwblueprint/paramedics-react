@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from 'react-apollo';
-import { makeStyles, Button, Box, Grid, Typography } from '@material-ui/core';
-import { useHistory, useLocation, NavLink } from 'react-router-dom';
-import AddIcon from '@material-ui/icons/Add';
-import MenuTabs from '../common/MenuTabs';
-import useAllEvents from '../../graphql/queries/hooks/events';
-import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
-import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
+import React from 'react';
+import { makeStyles, Box, Typography } from '@material-ui/core';
 import LoginButton from './LoginButton';
+import InvalidUserMessage from './InvalidUserMessage';
 import { Colours } from '../../styles/Constants';
 
 import paramedicsLogo from '../../paramedicsLogo.png';
@@ -58,7 +52,7 @@ const useStyles = makeStyles({
   },
 });
 
-const EventsPage = () => {
+const LoginPage = ({ invalidUser }: { invalidUser: Boolean }) => {
   const classes = useStyles();
 
   return (
@@ -73,6 +67,7 @@ const EventsPage = () => {
             Check that your administrator has granted you access before logging
             in
           </Typography>
+          {invalidUser && <InvalidUserMessage />}
           <LoginButton />
           <Typography variant="body1" className={classes.loginText}>
             Log in using your ROWPS account
@@ -93,4 +88,4 @@ const EventsPage = () => {
   );
 };
 
-export default EventsPage;
+export default LoginPage;

@@ -25,6 +25,11 @@ function App() {
       >
         <Switch>
           <Route exact path="/login" component={LoginPage} />
+          <Route
+            exact
+            path="/unauth"
+            component={(props) => <LoginPage invalidUser={true} {...props} />}
+          />
           <Route exact path="/events" component={EventsPage} />
           <Route
             exact
