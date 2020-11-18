@@ -139,7 +139,6 @@ const HospitalFormPage = ({
         </Typography>
       </div>
       <DoneButton handleClick={handleComplete} disabled={hospitalName === ''} />
-      <CancelButton to="/manage/hospitals" />
       <ConfirmModal
         open={openValidationError}
         title="Duplicate Hospital"

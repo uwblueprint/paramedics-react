@@ -146,7 +146,6 @@ const AmbulanceFormPage = ({
         handleClick={handleComplete}
         disabled={ambulanceNumber === ''}
       />
-      <CancelButton to="/manage/ambulances" />
       <ConfirmModal
         open={openValidationError}
         title="Duplicate Ambulance"
