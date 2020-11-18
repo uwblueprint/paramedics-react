@@ -44,11 +44,10 @@ interface PatientDetailsDialogProps {
   ccpId: string;
   runNumber: number | null;
   updateRunNumber: (runNumber: number) => void;
-  numUpdates?: number;
 }
 
 export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
-  const { patient, eventId, ccpId, runNumber, updateRunNumber, numUpdates } = props;
+  const { patient, eventId, ccpId, runNumber, updateRunNumber } = props;
 
   const history = useHistory();
   const classes = useStyles();
@@ -71,7 +70,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
   ];
 
   const handleCloseDetails = () => {
-    history.push(`/events/${eventId}/ccps/${ccpId}`, { numUpdates });
+    history.push(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   return (
