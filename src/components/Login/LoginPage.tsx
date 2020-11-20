@@ -84,11 +84,7 @@ const LoginPage = ({ invalidUser }: { invalidUser: Boolean }) => {
           className={classes.paramedicsLogo}
           alt="Paramedics Logo"
         />
-        <Typography
-          variant="body1"
-          className={classes.paramedicsText}
-          alt="Ambulance Image"
-        >
+        <Typography variant="body1" className={classes.paramedicsText}>
           Region of Waterloo Paramedic Services
         </Typography>
       </Box>
