@@ -507,7 +507,7 @@ export const PatientInfoTable = ({
                 color="secondary"
                 className={classes.editButton}
               >
-                Edit
+                {selectedPatient.status == Status.DELETED ? "Restore" : "Edit"}
               </Button>
             )}
           </DialogActions>
