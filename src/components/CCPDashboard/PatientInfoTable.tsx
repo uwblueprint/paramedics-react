@@ -289,7 +289,10 @@ export const PatientInfoTable = ({
   };
 
   const handleRestoreDialogBtn = () => {
-    if (selectedPatient !== undefined && selectedPatient.status === Status.DELETED) {
+    if (
+      selectedPatient !== undefined &&
+      selectedPatient.status === Status.DELETED
+    ) {
       setOpenRestorePatient(true);
     } else {
       history.push(
@@ -298,7 +301,7 @@ export const PatientInfoTable = ({
         }`
       );
     }
-  }
+  };
 
   const getTableRows = (isActive: Boolean, patients: Patient[]) => {
     return stableSort(patients, getComparator(order, orderBy)).map(
