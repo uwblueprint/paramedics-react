@@ -68,9 +68,7 @@ const AmbulanceFormPage = ({
   });
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<string>('');
-  const [openValidationError, setOpenValidationError] = useState<boolean>(
-    false
-  );
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -88,11 +86,11 @@ const AmbulanceFormPage = ({
   };
 
   const openErrorModal = () => {
-    setOpenValidationError(true);
+    setIsModalOpen(true);
   };
 
   const closeErrorModal = () => {
-    setOpenValidationError(false);
+    setIsModalOpen(false);
   };
 
   const handleComplete = () => {
@@ -147,7 +145,7 @@ const AmbulanceFormPage = ({
         disabled={ambulanceNumber === ''}
       />
       <ConfirmModal
-        open={openValidationError}
+        open={isModalOpen}
         title="Duplicate Ambulance"
         body="You cannot add this ambulance as this ambulance already exists in the system."
         actionLabel="Okay"

@@ -64,9 +64,7 @@ const HospitalFormPage = ({
   });
 
   const [hospitalName, setHospitalName] = useState<string>('');
-  const [openValidationError, setOpenValidationError] = useState<boolean>(
-    false
-  );
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -84,11 +82,11 @@ const HospitalFormPage = ({
   };
 
   const openErrorModal = () => {
-    setOpenValidationError(true);
+    setIsModalOpen(true);
   };
 
   const closeErrorModal = () => {
-    setOpenValidationError(false);
+    setIsModalOpen(false);
   };
 
   const handleComplete = () => {
@@ -140,7 +138,7 @@ const HospitalFormPage = ({
       </div>
       <DoneButton handleClick={handleComplete} disabled={hospitalName === ''} />
       <ConfirmModal
-        open={openValidationError}
+        open={isModalOpen}
         title="Duplicate Hospital"
         body="You cannot add this hospital as this hospital already exists in the system."
         actionLabel="Okay"
