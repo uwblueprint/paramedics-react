@@ -288,6 +288,18 @@ export const PatientInfoTable = ({
     setOpenRestorePatient(true);
   };
 
+  const handleRestoreDialogBtn = () => {
+    if (selectedPatient !== undefined && selectedPatient.status === Status.DELETED) {
+      setOpenRestorePatient(true);
+    } else {
+      history.push(
+        `/events/${eventId}/ccps/${ccpId}/patients/${
+          ((selectedPatient as unknown) as Patient).id
+        }`
+      );
+    }
+  }
+
   const getTableRows = (isActive: Boolean, patients: Patient[]) => {
     return stableSort(patients, getComparator(order, orderBy)).map(
       (patient: Patient) => {
@@ -497,17 +509,11 @@ export const PatientInfoTable = ({
               </Button>
             ) : (
               <Button
-                onClick={() => {
-                  history.push(
-                    `/events/${eventId}/ccps/${ccpId}/patients/${
-                      ((selectedPatient as unknown) as Patient).id
-                    }`
-                  );
-                }}
+                onClick={handleRestoreDialogBtn}
                 color="secondary"
                 className={classes.editButton}
               >
-                {selectedPatient.status == Status.DELETED ? "Restore" : "Edit"}
+                {selectedPatient.status === Status.DELETED ? 'Restore' : 'Edit'}
               </Button>
             )}
           </DialogActions>
