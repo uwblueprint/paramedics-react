@@ -16,6 +16,7 @@ import HospitalFormPage from './components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from './components/ResourceForm/AmbulanceFormPage';
 import UserFormPage from './components/ResourceForm/UserFormPage';
 import LoginPage from './components/Login/LoginPage';
+import MapPage from './components/Maps/MapPage';
 
 function App() {
   return (
@@ -105,6 +106,7 @@ function App() {
             path="/events/:eventId/ccps/:ccpId/patients/:patientId"
             component={(props) => <PatientProfilePage mode="edit" {...props} />}
           />
+          <Route exact path="/events/:eventId/map" component={MapPage} />
           <Route path="/">
             <Redirect to="/events" />
           </Route>

@@ -6,7 +6,6 @@ import { useQuery } from 'react-apollo';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { Typography, makeStyles } from '@material-ui/core';
 import FormField from '../common/FormField';
-import BackLink from '../common/BackLink';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import AccessLevelSelector from './AccessLevelSelector';
@@ -14,9 +13,9 @@ import { Colours } from '../../styles/Constants';
 import { ADD_USER, EDIT_USER } from '../../graphql/mutations/users';
 import {
   User,
-  AccessLevel,
   GET_ALL_USERS,
   GET_USER_BY_ID,
+  AccessLevel,
 } from '../../graphql/queries/users';
 
 const useStyles = makeStyles({
@@ -31,6 +30,7 @@ const useStyles = makeStyles({
   resourceHeader: {
     display: 'flex',
     padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
     padding: '30px',
@@ -77,22 +77,22 @@ const UserFormPage = ({
 
   const [memberName, setMemberName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [role, setRole] = useState<AccessLevel>(AccessLevel.SUPERVISOR);
+  const [role, setRole] = useState<number>(AccessLevel.SUPERVISOR);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
       const {
         name,
         email,
-        accessLevel,
+        roleId,
       }: {
         name: string;
         email: string;
-        accessLevel: AccessLevel;
+        roleId: number;
       } = data.user;
       setMemberName(name);
       setEmail(email);
-      setRole(accessLevel);
+      setRole(roleId);
     }
   }, [data, loading, mode]);
 
@@ -126,7 +126,7 @@ const UserFormPage = ({
           name: memberName,
           email,
           password: 'password',
-          accessLevel: role,
+          roleId: role,
           emergencyContact: '1234567890',
         },
       });
@@ -136,7 +136,7 @@ const UserFormPage = ({
           id: userId,
           name: memberName,
           email,
-          accessLevel: role,
+          roleId: role,
         },
       });
     }
@@ -147,11 +147,11 @@ const UserFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage/members" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new team member' : 'Edit team member'}
           </Typography>
+          <CancelButton to="/manage/members" />
         </div>
         {mode === 'new' ? (
           <div className={classes.caption}>
@@ -200,7 +200,6 @@ const UserFormPage = ({
         </div>
         <DoneButton disabled={memberName === '' || email === ''} />
       </ValidatorForm>
-      <CancelButton to="/manage/members" />
     </div>
   );
 };
