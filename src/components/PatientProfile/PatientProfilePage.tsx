@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, NavLink } from 'react-router-dom';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Typography, makeStyles } from '@material-ui/core';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -47,6 +47,14 @@ interface FormFields {
   TriageLevel?: number | null;
 }
 
+const useStyles = makeStyles({
+  patientCancelBtn: {
+    minWidth: '228px',
+    alignSelf: 'center',
+    display: 'flex',
+  },
+});
+
 const PatientProfilePage = ({
   match: {
     params: { eventId, ccpId, patientId, barcodeValue },
@@ -63,6 +71,7 @@ const PatientProfilePage = ({
   };
   mode: string;
 }) => {
+  const classes = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [openTransportModal, setOpenTransportModal] = useState(false);
@@ -110,7 +119,7 @@ const PatientProfilePage = ({
   });
 
   const [formFields, setFormFields] = useState<FormFields>({
-    barcodeValue: '',
+    barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
     triage: TriageLevel.GREEN,
     gender: Gender.M,
     age: null,
@@ -156,12 +165,6 @@ const PatientProfilePage = ({
       setTransportConfirmed(status === Status.TRANSPORTED);
     }
   }, [data, loading, mode]);
-
-  useEffect(() => {
-    if (mode === 'new' && barcodeValue) {
-      setFormFields({ ...formFields, barcodeValue });
-    }
-  }, [mode, barcodeValue]);
 
   const handleDeleteClick = () => {
     setDeleteClicked(true);
@@ -345,6 +348,8 @@ const PatientProfilePage = ({
         </Typography>
         <Button
           color="secondary"
+          variant="outlined"
+          className={classes.patientCancelBtn}
           component={NavLink}
           to={`/events/${eventId}/ccps/${ccpId}`}
         >

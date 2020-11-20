@@ -28,3 +28,20 @@ export const GET_PINS_BY_EVENT_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_PINS = gql`
+  query {
+    pins {
+      id
+      eventId {
+        id
+        name
+        createdAt
+      }
+      label
+      latitude
+      longitude
+      address
+    }
+  }
+`;

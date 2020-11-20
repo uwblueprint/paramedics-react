@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 const useEventButtonStyles = makeStyles({
   root: {
     minWidth: '228px',
-    minHeight: '48px',
     fontSize: '18px',
   },
   disabled: {
