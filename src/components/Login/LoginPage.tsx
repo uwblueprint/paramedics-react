@@ -79,8 +79,16 @@ const LoginPage = ({ invalidUser }: { invalidUser: Boolean }) => {
         <Typography variant="h5" className={classes.appNameText}>
           Mass Casualty Tracking Application
         </Typography>
-        <img src={paramedicsLogo} className={classes.paramedicsLogo} />
-        <Typography variant="body1" className={classes.paramedicsText}>
+        <img
+          src={paramedicsLogo}
+          className={classes.paramedicsLogo}
+          alt="Paramedics Logo"
+        />
+        <Typography
+          variant="body1"
+          className={classes.paramedicsText}
+          alt="Ambulance Image"
+        >
           Region of Waterloo Paramedic Services
         </Typography>
       </Box>

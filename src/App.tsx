@@ -29,7 +29,7 @@ function App() {
           <Route
             exact
             path="/unauth"
-            component={(props) => <LoginPage invalidUser={true} {...props} />}
+            component={(props) => <LoginPage invalidUser {...props} />}
           />
           <Route exact path="/events" component={EventsPage} />
           <Route

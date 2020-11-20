@@ -35,7 +35,7 @@ const UserProfile = () => {
     // TODO: Redirect to edit profile
   };
   const handleLogoutClick = (event) => {
-    fetch("http://localhost:4000/logout");
+    fetch('http://localhost:4000/logout');
     event.stopPropagation();
     // TODO: Logout
   };

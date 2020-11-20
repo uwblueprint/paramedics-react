@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation } from 'react-apollo';
 import { makeStyles, Button, Box, Grid, Typography } from '@material-ui/core';
 import { useHistory, useLocation, NavLink } from 'react-router-dom';
