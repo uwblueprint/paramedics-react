@@ -143,12 +143,20 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [allPatients, ccpId]
   );
 
+  const highlightPatient = (id) => {
+    setLastUpdatedPatient(id);
+
+    const timer = setTimeout(() => {
+      setLastUpdatedPatient('');
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  };
+
   useSubscription(PATIENT_UPDATED, {
     variables: { eventId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
-      // eslint-disable-next-line no-console
-      console.log(data);
-      setLastUpdatedPatient(data.patientUpdated.id);
+      highlightPatient(data.patientUpdated.id);
       client.writeFragment({
         id: `Patient:${data.patientUpdated.id}`,
         fragment: gql`
@@ -180,7 +188,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useSubscription(PATIENT_ADDED, {
     variables: { eventId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
-      setLastUpdatedPatient(data.patientAdded.id);
+      highlightPatient(data.patientAdded.id);
       client.writeQuery({
         query: GET_ALL_PATIENTS,
         data: {
@@ -193,7 +201,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useSubscription(PATIENT_DELETED, {
     variables: { eventId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
-      setLastUpdatedPatient(data.patientDeleted.id);
+      highlightPatient(data.patientDeleted.id);
       client.writeFragment({
         id: `Patient:${data.patientDeleted.id}`,
         fragment: gql`
