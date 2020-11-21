@@ -27,6 +27,7 @@ import MenuAppBar from '../common/MenuAppBar';
 import {
   PATIENT_ADDED,
   PATIENT_UPDATED,
+  PATIENT_DELETED,
 } from '../../graphql/subscriptions/patients';
 
 interface TParams {
@@ -121,7 +122,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   const { eventId, ccpId, patientId } = match.params;
 
-  const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState("");
+  const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState('');
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients();
@@ -144,6 +145,8 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   useSubscription(PATIENT_UPDATED, {
     variables: { collectionPointId: ccpId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      // eslint-disable-next-line no-console
+      console.log(data);
       setLastUpdatedPatient(data.patientUpdated.id);
       client.writeFragment({
         id: `Patient:${data.patientUpdated.id}`,
@@ -182,6 +185,23 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         data: {
           patients: [...patients, data.patientAdded],
         },
+      });
+    },
+  });
+
+  useSubscription(PATIENT_DELETED, {
+    variables: { collectionPointId: ccpId },
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      setLastUpdatedPatient(data.patientDeleted.id);
+      client.writeFragment({
+        id: `Patient:${data.patientDeleted.id}`,
+        fragment: gql`
+          fragment NewPatient on Patient {
+            status
+            updatedAt
+          }
+        `,
+        data: data.patientDeleted,
       });
     },
   });

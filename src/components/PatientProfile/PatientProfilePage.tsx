@@ -25,7 +25,7 @@ import {
 import {
   ADD_PATIENT,
   EDIT_PATIENT,
-  // DELETE_PATIENT,
+  DELETE_PATIENT,
 } from '../../graphql/mutations/patients';
 import { Hospital, GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import {
@@ -103,11 +103,11 @@ const PatientProfilePage = ({
     },
   });
   const [editPatient] = useMutation(EDIT_PATIENT);
-  // const [deletePatient] = useMutation(DELETE_PATIENT, {
-  //   onCompleted() {
-  //     history.replace(`/events/${eventId}/ccps/${ccpId}`);
-  //   },
-  // });
+  const [deletePatient] = useMutation(DELETE_PATIENT, {
+    onCompleted() {
+      history.replace(`/events/${eventId}/ccps/${ccpId}`);
+    },
+  });
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
@@ -167,19 +167,11 @@ const PatientProfilePage = ({
 
   const handleDeleteConfirm = () => {
     if (mode === 'edit') {
-      // deletePatient({
-      //   variables: {
-      //     id: patientId,
-      //   },
-      // });
-      editPatient({
+      deletePatient({
         variables: {
           id: patientId,
-          status: Status.DELETED,
-          collectionPointId: ccpId,
         },
       });
-      history.replace(`/events/${eventId}/ccps/${ccpId}`);
     }
   };
 

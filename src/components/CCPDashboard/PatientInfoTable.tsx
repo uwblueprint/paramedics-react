@@ -30,7 +30,7 @@ import {
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
-import { EDIT_PATIENT } from '../../graphql/mutations/patients';
+import { EDIT_PATIENT, DELETE_PATIENT } from '../../graphql/mutations/patients';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
 import { capitalize } from '../../utils/format';
 
@@ -173,6 +173,8 @@ export const PatientInfoTable = ({
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
+  const [deletePatient] = useMutation(DELETE_PATIENT, {});
+
   const [editPatient] = useMutation(EDIT_PATIENT, {
     update(cache): void {
       const patientId = ((selectedPatient as unknown) as Patient).id;
@@ -212,11 +214,9 @@ export const PatientInfoTable = ({
   };
 
   const handleConfirmDeletePatient = () => {
-    editPatient({
+    deletePatient({
       variables: {
         id: ((selectedPatient as unknown) as Patient).id,
-        status: Status.DELETED,
-        collectionPointId: ccpId,
       },
     });
     setOpenDeletePatient(false);

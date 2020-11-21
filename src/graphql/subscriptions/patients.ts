@@ -67,3 +67,13 @@ export const PATIENT_ADDED = gql`
     }
   }
 `;
+
+export const PATIENT_DELETED = gql`
+  subscription OnPatientDeleted($collectionPointId: ID!) {
+    patientDeleted(collectionPointId: $collectionPointId) {
+      id
+      status
+      updatedAt
+    }
+  }
+`;
