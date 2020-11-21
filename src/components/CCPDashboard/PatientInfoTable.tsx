@@ -154,7 +154,7 @@ export const PatientInfoTable = ({
   eventId: string;
   ccpId: string;
   patientId?: string;
-  lastUpdatedPatient?: string;
+  lastUpdatedPatient: string | null;
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');

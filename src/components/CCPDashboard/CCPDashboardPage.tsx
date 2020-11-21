@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { RouteComponentProps } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import gql from 'graphql-tag';
@@ -47,6 +48,7 @@ interface TabPanelProps {
   value: CCPDashboardTabOptions;
   className?: string;
 }
+type LocationState = { userUpdatedPatientId: string | null };
 
 const useStyles = makeStyles({
   root: {
@@ -121,11 +123,20 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
 
   const { eventId, ccpId, patientId } = match.params;
-
+  const location = useLocation<LocationState>();
+  const { userUpdatedPatientId } = location.state || { userUpdatedPatientId: '' };
   const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState('');
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients(eventId);
+
+  window.history.pushState(
+    {
+      ...location.state,
+      userUpdatedPatientId: null,
+    },
+    ''
+  );
 
   // Should switch to fetching patients from cache
 
@@ -142,6 +153,10 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       ),
     [allPatients, ccpId]
   );
+
+  React.useEffect(()=> {
+    highlightPatient(userUpdatedPatientId)
+  }, [])
 
   const highlightPatient = (id) => {
     setLastUpdatedPatient(id);

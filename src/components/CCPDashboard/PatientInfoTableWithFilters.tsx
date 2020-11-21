@@ -138,7 +138,7 @@ export const PatientInfoTableWithFilters = ({
   eventId: string;
   ccpId: string;
   patientId?: string;
-  lastUpdatedPatient?: string;
+  lastUpdatedPatient: string | null;
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(

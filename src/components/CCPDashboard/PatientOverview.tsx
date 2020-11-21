@@ -26,7 +26,7 @@ interface PatientOverviewProps {
   ccpId: string;
   patients: Patient[];
   patientId?: string;
-  lastUpdatedPatient?: string;
+  lastUpdatedPatient: string | null;
 }
 
 interface TableRowData {

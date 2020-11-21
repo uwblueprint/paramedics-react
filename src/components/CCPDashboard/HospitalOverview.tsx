@@ -23,7 +23,7 @@ interface HospitalOverviewProps {
   ccpId: string;
   patients: Patient[];
   patientId?: string;
-  lastUpdatedPatient?: string;
+  lastUpdatedPatient: string | null;
 }
 
 const useStyles = makeStyles({
