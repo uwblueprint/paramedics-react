@@ -125,7 +125,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState('');
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
-  useAllPatients();
   // Should switch to fetching patients from cache
 
   const { data, loading } = useQuery(GET_ALL_PATIENTS);

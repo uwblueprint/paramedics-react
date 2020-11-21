@@ -186,8 +186,11 @@ export const PatientInfoTable = ({
   });
 
   const handleOpenDetails = (patient) => {
-    history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`);
-    setOpenDetails(true);
+    if (!patientId) {
+      setSelectedPatient(patients.find((x) => x.id === patient.id));
+      setRunNumber(patient.runNumber);
+      setOpenDetails(true);
+    }
   };
 
   const handleClickOptions = (event, patient) => {
@@ -229,7 +232,11 @@ export const PatientInfoTable = ({
   };
 
   const handleCloseDetails = () => {
-    history.push(`/events/${eventId}/ccps/${ccpId}`);
+    if (patientId) {
+      history.push(`/events/${eventId}/ccps/${ccpId}`);
+    } else {
+      setOpenDetails(false);
+    }
   };
 
   const handleCancelDeletePatient = () => {
@@ -249,6 +256,8 @@ export const PatientInfoTable = ({
         collectionPointId: ccpId,
       },
     });
+    setSelectedPatient(undefined);
+    setOpenDetails(false);
     enqueueSnackbar(`Patient ${selectedPatient?.barcodeValue} edited.`);
   };
 
@@ -404,6 +413,7 @@ export const PatientInfoTable = ({
           PaperProps={{ className: classes.detailsDialog }}
         >
           <PatientDetailsDialog
+            handleCloseDetails={handleCloseDetails}
             patient={(selectedPatient as unknown) as Patient}
             eventId={eventId}
             ccpId={ccpId}
