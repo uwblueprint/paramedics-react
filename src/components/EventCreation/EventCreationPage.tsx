@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import CancelModal from './CancelModal';
 import Map from './Map';
 import NextButton from './NextButton';
-import { BackButton } from '../common/BackLink';
+import BackButton from '../common/BackButton';
 import FormField from '../common/FormField';
 import Stepper from './Stepper';
 import SelectDateModal from './SelectDateModal';
@@ -23,6 +23,14 @@ enum EventModes {
   Edit = 'edit',
 }
 
+const useStyles = makeStyles({
+  eventCancelBtn: {
+    minWidth: '228px',
+    alignSelf: 'center',
+    display: 'flex',
+  },
+});
+
 const EventCreationPage = ({
   match: {
     params: { eventId },
@@ -32,6 +40,7 @@ const EventCreationPage = ({
   match: { params: { eventId?: string } };
   mode: string;
 }) => {
+  const classes = useStyles();
   const history = useHistory();
 
   const { data, loading } = useQuery(
@@ -211,9 +220,14 @@ const EventCreationPage = ({
         borderBottom={`1px solid ${Colours.BorderLightGray}`}
       >
         <Typography variant="h4">
-          {mode === EventModes.New ? 'Create New Event' : 'Edit Event'}
+          {mode === EventModes.New ? 'Add New Event' : 'Edit Event'}
         </Typography>
-        <Button color="secondary" onClick={handleOpenCancelModal}>
+        <Button
+          color="secondary"
+          variant="outlined"
+          className={classes.eventCancelBtn}
+          onClick={handleOpenCancelModal}
+        >
           Cancel
         </Button>
       </Box>
@@ -229,27 +243,25 @@ const EventCreationPage = ({
         eventDate={eventDate}
         setEventDate={setEventDate}
       />
-      <Stepper
-        activeStep={activeStep}
-        nextButton={
-          <NextButton
-            handleClick={activeStep < 1 ? handleNext : handleComplete}
-            disabled={eventName === '' || eventDate === null}
-            buttonText={
-              activeStep < 1
-                ? 'Next'
-                : mode === EventModes.New
-                ? 'Create'
-                : 'Save'
-            }
-          />
-        }
-      />
-      {activeStep === 1 && (
-        <Box position="absolute" top="24px" left="56px">
-          <BackButton onClick={handleBack} />
-        </Box>
-      )}
+      <Box padding="0 56px">
+        <Stepper
+          activeStep={activeStep}
+          nextButton={
+            <NextButton
+              handleClick={activeStep < 1 ? handleNext : handleComplete}
+              disabled={eventName === '' || eventDate === null}
+              buttonText={
+                activeStep < 1
+                  ? 'Next'
+                  : mode === EventModes.New
+                  ? 'Complete'
+                  : 'Save'
+              }
+            />
+          }
+          backButton={activeStep === 1 && <BackButton onClick={handleBack} />}
+        />
+      </Box>
     </Box>
   );
 };

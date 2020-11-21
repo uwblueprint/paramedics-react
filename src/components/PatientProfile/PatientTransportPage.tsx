@@ -6,9 +6,7 @@ import {
   Dialog,
   AppBar,
   Toolbar,
-  IconButton,
 } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
@@ -29,6 +27,7 @@ const useStyles = makeStyles({
   resourceHeader: {
     display: 'flex',
     padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
     padding: '30px',
@@ -42,15 +41,12 @@ const useStyles = makeStyles({
     fontSize: '18px',
     margin: '10px 0px 60px 0px',
     position: 'absolute',
-    right: '56px',
+    right: '30px',
   },
   cancelButton: {
-    minWidth: '160px',
-    minHeight: '40px',
+    minWidth: '228px',
     fontSize: '18px',
-    marginTop: '90px',
-    position: 'absolute',
-    right: '56px',
+    alignSelf: 'center',
   },
   appBarText: {
     marginLeft: '15px',
@@ -95,14 +91,6 @@ const PatientTransportPage = ({
     <Dialog fullScreen open={open} onClose={handleClose}>
       <AppBar position="relative" className={classes.appBar}>
         <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-          >
-            <ArrowBackIcon />
-          </IconButton>
           <Typography variant="h6" className={classes.appBarText}>
             {ccp.name}
           </Typography>
@@ -113,23 +101,17 @@ const PatientTransportPage = ({
         </Toolbar>
       </AppBar>
       <div className={classes.resourceWrapper}>
-        <Button
-          color="secondary"
-          onClick={handleClose}
-          className={classes.cancelButton}
-        >
-          Cancel
-        </Button>
         <div className={classes.resourceCreationTopSection}>
-          <Button
-            onClick={handleClose}
-            color="secondary"
-            style={{ textTransform: 'none' }}
-          >
-            &#60; Back
-          </Button>
           <div className={classes.resourceHeader}>
             <Typography variant="h4">Patient Transport</Typography>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={handleClose}
+              className={classes.cancelButton}
+            >
+              Cancel
+            </Button>
           </div>
           <div className={classes.caption}>
             <Typography
