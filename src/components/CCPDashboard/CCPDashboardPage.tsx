@@ -143,7 +143,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   );
 
   useSubscription(PATIENT_UPDATED, {
-    variables: { collectionPointId: ccpId },
+    variables: { eventId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       // eslint-disable-next-line no-console
       console.log(data);
@@ -177,7 +177,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   });
 
   useSubscription(PATIENT_ADDED, {
-    variables: { collectionPointId: ccpId },
+    variables: { eventId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastUpdatedPatient(data.patientAdded.id);
       client.writeQuery({
@@ -190,7 +190,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   });
 
   useSubscription(PATIENT_DELETED, {
-    variables: { collectionPointId: ccpId },
+    variables: { eventId },
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       setLastUpdatedPatient(data.patientDeleted.id);
       client.writeFragment({

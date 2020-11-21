@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const PATIENT_UPDATED = gql`
-  subscription OnPatientUpdated($collectionPointId: ID!) {
-    patientUpdated(collectionPointId: $collectionPointId) {
+  subscription OnPatientUpdated($eventId: ID!) {
+    patientUpdated(eventId: $eventId) {
       id
       gender
       age
@@ -35,8 +35,8 @@ export const PATIENT_UPDATED = gql`
 `;
 
 export const PATIENT_ADDED = gql`
-  subscription OnPatientAdded($collectionPointId: ID!) {
-    patientAdded(collectionPointId: $collectionPointId) {
+  subscription OnPatientAdded($eventId: ID!) {
+    patientAdded(eventId: $eventId) {
       id
       gender
       age
@@ -69,8 +69,8 @@ export const PATIENT_ADDED = gql`
 `;
 
 export const PATIENT_DELETED = gql`
-  subscription OnPatientDeleted($collectionPointId: ID!) {
-    patientDeleted(collectionPointId: $collectionPointId) {
+  subscription OnPatientDeleted($eventId: ID!) {
+    patientDeleted(eventId: $eventId) {
       id
       status
       updatedAt
