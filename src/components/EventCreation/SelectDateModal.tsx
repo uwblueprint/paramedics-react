@@ -9,7 +9,6 @@ import { ThemeProvider } from '@material-ui/styles';
 import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Typography from '@material-ui/core/Typography';
-import { zonedTimeToUtc, format, toDate } from 'date-fns-tz';
 
 const useModalStyles = makeStyles({
   root: {
@@ -58,11 +57,35 @@ const datePickerTheme = createMuiTheme({
   },
 });
 
+const formatDateToString = (date: Date | null) => {
+  if (!date) {
+    return '';
+  }
+
+  const dateParts: {
+    year?: string;
+    month?: string;
+    day?: string;
+  } = new Intl.DateTimeFormat().formatToParts(date).reduce(
+    (obj, currentPart) => ({
+      ...obj,
+      [currentPart.type]: currentPart.value,
+    }),
+    {}
+  );
+
+  if (dateParts && dateParts.year && dateParts.month && dateParts.day) {
+    return dateParts.year.concat('-', dateParts.month, '-', dateParts.day);
+  }
+
+  return '';
+};
+
 const SelectDateModal: React.FC<{
   open: boolean;
   handleClose: () => void;
-  eventDate: Date | null;
-  setEventDate: (date: Date | null) => void;
+  eventDate: string | null;
+  setEventDate: (date: string | null) => void;
 }> = ({
   open,
   handleClose,
@@ -71,11 +94,13 @@ const SelectDateModal: React.FC<{
 }: {
   open: boolean;
   handleClose: () => void;
-  eventDate: Date | null;
-  setEventDate: (date: Date | null) => void;
+  eventDate: string | null;
+  setEventDate: (date: string | null) => void;
 }) => {
   const classes = useModalStyles();
-  const [date, setDate] = useState<Date | null>(eventDate);
+  const [date, setDate] = useState<Date | null>(
+    eventDate ? new Date(eventDate) : null
+  );
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
@@ -92,21 +117,7 @@ const SelectDateModal: React.FC<{
               id="date-picker-inline"
               label="Date picker inline"
               value={date}
-              onChange={(date) => {
-                if (date) {
-                  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                  const day = date.getDate().toString().padStart(2, '0');
-                  const year = date.getFullYear().toString();
-                  const newDate = year.concat(
-                    '-',
-                    month,
-                    '-',
-                    day,
-                    'T00:00:00'
-                  );
-                  setDate(toDate(newDate, { timeZone: 'UTC' }));
-                }
-              }}
+              onChange={setDate}
               fullWidth
             />
           </MuiPickersUtilsProvider>
@@ -122,7 +133,7 @@ const SelectDateModal: React.FC<{
               variant="contained"
               color="primary"
               onClick={() => {
-                setEventDate(date);
+                setEventDate(formatDateToString(date));
                 handleClose();
               }}
             >

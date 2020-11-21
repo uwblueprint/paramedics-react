@@ -17,7 +17,6 @@ import {
   GET_EVENT_BY_ID,
 } from '../../graphql/queries/events';
 import { Colours } from '../../styles/Constants';
-import { zonedTimeToUtc, format } from 'date-fns-tz';
 
 enum EventModes {
   New = 'new',
@@ -69,7 +68,7 @@ const EventCreationPage = ({
   const [openDateModal, setOpenDateModal] = useState(false);
 
   const [eventName, setEventName] = useState<string>('');
-  const [eventDate, setEventDate] = useState<Date | null>(null);
+  const [eventDate, setEventDate] = useState<string | null>(null);
   const [eventLocation, setEventLocation] = useState<string>('');
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -107,16 +106,13 @@ const EventCreationPage = ({
     day?: string;
     literal?: string;
   } = eventDate
-    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
-        (obj, currentPart) => ({
-          ...obj,
-          [currentPart.type]: currentPart.value,
-        }),
-        {}
-      )
+    ? {
+        year: eventDate.split('-')[0],
+        month: eventDate.split('-')[1],
+        day: eventDate.split('-')[2],
+      }
     : {};
 
-  console.log("eventDate outside useEffect", eventDate)
   const handleComplete = () => {
     if (mode === EventModes.New) {
       addEvent({
@@ -144,7 +140,7 @@ const EventCreationPage = ({
             dateParts.month &&
             dateParts.day &&
             `${dateParts.year}-${dateParts.month.padStart(
-              2, 
+              2,
               '0'
             )}-${dateParts.day.padStart(2, '0')}`,
           createdBy: 1,
@@ -165,9 +161,8 @@ const EventCreationPage = ({
         id: string;
       } = data.event;
 
-      console.log("eventDate", eventDate)
       setEventName(name);
-      setEventDate(new Date(eventDate));
+      setEventDate(eventDate);
     }
   }, [data, loading, mode]);
 
