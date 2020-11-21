@@ -184,7 +184,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       client.writeQuery({
         query: GET_ALL_PATIENTS,
         data: {
-          patients: [...patients, data.patientAdded],
+          patients: [...allPatients, data.patientAdded],
         },
       });
     },
