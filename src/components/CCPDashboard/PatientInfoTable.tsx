@@ -415,8 +415,6 @@ export const PatientInfoTable = ({
           <PatientDetailsDialog
             handleCloseDetails={handleCloseDetails}
             patient={(selectedPatient as unknown) as Patient}
-            eventId={eventId}
-            ccpId={ccpId}
             runNumber={runNumber}
             updateRunNumber={handleRunNumber}
           />
