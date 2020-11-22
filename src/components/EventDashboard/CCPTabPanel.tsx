@@ -203,6 +203,10 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     history.push(`/events/${eventId}/ccps/${selectedCCP?.id}/edit`);
   };
 
+  const handleClickRow = (row: CCP) => {
+    history.push(`/events/${eventId}/ccps/${row.id}`);
+  };
+
   const options: Array<Option> = [
     {
       name: 'Edit',
@@ -220,7 +224,13 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     getComparator(order, orderBy)
   ).map((row: CCP) => {
     return (
-      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+      <TableRow
+        hover
+        role="checkbox"
+        tabIndex={-1}
+        key={row.id}
+        onClick={() => handleClickRow(row)}
+      >
         <TableCell padding="checkbox" />
         <TableCell component="th" scope="row">
           {(row as CCP).name}
@@ -235,6 +245,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           <IconButton
             data-id={row.id}
             onClick={(event) => {
+              event.stopPropagation();
               handleClickOptions(event, row);
             }}
             color="inherit"
