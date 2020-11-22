@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
@@ -44,11 +44,21 @@ const Sidebar = ({
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
-  const [address, setAddress] = React.useState('' || editAddress);
+  const [address, setAddress] = React.useState('');
   const [latitude, setLatitude] = React.useState(0);
   const [longitude, setLongitude] = React.useState(0);
-  const [label, setLabel] = React.useState('' || editLabel);
+  const [label, setLabel] = React.useState('');
   const styles = useStyles();
+
+  useEffect(() => {
+    if(editLabel) {
+      setLabel(editLabel);
+    }
+
+    if(editAddress) {
+      setAddress(editAddress);
+    }
+  }, [editLabel, editAddress]);
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
     setLabel((e.target as HTMLInputElement).value);
