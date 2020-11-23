@@ -249,7 +249,7 @@ const PatientProfilePage = ({
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber
             ? parseInt(formFields.runNumber.toString())
-            : -1,
+            : null,
           barcodeValue: formFields.barcodeValue
             ? formFields.barcodeValue.toString()
             : '',
@@ -272,7 +272,7 @@ const PatientProfilePage = ({
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber
             ? parseInt(formFields.runNumber.toString())
-            : -1,
+            : null,
           barcodeValue: formFields.barcodeValue
             ? formFields.barcodeValue.toString()
             : '',
