@@ -94,7 +94,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
     createCategoryData('On Scene', Status.ON_SITE),
     createCategoryData('Transported', Status.TRANSPORTED),
     createCategoryData('Released', Status.RELEASED),
-    createCategoryData('Omitted/Deleted', Status.DELETED),
+    createCategoryData('Deleted', Status.DELETED),
   ];
 
   const noBorderLastRow = (index) =>
