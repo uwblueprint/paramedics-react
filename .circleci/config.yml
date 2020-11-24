@@ -8,8 +8,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 19.03.8
-          docker_layer_caching: false
+          version: 19.03.12
       - run:
           name: Install docker-compose
           command: |
