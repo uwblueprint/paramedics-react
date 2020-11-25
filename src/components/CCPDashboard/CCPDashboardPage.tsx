@@ -256,11 +256,9 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     return <LoadingState />;
   }
 
-  const currentCcp = ccpInfo.collectionPointsByEvent[ccpId].name;
-
   const menuBarTitle = (
     <>
-      {currentCcp}
+      {ccpInfo.collectionPointsByEvent[ccpId].name}
       <div className={classes.menuBarTitle}>
         <LocationOnOutlinedIcon className={classes.locationIcon} />
         <Typography variant="caption" className={classes.menuBarTitle}>
