@@ -208,9 +208,11 @@ const MapPage = ({
         address,
       },
     });
-    setInterestPinId('');
     setOpenSidebar(false);
     setIsEdit(false);
+    setInterestPinTitle(label);
+    setInterestPinLocation(address);
+    setInfoWindowOpen(true);
   };
 
   const onDeleteClick = () => {
