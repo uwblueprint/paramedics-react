@@ -57,11 +57,35 @@ const datePickerTheme = createMuiTheme({
   },
 });
 
+const formatDateToString = (date: Date | null) => {
+  if (!date) {
+    return '';
+  }
+
+  const dateParts: {
+    year?: string;
+    month?: string;
+    day?: string;
+  } = new Intl.DateTimeFormat().formatToParts(date).reduce(
+    (obj, currentPart) => ({
+      ...obj,
+      [currentPart.type]: currentPart.value,
+    }),
+    {}
+  );
+
+  if (dateParts && dateParts.year && dateParts.month && dateParts.day) {
+    return dateParts.year.concat('-', dateParts.month, '-', dateParts.day);
+  }
+
+  return '';
+};
+
 const SelectDateModal: React.FC<{
   open: boolean;
   handleClose: () => void;
-  eventDate: Date | null;
-  setEventDate: (date: Date | null) => void;
+  eventDate: string | null;
+  setEventDate: (date: string | null) => void;
 }> = ({
   open,
   handleClose,
@@ -70,11 +94,13 @@ const SelectDateModal: React.FC<{
 }: {
   open: boolean;
   handleClose: () => void;
-  eventDate: Date | null;
-  setEventDate: (date: Date | null) => void;
+  eventDate: string | null;
+  setEventDate: (date: string | null) => void;
 }) => {
   const classes = useModalStyles();
-  const [date, setDate] = useState<Date | null>(eventDate);
+  const [date, setDate] = useState<Date | null>(
+    eventDate ? new Date(eventDate) : null
+  );
   return (
     <Modal open={open} onClose={handleClose}>
       <Container classes={{ root: classes.root }}>
@@ -107,7 +133,7 @@ const SelectDateModal: React.FC<{
               variant="contained"
               color="primary"
               onClick={() => {
-                setEventDate(date);
+                setEventDate(formatDateToString(date));
                 handleClose();
               }}
             >
