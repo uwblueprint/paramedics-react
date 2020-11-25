@@ -120,8 +120,8 @@ const statusFilters: FilterOptionObject = {
     value: Status.RELEASED,
     selected: false,
   },
-  Omit: {
-    label: 'Omit',
+  Deleted: {
+    label: 'Deleted',
     value: Status.DELETED,
     selected: false,
   },
