@@ -162,10 +162,10 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const highlightPatient = (id) => {
     clearTimeout(lastUpdatedPatientTimeout);
     setLastUpdatedPatient(id);
-    const timer = setTimeout(() => {
+    const highlightTimeout = setTimeout(() => {
       setLastUpdatedPatient('');
     }, 5000);
-    setLastUpdatedPatientTimeout(timer);
+    setLastUpdatedPatientTimeout(highlightTimeout);
   };
 
   useSubscription(PATIENT_UPDATED, {
