@@ -34,7 +34,7 @@ export const formatDate = (date: string): string => {
   // date of the form YYYY-MM-DD
   const dateParts = date.split('-');
   const year = dateParts[0];
-  const month = months[parseInt(dateParts[1])];
+  const month = months[parseInt(dateParts[1]) - 1];
   const day = parseInt(dateParts[2]) + nth(parseInt(dateParts[2]));
 
   return `${month} ${day}, ${year}`;
