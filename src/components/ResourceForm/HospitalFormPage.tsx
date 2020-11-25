@@ -75,7 +75,7 @@ const HospitalFormPage = ({
       } = data.hospitals.find((hospital) => hospital.id === hospitalId);
       setHospitalName(name);
     }
-  }, [data, loading, mode]);
+  }, [data, hospitalId, loading, mode]);
 
   const handleNameChange = (e: any) => {
     setHospitalName(e.target.value);
