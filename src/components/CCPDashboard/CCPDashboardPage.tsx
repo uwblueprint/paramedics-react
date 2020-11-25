@@ -128,6 +128,10 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     userUpdatedPatientId: '',
   };
   const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState('');
+  const [
+    lastUpdatedPatientTimeout,
+    setLastUpdatedPatientTimeout,
+  ] = React.useState<NodeJS.Timeout>(setTimeout(() => {}, 0));
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
   useAllPatients(eventId);
@@ -160,18 +164,17 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   );
 
   const highlightPatient = (id) => {
+    clearTimeout(lastUpdatedPatientTimeout);
     setLastUpdatedPatient(id);
-
-    const timer = setTimeout(() => {
+    const highlightTimeout = setTimeout(() => {
       setLastUpdatedPatient('');
     }, 5000);
-
-    return () => clearTimeout(timer);
+    setLastUpdatedPatientTimeout(highlightTimeout);
   };
 
   React.useEffect(() => {
     highlightPatient(userUpdatedPatientId);
-  }, []);
+  }, [userUpdatedPatientId]);
 
   useSubscription(PATIENT_UPDATED, {
     variables: { eventId },

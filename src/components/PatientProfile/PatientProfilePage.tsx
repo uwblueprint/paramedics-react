@@ -114,7 +114,9 @@ const PatientProfilePage = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
   const [deletePatient] = useMutation(DELETE_PATIENT, {
     onCompleted() {
-      history.replace(`/events/${eventId}/ccps/${ccpId}`, patientId);
+      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+        userUpdatedPatientId: patientId,
+      });
     },
   });
 
@@ -249,7 +251,7 @@ const PatientProfilePage = ({
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber
             ? parseInt(formFields.runNumber.toString())
-            : -1,
+            : null,
           barcodeValue: formFields.barcodeValue
             ? formFields.barcodeValue.toString()
             : '',
@@ -272,7 +274,7 @@ const PatientProfilePage = ({
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber
             ? parseInt(formFields.runNumber.toString())
-            : -1,
+            : null,
           barcodeValue: formFields.barcodeValue
             ? formFields.barcodeValue.toString()
             : '',
@@ -293,7 +295,9 @@ const PatientProfilePage = ({
         action,
       });
     }
-    history.replace(`/events/${eventId}/ccps/${ccpId}`, { userUpdatedPatientId: patientId });
+    history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+      userUpdatedPatientId: patientId,
+    });
   };
 
   return (
