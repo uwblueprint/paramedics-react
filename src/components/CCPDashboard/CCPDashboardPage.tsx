@@ -30,6 +30,7 @@ import {
   PATIENT_DELETED,
 } from '../../graphql/subscriptions/patients';
 import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
+import { GET_NETWORK_STATUS } from '../../graphql/apollo/client';
 
 interface TParams {
   eventId: string;
@@ -79,6 +80,10 @@ const useStyles = makeStyles({
     paddingRight: '44px',
     paddingLeft: '44px',
     marginTop: '16px',
+  },
+  connected: {
+    position: 'absolute',
+    right: '80px',
   },
   lightBorder: {
     borderColor: Colours.BackgroundGray,
@@ -145,9 +150,11 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   );
 
   // Should switch to fetching patients from cache
+  const { data: connectionData } = useQuery(GET_NETWORK_STATUS);
 
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
-  const { loading: ccpLoading, data: ccpInfo } = useQuery(
+
+  const { data: ccpInfo, loading: ccpLoading } = useQuery(
     GET_CCPS_BY_EVENT_ID,
     {
       variables: { eventId },
@@ -259,13 +266,20 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     return <LoadingState />;
   }
 
+  const currentCcp = ccpInfo.collectionPointsByEvent.find(
+    (x) => x.id === ccpId
+  );
+
   const menuBarTitle = (
     <>
-      {ccpInfo.collectionPointsByEvent[ccpId].name}
+      {currentCcp.name}
       <div className={classes.menuBarTitle}>
         <LocationOnOutlinedIcon className={classes.locationIcon} />
         <Typography variant="caption" className={classes.menuBarTitle}>
           100 University
+        </Typography>
+        <Typography variant="caption" className={classes.connected}>
+          {connectionData.networkStatus}
         </Typography>
         <IconButton
           className={classes.refreshButton}

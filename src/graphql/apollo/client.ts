@@ -52,29 +52,29 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const networkQuery = gql`
+export const GET_NETWORK_STATUS = gql`
   query updateNetworkStatus {
     networkStatus
   }
 `;
 
-myClient.onReconnected(() => {
+myClient.onConnected(() => {
   // eslint-disable-next-line no-console
-  console.log('reconnected');
+  console.log('connected');
   client.writeQuery({
-    query: networkQuery,
+    query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'backOnline',
+      networkStatus: 'connected',
     },
   });
 });
-myClient.onReconnecting(() => {
+myClient.onConnecting(() => {
   // eslint-disable-next-line no-console
-  console.log('reconnecting');
+  console.log('onDisconnected');
   client.writeQuery({
-    query: networkQuery,
+    query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'reconnecting',
+      networkStatus: 'connecting...',
     },
   });
 });
@@ -82,9 +82,29 @@ myClient.onDisconnected(() => {
   // eslint-disable-next-line no-console
   console.log('onDisconnected');
   client.writeQuery({
-    query: networkQuery,
+    query: GET_NETWORK_STATUS,
     data: {
       networkStatus: 'disconnected',
+    },
+  });
+});
+myClient.onReconnected(() => {
+  // eslint-disable-next-line no-console
+  console.log('reconnected');
+  client.writeQuery({
+    query: GET_NETWORK_STATUS,
+    data: {
+      networkStatus: 'back online',
+    },
+  });
+});
+myClient.onReconnecting(() => {
+  // eslint-disable-next-line no-console
+  console.log('reconnecting');
+  client.writeQuery({
+    query: GET_NETWORK_STATUS,
+    data: {
+      networkStatus: 'reconnecting...',
     },
   });
 });
