@@ -116,16 +116,17 @@ const SearchBar = ({
             disableEnforceFocus
           >
             <List classes={{ root: styles.sidebarList }}>
-              {!loading && suggestions.map((suggestion) => (
-                <ListItem
-                  key={suggestion.description}
-                  classes={{ root: styles.sidebarOptions }}
-                >
-                  <div {...getSuggestionItemProps(suggestion)}>
-                    <Typography>{suggestion.description}</Typography>
-                  </div>
-                </ListItem>
-              ))}
+              {!loading &&
+                suggestions.map((suggestion) => (
+                  <ListItem
+                    key={suggestion.description}
+                    classes={{ root: styles.sidebarOptions }}
+                  >
+                    <div {...getSuggestionItemProps(suggestion)}>
+                      <Typography>{suggestion.description}</Typography>
+                    </div>
+                  </ListItem>
+                ))}
             </List>
           </Popover>
         </div>

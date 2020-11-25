@@ -114,7 +114,9 @@ const PatientProfilePage = ({
   const [editPatient] = useMutation(EDIT_PATIENT);
   const [deletePatient] = useMutation(DELETE_PATIENT, {
     onCompleted() {
-      history.replace(`/events/${eventId}/ccps/${ccpId}`, { userUpdatedPatientId: patientId });
+      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+        userUpdatedPatientId: patientId,
+      });
     },
   });
 
@@ -293,7 +295,9 @@ const PatientProfilePage = ({
         action,
       });
     }
-    history.replace(`/events/${eventId}/ccps/${ccpId}`, { userUpdatedPatientId: patientId });
+    history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+      userUpdatedPatientId: patientId,
+    });
   };
 
   return (
