@@ -79,7 +79,7 @@ const AmbulanceFormPage = ({
       } = data.ambulances.find((ambulance) => ambulance.id === ambulanceId);
       setAmbulanceNumber(vehicleNumber.toString());
     }
-  }, [data, loading, mode]);
+  }, [data, ambulanceId, loading, mode]);
 
   const handleNumberChange = (e: any) => {
     setAmbulanceNumber(e.target.value);
