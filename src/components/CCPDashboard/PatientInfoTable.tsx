@@ -357,7 +357,7 @@ export const PatientInfoTable = ({
               };
               break;
             case 'hospitalId.name':
-              content = patient.hospitalId.name;
+              content = patient.hospitalId?.name;
               break;
             case 'updatedAt':
               content = moment(patient[value]).format('MMM D YYYY, h:mm A');
@@ -372,6 +372,7 @@ export const PatientInfoTable = ({
           return (
             <TableCell
               className={style}
+              key={value}
               width={width}
               style={{ maxWidth: `${width}`, ...border }}
             >
