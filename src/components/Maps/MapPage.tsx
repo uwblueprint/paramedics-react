@@ -313,7 +313,7 @@ const MapPage = ({
         handleClickCancel={onDeletePinCancel}
         handleClickAction={onDeletePinConfirm}
         title="You are about to delete a location pin."
-        body="Deleted location pins will no longer be accessible to other team members. Are you sure you want to delete Pin Name?"
+        body="Deleted location pins will no longer be accessible to other team members. Are you sure you want to delete this pin?"
         actionLabel="Delete"
         isActionDelete
         isMap
