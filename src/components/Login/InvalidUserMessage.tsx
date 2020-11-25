@@ -5,13 +5,12 @@ import { Warning } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   outlinedBox: {
-    width: '404px',
-    height: '104px',
+    width: '339px',
+    height: '122px',
     border: '1px solid #AC3434',
     boxSizing: 'border-box',
     borderRadius: '10px',
-    paddingLeft: '26px',
-    paddingTop: '17px',
+    padding: '17px 26px 17px 26px',
     marginBottom: '61px',
   },
   warningIcon: {
