@@ -216,7 +216,6 @@ const MapPage = ({
   };
 
   const onDeleteClick = () => {
-    setInfoWindowOpen(false);
     setIsDeleteClicked(true);
   };
 
