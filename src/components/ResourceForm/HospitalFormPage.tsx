@@ -5,16 +5,12 @@ import { Typography, makeStyles } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import FormField from '../common/FormField';
-import BackLink from '../common/BackLink';
+import ConfirmModal from '../common/ConfirmModal';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
 import { ADD_HOSPITAL, EDIT_HOSPITAL } from '../../graphql/mutations/hospitals';
-import {
-  Hospital,
-  GET_ALL_HOSPITALS,
-  GET_HOSPITAL_BY_ID,
-} from '../../graphql/queries/hospitals';
+import { Hospital, GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 
 const useStyles = makeStyles({
   resourceWrapper: {
@@ -28,6 +24,7 @@ const useStyles = makeStyles({
   resourceHeader: {
     display: 'flex',
     padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
     padding: '30px',
@@ -44,11 +41,7 @@ const HospitalFormPage = ({
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { data, loading } = useQuery(
-    mode === 'edit' && hospitalId
-      ? GET_HOSPITAL_BY_ID(hospitalId)
-      : GET_ALL_HOSPITALS
-  );
+  const { data, loading } = useQuery(GET_ALL_HOSPITALS);
 
   const hospitals: Array<Hospital> = data ? data.hospitals : [];
   const [addHospital] = useMutation(ADD_HOSPITAL, {
@@ -71,6 +64,7 @@ const HospitalFormPage = ({
   });
 
   const [hospitalName, setHospitalName] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -78,17 +72,30 @@ const HospitalFormPage = ({
         name,
       }: {
         name: string;
-      } = data.hospital;
+      } = data.hospitals.find((hospital) => hospital.id === hospitalId);
       setHospitalName(name);
     }
-  }, [data, loading, mode]);
+  }, [data, hospitalId, loading, mode]);
 
   const handleNameChange = (e: any) => {
     setHospitalName(e.target.value);
   };
 
+  const openErrorModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeErrorModal = () => {
+    setIsModalOpen(false);
+  };
+
   const handleComplete = () => {
-    if (mode === 'new') {
+    const duplicateExists = hospitals.some(
+      (hospital) => hospital.name.toString() === hospitalName
+    );
+    if (duplicateExists) {
+      openErrorModal();
+    } else if (mode === 'new') {
       addHospital({
         variables: {
           name: hospitalName,
@@ -109,11 +116,11 @@ const HospitalFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage/hospitals" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new hospital' : 'Edit Hospital'}
           </Typography>
+          <CancelButton to="/manage/hospitals" />
         </div>
       </div>
       <div className={classes.resourceForm}>
@@ -130,7 +137,14 @@ const HospitalFormPage = ({
         </Typography>
       </div>
       <DoneButton handleClick={handleComplete} disabled={hospitalName === ''} />
-      <CancelButton to="/manage/hospitals" />
+      <ConfirmModal
+        open={isModalOpen}
+        title="Duplicate Hospital"
+        body="You cannot add this hospital as this hospital already exists in the system."
+        actionLabel="Okay"
+        handleClickAction={closeErrorModal}
+        handleClickCancel={closeErrorModal}
+      />
     </div>
   );
 };

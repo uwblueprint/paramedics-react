@@ -96,12 +96,14 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
             color: Colours.SecondaryGray,
           }}
         >
-          <LocationOnOutlinedIcon className={classes.icon} />
+          <CalendarTodayOutlinedIcon className={classes.icon} />
           <Typography variant="body1" style={{ paddingRight: '52px' }}>
+            {formatDate(event.eventDate)}
+          </Typography>
+          <LocationOnOutlinedIcon className={classes.icon} />
+          <Typography variant="body1">
             Ezra Street l1j3j4, Waterloo Canada
           </Typography>
-          <CalendarTodayOutlinedIcon className={classes.icon} />
-          <Typography variant="body1">{formatDate(event.eventDate)}</Typography>
         </Box>
       </Container>
       <Tabs

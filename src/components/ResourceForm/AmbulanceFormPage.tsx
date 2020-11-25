@@ -11,10 +11,9 @@ import {
 import {
   Ambulance,
   GET_ALL_AMBULANCES,
-  GET_AMBULANCE_BY_ID,
 } from '../../graphql/queries/ambulances';
 import FormField from '../common/FormField';
-import BackLink from '../common/BackLink';
+import ConfirmModal from '../common/ConfirmModal';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
 import { Colours } from '../../styles/Constants';
@@ -31,6 +30,7 @@ const useStyles = makeStyles({
   resourceHeader: {
     display: 'flex',
     padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
     padding: '30px',
@@ -46,12 +46,7 @@ const AmbulanceFormPage = ({
 }) => {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const { data, loading } = useQuery(
-    mode === 'edit' && ambulanceId
-      ? GET_AMBULANCE_BY_ID(ambulanceId)
-      : GET_ALL_AMBULANCES
-  );
-
+  const { data, loading } = useQuery(GET_ALL_AMBULANCES);
   const ambulances: Array<Ambulance> = data ? data.ambulances : [];
   const [addAmbulance] = useMutation(ADD_AMBULANCE, {
     update(cache, { data: { addAmbulance } }) {
@@ -73,6 +68,7 @@ const AmbulanceFormPage = ({
   });
 
   const [ambulanceNumber, setAmbulanceNumber] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -80,17 +76,30 @@ const AmbulanceFormPage = ({
         vehicleNumber,
       }: {
         vehicleNumber: number;
-      } = data.ambulance;
+      } = data.ambulances.find((ambulance) => ambulance.id === ambulanceId);
       setAmbulanceNumber(vehicleNumber.toString());
     }
-  }, [data, loading, mode]);
+  }, [data, ambulanceId, loading, mode]);
 
   const handleNumberChange = (e: any) => {
     setAmbulanceNumber(e.target.value);
   };
 
+  const openErrorModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeErrorModal = () => {
+    setIsModalOpen(false);
+  };
+
   const handleComplete = () => {
-    if (mode === 'new') {
+    const duplicateExists = ambulances.some(
+      (ambulance) => ambulance.vehicleNumber.toString() === ambulanceNumber
+    );
+    if (duplicateExists) {
+      openErrorModal();
+    } else if (mode === 'new') {
       addAmbulance({
         variables: {
           vehicleNumber: parseInt(ambulanceNumber),
@@ -111,11 +120,11 @@ const AmbulanceFormPage = ({
   return (
     <div className={classes.resourceWrapper}>
       <div className={classes.resourceCreationTopSection}>
-        <BackLink to="/manage/ambulances" />
         <div className={classes.resourceHeader}>
           <Typography variant="h4">
             {mode === 'new' ? 'Add a new ambulance' : 'Edit Ambulance'}
           </Typography>
+          <CancelButton to="/manage/ambulances" />
         </div>
       </div>
       <div className={classes.resourceForm}>
@@ -135,7 +144,14 @@ const AmbulanceFormPage = ({
         handleClick={handleComplete}
         disabled={ambulanceNumber === ''}
       />
-      <CancelButton to="/manage/ambulances" />
+      <ConfirmModal
+        open={isModalOpen}
+        title="Duplicate Ambulance"
+        body="You cannot add this ambulance as this ambulance already exists in the system."
+        actionLabel="Okay"
+        handleClickAction={closeErrorModal}
+        handleClickCancel={closeErrorModal}
+      />
     </div>
   );
 };

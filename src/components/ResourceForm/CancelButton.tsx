@@ -5,12 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useCancelButtonStyles = makeStyles({
   root: {
-    minWidth: '160px',
-    minHeight: '40px',
+    minWidth: '228px',
     fontSize: '18px',
-    marginTop: '10px',
-    position: 'absolute',
-    left: '56px',
+    alignSelf: 'center',
   },
 });
 
@@ -19,6 +16,7 @@ const CancelButton = ({ to }: { to: string }) => {
   return (
     <Button
       color="secondary"
+      variant="outlined"
       classes={{
         root: classes.root,
       }}
