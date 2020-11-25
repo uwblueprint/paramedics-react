@@ -14,7 +14,6 @@ import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import gql from 'graphql-tag';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
-import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
 import {
   GET_ALL_PATIENTS,
@@ -30,6 +29,7 @@ import {
   PATIENT_UPDATED,
   PATIENT_DELETED,
 } from '../../graphql/subscriptions/patients';
+import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 
 interface TParams {
   eventId: string;
@@ -124,7 +124,9 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   const { eventId, ccpId, patientId } = match.params;
   const location = useLocation<LocationState>();
-  const { userUpdatedPatientId } = location.state || { userUpdatedPatientId: '' };
+  const { userUpdatedPatientId } = location.state || {
+    userUpdatedPatientId: '',
+  };
   const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState('');
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
@@ -141,9 +143,12 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   // Should switch to fetching patients from cache
 
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
-  const { loading: ccpLoading, data: ccpInfo } = useQuery(GET_CCP_BY_ID, {
-    variables: { id: ccpId },
-  });
+  const { loading: ccpLoading, data: ccpInfo } = useQuery(
+    GET_CCPS_BY_EVENT_ID,
+    {
+      variables: { eventId },
+    }
+  );
 
   const allPatients: Array<Patient> = data ? data.patients : [];
   const patients = React.useMemo(
@@ -154,10 +159,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [allPatients, ccpId]
   );
 
-  React.useEffect(()=> {
-    highlightPatient(userUpdatedPatientId)
-  }, [])
-
   const highlightPatient = (id) => {
     setLastUpdatedPatient(id);
 
@@ -167,6 +168,10 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
     return () => clearTimeout(timer);
   };
+
+  React.useEffect(() => {
+    highlightPatient(userUpdatedPatientId);
+  }, []);
 
   useSubscription(PATIENT_UPDATED, {
     variables: { eventId },
@@ -251,11 +256,11 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     return <LoadingState />;
   }
 
-  const currentCcp = ccpInfo.collectionPoint;
+  const currentCcp = ccpInfo.collectionPointsByEvent[ccpId].name;
 
   const menuBarTitle = (
     <>
-      {currentCcp.name}
+      {currentCcp}
       <div className={classes.menuBarTitle}>
         <LocationOnOutlinedIcon className={classes.locationIcon} />
         <Typography variant="caption" className={classes.menuBarTitle}>

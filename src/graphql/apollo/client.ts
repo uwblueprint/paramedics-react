@@ -5,13 +5,14 @@ import { onError } from 'apollo-link-error';
 import { ApolloLink, split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import gql from 'graphql-tag';
 
-const wsLink: ApolloLink = new WebSocketLink({
-  uri: process.env.REACT_APP_BACKEND_WEBSOCKET_URL || 'ws://localhost:4000/graphql',
-  options: {
-    reconnect: true,
-  },
+const myClient = new SubscriptionClient('ws://localhost:4000/graphql', {
+  reconnect: true,
 });
+
+const wsLink = new WebSocketLink(myClient);
 
 const httpLink: ApolloLink = new HttpLink({
   uri: process.env.REACT_APP_BACKEND_HOST || 'http://localhost:4000/',
@@ -41,12 +42,51 @@ const client = new ApolloClient({
             `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
           )
         );
-      // eslint-disable-next-line no-console
-      if (networkError) console.log(`[Network error]: ${networkError}`);
+      if (networkError) {
+        // eslint-disable-next-line no-console
+        console.log(`[Network error]: ${networkError}`);
+      }
     }),
     link,
   ]),
   cache: new InMemoryCache(),
+});
+
+const networkQuery = gql`
+  query updateNetworkStatus {
+    networkStatus
+  }
+`;
+
+myClient.onReconnected(() => {
+  // eslint-disable-next-line no-console
+  console.log('reconnected');
+  client.writeQuery({
+    query: networkQuery,
+    data: {
+      networkStatus: 'backOnline',
+    },
+  });
+});
+myClient.onReconnecting(() => {
+  // eslint-disable-next-line no-console
+  console.log('reconnecting');
+  client.writeQuery({
+    query: networkQuery,
+    data: {
+      networkStatus: 'reconnecting',
+    },
+  });
+});
+myClient.onDisconnected(() => {
+  // eslint-disable-next-line no-console
+  console.log('onDisconnected');
+  client.writeQuery({
+    query: networkQuery,
+    data: {
+      networkStatus: 'disconnected',
+    },
+  });
 });
 
 export default client;
