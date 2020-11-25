@@ -58,12 +58,14 @@ const ConfirmModal = ({
   title,
   body,
   actionLabel,
+  isMap,
 }: {
   title: string;
   body: string | JSX.Element;
   actionLabel: string;
   open: boolean;
   isActionDelete?: boolean;
+  isMap?: boolean;
   handleClickCancel: () => void;
   handleClickAction: () => void;
 }) => {
@@ -96,7 +98,9 @@ const ConfirmModal = ({
           onClick={(event) => {
             event.stopPropagation();
             handleClickAction();
-            handleClickCancel();
+            if(!isMap) {
+              handleClickCancel();
+            }
           }}
         >
           <Typography variant="body1">{actionLabel}</Typography>

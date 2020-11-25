@@ -100,6 +100,17 @@ const MapPage = ({
     }
   });
 
+  useEffect(() => {
+    if(isDeleteConfirmed) {
+      setInfoWindowOpen(false);
+      setIsDeleteClicked(false);
+      setInterestPinId('');
+      setInterestPinLocation('');
+      setInterestPinTitle('');
+      setIsDeleteConfirmed(false);
+    }
+  }, [isDeleteConfirmed]);
+
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
       const { pinsForEvent } = cache.readQuery<any>({
@@ -163,6 +174,8 @@ const MapPage = ({
 
   const onSidebarClose = () => {
     setOpenSidebar(false);
+    setInfoWindowOpen(isEdit ? true : false);
+    setIsEdit(false);
   };
 
   const onAddPinComplete = ({ label, lat, lng, address }) => {
@@ -206,12 +219,9 @@ const MapPage = ({
   };
 
   const onDeletePinCancel = () => {
-      setIsDeleteClicked(false);
-      setInfoWindowOpen(false);
-      setInterestPinId('');
-      setInterestPinLocation('');
-      setInterestPinTitle('');
-      setIsDeleteConfirmed(false);
+    setIsDeleteClicked(false);
+    setInfoWindowOpen(true);
+    setIsDeleteConfirmed(false);
   };
 
   const onDeletePinConfirm = () => {
@@ -255,8 +265,8 @@ const MapPage = ({
                   address,
                 })
         }
-        editLabel={interestPinTitle}
-        editAddress={interestPinLocation}
+        editLabel={interestPinTitle && isEdit ? interestPinTitle : ''}
+        editAddress={interestPinLocation && isEdit ? interestPinLocation : ''}
       />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
@@ -290,7 +300,10 @@ const MapPage = ({
           />
         </GoogleMapReact>
       </div>
-      <AddPinButton handleClick={() => setOpenSidebar(true)} />
+      <AddPinButton handleClick={() => {
+        setInfoWindowOpen(false);
+        setOpenSidebar(true);
+      }} />
       <ConfirmModal 
         open={isDeleteClicked}
         handleClickCancel={onDeletePinCancel}
@@ -299,6 +312,7 @@ const MapPage = ({
         body="Deleted location pins will no longer be accessible to other team members. Are you sure you want to delete Pin Name?"
         actionLabel="Delete"
         isActionDelete
+        isMap
       />
     </>
   );
