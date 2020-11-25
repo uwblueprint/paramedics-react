@@ -30,9 +30,6 @@ const useCardOptionsStyles = makeStyles({
   },
   deleteButton: {
     color: Colours.Danger,
-    '&:hover': {
-      color: Colours.Danger,
-    },
   },
 });
 
@@ -133,8 +130,7 @@ const CardOptions: CardOptions = ({
           <MenuItem onClick={handleOpenArchiveDialog}>Archive</MenuItem>
           <MenuItem onClick={handleEditEvent}>Edit</MenuItem>
           <MenuItem
-            // style={{ backgroundColor: Colours.Danger }}
-            classes={{ root: classes.deleteButton, selected: classes.deleteButton }}
+            classes={{ root: classes.deleteButton }}
             onClick={handleOpenDeleteDialog}
           >
             Delete
