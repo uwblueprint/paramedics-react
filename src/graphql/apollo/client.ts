@@ -7,6 +7,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import gql from 'graphql-tag';
+import { GET_ALL_PATIENTS } from '../queries/patients';
 
 const myClient = new SubscriptionClient('ws://localhost:4000/graphql', {
   reconnect: true,
@@ -59,8 +60,6 @@ export const GET_NETWORK_STATUS = gql`
 `;
 
 myClient.onConnected(() => {
-  // eslint-disable-next-line no-console
-  console.log('connected');
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
@@ -69,8 +68,6 @@ myClient.onConnected(() => {
   });
 });
 myClient.onConnecting(() => {
-  // eslint-disable-next-line no-console
-  console.log('onDisconnected');
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
@@ -79,8 +76,6 @@ myClient.onConnecting(() => {
   });
 });
 myClient.onDisconnected(() => {
-  // eslint-disable-next-line no-console
-  console.log('onDisconnected');
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
@@ -89,18 +84,25 @@ myClient.onDisconnected(() => {
   });
 });
 myClient.onReconnected(() => {
-  // eslint-disable-next-line no-console
-  console.log('reconnected');
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'back online',
+      networkStatus: 'connected',
     },
   });
+
+  // const data = client.readQuery({ query: GET_ALL_PATIENTS });
+
+  // client.writeQuery({
+  //   query: GET_ALL_PATIENTS,
+  //   data: {
+  //     patients: data.patients,
+  //   },
+  // });
+  window.location.reload();
 });
+
 myClient.onReconnecting(() => {
-  // eslint-disable-next-line no-console
-  console.log('reconnecting');
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
