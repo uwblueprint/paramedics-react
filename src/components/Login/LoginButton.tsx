@@ -10,8 +10,16 @@ const useStyles = makeStyles({
 
 const LoginButton = () => {
   const classes = useStyles();
+  const handleLogin = () => {
+    fetch('http://localhost:4000/login');
+  };
   return (
-    <Button variant="contained" color="secondary" className={classes.addButton}>
+    <Button
+      variant="contained"
+      color="secondary"
+      className={classes.addButton}
+      onClick={handleLogin}
+    >
       Log in
     </Button>
   );
