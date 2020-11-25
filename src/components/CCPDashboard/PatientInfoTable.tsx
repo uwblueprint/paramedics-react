@@ -50,6 +50,12 @@ const useStyles = makeStyles({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+  deletedTableCell: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    color: `${Colours.InactiveGrey}`,
+  },
   editButton: {
     marginRight: '14px',
     marginBottom: '12px',
@@ -70,39 +76,15 @@ interface EnhancedTableProps {
   onRequestSort: (event: React.MouseEvent, property: string) => void;
   order: Order;
   orderBy: string;
-  type: CCPDashboardTabOptions;
+  headCells: HeadCell[];
 }
 
 const EnhancedTableHead = (props: EnhancedTableProps) => {
-  const { classes, order, orderBy, onRequestSort, type } = props;
+  const { classes, order, orderBy, onRequestSort, headCells } = props;
 
   const createSortHandler = (property: string) => (event: React.MouseEvent) => {
     onRequestSort(event, property);
   };
-
-  const headCells: HeadCell[] = [
-    { headerId: 'triageLevel', label: 'Triage', width: '78px' },
-    { headerId: 'barcodeValue', label: 'Barcode', width: '94px' },
-    { headerId: 'gender', label: 'Gender', width: '72px' },
-    { headerId: 'age', label: 'Age', width: '34px' },
-    { headerId: 'status', label: 'Status', width: '104px' },
-    ...(type === CCPDashboardTabOptions.PatientOverview
-      ? [
-          { headerId: 'hospitalId.name', label: 'Hospital', width: '128px' },
-          { headerId: 'updatedAt', label: 'Last Edited', width: '192px' },
-        ]
-      : []),
-    ...(type === CCPDashboardTabOptions.Hospital
-      ? [
-          { headerId: 'runNumber', label: 'Run Number', width: '132px' },
-          {
-            headerId: 'transportTime',
-            label: 'Transported Time',
-            width: '192px',
-          },
-        ]
-      : []),
-  ];
 
   return (
     <TableHead>
@@ -170,6 +152,36 @@ export const PatientInfoTable = ({
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
+  const triageLevels = {
+    [TriageLevel.GREEN]: {
+      colour: Colours.TriageGreen,
+      label: 'Green',
+    },
+    [TriageLevel.YELLOW]: {
+      colour: Colours.TriageYellow,
+      label: 'Yellow',
+    },
+    [TriageLevel.RED]: {
+      colour: Colours.TriageRed,
+      label: 'Red',
+    },
+    [TriageLevel.BLACK]: {
+      colour: Colours.Black,
+      label: 'Black',
+    },
+    [TriageLevel.WHITE]: {
+      colour: Colours.BorderLightGray,
+      label: 'White',
+    },
+  };
+
+  const statusLabels = {
+    [Status.ON_SITE]: 'On Scene',
+    [Status.TRANSPORTED]: 'Transported',
+    [Status.RELEASED]: 'Released',
+    [Status.DELETED]: 'Deleted',
+  };
+
   const [editPatient] = useMutation(EDIT_PATIENT, {
     update(cache) {
       const patientId = ((selectedPatient as unknown) as Patient).id;
@@ -182,6 +194,30 @@ export const PatientInfoTable = ({
 
   const deletedPatients: Patient[] = [];
   const activePatients: Patient[] = [];
+
+  const headCells: HeadCell[] = [
+    { headerId: 'triageLevel', label: 'Triage', width: '78px' },
+    { headerId: 'barcodeValue', label: 'Barcode', width: '94px' },
+    { headerId: 'gender', label: 'Gender', width: '72px' },
+    { headerId: 'age', label: 'Age', width: '34px' },
+    { headerId: 'status', label: 'Status', width: '104px' },
+    ...(type === CCPDashboardTabOptions.PatientOverview
+      ? [
+          { headerId: 'hospitalId.name', label: 'Hospital', width: '128px' },
+          { headerId: 'updatedAt', label: 'Last Edited', width: '192px' },
+        ]
+      : []),
+    ...(type === CCPDashboardTabOptions.Hospital
+      ? [
+          { headerId: 'runNumber', label: 'Run Number', width: '132px' },
+          {
+            headerId: 'transportTime',
+            label: 'Transported Time',
+            width: '192px',
+          },
+        ]
+      : []),
+  ];
 
   patients.forEach((patient) => {
     if (patient.status === Status.DELETED) {
@@ -306,39 +342,42 @@ export const PatientInfoTable = ({
   const getTableRows = (isActive: Boolean, patients: Patient[]) => {
     return stableSort(patients, getComparator(order, orderBy)).map(
       (patient: Patient) => {
-        const triageLevels = {
-          [TriageLevel.GREEN]: {
-            colour: Colours.TriageGreen,
-            triageLevel: TriageLevel.GREEN,
-            label: 'Green',
-          },
-          [TriageLevel.YELLOW]: {
-            colour: Colours.TriageYellow,
-            triageLevel: TriageLevel.YELLOW,
-            label: 'Yellow',
-          },
-          [TriageLevel.RED]: {
-            colour: Colours.TriageRed,
-            triageLevel: TriageLevel.RED,
-            label: 'Red',
-          },
-          [TriageLevel.BLACK]: {
-            colour: Colours.Black,
-            triageLevel: TriageLevel.BLACK,
-            label: 'Black',
-          },
-          [TriageLevel.WHITE]: {
-            colour: Colours.BorderLightGray,
-            triageLevel: TriageLevel.WHITE,
-            label: 'White',
-          },
-        };
+        const style = isActive ? classes.tableCell : classes.deletedTableCell;
+        const renderTableCell = (style, width, value) => {
+          let content = patient[value];
+          let border = {};
 
-        const statusLabels = {
-          [Status.ON_SITE]: 'On Scene',
-          [Status.TRANSPORTED]: 'Transported',
-          [Status.RELEASED]: 'Released',
-          [Status.DELETED]: 'Deleted',
+          switch (value) {
+            case 'triageLevel':
+              content = triageLevels[content].label;
+              border = {
+                borderLeft: `${isActive ? '16px' : '0px'} solid ${
+                  triageLevels[patient.triageLevel].colour
+                }`,
+              };
+              break;
+            case 'hospitalId.name':
+              content = patient.hospitalId.name;
+              break;
+            case 'updatedAt':
+              content = moment(patient[value]).format('MMM D YYYY, h:mm A');
+              break;
+            case 'status':
+              content = statusLabels[patient[value]];
+              break;
+            default:
+              break;
+          }
+
+          return (
+            <TableCell
+              className={style}
+              width={width}
+              style={{ maxWidth: `${width}`, ...border }}
+            >
+              {content}
+            </TableCell>
+          );
         };
 
         return (
@@ -346,106 +385,9 @@ export const PatientInfoTable = ({
             hover
             key={patient.id}
             onClick={() => handleOpenDetails(patient)}
-            style={{
-              color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-            }}
           >
-            <TableCell
-              className={classes.tableCell}
-              style={{
-                width: '78px',
-                maxWidth: '78px',
-                borderLeft: `${isActive ? '16px' : '0px'} solid ${
-                  isActive
-                    ? triageLevels[patient.triageLevel].colour
-                    : Colours.InactiveGrey
-                }`,
-                color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-              }}
-            >
-              {triageLevels[patient.triageLevel].label}
-            </TableCell>
-            <TableCell
-              className={classes.tableCell}
-              width="94px"
-              style={{
-                maxWidth: '94px',
-                color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-              }}
-            >
-              {patient.barcodeValue}
-            </TableCell>
-            <TableCell
-              className={classes.tableCell}
-              width="72px"
-              style={{
-                maxWidth: '72px',
-                color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-              }}
-            >
-              {patient.gender}
-            </TableCell>
-            <TableCell
-              className={classes.tableCell}
-              width="34px"
-              style={{
-                maxWidth: '34px',
-                color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-              }}
-            >
-              {patient.age}
-            </TableCell>
-            <TableCell
-              className={classes.tableCell}
-              width="104px"
-              style={{
-                maxWidth: '104px',
-                color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-              }}
-            >
-              {statusLabels[patient.status]}
-            </TableCell>
-            {type === CCPDashboardTabOptions.PatientOverview && (
-              <>
-                <TableCell
-                  className={classes.tableCell}
-                  width="128px"
-                  style={{
-                    maxWidth: '128px',
-                    color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-                  }}
-                >
-                  {patient.hospitalId?.name}
-                </TableCell>
-                <TableCell
-                  className={classes.tableCell}
-                  width="192px"
-                  style={{
-                    maxWidth: '192px',
-                    color: `${isActive ? Colours.Black : Colours.InactiveGrey}`,
-                  }}
-                >
-                  {moment(patient.updatedAt).format('MMM D YYYY, h:mm A')}
-                </TableCell>
-              </>
-            )}
-            {type === CCPDashboardTabOptions.Hospital && (
-              <>
-                <TableCell
-                  className={classes.tableCell}
-                  width="132px"
-                  style={{ maxWidth: '132px' }}
-                >
-                  {patient.runNumber}
-                </TableCell>
-                <TableCell
-                  className={classes.tableCell}
-                  width="192px"
-                  style={{ maxWidth: '192px' }}
-                >
-                  {moment(patient.transportTime).format('MMM D YYYY, h:mm A')}
-                </TableCell>
-              </>
+            {headCells.map((cell) =>
+              renderTableCell(style, cell.width, cell.headerId)
             )}
             <TableCell width="48px" style={{ maxWidth: '48px' }}>
               <IconButton
@@ -472,7 +414,7 @@ export const PatientInfoTable = ({
         order={order}
         orderBy={orderBy}
         onRequestSort={handleRequestSort}
-        type={type}
+        headCells={headCells}
       />
       <TableBody>
         {getTableRows(true, activePatients)}

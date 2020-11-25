@@ -6,7 +6,6 @@ const comparator = (a, b, orderBy: string, descending: boolean) => {
     aValue =
       a[maybeNestedOrderBy[0]] &&
       a[maybeNestedOrderBy[0]][maybeNestedOrderBy[1]];
-
     bValue =
       b[maybeNestedOrderBy[0]] &&
       b[maybeNestedOrderBy[0]][maybeNestedOrderBy[1]];
