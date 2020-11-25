@@ -77,7 +77,7 @@ const EventCreationPage = ({
   const [openDateModal, setOpenDateModal] = useState(false);
 
   const [eventName, setEventName] = useState<string>('');
-  const [eventDate, setEventDate] = useState<Date | null>(null);
+  const [eventDate, setEventDate] = useState<string | null>(null);
   const [eventLocation, setEventLocation] = useState<string>('');
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -115,13 +115,11 @@ const EventCreationPage = ({
     day?: string;
     literal?: string;
   } = eventDate
-    ? new Intl.DateTimeFormat().formatToParts(eventDate).reduce(
-        (obj, currentPart) => ({
-          ...obj,
-          [currentPart.type]: currentPart.value,
-        }),
-        {}
-      )
+    ? {
+        year: eventDate.split('-')[0],
+        month: eventDate.split('-')[1],
+        day: eventDate.split('-')[2],
+      }
     : {};
 
   const handleComplete = () => {
@@ -173,7 +171,7 @@ const EventCreationPage = ({
       } = data.event;
 
       setEventName(name);
-      setEventDate(new Date(eventDate));
+      setEventDate(eventDate);
     }
   }, [data, loading, mode]);
 
