@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 
 const config = {
   link: new HttpLink({
-    uri: 'http://localhost:4000/',
+    uri: process.env.REACT_APP_BACKEND_HOST || 'http://localhost:4000/',
   }),
   cache: new InMemoryCache(),
 };
