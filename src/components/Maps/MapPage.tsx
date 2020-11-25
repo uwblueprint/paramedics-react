@@ -35,7 +35,7 @@ const MapPage = ({
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
-  const [interestPinId, setInterestPinId] = React.useState('')
+  const [interestPinId, setInterestPinId] = React.useState('');
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -101,7 +101,7 @@ const MapPage = ({
   });
 
   useEffect(() => {
-    if(isDeleteConfirmed) {
+    if (isDeleteConfirmed) {
       setInfoWindowOpen(false);
       setIsDeleteClicked(false);
       setInterestPinId('');
@@ -174,7 +174,7 @@ const MapPage = ({
 
   const onSidebarClose = () => {
     setOpenSidebar(false);
-    setInfoWindowOpen(isEdit ? true : false);
+    setInfoWindowOpen(!!isEdit);
     setIsEdit(false);
   };
 
@@ -229,7 +229,7 @@ const MapPage = ({
     deletePin({
       variables: {
         id: interestPinId,
-      }
+      },
     });
   };
 
@@ -300,11 +300,13 @@ const MapPage = ({
           />
         </GoogleMapReact>
       </div>
-      <AddPinButton handleClick={() => {
-        setInfoWindowOpen(false);
-        setOpenSidebar(true);
-      }} />
-      <ConfirmModal 
+      <AddPinButton
+        handleClick={() => {
+          setInfoWindowOpen(false);
+          setOpenSidebar(true);
+        }}
+      />
+      <ConfirmModal
         open={isDeleteClicked}
         handleClickCancel={onDeletePinCancel}
         handleClickAction={onDeletePinConfirm}

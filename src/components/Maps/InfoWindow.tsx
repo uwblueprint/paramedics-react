@@ -102,7 +102,11 @@ const InfoWindow = ({
       </Container>
       <DialogActions style={{ padding: '0px', boxShadow: 'none' }}>
         <Container classes={{ root: infoStyles.flexContainerButtons }}>
-          <Button size="small" style={{ color: Colours.Danger }} onClick={handleDeleteClicked}>
+          <Button
+            size="small"
+            style={{ color: Colours.Danger }}
+            onClick={handleDeleteClicked}
+          >
             Delete
           </Button>
           <Button

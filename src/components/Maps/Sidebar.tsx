@@ -51,11 +51,11 @@ const Sidebar = ({
   const styles = useStyles();
 
   useEffect(() => {
-    if(editLabel) {
+    if (editLabel) {
       setLabel(editLabel);
     }
 
-    if(editAddress) {
+    if (editAddress) {
       setAddress(editAddress);
     }
   }, [editLabel, editAddress]);

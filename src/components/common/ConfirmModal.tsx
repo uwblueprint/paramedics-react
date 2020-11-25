@@ -98,7 +98,7 @@ const ConfirmModal = ({
           onClick={(event) => {
             event.stopPropagation();
             handleClickAction();
-            if(!isMap) {
+            if (!isMap) {
               handleClickCancel();
             }
           }}
