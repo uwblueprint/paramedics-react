@@ -66,8 +66,7 @@ const SearchBar = ({
           address: selectedAddress,
         });
       })
-      .catch((e) => {
-        // eslint-disable-line
+      .catch((e) => { // eslint-disable-line
         // handle errors
       });
     setMenuOpen(false);
