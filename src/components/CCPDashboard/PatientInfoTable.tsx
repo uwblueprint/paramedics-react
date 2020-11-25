@@ -280,7 +280,7 @@ export const PatientInfoTable = ({
         [Status.ON_SITE]: 'On Scene',
         [Status.TRANSPORTED]: 'Transported',
         [Status.RELEASED]: 'Released',
-        [Status.DELETED]: 'Omitted/Deleted',
+        [Status.DELETED]: 'Deleted',
       };
 
       return (
