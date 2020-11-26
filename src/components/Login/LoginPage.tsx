@@ -4,8 +4,8 @@ import LoginButton from './LoginButton';
 import InvalidUserMessage from './InvalidUserMessage';
 import { Colours } from '../../styles/Constants';
 
-import paramedicsLogo from '../../paramedicsLogo.png';
-import paramedicsBackground from '../../paramedicsBackground.png';
+import paramedicsLogo from '../../assets/paramedicsLogo.png';
+import paramedicsBackground from '../../assets/paramedicsBackground.png';
 
 const useStyles = makeStyles({
   root: {
