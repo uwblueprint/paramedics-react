@@ -40,8 +40,8 @@ const useStyles = makeStyles({
     background: Colours.BackgroundGray,
   },
   tabPanel: {
-    paddingLeft: '56px',
-    paddingRight: '56px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
   },
   tabs: {
     background: Colours.White,
