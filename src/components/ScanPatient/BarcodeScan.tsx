@@ -54,7 +54,7 @@ const BarcodeScan = ({
           constraints: {
             width: window.innerWidth,
             height: window.innerHeight,
-            facing: 'environment', // or user
+            facingMode: 'environment',
           },
         },
         decoder: {
