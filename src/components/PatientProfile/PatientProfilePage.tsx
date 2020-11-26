@@ -118,7 +118,10 @@ const PatientProfilePage = ({
       history.replace(`/events/${eventId}/ccps/${ccpId}`);
     },
   });
-  const isRestore = loading ? false : data.patient.status === Status.DELETED;
+  const isRestore =
+    !loading && mode === 'edit'
+      ? data.patient.status === Status.DELETED
+      : false;
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',

@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     height: '100%',
   },
   select: {
-    minWidth: '385px',
+    minWidth: '300px',
   },
   menuItem: {
     boxSizing: 'border-box',
