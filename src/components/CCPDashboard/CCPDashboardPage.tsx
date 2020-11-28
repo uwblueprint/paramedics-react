@@ -181,7 +181,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       highlightPatient(data.patientUpdated.id);
       client.writeFragment({
-        id: `Patient:${data.patientUpdated.id}`, 
+        id: `Patient:${data.patientUpdated.id}`,
         fragment: SUBSCRIPTION_UPDATE_PATIENT,
         data: data.patientUpdated,
       });

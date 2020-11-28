@@ -17,9 +17,13 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useSubscription } from '@apollo/react-hooks';
 import { MoreHoriz } from '@material-ui/icons';
 import { useSnackbar } from 'notistack';
+import {
+  PATIENT_UPDATED,
+  PATIENT_DELETED,
+} from '../../graphql/subscriptions/patients';
 import { Colours } from '../../styles/Constants';
 import {
   Patient,
@@ -261,6 +265,29 @@ export const PatientInfoTable = ({
     enqueueSnackbar(`Patient ${selectedPatient?.barcodeValue} edited.`);
   };
 
+  useSubscription(PATIENT_UPDATED, {
+    variables: { eventId },
+    onSubscriptionData: () => {
+      if (selectedPatient) {
+        if (selectedPatient.id === lastUpdatedPatient) {
+          const newPatient = patients.find((x) => x.id === lastUpdatedPatient);
+          setSelectedPatient(newPatient);
+          setRunNumber(newPatient ? newPatient.runNumber : runNumber);
+        }
+      }
+    },
+  });
+
+  useSubscription(PATIENT_DELETED, {
+    variables: { eventId },
+    onSubscriptionData: () => {
+      if (selectedPatient) {
+        if (selectedPatient.id === lastUpdatedPatient) {
+          setSelectedPatient(patients.find((x) => x.id === lastUpdatedPatient));
+        }
+      }
+    },
+  });
   const tableRows = stableSort(patients, getComparator(order, orderBy)).map(
     (patient: Patient) => {
       const triageLevels = {
