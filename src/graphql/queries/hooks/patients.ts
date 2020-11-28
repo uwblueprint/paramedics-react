@@ -8,8 +8,10 @@ export function useAllPatients(eventId?: string) {
   const client = useApolloClient();
 
   React.useEffect(() => {
+    // fetches from backend when eventId changes
     refetch();
   }, [eventId]);
+
   if (data) {
     client.writeQuery({
       query: GET_ALL_PATIENTS,
