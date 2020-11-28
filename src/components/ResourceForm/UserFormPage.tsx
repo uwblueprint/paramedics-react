@@ -120,7 +120,7 @@ const UserFormPage = ({
     setRole(e.target.value);
   };
 
-  const handleWhenValid = (result: boolean) => {
+  const handleValid = (result: boolean) => {
     setValidForm(result && email !== '');
   };
 
@@ -191,7 +191,7 @@ const UserFormPage = ({
             ]}
             onChange={handleEmailChange}
             value={email}
-            whenValid={handleWhenValid}
+            onValid={handleValid}
           />
           <AccessLevelSelector
             currentValue={role}
