@@ -426,6 +426,7 @@ export const PatientInfoTable = ({
           open={openDetails}
           onClose={handleCloseDetails}
           PaperProps={{ className: classes.detailsDialog }}
+          disableBackdropClick
         >
           <PatientDetailsDialog
             patient={(selectedPatient as unknown) as Patient}

@@ -70,7 +70,11 @@ const ConfirmModal = ({
   const dialogStyle = dialogStyles();
 
   return (
-    <Dialog classes={{ paper: dialogStyle.paper }} open={open}>
+    <Dialog
+      classes={{ paper: dialogStyle.paper }}
+      open={open}
+      disableBackdropClick
+    >
       <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
         {title}
       </DialogTitle>

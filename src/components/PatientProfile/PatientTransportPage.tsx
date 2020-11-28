@@ -88,7 +88,7 @@ const PatientTransportPage = ({
   const classes = useStyles();
 
   return (
-    <Dialog fullScreen open={open} onClose={handleClose}>
+    <Dialog fullScreen open={open} onClose={handleClose} disableBackdropClick>
       <AppBar position="relative" className={classes.appBar}>
         <Toolbar variant="dense">
           <Typography variant="h6" className={classes.appBarText}>

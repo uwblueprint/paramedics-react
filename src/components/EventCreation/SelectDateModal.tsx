@@ -102,7 +102,7 @@ const SelectDateModal: React.FC<{
     eventDate ? new Date(eventDate) : null
   );
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} disableBackdropClick>
       <Container classes={{ root: classes.root }}>
         <Typography variant="h6" classes={{ root: classes.text }}>
           Select Event Date:
