@@ -41,6 +41,7 @@
     "graphql-tag": "^2.11.0",
     "moment": "^2.27.0",
     "notistack": "^0.9.17",
+    "offix-client": "^0.15.5",
     "quagga": "^0.12.1",
     "react": "^16.13.1",
     "react-apollo": "^3.1.3",
