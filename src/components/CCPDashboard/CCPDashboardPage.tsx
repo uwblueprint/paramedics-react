@@ -139,6 +139,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   // Fetch events from backend
   useAllPatients(eventId);
 
+  // Clear the userUpdatedPatientId in location state now that it's been used
   window.history.pushState(
     {
       ...location.state,
