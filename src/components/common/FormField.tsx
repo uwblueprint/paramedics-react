@@ -60,7 +60,7 @@ const FormField: React.FC<{
   readOnly,
   disabled,
   numeric,
-  handleValid,
+  onValid,
 }: {
   label: string;
   placeholder?: string;
@@ -73,7 +73,7 @@ const FormField: React.FC<{
   readOnly?: boolean;
   disabled?: boolean;
   numeric?: boolean;
-  handleValid?: (boolean) => void;
+  onValid?: (boolean) => void;
 }) => {
   const classes = useTextFieldStyles();
   if (isValidated) {
@@ -95,7 +95,7 @@ const FormField: React.FC<{
         onFocus={handleFocus}
         validators={validators}
         errorMessages={errorMessages}
-        validatorListener={handleValid}
+        validatorListener={onValid}
       />
     );
   }
