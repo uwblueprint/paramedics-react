@@ -90,16 +90,6 @@ myClient.onReconnected(() => {
       networkStatus: 'connected',
     },
   });
-
-  // const data = client.readQuery({ query: GET_ALL_PATIENTS });
-
-  // client.writeQuery({
-  //   query: GET_ALL_PATIENTS,
-  //   data: {
-  //     patients: data.patients,
-  //   },
-  // });
-  window.location.reload();
 });
 
 myClient.onReconnecting(() => {
