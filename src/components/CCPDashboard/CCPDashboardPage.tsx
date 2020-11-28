@@ -12,7 +12,6 @@ import { RouteComponentProps } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
-import gql from 'graphql-tag';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
@@ -30,6 +29,10 @@ import {
   PATIENT_UPDATED,
   PATIENT_DELETED,
 } from '../../graphql/subscriptions/patients';
+import {
+  SUBSCRIPTION_UPDATE_PATIENT,
+  SUBSCRIPTION_DELETE_PATIENT,
+} from '../../graphql/fragments/patients';
 
 interface TParams {
   eventId: string;
@@ -178,28 +181,8 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       highlightPatient(data.patientUpdated.id);
       client.writeFragment({
-        id: `Patient:${data.patientUpdated.id}`,
-        fragment: gql`
-          fragment NewPatient on Patient {
-            gender
-            age
-            runNumber
-            barcodeValue
-            triageLevel
-            status
-            notes
-            updatedAt
-            transportTime
-            hospitalId {
-              id
-              name
-            }
-            ambulanceId {
-              id
-              vehicleNumber
-            }
-          }
-        `,
+        id: `Patient:${data.patientUpdated.id}`, 
+        fragment: SUBSCRIPTION_UPDATE_PATIENT,
         data: data.patientUpdated,
       });
     },
@@ -224,12 +207,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       highlightPatient(data.patientDeleted.id);
       client.writeFragment({
         id: `Patient:${data.patientDeleted.id}`,
-        fragment: gql`
-          fragment NewPatient on Patient {
-            status
-            updatedAt
-          }
-        `,
+        fragment: SUBSCRIPTION_DELETE_PATIENT,
         data: data.patientDeleted,
       });
     },
