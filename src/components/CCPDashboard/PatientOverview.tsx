@@ -42,8 +42,8 @@ const useStyles = makeStyles({
   categoryTableCard: {
     display: 'flex',
     alignItems: 'center',
-    paddingRight: '44px',
-    paddingLeft: '44px',
+    paddingRight: '22px',
+    paddingLeft: '22px',
     marginTop: '16px',
   },
   lightBorder: {
@@ -94,7 +94,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
     createCategoryData('On Scene', Status.ON_SITE),
     createCategoryData('Transported', Status.TRANSPORTED),
     createCategoryData('Released', Status.RELEASED),
-    createCategoryData('Omitted/Deleted', Status.DELETED),
+    createCategoryData('Deleted', Status.DELETED),
   ];
 
   const noBorderLastRow = (index) =>

@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
+import { AccessLevel } from '../../graphql/queries/users';
 
-const useRadioStyles = makeStyles({
+const useAccessLevelStyles = makeStyles({
   root: {
     border: '1px solid #E8E8E8',
     boxSizing: 'border-box',
@@ -21,15 +21,6 @@ const useRadioStyles = makeStyles({
     '& .MuiInput-formControl': {
       marginTop: 'auto',
     },
-    '& label.Mui-focused': {
-      color: '#2E5584',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#2E5584',
-    },
-  },
-  radioGroup: {
-    display: 'inline-block',
   },
   label: {
     fontWeight: 'bold',
@@ -39,6 +30,26 @@ const useRadioStyles = makeStyles({
     display: 'inline-block',
     transform: 'translate(0, 1.5px) scale(0.75)',
   },
+  statusPill: {
+    color: '#2E5584',
+    border: '#2E5584 solid 1px',
+    marginRight: '20px',
+    borderRadius: '4px',
+  },
+  selectedPill: {
+    backgroundColor: '#C6D7EB !important',
+    color: '#2E5584 !important',
+    fontWeight: 'bold',
+  },
+  buttonGroup: {
+    '&:not(:first-child)': {
+      border: '#3f51b5 solid 1px',
+      borderRadius: '4px',
+    },
+    '&:not(:last-child)': {
+      borderRadius: '4px',
+    },
+  },
 });
 
 const AccessLevelSelector = ({
@@ -46,9 +57,12 @@ const AccessLevelSelector = ({
   handleChange,
 }: {
   currentValue: number;
-  handleChange: (e: any) => any;
+  handleChange: (
+    e: React.MouseEvent<HTMLElement>,
+    newRole: AccessLevel
+  ) => void;
 }) => {
-  const classes = useRadioStyles();
+  const classes = useAccessLevelStyles();
   const accessLevels = [
     { label: 'Commander', roleId: 1 },
     { label: 'Supervisor', roleId: 2 },
@@ -57,24 +71,27 @@ const AccessLevelSelector = ({
   return (
     <Container className={classes.root}>
       <Typography className={classes.label}>*Role:</Typography>
-      <RadioGroup
-        row
-        aria-label="position"
-        name="position"
-        value={currentValue.toString()}
+      <ToggleButtonGroup
+        value={currentValue}
+        exclusive
         onChange={handleChange}
-        className={classes.radioGroup}
+        classes={{
+          groupedHorizontal: classes.buttonGroup,
+        }}
       >
         {accessLevels.map((accessLevel) => (
-          <FormControlLabel
-            value={accessLevel.roleId.toString()}
-            control={<Radio color="secondary" />}
-            label={accessLevel.label}
-            labelPlacement="end"
+          <ToggleButton
+            value={String(accessLevel.roleId)}
+            classes={{
+              root: classes.statusPill,
+              selected: classes.selectedPill,
+            }}
             key={accessLevel.roleId}
-          />
+          >
+            <Typography variant="body2">{accessLevel.label}</Typography>
+          </ToggleButton>
         ))}
-      </RadioGroup>
+      </ToggleButtonGroup>
     </Container>
   );
 };

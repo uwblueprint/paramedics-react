@@ -116,8 +116,11 @@ const UserFormPage = ({
     setEmail(e.target.value);
   };
 
-  const handleRoleChange = (e: any) => {
-    setRole(e.target.value);
+  const handleRoleChange = (
+    e: React.MouseEvent<HTMLElement>,
+    newRole: AccessLevel
+  ) => {
+    setRole(newRole);
   };
 
   const handleValid = (result: boolean) => {
