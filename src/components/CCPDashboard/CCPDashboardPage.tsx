@@ -124,7 +124,7 @@ const TabPanel = (props: TabPanelProps) => {
 
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
-
+  const highlightDuration = 5000; // seconds
   const { eventId, ccpId, patientId } = match.params;
   const location = useLocation<LocationState>();
   const { userUpdatedPatientId } = location.state || {
@@ -168,7 +168,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     setLastUpdatedPatient(id);
     const highlightTimeout = setTimeout(() => {
       setLastUpdatedPatient('');
-    }, 5000);
+    }, highlightDuration);
     setLastUpdatedPatientTimeout(highlightTimeout);
   };
 
