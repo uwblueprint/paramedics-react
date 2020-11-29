@@ -8,6 +8,7 @@ import { useSnackbar } from 'notistack';
 import ConfirmModal from '../common/ConfirmModal';
 import { Colours } from '../../styles/Constants';
 import FormField from '../common/FormField';
+import LoadingState from '../common/LoadingState';
 import CompletePatientButton from './CompletePatientButton';
 import RadioSelector from '../common/RadioSelector';
 import TriagePills from './TriagePills';
@@ -119,6 +120,10 @@ const PatientProfilePage = ({
       });
     },
   });
+  const isRestore =
+    !loading && mode === 'edit'
+      ? data.patient.status === Status.DELETED
+      : false;
 
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
@@ -129,6 +134,13 @@ const PatientProfilePage = ({
     status: Status.ON_SITE,
     runNumber: null,
   });
+
+  const headerLabel =
+    mode === 'new'
+      ? 'Add a patient'
+      : isRestore
+      ? 'Restore patient'
+      : 'Edit patient';
 
   useEffect(() => {
     if (!loading && mode === 'edit') {
@@ -153,13 +165,15 @@ const PatientProfilePage = ({
         hospitalId: Hospital;
         ambulanceId: Ambulance;
       } = data.patient;
+
+      const formStatus = status === Status.DELETED ? Status.ON_SITE : status;
       setFormFields(() => ({
         barcodeValue,
         triage: triageLevel,
         gender,
         age,
         notes,
-        status,
+        status: formStatus,
         runNumber,
       }));
       if (hospitalId) setSelectedHospital(hospitalId);
@@ -267,6 +281,10 @@ const PatientProfilePage = ({
         },
       });
     } else if (mode === 'edit') {
+      if (isRestore) {
+        enqueueSnackbar(`Patient #${formFields.barcodeValue} restored.`);
+      }
+
       editPatient({
         variables: {
           id: patientId,
@@ -299,6 +317,10 @@ const PatientProfilePage = ({
       userUpdatedPatientId: patientId,
     });
   };
+
+  if (loading) {
+    return <LoadingState />;
+  }
 
   return (
     <Box>
@@ -347,9 +369,7 @@ const PatientProfilePage = ({
         padding="56px 56px 36px 56px"
         borderBottom={`1px solid ${Colours.BorderLightGray}`}
       >
-        <Typography variant="h4">
-          {mode === 'new' ? 'Add a patient' : 'Edit patient'}
-        </Typography>
+        <Typography variant="h4">{headerLabel}</Typography>
         <Button
           color="secondary"
           variant="outlined"
@@ -482,7 +502,9 @@ const PatientProfilePage = ({
           <CompletePatientButton />
           {mode === 'edit' && (
             <>
-              <DeletePatientButton handleClick={handleDeleteClick} />
+              {!isRestore && (
+                <DeletePatientButton handleClick={handleDeleteClick} />
+              )}
               <ConfirmModal
                 open={deleteClicked}
                 handleClickCancel={handleDeleteCancel}

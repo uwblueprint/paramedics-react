@@ -1,4 +1,4 @@
-import { ApolloClient } from 'apollo-client';
+import { ApolloOfflineClient } from 'offix-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
@@ -7,7 +7,6 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import gql from 'graphql-tag';
-import { GET_ALL_PATIENTS } from '../queries/patients';
 
 const myClient = new SubscriptionClient('ws://localhost:4000/graphql', {
   reconnect: true,
@@ -33,7 +32,7 @@ const link: ApolloLink = split(
   httpLink
 );
 
-const client = new ApolloClient({
+const client = new ApolloOfflineClient({
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors)

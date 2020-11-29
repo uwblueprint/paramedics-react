@@ -12,7 +12,6 @@ import { RouteComponentProps } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
-import gql from 'graphql-tag';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
 import { Colours } from '../../styles/Constants';
 import {
@@ -31,6 +30,10 @@ import {
 } from '../../graphql/subscriptions/patients';
 import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 import { GET_NETWORK_STATUS } from '../../graphql/apollo/client';
+import {
+  SUBSCRIPTION_UPDATE_PATIENT,
+  SUBSCRIPTION_DELETE_PATIENT,
+} from '../../graphql/fragments/patients';
 
 interface TParams {
   eventId: string;
@@ -126,7 +129,7 @@ const TabPanel = (props: TabPanelProps) => {
 
 const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const classes = useStyles();
-
+  const highlightDuration = 5000; // seconds
   const { eventId, ccpId, patientId } = match.params;
   const location = useLocation<LocationState>();
   const { userUpdatedPatientId } = location.state || {
@@ -137,10 +140,14 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     lastUpdatedPatientTimeout,
     setLastUpdatedPatientTimeout,
   ] = React.useState<NodeJS.Timeout>(setTimeout(() => {}, 0));
+
+  const { data: connectionData } = useQuery(GET_NETWORK_STATUS);
+
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
-  useAllPatients(eventId);
+  useAllPatients(eventId, connectionData);
 
+  // Clear the userUpdatedPatientId in location state now that it's been used
   window.history.pushState(
     {
       ...location.state,
@@ -150,7 +157,6 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   );
 
   // Should switch to fetching patients from cache
-  const { data: connectionData } = useQuery(GET_NETWORK_STATUS);
 
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
 
@@ -175,7 +181,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     setLastUpdatedPatient(id);
     const highlightTimeout = setTimeout(() => {
       setLastUpdatedPatient('');
-    }, 5000);
+    }, highlightDuration);
     setLastUpdatedPatientTimeout(highlightTimeout);
   };
 
@@ -189,27 +195,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       highlightPatient(data.patientUpdated.id);
       client.writeFragment({
         id: `Patient:${data.patientUpdated.id}`,
-        fragment: gql`
-          fragment NewPatient on Patient {
-            gender
-            age
-            runNumber
-            barcodeValue
-            triageLevel
-            status
-            notes
-            updatedAt
-            transportTime
-            hospitalId {
-              id
-              name
-            }
-            ambulanceId {
-              id
-              vehicleNumber
-            }
-          }
-        `,
+        fragment: SUBSCRIPTION_UPDATE_PATIENT,
         data: data.patientUpdated,
       });
     },
@@ -234,12 +220,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       highlightPatient(data.patientDeleted.id);
       client.writeFragment({
         id: `Patient:${data.patientDeleted.id}`,
-        fragment: gql`
-          fragment NewPatient on Patient {
-            status
-            updatedAt
-          }
-        `,
+        fragment: SUBSCRIPTION_DELETE_PATIENT,
         data: data.patientDeleted,
       });
     },
