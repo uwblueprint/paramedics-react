@@ -8,9 +8,12 @@ import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import gql from 'graphql-tag';
 
-const myClient = new SubscriptionClient('ws://localhost:4000/graphql', {
-  reconnect: true,
-});
+const myClient = new SubscriptionClient(
+  process.env.REACT_APP_BACKEND_WEBSOCKET_URL || 'ws://localhost:4000/graphql',
+  {
+    reconnect: true,
+  }
+);
 
 const wsLink = new WebSocketLink(myClient);
 
