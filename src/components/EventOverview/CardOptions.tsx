@@ -6,6 +6,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import ConfirmModal from '../common/ConfirmModal';
+import { Colours } from '../../styles/Constants';
 
 type CardOptions = ({
   eventId,
@@ -26,6 +27,9 @@ type CardOptions = ({
 const useCardOptionsStyles = makeStyles({
   iconButtonRoot: {
     padding: 'unset',
+  },
+  deleteButton: {
+    color: Colours.Danger,
   },
 });
 
@@ -125,7 +129,12 @@ const CardOptions: CardOptions = ({
         >
           <MenuItem onClick={handleOpenArchiveDialog}>Archive</MenuItem>
           <MenuItem onClick={handleEditEvent}>Edit</MenuItem>
-          <MenuItem onClick={handleOpenDeleteDialog}>Delete</MenuItem>
+          <MenuItem
+            classes={{ root: classes.deleteButton }}
+            onClick={handleOpenDeleteDialog}
+          >
+            Delete
+          </MenuItem>
         </Menu>
       </>
     );

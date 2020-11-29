@@ -43,8 +43,8 @@ const useStyles = makeStyles({
   categoryTableCard: {
     display: 'flex',
     alignItems: 'center',
-    paddingRight: '0px',
-    paddingLeft: '0px',
+    paddingRight: '22px',
+    paddingLeft: '22px',
     marginTop: '16px',
   },
   lightBorder: {

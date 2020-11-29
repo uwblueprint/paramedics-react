@@ -1,4 +1,4 @@
-import { ApolloClient } from 'apollo-client';
+import { ApolloOfflineClient } from 'offix-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
@@ -33,7 +33,7 @@ const link: ApolloLink = split(
   httpLink
 );
 
-const client = new ApolloClient({
+const client = new ApolloOfflineClient({
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors)
