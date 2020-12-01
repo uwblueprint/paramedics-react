@@ -176,18 +176,25 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [allPatients, ccpId]
   );
 
-  const highlightPatient = (id) => {
-    clearTimeout(lastUpdatedPatientTimeout);
+  const highlightPatient = React.useCallback((id) => {
     setLastUpdatedPatient(id);
     const highlightTimeout = setTimeout(() => {
       setLastUpdatedPatient('');
     }, highlightDuration);
     setLastUpdatedPatientTimeout(highlightTimeout);
-  };
+  }, []);
 
+  // If a new update is detected, cleans up old highlight
   React.useEffect(() => {
-    highlightPatient(userUpdatedPatientId);
-  }, [userUpdatedPatientId]);
+    return () => {
+      clearTimeout(lastUpdatedPatientTimeout);
+    }
+  }, [lastUpdatedPatientTimeout]);
+
+  // First highlight if coming from Add/Edit Patient page
+  React.useEffect(() => {
+    if (userUpdatedPatientId) highlightPatient(userUpdatedPatientId);
+  }, [userUpdatedPatientId, highlightPatient]);
 
   useSubscription(PATIENT_UPDATED, {
     variables: { eventId },

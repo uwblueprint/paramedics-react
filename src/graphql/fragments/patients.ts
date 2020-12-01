@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const SUBSCRIPTION_UPDATE_PATIENT = gql`
-fragment NewPatient on Patient {
+fragment updatedPatient on Patient {
   gender
   age
   runNumber
@@ -23,7 +23,7 @@ fragment NewPatient on Patient {
 `;
 
 export const SUBSCRIPTION_DELETE_PATIENT = gql`
-fragment NewPatient on Patient {
+fragment deletedPatient on Patient {
   status
   updatedAt
 }

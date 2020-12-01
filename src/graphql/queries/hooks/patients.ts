@@ -10,7 +10,7 @@ export function useAllPatients(eventId?: string, connectionData?: string) {
   React.useEffect(() => {
     // fetches from backend when eventId changes
     if (connectionData === 'connected') refetch();
-  }, [eventId]);
+  }, [eventId, connectionData, refetch]);
 
   if (data) {
     client.writeQuery({
