@@ -4,8 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import SearchBar from './SearchBar';
 import { Colours } from '../../styles/Constants';
@@ -29,12 +27,6 @@ const useStyles = makeStyles({
     marginTop: '30px',
     padding: '0px 30px 0px 16px',
   },
-  autocompleteBackContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '20px',
-    padding: '0px 30px 10px 16px',
-  },
 });
 
 const Sidebar = ({
@@ -52,9 +44,6 @@ const Sidebar = ({
   const [latitude, setLatitude] = React.useState(0);
   const [longitude, setLongitude] = React.useState(0);
   const [label, setLabel] = React.useState('');
-  const [isAutocompleteClicked, setIsAutocompleteClicked] = React.useState(
-    false
-  );
   const styles = useStyles();
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
@@ -67,14 +56,6 @@ const Sidebar = ({
     setAddress(address);
   };
 
-  const handleAutocompleteClicked = () => {
-    setIsAutocompleteClicked(true);
-  };
-
-  const handleBackClicked = () => {
-    setIsAutocompleteClicked(false);
-  };
-
   return (
     <Drawer
       open={open}
@@ -82,11 +63,9 @@ const Sidebar = ({
       PaperProps={{ style: { width: '400px' } }}
       disableScrollLock
     >
-      <Collapse in={!isAutocompleteClicked}>
-        <Typography variant="h4" classes={{ root: styles.title }}>
-          {title}
-        </Typography>
-      </Collapse>
+      <Typography variant="h4" classes={{ root: styles.title }}>
+        {title}
+      </Typography>
       <ValidatorForm
         onSubmit={(e) => {
           onComplete({
@@ -100,30 +79,17 @@ const Sidebar = ({
           e.preventDefault();
         }}
       >
-        <Collapse in={!isAutocompleteClicked}>
-          <Typography variant="body1" classes={{ root: styles.label }}>
-            Name:
-          </Typography>
-          <TextValidator
-            placeholder="Pin name"
-            onChange={handleLabelChange}
-            value={label}
-            validators={['required']}
-            errorMessages={['A pin name is required']}
-            className={styles.pinLabelField}
-          />
-        </Collapse>
-        <Collapse in={isAutocompleteClicked}>
-          <Container classes={{ root: styles.autocompleteBackContainer }}>
-            <Button
-              onClick={handleBackClicked}
-              style={{ color: Colours.Secondary }}
-              startIcon={<KeyboardBackspaceIcon />}
-            >
-              Back
-            </Button>
-          </Container>
-        </Collapse>
+        <Typography variant="body1" classes={{ root: styles.label }}>
+          Name:
+        </Typography>
+        <TextValidator
+          placeholder="Pin name"
+          onChange={handleLabelChange}
+          value={label}
+          validators={['required']}
+          errorMessages={['A pin name is required']}
+          className={styles.pinLabelField}
+        />
         <Typography variant="body1" classes={{ root: styles.label }}>
           Pin Location:
         </Typography>
@@ -135,26 +101,22 @@ const Sidebar = ({
               address,
             })
           }
-          onAutocompleteClick={handleAutocompleteClicked}
         />
-        <Collapse in={!isAutocompleteClicked}>
-          <Container classes={{ root: styles.buttonContainer }}>
-            <Button
-              variant="outlined"
-              style={{ color: Colours.Secondary }}
-              onClick={() => {
-                setLabel('');
-                setAddress('');
-                onClose();
-              }}
-            >
-              Cancel
-            </Button>
-            <Button variant="contained" color="secondary" type="submit">
-              Complete
-            </Button>
-          </Container>
-        </Collapse>
+        <Container classes={{ root: styles.buttonContainer }}>
+          <Button
+            style={{ color: Colours.Secondary }}
+            onClick={() => {
+              setLabel('');
+              setAddress('');
+              onClose();
+            }}
+          >
+            Cancel
+          </Button>
+          <Button variant="contained" color="secondary" type="submit">
+            Complete
+          </Button>
+        </Container>
       </ValidatorForm>
     </Drawer>
   );

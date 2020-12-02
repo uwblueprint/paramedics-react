@@ -5,7 +5,6 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -33,10 +32,8 @@ const useStyles = makeStyles({
 
 const SearchBar = ({
   onComplete,
-  onAutocompleteClick,
 }: {
   onComplete: ({ latitude, longitude, address }) => void;
-  onAutocompleteClick: () => void;
 }) => {
   const [address, setAddress] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -89,24 +86,9 @@ const SearchBar = ({
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    {address && (
-                      <>
-                        <IconButton
-                          onClick={() => {
-                            setAddress('');
-                          }}
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </>
-                    )}
-                    {!address && (
-                      <>
-                        <IconButton>
-                          <SearchIcon />
-                        </IconButton>
-                      </>
-                    )}
+                    <IconButton>
+                      <SearchIcon />
+                    </IconButton>
                   </InputAdornment>
                 ),
                 inputProps: getInputProps({
@@ -116,7 +98,6 @@ const SearchBar = ({
               onFocus={() => {
                 setMenuOpen(true);
               }}
-              onClick={onAutocompleteClick}
               value={address}
               className={styles.sidebarTextField}
               validators={['required']}
