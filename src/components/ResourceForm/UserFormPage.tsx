@@ -91,6 +91,7 @@ const UserFormPage = ({
         email: string;
         roleId: number;
       } = data.user;
+
       setMemberName(name);
       setEmail(email);
       setRole(roleId);
