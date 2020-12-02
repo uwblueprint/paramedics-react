@@ -197,7 +197,7 @@ const UserFormPage = ({
             onValid={handleValid}
           />
           <AccessLevelSelector
-            currentValue={role}
+            currentValue={Number(role)}
             handleChange={handleRoleChange}
           />
           <Typography
