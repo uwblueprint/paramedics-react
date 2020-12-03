@@ -31,17 +31,21 @@ const MapPage = ({
     lat: 0,
     lng: 0,
   });
+  const [center, setCenter] = React.useState({
+    lat: 43.470846,
+    lng: -80.538473,
+  });
+  const [tempMarkerClick, setTempMarkerClick] = React.useState(false);
+  const [tempMarkerLocation, setTempMarkerLocation] = React.useState({lat: 0, lng: 0});
+  const [zoom, setZoom] = React.useState(11);
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
   const defaultMap = {
-    zoom: 11,
-    center: {
-      lat: 43.470846,
-      lng: -80.538473,
-    },
+    zoom,
+    center,
   };
   const geolocationErrorCallback = undefined;
 
@@ -114,6 +118,7 @@ const MapPage = ({
     setInfoWindowOpen(true);
     setInterestPinLocation(pin.address);
     setInterestPinTitle(pin.label);
+    setCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
   const onInfoWindowClose = () => {
@@ -121,6 +126,13 @@ const MapPage = ({
     setInterestPinLocation('');
     setInterestPinTitle('');
   };
+
+  const onMapClick = (obj) => {
+    setCenter({obj.lat, obj.lng});
+    setTempMarkerClick(true);
+    setTempMarkerLocation({obj.lat, obj.lng});
+    setOpenSidebar(true);
+  }
 
   const mapTypeIdListener = (mapObject) => {
     mapObject.map.addListener('maptypeid_changed', () => {
@@ -130,6 +142,7 @@ const MapPage = ({
 
   const onSidebarClose = () => {
     setOpenSidebar(false);
+    setTempMarkerClick(false);
   };
 
   const onAddPinComplete = ({ label, lat, lng, address }) => {
@@ -142,7 +155,10 @@ const MapPage = ({
         address,
       },
     });
+    setCenter({ lat, lng });
+    setZoom(16);
     setOpenSidebar(false);
+    setTempMarkerClick(false);
   };
 
   return (
@@ -173,11 +189,12 @@ const MapPage = ({
             key: process.env.REACT_APP_GMAPS,
             libraries: ['places'],
           }}
-          center={[defaultMap.center.lat, defaultMap.center.lng]}
+          center={[center.lat, center.lng]}
           zoom={defaultMap.zoom}
           options={getMapOptions}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={(mapObject) => mapTypeIdListener(mapObject)}
+          onClick={(obj) => onMapClick(obj)}
         >
           {pins.map((pin) => (
             <Marker
