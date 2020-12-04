@@ -32,11 +32,15 @@ const useStyles = makeStyles({
 const Sidebar = ({
   open,
   title,
+  openClick,
+  tempLocation,
   onClose,
   onComplete,
 }: {
   open: boolean;
   title: string;
+  openClick?: boolean;
+  tempLocation?: any;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
@@ -60,7 +64,9 @@ const Sidebar = ({
     <Drawer
       open={open}
       onClose={onClose}
-      PaperProps={{ style: { width: '400px' } }}
+      PaperProps={{ style: { width: '400px' }, elevation: 6, }}
+      hideBackdrop
+      disableEnforceFocus
       disableScrollLock
     >
       <Typography variant="h4" classes={{ root: styles.title }}>

@@ -127,12 +127,15 @@ const MapPage = ({
     setInterestPinTitle('');
   };
 
-  const onMapClick = (obj) => {
-    setCenter({obj.lat, obj.lng});
+  const onMapClick = (obj: {lat: number, lng: number}) => {
+    const {lat, lng} = obj;
+    console.log(lat);
+    console.log(lng);
+    setCenter({lat, lng});
     setTempMarkerClick(true);
-    setTempMarkerLocation({obj.lat, obj.lng});
+    setTempMarkerLocation({lat, lng});
     setOpenSidebar(true);
-  }
+  };
 
   const mapTypeIdListener = (mapObject) => {
     mapObject.map.addListener('maptypeid_changed', () => {
@@ -214,6 +217,14 @@ const MapPage = ({
             lng={currentLocationPin.lng}
             isCurrentLocation
           />
+          {tempMarkerClick && (
+            <>
+              <Marker 
+                lat={tempMarkerLocation.lat}
+                lng={tempMarkerLocation.lng}
+              />
+            </>
+          )}
         </GoogleMapReact>
       </div>
       <AddPinButton handleClick={() => setOpenSidebar(true)} />
