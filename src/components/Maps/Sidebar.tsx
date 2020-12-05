@@ -64,6 +64,7 @@ const Sidebar = ({
     <Drawer
       open={open}
       onClose={onClose}
+      style={{ position: 'initial' }}
       PaperProps={{ style: { width: '400px' }, elevation: 6, }}
       hideBackdrop
       disableEnforceFocus

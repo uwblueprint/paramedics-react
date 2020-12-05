@@ -7,6 +7,9 @@ import { Colours } from '../../styles/Constants';
 const useStyles = makeStyles({
   root: {
     color: Colours.Marker,
+    textAlign: 'center',
+    position: 'absolute',
+    transform: 'translate(-50%, -50%)',
   },
   currentLocation: {
     color: Colours.CurrentLocationMarker,
@@ -23,25 +26,31 @@ const Marker = ({
   /* eslint-enable */
   isCurrentLocation,
   otherClicked,
+  tempRender,
   onClick,
 }: {
   lat: number;
   lng: number;
   isCurrentLocation?: boolean;
   otherClicked?: boolean;
+  tempRender: boolean;
   onClick?: () => void;
 }) => {
   const styles = useStyles();
   if (isCurrentLocation) {
     return <RadioButtonCheckedIcon className={styles.currentLocation} />;
   }
-  return (
-    <RoomIcon
-      onClick={onClick}
-      fontSize="large"
-      className={otherClicked ? styles.notClicked : styles.root}
-    />
-  );
+  if(tempRender) {
+    return (
+      <RoomIcon
+        onClick={onClick}
+        fontSize="large"
+        className={otherClicked ? styles.notClicked : styles.root}
+      />
+    );
+  } else {
+    return null;
+  }
 };
 
 export default Marker;

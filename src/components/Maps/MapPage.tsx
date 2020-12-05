@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
 import GoogleMapReact from 'google-map-react';
-
+import Geocode from 'react-geocode';
 import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
 import Sidebar from './Sidebar';
@@ -48,6 +48,10 @@ const MapPage = ({
     center,
   };
   const geolocationErrorCallback = undefined;
+
+  Geocode.setApiKey(process.env.REACT_APP_GMAPS);
+  Geocode.setLanguage("en");
+  Geocode.setRegion("ca");
 
   const getMapOptions = (maps) => {
     return {
@@ -129,12 +133,14 @@ const MapPage = ({
 
   const onMapClick = (obj: {lat: number, lng: number}) => {
     const {lat, lng} = obj;
-    console.log(lat);
-    console.log(lng);
     setCenter({lat, lng});
+    setZoom(16);
     setTempMarkerClick(true);
     setTempMarkerLocation({lat, lng});
     setOpenSidebar(true);
+    Geocode.fromLatLng(lat, lng).then((res) => {
+      console.log(res.results[0].formatted_address);
+    });
   };
 
   const mapTypeIdListener = (mapObject) => {
@@ -210,21 +216,20 @@ const MapPage = ({
               onClick={() => {
                 onMarkerClick(pin);
               }}
+              tempRender
             />
           ))}
           <Marker
             lat={currentLocationPin.lat}
             lng={currentLocationPin.lng}
             isCurrentLocation
+            tempRender
           />
-          {tempMarkerClick && (
-            <>
-              <Marker 
-                lat={tempMarkerLocation.lat}
-                lng={tempMarkerLocation.lng}
-              />
-            </>
-          )}
+          <Marker 
+            lat={tempMarkerLocation.lat}
+            lng={tempMarkerLocation.lng}
+            tempRender={tempMarkerClick}
+          />
         </GoogleMapReact>
       </div>
       <AddPinButton handleClick={() => setOpenSidebar(true)} />
