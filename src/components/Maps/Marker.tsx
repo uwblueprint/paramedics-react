@@ -26,21 +26,21 @@ const Marker = ({
   /* eslint-enable */
   isCurrentLocation,
   otherClicked,
-  tempRender,
+  render,
   onClick,
 }: {
   lat: number;
   lng: number;
   isCurrentLocation?: boolean;
   otherClicked?: boolean;
-  tempRender: boolean;
+  render: boolean;
   onClick?: () => void;
 }) => {
   const styles = useStyles();
   if (isCurrentLocation) {
     return <RadioButtonCheckedIcon className={styles.currentLocation} />;
   }
-  if(tempRender) {
+  if(render) {
     return (
       <RoomIcon
         onClick={onClick}
@@ -48,9 +48,8 @@ const Marker = ({
         className={otherClicked ? styles.notClicked : styles.root}
       />
     );
-  } else {
-    return null;
   }
+  return null;
 };
 
 export default Marker;

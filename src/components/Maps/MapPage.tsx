@@ -37,6 +37,7 @@ const MapPage = ({
   });
   const [tempMarkerClick, setTempMarkerClick] = React.useState(false);
   const [tempMarkerLocation, setTempMarkerLocation] = React.useState({lat: 0, lng: 0});
+  const [tempMarkerAddress, setTempMarkerAddress] = React.useState('');
   const [zoom, setZoom] = React.useState(11);
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
@@ -139,7 +140,7 @@ const MapPage = ({
     setTempMarkerLocation({lat, lng});
     setOpenSidebar(true);
     Geocode.fromLatLng(lat, lng).then((res) => {
-      console.log(res.results[0].formatted_address);
+      setTempMarkerAddress(res.results[0].formatted_address);
     });
   };
 
@@ -183,6 +184,7 @@ const MapPage = ({
         open={openSidebar}
         onClose={onSidebarClose}
         title="Add a location pin"
+        clickedAddress={tempMarkerAddress}
         onComplete={({ label, latitude, longitude, address }) =>
           onAddPinComplete({
             label,
@@ -216,19 +218,19 @@ const MapPage = ({
               onClick={() => {
                 onMarkerClick(pin);
               }}
-              tempRender
+              render
             />
           ))}
           <Marker
             lat={currentLocationPin.lat}
             lng={currentLocationPin.lng}
             isCurrentLocation
-            tempRender
+            render
           />
           <Marker 
             lat={tempMarkerLocation.lat}
             lng={tempMarkerLocation.lng}
-            tempRender={tempMarkerClick}
+            render={tempMarkerClick}
           />
         </GoogleMapReact>
       </div>
