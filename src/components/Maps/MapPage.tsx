@@ -144,6 +144,13 @@ const MapPage = ({
     });
   };
 
+  const onSuggestionTempMarkerSet = ({lat, lng}) => {
+    setCenter({lat, lng});
+    setZoom(16);
+    setTempMarkerClick(true);
+    setTempMarkerLocation({lat, lng});
+  }
+
   const mapTypeIdListener = (mapObject) => {
     mapObject.map.addListener('maptypeid_changed', () => {
       setMapTypeId(mapObject.map.getMapTypeId());
@@ -185,6 +192,7 @@ const MapPage = ({
         onClose={onSidebarClose}
         title="Add a location pin"
         clickedAddress={tempMarkerAddress}
+        onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
         onComplete={({ label, latitude, longitude, address }) =>
           onAddPinComplete({
             label,

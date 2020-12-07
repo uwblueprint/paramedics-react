@@ -32,13 +32,15 @@ const useStyles = makeStyles({
 const Sidebar = ({
   open,
   title,
+  clickedAddress,
+  onSuggestionTempMarkerSet,
   onClose,
   onComplete,
-  clickedAddress,
 }: {
   open: boolean;
   title: string;
   clickedAddress?: string;
+  onSuggestionTempMarkerSet: ({ lat, lng }) => void;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
@@ -62,6 +64,7 @@ const Sidebar = ({
     setLatitude(lat);
     setLongitude(lng);
     setAddress(address);
+    onSuggestionTempMarkerSet({lat, lng});
   };
 
   return (
