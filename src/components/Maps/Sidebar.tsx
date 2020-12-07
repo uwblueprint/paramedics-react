@@ -32,15 +32,19 @@ const useStyles = makeStyles({
 const Sidebar = ({
   open,
   title,
+  clickedLocation,
   clickedAddress,
   onSuggestionTempMarkerSet,
+  setTempMarkerClick,
   onClose,
   onComplete,
 }: {
   open: boolean;
   title: string;
+  clickedLocation?: { lat: number; lng: number };
   clickedAddress?: string;
-  onSuggestionTempMarkerSet: ({ lat, lng }) => void;
+  onSuggestionTempMarkerSet: ({ lat, lng, address }) => void;
+  setTempMarkerClick: () => void;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
@@ -51,10 +55,15 @@ const Sidebar = ({
   const styles = useStyles();
 
   useEffect(() => {
-    if(clickedAddress) {
+    if (clickedAddress) {
       setAddress(clickedAddress);
     }
-  },[clickedAddress]);
+
+    if (clickedLocation) {
+      setLatitude(clickedLocation.lat);
+      setLongitude(clickedLocation.lng);
+    }
+  }, [clickedAddress, clickedLocation]);
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
     setLabel((e.target as HTMLInputElement).value);
@@ -64,7 +73,8 @@ const Sidebar = ({
     setLatitude(lat);
     setLongitude(lng);
     setAddress(address);
-    onSuggestionTempMarkerSet({lat, lng});
+    setTempMarkerClick();
+    onSuggestionTempMarkerSet({ lat, lng, address });
   };
 
   return (
@@ -72,7 +82,7 @@ const Sidebar = ({
       open={open}
       onClose={onClose}
       style={{ position: 'initial' }}
-      PaperProps={{ style: { width: '400px' }, elevation: 6, }}
+      PaperProps={{ style: { width: '400px' }, elevation: 6 }}
       hideBackdrop
       disableEnforceFocus
       disableScrollLock

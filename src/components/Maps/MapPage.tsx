@@ -36,7 +36,10 @@ const MapPage = ({
     lng: -80.538473,
   });
   const [tempMarkerClick, setTempMarkerClick] = React.useState(false);
-  const [tempMarkerLocation, setTempMarkerLocation] = React.useState({lat: 0, lng: 0});
+  const [tempMarkerLocation, setTempMarkerLocation] = React.useState({
+    lat: 0,
+    lng: 0,
+  });
   const [tempMarkerAddress, setTempMarkerAddress] = React.useState('');
   const [zoom, setZoom] = React.useState(11);
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
@@ -51,8 +54,8 @@ const MapPage = ({
   const geolocationErrorCallback = undefined;
 
   Geocode.setApiKey(process.env.REACT_APP_GMAPS);
-  Geocode.setLanguage("en");
-  Geocode.setRegion("ca");
+  Geocode.setLanguage('en');
+  Geocode.setRegion('ca');
 
   const getMapOptions = (maps) => {
     return {
@@ -132,24 +135,26 @@ const MapPage = ({
     setInterestPinTitle('');
   };
 
-  const onMapClick = (obj: {lat: number, lng: number}) => {
-    const {lat, lng} = obj;
-    setCenter({lat, lng});
+  const onMapClick = (obj: { lat: number; lng: number }) => {
+    const { lat, lng } = obj;
+    setInfoWindowOpen(false);
+    setCenter({ lat, lng });
     setZoom(16);
     setTempMarkerClick(true);
-    setTempMarkerLocation({lat, lng});
+    setTempMarkerLocation({ lat, lng });
     setOpenSidebar(true);
     Geocode.fromLatLng(lat, lng).then((res) => {
       setTempMarkerAddress(res.results[0].formatted_address);
     });
   };
 
-  const onSuggestionTempMarkerSet = ({lat, lng}) => {
-    setCenter({lat, lng});
+  const onSuggestionTempMarkerSet = ({ lat, lng, address }) => {
+    setCenter({ lat, lng });
     setZoom(16);
     setTempMarkerClick(true);
-    setTempMarkerLocation({lat, lng});
-  }
+    setTempMarkerLocation({ lat, lng });
+    setTempMarkerAddress(address);
+  };
 
   const mapTypeIdListener = (mapObject) => {
     mapObject.map.addListener('maptypeid_changed', () => {
@@ -178,6 +183,7 @@ const MapPage = ({
     setTempMarkerClick(false);
   };
 
+
   return (
     <>
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
@@ -191,8 +197,13 @@ const MapPage = ({
         open={openSidebar}
         onClose={onSidebarClose}
         title="Add a location pin"
-        clickedAddress={tempMarkerAddress}
+        clickedAddress={tempMarkerClick ? tempMarkerAddress : undefined}
+        clickedLocation={tempMarkerClick ? tempMarkerLocation : undefined}
         onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
+        setTempMarkerClick={() => {
+          console.log("clicked");
+          setTempMarkerClick(false);
+        }}
         onComplete={({ label, latitude, longitude, address }) =>
           onAddPinComplete({
             label,
@@ -235,7 +246,7 @@ const MapPage = ({
             isCurrentLocation
             render
           />
-          <Marker 
+          <Marker
             lat={tempMarkerLocation.lat}
             lng={tempMarkerLocation.lng}
             render={tempMarkerClick}

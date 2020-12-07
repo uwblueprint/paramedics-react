@@ -43,7 +43,7 @@ const SearchBar = ({
   const inputEl = useRef(null);
 
   useEffect(() => {
-    if(existingAddress) {
+    if (existingAddress) {
       setAddress(existingAddress);
     }
   }, [existingAddress]);
@@ -72,7 +72,8 @@ const SearchBar = ({
           address: selectedAddress,
         });
       })
-      .catch((e) => { // eslint-disable-line
+      .catch((e) => {
+        // eslint-disable-line
         // handle errors
       });
     setMenuOpen(false);

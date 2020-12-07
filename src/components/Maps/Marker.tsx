@@ -40,7 +40,7 @@ const Marker = ({
   if (isCurrentLocation) {
     return <RadioButtonCheckedIcon className={styles.currentLocation} />;
   }
-  if(render) {
+  if (render) {
     return (
       <RoomIcon
         onClick={onClick}
