@@ -183,7 +183,6 @@ const MapPage = ({
     setTempMarkerClick(false);
   };
 
-
   return (
     <>
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
@@ -201,7 +200,6 @@ const MapPage = ({
         clickedLocation={tempMarkerClick ? tempMarkerLocation : undefined}
         onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
         setTempMarkerClick={() => {
-          console.log("clicked");
           setTempMarkerClick(false);
         }}
         onComplete={({ label, latitude, longitude, address }) =>

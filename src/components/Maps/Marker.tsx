@@ -16,6 +16,9 @@ const useStyles = makeStyles({
   },
   notClicked: {
     color: Colours.MarkerNotClicked,
+    textAlign: 'center',
+    position: 'absolute',
+    transform: 'translate(-50%, -50%)',
   },
 });
 
@@ -23,12 +26,12 @@ const Marker = ({
   /* eslint-disable */
   lat,
   lng,
-  /* eslint-enable */
   isCurrentLocation,
   otherClicked,
   render,
   onClick,
-}: {
+}: /* eslint-enable */
+{
   lat: number;
   lng: number;
   isCurrentLocation?: boolean;
