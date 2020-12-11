@@ -89,23 +89,18 @@ const SearchBar = ({
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    {address && (
-                      <>
-                        <IconButton
-                          onClick={() => {
-                            setAddress('');
-                          }}
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </>
-                    )}
-                    {!address && (
-                      <>
-                        <IconButton>
-                          <SearchIcon />
-                        </IconButton>
-                      </>
+                    {address ? (
+                      <IconButton
+                        onClick={() => {
+                          setAddress('');
+                        }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton>
+                        <SearchIcon />
+                      </IconButton>
                     )}
                   </InputAdornment>
                 ),
