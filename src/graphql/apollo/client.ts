@@ -12,6 +12,7 @@ import {
   CONNECTED,
   DISCONNECTED,
   RECONNECTING,
+  RECONNECTED,
 } from '../subscriptions/constants';
 
 const myClient = new SubscriptionClient(
@@ -95,7 +96,7 @@ myClient.onReconnected(() => {
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: CONNECTED,
+      networkStatus: RECONNECTED,
     },
   });
 });
