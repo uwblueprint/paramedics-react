@@ -17,6 +17,9 @@ const useTextFieldStyles = makeStyles({
     '& .MuiInput-formControl': {
       marginTop: 'auto',
     },
+    '& .MuiInputBase-multiline': {
+      marginTop: '43.625px',
+    },
     '& label': {
       fontWeight: 'bold',
       margin: '20px',
@@ -92,6 +95,7 @@ const FormField: React.FC<{
         }}
         disabled={disabled}
         className={classes.root}
+        styles={isMultiline ? { color: "red" } : {}}
         margin="normal"
         onChange={onChange}
         value={value}
