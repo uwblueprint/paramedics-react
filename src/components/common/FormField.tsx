@@ -95,7 +95,7 @@ const FormField: React.FC<{
         }}
         disabled={disabled}
         className={classes.root}
-        styles={isMultiline ? { color: "red" } : {}}
+        styles={isMultiline ? { color: 'red' } : {}}
         margin="normal"
         onChange={onChange}
         value={value}
