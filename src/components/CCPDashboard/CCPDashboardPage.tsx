@@ -145,7 +145,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
-  useAllPatients(eventId, connectionData);
+  useAllPatients(eventId, connectionData.networkStatus);
 
   // Clear the userUpdatedPatientId in location state now that it's been used
   window.history.pushState(
@@ -188,7 +188,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   React.useEffect(() => {
     return () => {
       clearTimeout(lastUpdatedPatientTimeout);
-    }
+    };
   }, [lastUpdatedPatientTimeout]);
 
   // First highlight if coming from Add/Edit Patient page
