@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from 'react-apollo';
 import { GET_ALL_PATIENTS } from '../patients';
+import { CONNECTED } from '../../subscriptions/constants';
 
 export function useAllPatients(eventId?: string, connectionStatus?: string) {
   const { data, refetch } = useQuery(GET_ALL_PATIENTS);
@@ -9,7 +10,7 @@ export function useAllPatients(eventId?: string, connectionStatus?: string) {
 
   React.useEffect(() => {
     // fetches from backend when eventId changes
-    if (connectionStatus === 'connected') refetch();
+    if (connectionStatus === CONNECTED) refetch();
   }, [eventId, connectionStatus, refetch]);
 
   if (data) {

@@ -7,6 +7,12 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import gql from 'graphql-tag';
+import {
+  CONNECTING,
+  CONNECTED,
+  DISCONNECTED,
+  RECONNECTING,
+} from '../subscriptions/constants';
 
 const myClient = new SubscriptionClient(
   process.env.REACT_APP_BACKEND_WEBSOCKET_URL || 'ws://localhost:4000/graphql',
@@ -65,7 +71,7 @@ myClient.onConnected(() => {
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'connected',
+      networkStatus: CONNECTED,
     },
   });
 });
@@ -73,7 +79,7 @@ myClient.onConnecting(() => {
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'connecting...',
+      networkStatus: CONNECTING,
     },
   });
 });
@@ -81,7 +87,7 @@ myClient.onDisconnected(() => {
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'disconnected',
+      networkStatus: DISCONNECTED,
     },
   });
 });
@@ -89,7 +95,7 @@ myClient.onReconnected(() => {
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'connected',
+      networkStatus: CONNECTED,
     },
   });
 });
@@ -98,7 +104,7 @@ myClient.onReconnecting(() => {
   client.writeQuery({
     query: GET_NETWORK_STATUS,
     data: {
-      networkStatus: 'reconnecting...',
+      networkStatus: RECONNECTING,
     },
   });
 });
