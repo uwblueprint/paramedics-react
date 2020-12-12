@@ -8,7 +8,11 @@ import InfoWindow from './InfoWindow';
 import Sidebar from './Sidebar';
 import AddPinButton from './AddPinButton';
 import Marker from './Marker';
-import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
+import {
+  LocationPin,
+  GET_PINS_BY_EVENT_ID,
+  PinType,
+} from '../../graphql/queries/maps';
 import { ADD_PIN } from '../../graphql/mutations/maps';
 
 enum MapTypes {
@@ -27,6 +31,7 @@ const MapPage = ({
     variables: { eventId },
   });
   const pins: Array<LocationPin> = data && !loading ? data.pinsForEvent : [];
+  console.log(pins);
   const [currentLocationPin, setCurrentLocationPin] = React.useState({
     lat: 0,
     lng: 0,
@@ -140,6 +145,7 @@ const MapPage = ({
         latitude: lat,
         longitude: lng,
         address,
+        pinType: PinType.OTHER,
       },
     });
     setOpenSidebar(false);
@@ -184,9 +190,8 @@ const MapPage = ({
               key={pin.id}
               lat={pin.latitude}
               lng={pin.longitude}
-              otherClicked={
-                interestPinTitle !== '' && interestPinTitle !== pin.label
-              }
+              clicked={interestPinTitle === pin.label}
+              type={pin.pinType}
               onClick={() => {
                 onMarkerClick(pin);
               }}

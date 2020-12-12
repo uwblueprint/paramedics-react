@@ -7,6 +7,8 @@ export const ADD_PIN = gql`
     $latitude: Float!
     $longitude: Float!
     $address: String
+    $pinType: pinType!
+    $ccpId: ID
   ) {
     addLocationPin(
       label: $label
@@ -14,6 +16,8 @@ export const ADD_PIN = gql`
       latitude: $latitude
       longitude: $longitude
       address: $address
+      pinType: $pinType
+      ccpId: $ccpId
     ) {
       id
       eventId {
@@ -25,6 +29,11 @@ export const ADD_PIN = gql`
       latitude
       longitude
       address
+      pinType
+      ccpId {
+        id
+        name
+      }
     }
   }
 `;

@@ -1,18 +1,30 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import RoomIcon from '@material-ui/icons/Room';
+import Icon from '@material-ui/core/Icon';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import { Colours } from '../../styles/Constants';
 
+import { PinType } from '../../graphql/queries/maps';
+import ccpPin from '../../assets/ccpPin.png';
+import currentSelectPin from '../../assets/currentSelectPin.png';
+import eventPin from '../../assets/eventPin.png';
+import otherPin from '../../assets/otherPin.png';
+
 const useStyles = makeStyles({
   root: {
-    color: Colours.Marker,
+    backgroundImage: `url(${otherPin})`,
   },
   currentLocation: {
     color: Colours.CurrentLocationMarker,
   },
-  notClicked: {
-    color: Colours.MarkerNotClicked,
+  clicked: {
+    backgroundImage: `url(${currentSelectPin})`,
+  },
+  eventPin: {
+    backgroundImage: `url(${eventPin})`,
+  },
+  ccpPin: {
+    backgroundImage: `url(${ccpPin})`,
   },
 });
 
@@ -22,13 +34,15 @@ const Marker = ({
   lng,
   /* eslint-enable */
   isCurrentLocation,
-  otherClicked,
+  type,
+  clicked,
   onClick,
 }: {
   lat: number;
   lng: number;
   isCurrentLocation?: boolean;
-  otherClicked?: boolean;
+  type?: PinType;
+  clicked?: boolean;
   onClick?: () => void;
 }) => {
   const styles = useStyles();
@@ -36,10 +50,18 @@ const Marker = ({
     return <RadioButtonCheckedIcon className={styles.currentLocation} />;
   }
   return (
-    <RoomIcon
+    <Icon
       onClick={onClick}
       fontSize="large"
-      className={otherClicked ? styles.notClicked : styles.root}
+      className={
+        clicked
+          ? styles.clicked
+          : type === PinType.EVENT
+          ? styles.eventPin
+          : type === PinType.CCP
+          ? styles.ccpPin
+          : styles.root
+      }
     />
   );
 };
