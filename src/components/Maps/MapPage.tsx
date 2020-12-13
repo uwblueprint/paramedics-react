@@ -31,7 +31,6 @@ const MapPage = ({
     variables: { eventId },
   });
   const pins: Array<LocationPin> = data && !loading ? data.pinsForEvent : [];
-  console.log(pins);
   const [currentLocationPin, setCurrentLocationPin] = React.useState({
     lat: 0,
     lng: 0,

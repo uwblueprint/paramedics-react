@@ -5,10 +5,10 @@ import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import { Colours } from '../../styles/Constants';
 
 import { PinType } from '../../graphql/queries/maps';
-import ccpPin from '../../assets/ccpPin.png';
-import currentSelectPin from '../../assets/currentSelectPin.png';
-import eventPin from '../../assets/eventPin.png';
-import otherPin from '../../assets/otherPin.png';
+import ccpPin from '../../assets/ccpPin.svg';
+import currentSelectPin from '../../assets/currentSelectPin.svg';
+import eventPin from '../../assets/eventPin.svg';
+import otherPin from '../../assets/otherPin.svg';
 
 const useStyles = makeStyles({
   root: {
@@ -50,19 +50,20 @@ const Marker = ({
     return <RadioButtonCheckedIcon className={styles.currentLocation} />;
   }
   return (
-    <Icon
-      onClick={onClick}
-      fontSize="large"
-      className={
-        clicked
-          ? styles.clicked
-          : type === PinType.EVENT
-          ? styles.eventPin
-          : type === PinType.CCP
-          ? styles.ccpPin
-          : styles.root
-      }
-    />
+    <Icon onClick={onClick} fontSize="large">
+      <img
+        alt="pin"
+        src={
+          clicked
+            ? currentSelectPin
+            : type === PinType.EVENT
+            ? eventPin
+            : type === PinType.CCP
+            ? ccpPin
+            : otherPin
+        }
+      />
+    </Icon>
   );
 };
 
