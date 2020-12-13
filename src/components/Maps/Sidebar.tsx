@@ -81,6 +81,7 @@ const Sidebar = ({
       onClose={onClose}
       PaperProps={{ style: { width: '400px' } }}
       disableScrollLock
+      disableBackdropClick
     >
       <Collapse in={!isAutocompleteClicked}>
         <Typography variant="h4" classes={{ root: styles.title }}>
