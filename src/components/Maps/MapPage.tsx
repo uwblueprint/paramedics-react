@@ -189,7 +189,7 @@ const MapPage = ({
               key={pin.id}
               lat={pin.latitude}
               lng={pin.longitude}
-              clicked={interestPinTitle === pin.label}
+              isClicked={interestPinTitle === pin.label}
               type={pin.pinType}
               onClick={() => {
                 onMarkerClick(pin);
