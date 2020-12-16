@@ -315,7 +315,6 @@ const MapPage = ({
         body="Deleted location pins will no longer be accessible to other team members. Are you sure you want to delete this pin?"
         actionLabel="Delete"
         isActionDelete
-        isMap
       />
     </>
   );
