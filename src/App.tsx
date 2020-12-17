@@ -46,11 +46,7 @@ function App() {
         path="/events/:eventId/edit"
         component={(props) => <EventCreationPage mode="edit" {...props} />}
       />
-      <Route
-        exact
-        path="/manage/:resource"
-        component={ResourceOverviewPage}
-      />
+      <Route exact path="/manage/:resource" component={ResourceOverviewPage} />
       <Route exact path="/manage/">
         <Redirect to="/manage/members" />
       </Route>
