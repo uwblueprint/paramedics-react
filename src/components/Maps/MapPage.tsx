@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
 import GoogleMapReact from 'google-map-react';
 import Geocode from 'react-geocode';
+import { useSnackbar } from 'notistack';
 import MenuAppBar from '../common/MenuAppBar';
 import InfoWindow from './InfoWindow';
 import Sidebar from './Sidebar';
@@ -10,23 +12,70 @@ import AddPinButton from './AddPinButton';
 import Marker from './Marker';
 import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
 import { ADD_PIN } from '../../graphql/mutations/maps';
+import {
+  Event,
+  GET_ALL_EVENTS,
+  GET_EVENT_BY_ID,
+} from '../../graphql/queries/events';
+import { ADD_EVENT, EDIT_EVENT } from '../../graphql/mutations/events';
+import {
+  GET_CCP_BY_ID,
+  GET_CCPS_BY_EVENT_ID,
+  CCP,
+} from '../../graphql/queries/ccps';
+import { ADD_CCP, EDIT_CCP } from '../../graphql/mutations/ccps';
 
 enum MapTypes {
   ROADMAP = 'roadmap',
   HYBRID = 'hybrid',
 }
 
+enum MapModes {
+  Map = 'map',
+  NewEvent = 'newEvent',
+  NewCCP = 'newCCP',
+  EditEvent = 'editEvent',
+  EditCCP = 'editCCP',
+}
+
 const MapPage = ({
   match: {
-    params: { eventId },
+    params: { eventId, ccpId },
   },
+  mode,
 }: {
-  match: { params: { eventId: string } };
+  match: { params: { eventId: string, ccpId?: string }; };
+  mode: string;
 }) => {
-  const { data, loading } = useQuery(GET_PINS_BY_EVENT_ID, {
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const pinResults = useQuery(GET_PINS_BY_EVENT_ID, {
+    skip: mode !== MapModes.Map,
     variables: { eventId },
   });
-  const pins: Array<LocationPin> = data && !loading ? data.pinsForEvent : [];
+  const pins: Array<LocationPin> = pinResults.data && !pinResults.loading ? pinResults.data.pinsForEvent : [];
+
+  const eventResults = useQuery(
+    mode === MapModes.EditEvent && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
+    {
+      skip: !(mode === MapModes.EditEvent || mode === MapModes.NewEvent),
+      variables: {
+        eventId,
+      },
+    }
+  );
+  const events: Array<Event> = eventResults.data ? eventResults.data.events : [];
+
+  const ccpResults = useQuery(
+    mode === MapModes.EditCCP ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID,
+    {
+      skip: !(mode === MapModes.EditCCP || mode === MapModes.NewCCP),
+      variables: { id: ccpId, eventId },
+    }
+  );
+  const collectionPoint: CCP = ccpResults.data ? ccpResults.data.collectionPoint : null;
+
   const [currentLocationPin, setCurrentLocationPin] = React.useState({
     lat: 0,
     lng: 0,
@@ -119,6 +168,60 @@ const MapPage = ({
         variables: { eventId },
         data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
       });
+    },
+  });
+
+  const [addEvent] = useMutation(ADD_EVENT, {
+    update(cache, { data: { addEvent } }) {
+      cache.writeQuery({
+        query: GET_ALL_EVENTS,
+        data: { events: events.concat([addEvent]) },
+      });
+    },
+    onCompleted({ addEvent }) {
+      history.replace('/events', { addedEventId: addEvent.id });
+    },
+    onError() {
+      history.replace('/events');
+    },
+  });
+
+  const [editEvent] = useMutation(EDIT_EVENT, {
+    onCompleted() {
+      history.replace('/events');
+    },
+  });
+
+  const [addCCP] = useMutation(ADD_CCP, {
+    update(cache, { data: { addCollectionPoint } }) {
+      // Update GET_CCPS_BY_EVENT_ID
+      const { collectionPointsByEvent } = cache.readQuery<any>({
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      cache.writeQuery({
+        query: GET_CCPS_BY_EVENT_ID,
+        variables: { eventId },
+        data: {
+          collectionPointsByEvent: collectionPointsByEvent.concat([
+            addCollectionPoint,
+          ]),
+        },
+      });
+    },
+    onCompleted() {
+      enqueueSnackbar('CCP added.');
+      // TODO: Check for valid eventId
+      history.replace(`/events/${eventId}`);
+    },
+  });
+
+  const [editCCP] = useMutation(EDIT_CCP, {
+    onCompleted() {
+      enqueueSnackbar('CCP edited.');
+      // TODO: Check for valid eventId
+      history.replace(`/events/${eventId}`);
     },
   });
 
