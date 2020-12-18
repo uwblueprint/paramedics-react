@@ -33,16 +33,14 @@ const useStyles = makeStyles({
 
 const SearchBar = ({
   existingAddress,
-  editAddress,
   onComplete,
   onAutocompleteClick,
 }: {
   existingAddress?: string;
-  editAddress?: string;
   onComplete: ({ latitude, longitude, address }) => void;
   onAutocompleteClick: () => void;
 }) => {
-  const [address, setAddress] = useState(editAddress || '');
+  const [address, setAddress] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const styles = useStyles();
   const inputEl = useRef(null);

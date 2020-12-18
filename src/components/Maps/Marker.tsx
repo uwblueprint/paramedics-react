@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     textAlign: 'center',
     position: 'absolute',
     transform: 'translate(-50%, -50%)',
+    overflow: 'visible',
   },
   currentLocation: {
     color: Colours.CurrentLocationMarker,
@@ -29,8 +30,6 @@ const Marker = ({
   lat,
   lng,
   isCurrentLocation,
-  otherClicked,
-  render,
   type,
   isClicked,
   onClick,
@@ -39,8 +38,6 @@ const Marker = ({
   lat: number;
   lng: number;
   isCurrentLocation?: boolean;
-  otherClicked?: boolean;
-  render: boolean;
   type?: PinType;
   isClicked?: boolean;
   onClick?: () => void;
@@ -55,14 +52,11 @@ const Marker = ({
   if (isCurrentLocation) {
     return <RadioButtonCheckedIcon className={styles.currentLocation} />;
   }
-  if (render) {
-    return (
-      <Icon onClick={onClick} fontSize="large" classes={styles.root}>
-        <img alt="pin" src={isClicked ? selectedPin : pinSrc} />
-      </Icon>
-    );
-  }
-  return null;
+  return (
+    <Icon onClick={onClick} fontSize="large" className={styles.root}>
+      <img alt="pin" src={isClicked ? selectedPin : pinSrc} />
+    </Icon>
+  );
 };
 
 export default Marker;

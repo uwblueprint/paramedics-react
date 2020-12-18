@@ -179,6 +179,7 @@ const MapPage = ({
     setInfoWindowOpen(true);
     setInterestPinLocation(pin.address);
     setInterestPinTitle(pin.label);
+    setInterestPinId(pin.id);
     setCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
@@ -331,7 +332,8 @@ const MapPage = ({
           onClick={(obj) => onMapClick(obj)}
         >
           {pins.map((pin) => (
-            <Marker
+            (!tempMarkerClick || interestPinId !== pin.id || !isEdit) && (
+              <Marker
               key={pin.id}
               lat={pin.latitude}
               lng={pin.longitude}
@@ -340,20 +342,20 @@ const MapPage = ({
               onClick={() => {
                 onMarkerClick(pin);
               }}
-              render
             />
+            )
           ))}
           <Marker
             lat={currentLocationPin.lat}
             lng={currentLocationPin.lng}
             isCurrentLocation
-            render
           />
-          <Marker
-            lat={tempMarkerLocation.lat}
-            lng={tempMarkerLocation.lng}
-            render={tempMarkerClick}
-          />
+          {tempMarkerClick && (
+            <Marker
+              lat={tempMarkerLocation.lat}
+              lng={tempMarkerLocation.lng}
+            />
+          )}
         </GoogleMapReact>
       </div>
       <AddPinButton

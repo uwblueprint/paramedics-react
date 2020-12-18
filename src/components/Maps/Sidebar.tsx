@@ -83,7 +83,7 @@ const Sidebar = ({
       setLabel(editLabel);
     }
 
-    if (editAddress) {
+    if (editAddress && address === '') {
       setAddress(editAddress);
     }
   }, [clickedAddress, clickedLocation, editLabel, editAddress]);
@@ -165,7 +165,6 @@ const Sidebar = ({
         </Typography>
         <SearchBar
           existingAddress={address}
-          editAddress={address}
           onComplete={({ latitude, longitude, address }) =>
             handleGeocodeSelection({
               lat: latitude,
