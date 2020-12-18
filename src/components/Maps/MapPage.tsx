@@ -8,7 +8,11 @@ import InfoWindow from './InfoWindow';
 import Sidebar from './Sidebar';
 import AddPinButton from './AddPinButton';
 import Marker from './Marker';
-import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
+import {
+  LocationPin,
+  GET_PINS_BY_EVENT_ID,
+  PinType,
+} from '../../graphql/queries/maps';
 import { ADD_PIN, EDIT_PIN, DELETE_PIN } from '../../graphql/mutations/maps';
 import ConfirmModal from '../common/ConfirmModal';
 
@@ -186,6 +190,7 @@ const MapPage = ({
         latitude: lat,
         longitude: lng,
         address,
+        pinType: PinType.OTHER,
       },
     });
     setOpenSidebar(false);
@@ -286,9 +291,8 @@ const MapPage = ({
               key={pin.id}
               lat={pin.latitude}
               lng={pin.longitude}
-              otherClicked={
-                interestPinTitle !== '' && interestPinTitle !== pin.label
-              }
+              isClicked={interestPinTitle === pin.label}
+              type={pin.pinType}
               onClick={() => {
                 onMarkerClick(pin);
               }}
