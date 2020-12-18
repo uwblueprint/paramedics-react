@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
@@ -40,11 +40,15 @@ const useStyles = makeStyles({
 const Sidebar = ({
   open,
   title,
+  editLabel,
+  editAddress,
   onClose,
   onComplete,
 }: {
   open: boolean;
   title: string;
+  editLabel?: string;
+  editAddress?: string;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
@@ -56,6 +60,16 @@ const Sidebar = ({
     false
   );
   const styles = useStyles();
+
+  useEffect(() => {
+    if (editLabel) {
+      setLabel(editLabel);
+    }
+
+    if (editAddress) {
+      setAddress(editAddress);
+    }
+  }, [editLabel, editAddress]);
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
     setLabel((e.target as HTMLInputElement).value);
@@ -128,6 +142,7 @@ const Sidebar = ({
           Pin Location:
         </Typography>
         <SearchBar
+          editAddress={address}
           onComplete={({ latitude, longitude, address }) =>
             handleGeocodeSelection({
               lat: latitude,

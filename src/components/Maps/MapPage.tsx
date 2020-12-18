@@ -13,7 +13,8 @@ import {
   GET_PINS_BY_EVENT_ID,
   PinType,
 } from '../../graphql/queries/maps';
-import { ADD_PIN } from '../../graphql/mutations/maps';
+import { ADD_PIN, EDIT_PIN, DELETE_PIN } from '../../graphql/mutations/maps';
+import ConfirmModal from '../common/ConfirmModal';
 
 enum MapTypes {
   ROADMAP = 'roadmap',
@@ -38,8 +39,12 @@ const MapPage = ({
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
+  const [interestPinId, setInterestPinId] = React.useState('');
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
+  const [isEdit, setIsEdit] = React.useState(false);
+  const [isDeleteClicked, setIsDeleteClicked] = React.useState(false);
+  const [isDeleteConfirmed, setIsDeleteConfirmed] = React.useState(false);
   const defaultMap = {
     zoom: 11,
     center: {
@@ -99,6 +104,17 @@ const MapPage = ({
     }
   });
 
+  useEffect(() => {
+    if (isDeleteConfirmed) {
+      setInfoWindowOpen(false);
+      setIsDeleteClicked(false);
+      setInterestPinId('');
+      setInterestPinLocation('');
+      setInterestPinTitle('');
+      setIsDeleteConfirmed(false);
+    }
+  }, [isDeleteConfirmed]);
+
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
       const { pinsForEvent } = cache.readQuery<any>({
@@ -114,16 +130,44 @@ const MapPage = ({
     },
   });
 
-  const onMarkerClick = (pin) => {
-    setInfoWindowOpen(true);
-    setInterestPinLocation(pin.address);
-    setInterestPinTitle(pin.label);
-  };
+  const [editPin] = useMutation(EDIT_PIN);
+
+  const [deletePin] = useMutation(DELETE_PIN, {
+    update(cache, { data: { deleteLocationPin } }) {
+      if (!deleteLocationPin) {
+        return;
+      }
+
+      // Update GET_PINS_BY_EVENT_ID
+      const { pinsForEvent } = cache.readQuery<any>({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      const updatedPinsList = pinsForEvent.filter(
+        (pin) => pin.id !== deleteLocationPin
+      );
+
+      cache.writeQuery({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { pinsForEvent: updatedPinsList },
+      });
+    },
+  });
 
   const onInfoWindowClose = () => {
     setInfoWindowOpen(false);
     setInterestPinLocation('');
     setInterestPinTitle('');
+    setInterestPinId('');
+  };
+
+  const onMarkerClick = (pin) => {
+    setInfoWindowOpen(true);
+    setInterestPinLocation(pin.address);
+    setInterestPinTitle(pin.label);
+    setInterestPinId(pin.id);
   };
 
   const mapTypeIdListener = (mapObject) => {
@@ -134,6 +178,8 @@ const MapPage = ({
 
   const onSidebarClose = () => {
     setOpenSidebar(false);
+    setInfoWindowOpen(!!isEdit);
+    setIsEdit(false);
   };
 
   const onAddPinComplete = ({ label, lat, lng, address }) => {
@@ -150,6 +196,49 @@ const MapPage = ({
     setOpenSidebar(false);
   };
 
+  const onEditClicked = () => {
+    setIsEdit(true);
+    setInfoWindowOpen(false);
+    setOpenSidebar(true);
+  };
+
+  const onEditPinComplete = ({ label, lat, lng, address }) => {
+    editPin({
+      variables: {
+        id: interestPinId,
+        label,
+        eventId,
+        latitude: lat,
+        longitude: lng,
+        address,
+      },
+    });
+    setOpenSidebar(false);
+    setIsEdit(false);
+    setInterestPinTitle(label);
+    setInterestPinLocation(address);
+    setInfoWindowOpen(true);
+  };
+
+  const onDeleteClick = () => {
+    setIsDeleteClicked(true);
+  };
+
+  const onDeletePinCancel = () => {
+    setIsDeleteClicked(false);
+    setInfoWindowOpen(true);
+    setIsDeleteConfirmed(false);
+  };
+
+  const onDeletePinConfirm = () => {
+    setIsDeleteConfirmed(true);
+    deletePin({
+      variables: {
+        id: interestPinId,
+      },
+    });
+  };
+
   return (
     <>
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
@@ -157,20 +246,33 @@ const MapPage = ({
         title={interestPinTitle}
         address={interestPinLocation}
         open={infoWindowOpen}
+        handleEditClick={onEditClicked}
         handleClose={onInfoWindowClose}
+        handleDeleteClicked={onDeleteClick}
       />
       <Sidebar
         open={openSidebar}
         onClose={onSidebarClose}
-        title="Add a location pin"
-        onComplete={({ label, latitude, longitude, address }) =>
-          onAddPinComplete({
-            label,
-            lat: latitude,
-            lng: longitude,
-            address,
-          })
+        title={isEdit ? 'Edit a location pin' : 'Add a location pin'}
+        onComplete={
+          isEdit
+            ? ({ label, latitude, longitude, address }) =>
+                onEditPinComplete({
+                  label,
+                  lat: latitude,
+                  lng: longitude,
+                  address,
+                })
+            : ({ label, latitude, longitude, address }) =>
+                onAddPinComplete({
+                  label,
+                  lat: latitude,
+                  lng: longitude,
+                  address,
+                })
         }
+        editLabel={interestPinTitle && isEdit ? interestPinTitle : ''}
+        editAddress={interestPinLocation && isEdit ? interestPinLocation : ''}
       />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
@@ -203,7 +305,21 @@ const MapPage = ({
           />
         </GoogleMapReact>
       </div>
-      <AddPinButton handleClick={() => setOpenSidebar(true)} />
+      <AddPinButton
+        handleClick={() => {
+          setInfoWindowOpen(false);
+          setOpenSidebar(true);
+        }}
+      />
+      <ConfirmModal
+        open={isDeleteClicked}
+        handleClickCancel={onDeletePinCancel}
+        handleClickAction={onDeletePinConfirm}
+        title="You are about to delete a location pin."
+        body="Deleted location pins will no longer be accessible to other team members. Are you sure you want to delete this pin?"
+        actionLabel="Delete"
+        isActionDelete
+      />
     </>
   );
 };
