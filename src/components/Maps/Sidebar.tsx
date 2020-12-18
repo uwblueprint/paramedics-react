@@ -44,6 +44,8 @@ const Sidebar = ({
   clickedAddress,
   onSuggestionTempMarkerSet,
   setTempMarkerClick,
+  editLabel,
+  editAddress,
   onClose,
   onComplete,
 }: {
@@ -53,6 +55,8 @@ const Sidebar = ({
   clickedAddress?: string;
   onSuggestionTempMarkerSet: ({ lat, lng, address }) => void;
   setTempMarkerClick: () => void;
+  editLabel?: string;
+  editAddress?: string;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
@@ -74,7 +78,15 @@ const Sidebar = ({
       setLatitude(clickedLocation.lat);
       setLongitude(clickedLocation.lng);
     }
-  }, [clickedAddress, clickedLocation]);
+
+    if (editLabel) {
+      setLabel(editLabel);
+    }
+
+    if (editAddress) {
+      setAddress(editAddress);
+    }
+  }, [clickedAddress, clickedLocation, editLabel, editAddress]);
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
     setLabel((e.target as HTMLInputElement).value);
@@ -153,6 +165,7 @@ const Sidebar = ({
         </Typography>
         <SearchBar
           existingAddress={address}
+          editAddress={address}
           onComplete={({ latitude, longitude, address }) =>
             handleGeocodeSelection({
               lat: latitude,

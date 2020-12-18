@@ -1,5 +1,12 @@
 import gql from 'graphql-tag';
 import { Event } from './events';
+import { CCP } from './ccps';
+
+export enum PinType {
+  EVENT = 'EVENT',
+  CCP = 'CCP',
+  OTHER = 'OTHER',
+}
 
 export interface LocationPin {
   id: string;
@@ -10,6 +17,8 @@ export interface LocationPin {
   address: string;
   createdAt: string;
   updatedAt: string;
+  pinType: PinType;
+  ccpId: CCP;
 }
 
 export const GET_PINS_BY_EVENT_ID = gql`
@@ -25,6 +34,11 @@ export const GET_PINS_BY_EVENT_ID = gql`
       latitude
       longitude
       address
+      pinType
+      ccpId {
+        id
+        name
+      }
     }
   }
 `;
@@ -42,6 +56,11 @@ export const GET_ALL_PINS = gql`
       latitude
       longitude
       address
+      pinType
+      ccpId {
+        id
+        name
+      }
     }
   }
 `;

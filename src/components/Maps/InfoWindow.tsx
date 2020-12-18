@@ -47,12 +47,16 @@ const InfoWindow = ({
   title,
   address,
   open,
+  handleEditClick,
   handleClose,
+  handleDeleteClicked,
 }: {
   title: string;
   address: string;
   open: boolean;
+  handleEditClick: () => void;
   handleClose: () => void;
+  handleDeleteClicked: () => void;
 }) => {
   const infoStyles = useStyles();
 
@@ -98,10 +102,18 @@ const InfoWindow = ({
       </Container>
       <DialogActions style={{ padding: '0px', boxShadow: 'none' }}>
         <Container classes={{ root: infoStyles.flexContainerButtons }}>
-          <Button size="small" style={{ color: Colours.Danger }}>
+          <Button
+            size="small"
+            style={{ color: Colours.Danger }}
+            onClick={handleDeleteClicked}
+          >
             Delete
           </Button>
-          <Button size="small" style={{ color: Colours.Secondary }}>
+          <Button
+            size="small"
+            style={{ color: Colours.Secondary }}
+            onClick={handleEditClick}
+          >
             Edit
           </Button>
         </Container>

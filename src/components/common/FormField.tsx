@@ -12,10 +12,13 @@ const useTextFieldStyles = makeStyles({
     padding: '20px',
     marginTop: '0px',
     marginBottom: '20px',
-    height: '120px',
+    minHeight: '120px',
     width: '100%',
     '& .MuiInput-formControl': {
       marginTop: 'auto',
+    },
+    '& .MuiInputBase-multiline': {
+      marginTop: '43.625px',
     },
     '& label': {
       fontWeight: 'bold',
@@ -47,6 +50,7 @@ const FormField: React.FC<{
   readOnly?: boolean;
   disabled?: boolean;
   numeric?: boolean;
+  isMultiline?: boolean;
 }> = ({
   label,
   placeholder,
@@ -59,6 +63,7 @@ const FormField: React.FC<{
   readOnly,
   disabled,
   numeric,
+  isMultiline,
 }: {
   label: string;
   placeholder?: string;
@@ -71,6 +76,7 @@ const FormField: React.FC<{
   readOnly?: boolean;
   disabled?: boolean;
   numeric?: boolean;
+  isMultiline?: boolean;
 }) => {
   const classes = useTextFieldStyles();
   if (isValidated) {
@@ -92,6 +98,7 @@ const FormField: React.FC<{
         onFocus={handleFocus}
         validators={validators}
         errorMessages={errorMessages}
+        multiline={isMultiline}
       />
     );
   }
@@ -112,6 +119,7 @@ const FormField: React.FC<{
       onChange={onChange}
       value={value}
       onFocus={handleFocus}
+      multiline={isMultiline}
     />
   );
 };
