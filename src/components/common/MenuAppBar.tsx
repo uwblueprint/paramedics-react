@@ -50,24 +50,32 @@ const useStyles = makeStyles({
   active: {
     backgroundColor: 'red',
   },
-  activeCcp: {
-    color: Colours.White,
-    backgroundColor: Colours.Secondary,
-    '&:hover': {
-      backgroundColor: Colours.Secondary,
-    },
-  },
   viewEventsLink: {
+    padding: '16px',
     position: 'absolute',
-    bottom: 0,
-    padding: '24px',
+    top: '24px',
+    zIndex: 10,
   },
-  activeMap: {
+  activeIcon: {
     color: Colours.White,
     backgroundColor: Colours.Secondary,
     '&:hover': {
       backgroundColor: Colours.Secondary,
     },
+  },
+  activeRow: {
+    color: Colours.White,
+    backgroundColor: Colours.Secondary,
+    '&:hover': {
+      backgroundColor: Colours.Secondary,
+    },
+    padding: '12px 16px',
+  },
+  sidebarIcon: {
+    minWidth: '40px',
+  },
+  sidebarRow: {
+    padding: '12px 16px',
   },
 });
 
@@ -131,6 +139,15 @@ export default function MenuAppBar(props: MenuAppBarProps) {
           onClick={toggleMenu}
           onKeyDown={toggleMenu}
         >
+          <Link
+            color="secondary"
+            variant="body2"
+            component={NavLink}
+            to="/events"
+            className={classes.viewEventsLink}
+          >
+            &larr; Home
+          </Link>
           <List>
             <ListItem key={eventInfo.event.name}>
               <Typography variant="h6" className={classes.eventName}>
@@ -140,8 +157,13 @@ export default function MenuAppBar(props: MenuAppBarProps) {
           </List>
           <Divider />
           <List>
-            <ListItem button key="directory" onClick={handleDirectoryClick}>
-              <ListItemIcon>
+            <ListItem
+              button
+              key="directory"
+              onClick={handleDirectoryClick}
+              className={classes.sidebarRow}
+            >
+              <ListItemIcon className={classes.sidebarIcon}>
                 <ScanIcon colour={Colours.Black} />
               </ListItemIcon>
               <Typography variant="body2">Directory</Typography>
@@ -150,12 +172,12 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               button
               key="maps"
               onClick={handleMapClick}
-              className={selectedMaps ? classes.activeMap : ''}
+              className={selectedMaps ? classes.activeRow : classes.sidebarRow}
             >
-              <ListItemIcon>
+              <ListItemIcon className={classes.sidebarIcon}>
                 <MapOutlinedIcon
                   style={{ color: Colours.Black }}
-                  className={selectedMaps ? classes.activeMap : ''}
+                  className={selectedMaps ? classes.activeIcon : ''}
                 />
               </ListItemIcon>
               <Typography variant="body2">Map</Typography>
@@ -175,14 +197,16 @@ export default function MenuAppBar(props: MenuAppBarProps) {
                 key={ccp.name}
                 onClick={() => handleCCPClick(ccp.id)}
                 className={
-                  selectedCcp && selectedCcp === ccp.id ? classes.activeCcp : ''
+                  selectedCcp && selectedCcp === ccp.id
+                    ? classes.activeRow
+                    : classes.sidebarRow
                 }
               >
-                <ListItemIcon>
+                <ListItemIcon className={classes.sidebarIcon}>
                   <RoomOutlinedIcon
                     className={
                       selectedCcp && selectedCcp === ccp.id
-                        ? classes.activeCcp
+                        ? classes.activeIcon
                         : ''
                     }
                   />
@@ -191,15 +215,6 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               </ListItem>
             ))}
           </List>
-          <Link
-            color="secondary"
-            variant="body2"
-            component={NavLink}
-            to="/events"
-            className={classes.viewEventsLink}
-          >
-            View other events
-          </Link>
         </div>
       </Drawer>
     </>
