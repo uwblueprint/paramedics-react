@@ -462,6 +462,7 @@ const PatientProfilePage = ({
             }}
             value={formFields.notes || ''}
             isValidated={false}
+            isMultiline
           />
           {transportConfirmed === true && (
             <>
