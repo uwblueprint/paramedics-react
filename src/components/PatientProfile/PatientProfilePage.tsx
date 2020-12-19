@@ -111,8 +111,29 @@ const PatientProfilePage = ({
         data: { patients: patients.concat([addPatient]) },
       });
     },
+    onCompleted({ addPatient }) {
+      if (transportingPatient) {
+        enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
+          action,
+        });
+      }
+      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+        userUpdatedPatientId: addPatient.id,
+      });
+    },
   });
-  const [editPatient] = useMutation(EDIT_PATIENT);
+  const [editPatient] = useMutation(EDIT_PATIENT, {
+    onCompleted() {
+      if (transportingPatient) {
+        enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
+          action,
+        });
+      }
+      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+        userUpdatedPatientId: patientId,
+      });
+    },
+  });
   const [deletePatient] = useMutation(DELETE_PATIENT, {
     onCompleted() {
       history.replace(`/events/${eventId}/ccps/${ccpId}`, {
@@ -284,7 +305,6 @@ const PatientProfilePage = ({
       if (isRestore) {
         enqueueSnackbar(`Patient #${formFields.barcodeValue} restored.`);
       }
-
       editPatient({
         variables: {
           id: patientId,
@@ -308,14 +328,6 @@ const PatientProfilePage = ({
         },
       });
     }
-    if (transportingPatient) {
-      enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
-        action,
-      });
-    }
-    history.replace(`/events/${eventId}/ccps/${ccpId}`, {
-      userUpdatedPatientId: patientId,
-    });
   };
 
   if (loading) {
