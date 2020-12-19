@@ -228,6 +228,7 @@ const MapPage = ({
         pinType: PinType.OTHER,
       },
     });
+    setTempMarkerClick(false);
     setOpenSidebar(false);
   };
 
@@ -331,30 +332,29 @@ const MapPage = ({
           onGoogleApiLoaded={(mapObject) => mapTypeIdListener(mapObject)}
           onClick={(obj) => onMapClick(obj)}
         >
-          {pins.map((pin) => (
-            (!tempMarkerClick || interestPinId !== pin.id || !isEdit) && (
-              <Marker
-              key={pin.id}
-              lat={pin.latitude}
-              lng={pin.longitude}
-              isClicked={interestPinTitle === pin.label}
-              type={pin.pinType}
-              onClick={() => {
-                onMarkerClick(pin);
-              }}
-            />
-            )
-          ))}
+          {pins.map(
+            (pin) =>
+              (!tempMarkerClick || interestPinId !== pin.id || !isEdit) && (
+                <Marker
+                  key={pin.id}
+                  lat={pin.latitude}
+                  lng={pin.longitude}
+                  isClicked={interestPinTitle === pin.label}
+                  type={pin.pinType}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMarkerClick(pin);
+                  }}
+                />
+              )
+          )}
           <Marker
             lat={currentLocationPin.lat}
             lng={currentLocationPin.lng}
             isCurrentLocation
           />
           {tempMarkerClick && (
-            <Marker
-              lat={tempMarkerLocation.lat}
-              lng={tempMarkerLocation.lng}
-            />
+            <Marker lat={tempMarkerLocation.lat} lng={tempMarkerLocation.lng} />
           )}
         </GoogleMapReact>
       </div>
