@@ -49,8 +49,12 @@ const MapPage = ({
   const [zoom, setZoom] = React.useState(11);
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
-  const [interestPinLocation, setInterestPinLocation] = React.useState('');
+  const [interestPinAddress, setInterestPinAddress] = React.useState('');
   const [interestPinId, setInterestPinId] = React.useState('');
+  const [interestPinLocation, setInterestPinLocation] = React.useState({
+    lat: 0,
+    lng: 0,
+  });
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -121,8 +125,9 @@ const MapPage = ({
       setInfoWindowOpen(false);
       setIsDeleteClicked(false);
       setInterestPinId('');
-      setInterestPinLocation('');
+      setInterestPinAddress('');
       setInterestPinTitle('');
+      setInterestPinLocation({ lat: 0, lng: 0 });
       setIsDeleteConfirmed(false);
     }
   }, [isDeleteConfirmed]);
@@ -170,17 +175,19 @@ const MapPage = ({
 
   const onInfoWindowClose = () => {
     setInfoWindowOpen(false);
-    setInterestPinLocation('');
+    setInterestPinAddress('');
     setInterestPinTitle('');
     setInterestPinId('');
+    setInterestPinLocation({ lat: 0, lng: 0 });
   };
 
   const onMarkerClick = (pin) => {
     setInfoWindowOpen(true);
-    setInterestPinLocation(pin.address);
+    setInterestPinAddress(pin.address);
     setInterestPinTitle(pin.label);
     setInterestPinId(pin.id);
     setCenter({ lat: pin.latitude, lng: pin.longitude });
+    setInterestPinLocation({ lat: pin.latitude, lng: pin.longitude });
   };
 
   const onMapClick = (obj: { lat: number; lng: number }) => {
@@ -255,7 +262,8 @@ const MapPage = ({
     setTempMarkerClick(false);
     setIsEdit(false);
     setInterestPinTitle(label);
-    setInterestPinLocation(address);
+    setInterestPinAddress(address);
+    setInterestPinLocation({ lat, lng });
     setInfoWindowOpen(true);
   };
 
@@ -283,7 +291,7 @@ const MapPage = ({
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
       <InfoWindow
         title={interestPinTitle}
-        address={interestPinLocation}
+        address={interestPinAddress}
         open={infoWindowOpen}
         handleEditClick={onEditClicked}
         handleClose={onInfoWindowClose}
@@ -317,7 +325,10 @@ const MapPage = ({
                 })
         }
         editLabel={interestPinTitle && isEdit ? interestPinTitle : ''}
-        editAddress={interestPinLocation && isEdit ? interestPinLocation : ''}
+        editAddress={interestPinAddress && isEdit ? interestPinAddress : ''}
+        editLocation={
+          interestPinAddress && isEdit ? interestPinLocation : undefined
+        }
       />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact

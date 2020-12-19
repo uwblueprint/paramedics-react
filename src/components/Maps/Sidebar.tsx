@@ -46,6 +46,7 @@ const Sidebar = ({
   setTempMarkerClick,
   editLabel,
   editAddress,
+  editLocation,
   onClose,
   onComplete,
 }: {
@@ -57,6 +58,7 @@ const Sidebar = ({
   setTempMarkerClick: () => void;
   editLabel?: string;
   editAddress?: string;
+  editLocation?: { lat: number; lng: number };
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
@@ -83,8 +85,10 @@ const Sidebar = ({
       setLabel(editLabel);
     }
 
-    if (editAddress && address === '') {
+    if (editAddress && editLocation && address === '') {
       setAddress(editAddress);
+      setLatitude(editLocation.lat);
+      setLongitude(editLocation.lng);
     }
   }, [clickedAddress, clickedLocation, editLabel, editAddress]);
 
