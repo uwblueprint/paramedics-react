@@ -104,6 +104,27 @@ const PatientProfilePage = ({
   const { data: ccpData } = useQuery(GET_CPP_BY_ID(ccpId));
   const ccp: CCP = ccpData ? ccpData.collectionPoint : [];
 
+  const [formFields, setFormFields] = useState<FormFields>({
+    barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
+    triage: TriageLevel.GREEN,
+    gender: Gender.M,
+    age: null,
+    notes: '',
+    status: Status.ON_SITE,
+    runNumber: null,
+  });
+
+  const transportAction = (snackbarPatientId) => (
+    <Button
+      onClick={() =>
+        history.push(`/events/${eventId}/ccps/${ccpId}/open/${snackbarPatientId}`)
+      }
+      style={{ color: Colours.SnackbarButtonBlue }}
+    >
+      View Patient Details
+    </Button>
+  );
+
   const [addPatient] = useMutation(ADD_PATIENT, {
     update(cache, { data: { addPatient } }) {
       cache.writeQuery({
@@ -114,7 +135,7 @@ const PatientProfilePage = ({
     onCompleted({ addPatient }) {
       if (transportingPatient) {
         enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
-          action,
+          action: transportAction(addPatient.id),
         });
       }
       history.replace(`/events/${eventId}/ccps/${ccpId}`, {
@@ -126,7 +147,7 @@ const PatientProfilePage = ({
     onCompleted() {
       if (transportingPatient) {
         enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
-          action,
+          action: transportAction(patientId),
         });
       }
       history.replace(`/events/${eventId}/ccps/${ccpId}`, {
@@ -145,16 +166,6 @@ const PatientProfilePage = ({
     !loading && mode === 'edit'
       ? data.patient.status === Status.DELETED
       : false;
-
-  const [formFields, setFormFields] = useState<FormFields>({
-    barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
-    triage: TriageLevel.GREEN,
-    gender: Gender.M,
-    age: null,
-    notes: '',
-    status: Status.ON_SITE,
-    runNumber: null,
-  });
 
   const headerLabel =
     mode === 'new'
@@ -260,17 +271,6 @@ const PatientProfilePage = ({
       )[0].vehicleNumber,
     });
   };
-
-  const action = () => (
-    <Button
-      onClick={() =>
-        history.push(`/events/${eventId}/ccps/${ccpId}/open/${patientId}`)
-      }
-      style={{ color: Colours.SnackbarButtonBlue }}
-    >
-      View Patient Details
-    </Button>
-  );
 
   const handleComplete = () => {
     if (transportingPatient && !transportConfirmed) {
