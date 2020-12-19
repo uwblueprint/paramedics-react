@@ -117,7 +117,9 @@ const PatientProfilePage = ({
   const transportAction = (snackbarPatientId) => (
     <Button
       onClick={() =>
-        history.push(`/events/${eventId}/ccps/${ccpId}/open/${snackbarPatientId}`)
+        history.push(
+          `/events/${eventId}/ccps/${ccpId}/open/${snackbarPatientId}`
+        )
       }
       style={{ color: Colours.SnackbarButtonBlue }}
     >
