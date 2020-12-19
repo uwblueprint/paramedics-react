@@ -50,6 +50,7 @@ const FormField: React.FC<{
   readOnly?: boolean;
   disabled?: boolean;
   numeric?: boolean;
+  onValid?: (boolean) => void;
   isMultiline?: boolean;
 }> = ({
   label,
@@ -63,6 +64,7 @@ const FormField: React.FC<{
   readOnly,
   disabled,
   numeric,
+  onValid,
   isMultiline,
 }: {
   label: string;
@@ -76,6 +78,7 @@ const FormField: React.FC<{
   readOnly?: boolean;
   disabled?: boolean;
   numeric?: boolean;
+  onValid?: (boolean) => void;
   isMultiline?: boolean;
 }) => {
   const classes = useTextFieldStyles();
@@ -98,6 +101,7 @@ const FormField: React.FC<{
         onFocus={handleFocus}
         validators={validators}
         errorMessages={errorMessages}
+        validatorListener={onValid}
         multiline={isMultiline}
       />
     );
