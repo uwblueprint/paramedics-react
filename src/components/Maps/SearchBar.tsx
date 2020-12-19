@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -31,11 +32,15 @@ const useStyles = makeStyles({
 });
 
 const SearchBar = ({
+  editAddress,
   onComplete,
+  onAutocompleteClick,
 }: {
+  editAddress?: string;
   onComplete: ({ latitude, longitude, address }) => void;
+  onAutocompleteClick: () => void;
 }) => {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState(editAddress || '');
   const [menuOpen, setMenuOpen] = useState(false);
   const styles = useStyles();
   const inputEl = useRef(null);
@@ -63,9 +68,6 @@ const SearchBar = ({
           longitude: latLng.lng,
           address: selectedAddress,
         });
-      })
-      .catch((e) => { // eslint-disable-line
-        // handle errors
       });
     setMenuOpen(false);
     setAddress(selectedAddress);
@@ -86,9 +88,19 @@ const SearchBar = ({
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
+                    {address ? (
+                      <IconButton
+                        onClick={() => {
+                          setAddress('');
+                        }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton>
+                        <SearchIcon />
+                      </IconButton>
+                    )}
                   </InputAdornment>
                 ),
                 inputProps: getInputProps({
@@ -98,6 +110,7 @@ const SearchBar = ({
               onFocus={() => {
                 setMenuOpen(true);
               }}
+              onClick={onAutocompleteClick}
               value={address}
               className={styles.sidebarTextField}
               validators={['required']}
