@@ -104,25 +104,6 @@ const PatientProfilePage = ({
   const { data: ccpData } = useQuery(GET_CPP_BY_ID(ccpId));
   const ccp: CCP = ccpData ? ccpData.collectionPoint : [];
 
-  const [addPatient] = useMutation(ADD_PATIENT, {
-    update(cache, { data: { addPatient } }) {
-      cache.writeQuery({
-        query: GET_ALL_PATIENTS,
-        data: { patients: patients.concat([addPatient]) },
-      });
-    },
-  });
-  const [editPatient] = useMutation(EDIT_PATIENT);
-  const [deletePatient] = useMutation(DELETE_PATIENT, {
-    onCompleted() {
-      history.replace(`/events/${eventId}/ccps/${ccpId}`);
-    },
-  });
-  const isRestore =
-    !loading && mode === 'edit'
-      ? data.patient.status === Status.DELETED
-      : false;
-
   const [formFields, setFormFields] = useState<FormFields>({
     barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
     triage: TriageLevel.GREEN,
@@ -132,6 +113,61 @@ const PatientProfilePage = ({
     status: Status.ON_SITE,
     runNumber: null,
   });
+
+  const transportAction = (snackbarPatientId) => (
+    <Button
+      onClick={() =>
+        history.push(
+          `/events/${eventId}/ccps/${ccpId}/open/${snackbarPatientId}`
+        )
+      }
+      style={{ color: Colours.SnackbarButtonBlue }}
+    >
+      View Patient Details
+    </Button>
+  );
+
+  const [addPatient] = useMutation(ADD_PATIENT, {
+    update(cache, { data: { addPatient } }) {
+      cache.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: { patients: patients.concat([addPatient]) },
+      });
+    },
+    onCompleted({ addPatient }) {
+      if (transportingPatient) {
+        enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
+          action: transportAction(addPatient.id),
+        });
+      }
+      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+        userUpdatedPatientId: addPatient.id,
+      });
+    },
+  });
+  const [editPatient] = useMutation(EDIT_PATIENT, {
+    onCompleted() {
+      if (transportingPatient) {
+        enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
+          action: transportAction(patientId),
+        });
+      }
+      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+        userUpdatedPatientId: patientId,
+      });
+    },
+  });
+  const [deletePatient] = useMutation(DELETE_PATIENT, {
+    onCompleted() {
+      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+        userUpdatedPatientId: patientId,
+      });
+    },
+  });
+  const isRestore =
+    !loading && mode === 'edit'
+      ? data.patient.status === Status.DELETED
+      : false;
 
   const headerLabel =
     mode === 'new'
@@ -238,17 +274,6 @@ const PatientProfilePage = ({
     });
   };
 
-  const action = () => (
-    <Button
-      onClick={() =>
-        history.push(`/events/${eventId}/ccps/${ccpId}/open/${patientId}`)
-      }
-      style={{ color: Colours.SnackbarButtonBlue }}
-    >
-      View Patient Details
-    </Button>
-  );
-
   const handleComplete = () => {
     if (transportingPatient && !transportConfirmed) {
       setOpenTransportModal(true);
@@ -282,7 +307,6 @@ const PatientProfilePage = ({
       if (isRestore) {
         enqueueSnackbar(`Patient #${formFields.barcodeValue} restored.`);
       }
-
       editPatient({
         variables: {
           id: patientId,
@@ -306,12 +330,6 @@ const PatientProfilePage = ({
         },
       });
     }
-    if (transportingPatient) {
-      enqueueSnackbar(`Patient ${formFields.barcodeValue} transported.`, {
-        action,
-      });
-    }
-    history.replace(`/events/${eventId}/ccps/${ccpId}`);
   };
 
   if (loading) {
