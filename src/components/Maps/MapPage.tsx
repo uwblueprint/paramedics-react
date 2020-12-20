@@ -182,12 +182,14 @@ const MapPage = ({
   };
 
   const onMarkerClick = (pin) => {
-    setInfoWindowOpen(true);
-    setInterestPinAddress(pin.address);
-    setInterestPinTitle(pin.label);
-    setInterestPinId(pin.id);
-    setCenter({ lat: pin.latitude, lng: pin.longitude });
-    setInterestPinLocation({ lat: pin.latitude, lng: pin.longitude });
+    if (!openSidebar) {
+      setInfoWindowOpen(true);
+      setInterestPinAddress(pin.address);
+      setInterestPinTitle(pin.label);
+      setInterestPinId(pin.id);
+      setCenter({ lat: pin.latitude, lng: pin.longitude });
+      setInterestPinLocation({ lat: pin.latitude, lng: pin.longitude });
+    }
   };
 
   const onMapClick = (obj: { lat: number; lng: number }) => {
@@ -365,16 +367,22 @@ const MapPage = ({
             isCurrentLocation
           />
           {tempMarkerClick && (
-            <Marker lat={tempMarkerLocation.lat} lng={tempMarkerLocation.lng} />
+            <Marker
+              lat={tempMarkerLocation.lat}
+              lng={tempMarkerLocation.lng}
+              isClicked
+            />
           )}
         </GoogleMapReact>
       </div>
-      <AddPinButton
-        handleClick={() => {
-          setInfoWindowOpen(false);
-          setOpenSidebar(true);
-        }}
-      />
+      {!openSidebar && (
+        <AddPinButton
+          handleClick={() => {
+            setInfoWindowOpen(false);
+            setOpenSidebar(true);
+          }}
+        />
+      )}
       <ConfirmModal
         open={isDeleteClicked}
         handleClickCancel={onDeletePinCancel}
