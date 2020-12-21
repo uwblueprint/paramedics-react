@@ -90,7 +90,14 @@ const Sidebar = ({
       setLatitude(editLocation.lat);
       setLongitude(editLocation.lng);
     }
-  }, [clickedAddress, clickedLocation, editLabel, editAddress]);
+  }, [
+    clickedAddress,
+    clickedLocation,
+    editLabel,
+    editAddress,
+    editLocation,
+    address,
+  ]);
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
     setLabel((e.target as HTMLInputElement).value);
