@@ -81,7 +81,7 @@ const AccessLevelSelector = ({
       >
         {accessLevels.map((accessLevel) => (
           <ToggleButton
-            value={String(accessLevel.roleId)}
+            value={accessLevel.roleId}
             classes={{
               root: classes.statusPill,
               selected: classes.selectedPill,

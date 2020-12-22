@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
 import {
   makeStyles,
   Table,
@@ -16,9 +17,13 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useSubscription } from '@apollo/react-hooks';
 import { MoreHoriz } from '@material-ui/icons';
 import { useSnackbar } from 'notistack';
+import {
+  PATIENT_UPDATED,
+  PATIENT_DELETED,
+} from '../../graphql/subscriptions/patients';
 import { Colours } from '../../styles/Constants';
 import {
   Patient,
@@ -29,7 +34,7 @@ import {
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
-import { EDIT_PATIENT } from '../../graphql/mutations/patients';
+import { EDIT_PATIENT, DELETE_PATIENT } from '../../graphql/mutations/patients';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
 import { capitalize } from '../../utils/format';
 
@@ -62,6 +67,9 @@ const useStyles = makeStyles({
   },
   detailsDialog: {
     width: '662px',
+  },
+  highlighted: {
+    backgroundColor: Colours.Blue,
   },
 });
 
@@ -125,12 +133,14 @@ export const PatientInfoTable = ({
   eventId,
   ccpId,
   patientId,
+  lastUpdatedPatient,
 }: {
   patients: Patient[];
   type: CCPDashboardTabOptions;
   eventId: string;
   ccpId: string;
   patientId?: string;
+  lastUpdatedPatient: string | null;
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('desc');
@@ -151,6 +161,7 @@ export const PatientInfoTable = ({
   );
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const [deletePatient] = useMutation(DELETE_PATIENT, {});
 
   const triageLevels = {
     [TriageLevel.GREEN]: {
@@ -183,7 +194,7 @@ export const PatientInfoTable = ({
   };
 
   const [editPatient] = useMutation(EDIT_PATIENT, {
-    update(cache) {
+    update(cache): void {
       const patientId = ((selectedPatient as unknown) as Patient).id;
       const { patients } = cache.readQuery<any>({
         query: GET_ALL_PATIENTS,
@@ -227,10 +238,29 @@ export const PatientInfoTable = ({
     }
   });
 
-  const handleRunNumber = (newRunNumber) => {
-    const convertedRunNumber = newRunNumber ? parseInt(newRunNumber) : null;
-    setRunNumber(convertedRunNumber);
-  };
+  useSubscription(PATIENT_UPDATED, {
+    variables: { eventId },
+    onSubscriptionData: () => {
+      if (selectedPatient) {
+        if (selectedPatient.id === lastUpdatedPatient) {
+          const newPatient = patients.find((x) => x.id === lastUpdatedPatient);
+          setSelectedPatient(newPatient);
+          setRunNumber(newPatient ? newPatient.runNumber : runNumber);
+        }
+      }
+    },
+  });
+
+  useSubscription(PATIENT_DELETED, {
+    variables: { eventId },
+    onSubscriptionData: () => {
+      if (selectedPatient) {
+        if (selectedPatient.id === lastUpdatedPatient) {
+          setSelectedPatient(patients.find((x) => x.id === lastUpdatedPatient));
+        }
+      }
+    },
+  });
 
   const handleClickSave = () => {
     editPatient({
@@ -240,12 +270,22 @@ export const PatientInfoTable = ({
         collectionPointId: ccpId,
       },
     });
+    setSelectedPatient(undefined);
+    setOpenDetails(false);
     enqueueSnackbar(`Patient ${selectedPatient?.barcodeValue} edited.`);
   };
 
+  const handleRunNumber = (newRunNumber) => {
+    const convertedRunNumber = newRunNumber ? parseInt(newRunNumber) : null;
+    setRunNumber(convertedRunNumber);
+  };
+
   const handleOpenDetails = (patient) => {
-    history.push(`/events/${eventId}/ccps/${ccpId}/open/${patient.id}`);
-    setOpenDetails(true);
+    if (!patientId) {
+      setSelectedPatient(patients.find((x) => x.id === patient.id));
+      setRunNumber(patient.runNumber);
+      setOpenDetails(true);
+    }
   };
 
   const handleClickOptions = (event, patient) => {
@@ -282,11 +322,9 @@ export const PatientInfoTable = ({
   };
 
   const handleConfirmDeletePatient = () => {
-    editPatient({
+    deletePatient({
       variables: {
         id: ((selectedPatient as unknown) as Patient).id,
-        status: Status.DELETED,
-        collectionPointId: ccpId,
       },
     });
     setOpenDeletePatient(false);
@@ -299,7 +337,11 @@ export const PatientInfoTable = ({
   };
 
   const handleCloseDetails = () => {
-    history.push(`/events/${eventId}/ccps/${ccpId}`);
+    if (patientId) {
+      history.push(`/events/${eventId}/ccps/${ccpId}`);
+    } else {
+      setOpenDetails(false);
+    }
   };
 
   const handleCancelDeletePatient = () => {
@@ -385,6 +427,9 @@ export const PatientInfoTable = ({
           <TableRow
             hover
             key={patient.id}
+            className={clsx({
+              [classes.highlighted]: patient.id === lastUpdatedPatient,
+            })}
             onClick={() => handleOpenDetails(patient)}
           >
             {headCells.map((cell) =>
@@ -428,9 +473,8 @@ export const PatientInfoTable = ({
           PaperProps={{ className: classes.detailsDialog }}
         >
           <PatientDetailsDialog
+            handleCloseDetails={handleCloseDetails}
             patient={(selectedPatient as unknown) as Patient}
-            eventId={eventId}
-            ccpId={ccpId}
             runNumber={runNumber}
             updateRunNumber={handleRunNumber}
           />
