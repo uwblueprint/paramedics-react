@@ -156,6 +156,17 @@ const MapPage = ({
     }
   });
 
+  useEffect(() => {
+    console.log('change');
+    if (isDeleteConfirmed) {
+      setInfoWindowOpen(false);
+      setIsDeleteClicked(false);
+      setInterestPinId('');
+      setInterestPinLocation('');
+      setInterestPinTitle('');
+    }
+  }, [isDeleteConfirmed]);
+
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
       const { pinsForEvent } = cache.readQuery<any>({
@@ -283,7 +294,49 @@ const MapPage = ({
     setCenter({ lat, lng });
     setZoom(16);
     setOpenSidebar(false);
-    setTempMarkerClick(false);
+  };
+
+  const onEditClicked = () => {
+    setIsEdit(true);
+    setInfoWindowOpen(false);
+    setOpenSidebar(true);
+  };
+
+  const onEditPinComplete = ({ label, lat, lng, address }) => {
+    editPin({
+      variables: {
+        id: interestPinId,
+        label,
+        eventId,
+        latitude: lat,
+        longitude: lng,
+        address,
+      },
+    });
+    setOpenSidebar(false);
+    setIsEdit(false);
+    setInterestPinTitle(label);
+    setInterestPinLocation(address);
+    setInfoWindowOpen(true);
+  };
+
+  const onDeleteClick = () => {
+    setIsDeleteClicked(true);
+  };
+
+  const onDeletePinCancel = () => {
+    setIsDeleteClicked(false);
+    setIsDeleteConfirmed(false);
+  };
+
+  const onDeletePinConfirm = () => {
+    console.log(isDeleteConfirmed);
+    deletePin({
+      variables: {
+        id: interestPinId,
+      },
+    });
+    setIsDeleteConfirmed(true);
   };
 
   return (
