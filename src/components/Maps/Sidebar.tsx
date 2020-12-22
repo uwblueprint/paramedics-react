@@ -40,15 +40,25 @@ const useStyles = makeStyles({
 const Sidebar = ({
   open,
   title,
+  clickedLocation,
+  clickedAddress,
+  onSuggestionTempMarkerSet,
+  setTempMarkerClick,
   editLabel,
   editAddress,
+  editLocation,
   onClose,
   onComplete,
 }: {
   open: boolean;
   title: string;
+  clickedLocation?: { lat: number; lng: number };
+  clickedAddress?: string;
+  onSuggestionTempMarkerSet: ({ lat, lng, address }) => void;
+  setTempMarkerClick: () => void;
   editLabel?: string;
   editAddress?: string;
+  editLocation?: { lat: number; lng: number };
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
 }) => {
@@ -62,14 +72,32 @@ const Sidebar = ({
   const styles = useStyles();
 
   useEffect(() => {
+    if (clickedAddress) {
+      setAddress(clickedAddress);
+    }
+
+    if (clickedLocation) {
+      setLatitude(clickedLocation.lat);
+      setLongitude(clickedLocation.lng);
+    }
+
     if (editLabel) {
       setLabel(editLabel);
     }
 
-    if (editAddress) {
+    if (editAddress && editLocation && address === '') {
       setAddress(editAddress);
+      setLatitude(editLocation.lat);
+      setLongitude(editLocation.lng);
     }
-  }, [editLabel, editAddress]);
+  }, [
+    clickedAddress,
+    clickedLocation,
+    editLabel,
+    editAddress,
+    editLocation,
+    address,
+  ]);
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLElement>) => {
     setLabel((e.target as HTMLInputElement).value);
@@ -79,6 +107,8 @@ const Sidebar = ({
     setLatitude(lat);
     setLongitude(lng);
     setAddress(address);
+    setTempMarkerClick();
+    onSuggestionTempMarkerSet({ lat, lng, address });
   };
 
   const handleAutocompleteClicked = () => {
@@ -93,7 +123,10 @@ const Sidebar = ({
     <Drawer
       open={open}
       onClose={onClose}
-      PaperProps={{ style: { width: '400px' } }}
+      style={{ position: 'initial' }}
+      PaperProps={{ style: { width: '400px' }, elevation: 6 }}
+      hideBackdrop
+      disableEnforceFocus
       disableScrollLock
     >
       <Collapse in={!isAutocompleteClicked}>
@@ -142,7 +175,7 @@ const Sidebar = ({
           Pin Location:
         </Typography>
         <SearchBar
-          editAddress={address}
+          existingAddress={address}
           onComplete={({ latitude, longitude, address }) =>
             handleGeocodeSelection({
               lat: latitude,
