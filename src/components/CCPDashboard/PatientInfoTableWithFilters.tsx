@@ -132,11 +132,13 @@ export const PatientInfoTableWithFilters = ({
   eventId,
   ccpId,
   patientId,
+  lastUpdatedPatient,
 }: {
   patients: Patient[];
   eventId: string;
   ccpId: string;
   patientId?: string;
+  lastUpdatedPatient: string | null;
 }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -426,6 +428,7 @@ export const PatientInfoTableWithFilters = ({
           eventId={eventId}
           ccpId={ccpId}
           patientId={patientId}
+          lastUpdatedPatient={lastUpdatedPatient}
         />
       </TableContainer>
     </>

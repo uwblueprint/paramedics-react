@@ -10,8 +10,6 @@ import InfoWindow from './InfoWindow';
 import Sidebar from './Sidebar';
 import AddPinButton from './AddPinButton';
 import Marker from './Marker';
-import { LocationPin, GET_PINS_BY_EVENT_ID } from '../../graphql/queries/maps';
-import { ADD_PIN } from '../../graphql/mutations/maps';
 import {
   Event,
   GET_ALL_EVENTS,
@@ -24,6 +22,13 @@ import {
   CCP,
 } from '../../graphql/queries/ccps';
 import { ADD_CCP, EDIT_CCP } from '../../graphql/mutations/ccps';
+import {
+  LocationPin,
+  GET_PINS_BY_EVENT_ID,
+  PinType,
+} from '../../graphql/queries/maps';
+import { ADD_PIN, EDIT_PIN, DELETE_PIN } from '../../graphql/mutations/maps';
+import ConfirmModal from '../common/ConfirmModal';
 
 enum MapTypes {
   ROADMAP = 'roadmap',
@@ -94,8 +99,12 @@ const MapPage = ({
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinLocation, setInterestPinLocation] = React.useState('');
+  const [interestPinId, setInterestPinId] = React.useState('');
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
+  const [isEdit, setIsEdit] = React.useState(false);
+  const [isDeleteClicked, setIsDeleteClicked] = React.useState(false);
+  const [isDeleteConfirmed, setIsDeleteConfirmed] = React.useState(false);
   const defaultMap = {
     zoom,
     center,
@@ -157,13 +166,13 @@ const MapPage = ({
   });
 
   useEffect(() => {
-    console.log('change');
     if (isDeleteConfirmed) {
       setInfoWindowOpen(false);
       setIsDeleteClicked(false);
       setInterestPinId('');
       setInterestPinLocation('');
       setInterestPinTitle('');
+      setIsDeleteConfirmed(false);
     }
   }, [isDeleteConfirmed]);
 
@@ -236,17 +245,44 @@ const MapPage = ({
     },
   });
 
-  const onMarkerClick = (pin) => {
-    setInfoWindowOpen(true);
-    setInterestPinLocation(pin.address);
-    setInterestPinTitle(pin.label);
-    setCenter({ lat: pin.latitude, lng: pin.longitude });
-  };
+  const [editPin] = useMutation(EDIT_PIN);
+
+  const [deletePin] = useMutation(DELETE_PIN, {
+    update(cache, { data: { deleteLocationPin } }) {
+      if (!deleteLocationPin) {
+        return;
+      }
+
+      // Update GET_PINS_BY_EVENT_ID
+      const { pinsForEvent } = cache.readQuery<any>({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      const updatedPinsList = pinsForEvent.filter(
+        (pin) => pin.id !== deleteLocationPin
+      );
+
+      cache.writeQuery({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { pinsForEvent: updatedPinsList },
+      });
+    },
+  });
 
   const onInfoWindowClose = () => {
     setInfoWindowOpen(false);
     setInterestPinLocation('');
     setInterestPinTitle('');
+    setInterestPinId('');
+  };
+
+  const onMarkerClick = (pin) => {
+    setInfoWindowOpen(true);
+    setInterestPinLocation(pin.address);
+    setInterestPinTitle(pin.label);
+    setCenter({ lat: pin.latitude, lng: pin.longitude });
   };
 
   const onMapClick = (obj: { lat: number; lng: number }) => {
@@ -279,6 +315,8 @@ const MapPage = ({
   const onSidebarClose = () => {
     setOpenSidebar(false);
     setTempMarkerClick(false);
+    setInfoWindowOpen(!!isEdit);
+    setIsEdit(false);
   };
 
   const onAddPinComplete = ({ label, lat, lng, address }) => {
@@ -289,10 +327,9 @@ const MapPage = ({
         latitude: lat,
         longitude: lng,
         address,
+        pinType: PinType.OTHER,
       },
     });
-    setCenter({ lat, lng });
-    setZoom(16);
     setOpenSidebar(false);
   };
 
@@ -313,6 +350,8 @@ const MapPage = ({
         address,
       },
     });
+    setCenter({ lat, lng });
+    setZoom(16);
     setOpenSidebar(false);
     setIsEdit(false);
     setInterestPinTitle(label);
@@ -326,17 +365,17 @@ const MapPage = ({
 
   const onDeletePinCancel = () => {
     setIsDeleteClicked(false);
+    setInfoWindowOpen(true);
     setIsDeleteConfirmed(false);
   };
 
   const onDeletePinConfirm = () => {
-    console.log(isDeleteConfirmed);
+    setIsDeleteConfirmed(true);
     deletePin({
       variables: {
         id: interestPinId,
       },
     });
-    setIsDeleteConfirmed(true);
   };
 
   return (
@@ -346,26 +385,39 @@ const MapPage = ({
         title={interestPinTitle}
         address={interestPinLocation}
         open={infoWindowOpen}
+        handleEditClick={onEditClicked}
         handleClose={onInfoWindowClose}
+        handleDeleteClicked={onDeleteClick}
       />
       <Sidebar
         open={openSidebar}
         onClose={onSidebarClose}
-        title="Add a location pin"
-        clickedAddress={tempMarkerClick ? tempMarkerAddress : undefined}
-        clickedLocation={tempMarkerClick ? tempMarkerLocation : undefined}
+        title={isEdit ? 'Edit a location pin' : 'Add a location pin'}
+        clickedAddress={tempMarkerClick ? tempMarkerAddress : null}
+        clickedLocation={tempMarkerClick ? tempMarkerLocation : null}
         onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
         setTempMarkerClick={() => {
           setTempMarkerClick(false);
         }}
-        onComplete={({ label, latitude, longitude, address }) =>
-          onAddPinComplete({
-            label,
-            lat: latitude,
-            lng: longitude,
-            address,
-          })
+        onComplete={
+          isEdit
+            ? ({ label, latitude, longitude, address }) =>
+                onEditPinComplete({
+                  label,
+                  lat: latitude,
+                  lng: longitude,
+                  address,
+                })
+            : ({ label, latitude, longitude, address }) =>
+                onAddPinComplete({
+                  label,
+                  lat: latitude,
+                  lng: longitude,
+                  address,
+                })
         }
+        editLabel={interestPinTitle && isEdit ? interestPinTitle : ''}
+        editAddress={interestPinLocation && isEdit ? interestPinLocation : ''}
       />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
@@ -385,9 +437,8 @@ const MapPage = ({
               key={pin.id}
               lat={pin.latitude}
               lng={pin.longitude}
-              otherClicked={
-                interestPinTitle !== '' && interestPinTitle !== pin.label
-              }
+              isClicked={interestPinTitle === pin.label}
+              type={pin.pinType}
               onClick={() => {
                 onMarkerClick(pin);
               }}
@@ -407,7 +458,21 @@ const MapPage = ({
           />
         </GoogleMapReact>
       </div>
-      <AddPinButton handleClick={() => setOpenSidebar(true)} />
+      <AddPinButton
+        handleClick={() => {
+          setInfoWindowOpen(false);
+          setOpenSidebar(true);
+        }}
+      />
+      <ConfirmModal
+        open={isDeleteClicked}
+        handleClickCancel={onDeletePinCancel}
+        handleClickAction={onDeletePinConfirm}
+        title="You are about to delete a location pin."
+        body="Deleted location pins will no longer be accessible to other team members. Are you sure you want to delete this pin?"
+        actionLabel="Delete"
+        isActionDelete
+      />
     </>
   );
 };

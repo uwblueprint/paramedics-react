@@ -74,11 +74,6 @@ const SearchBar = ({
           longitude: latLng.lng,
           address: selectedAddress,
         });
-      })
-      /* eslint-disable */
-      .catch((e) => {
-        /* eslint-enable */
-        // handle errors
       });
     setMenuOpen(false);
     setAddress(selectedAddress);
