@@ -176,6 +176,12 @@ const MapPage = ({
     }
   }, [isDeleteConfirmed]);
 
+  useEffect(() => {
+    if(mode !== MapModes.Map) {
+      setOpenSidebar(true);
+    }
+  }, [mode]);
+
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
       const { pinsForEvent } = cache.readQuery<any>({
@@ -378,6 +384,50 @@ const MapPage = ({
     });
   };
 
+  const onEventComplete = ({ name, eventDate }) => {
+    if(mode === MapModes.NewEvent) {
+      addEvent({
+        variables: {
+          name,
+          eventDate,
+          createdBy: 1, // TODO: change this to proper user
+          isActive: true,
+        },
+      });
+    }
+    else if(mode === MapModes.EditEvent) {
+       editEvent({
+        variables: {
+          id: eventId,
+          name,
+          eventDate,
+          createdBy: 1,
+          isActive: true,
+        },
+      });
+    }
+  };
+
+  const onCCPComplete = ({ name }) => {
+    if (mode === MapModes.NewCCP) {
+      addCCP({
+        variables: {
+          name,
+          eventId,
+          createdBy: 1,
+        },
+      });
+    } else if (mode === MapModes.EditCCP) {
+      editCCP({
+        variables: {
+          id: ccpId,
+          name,
+          eventId,
+        },
+      });
+    }
+  };
+
   return (
     <>
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
@@ -393,8 +443,8 @@ const MapPage = ({
         open={openSidebar}
         onClose={onSidebarClose}
         title={isEdit ? 'Edit a location pin' : 'Add a location pin'}
-        clickedAddress={tempMarkerClick ? tempMarkerAddress : null}
-        clickedLocation={tempMarkerClick ? tempMarkerLocation : null}
+        clickedAddress={tempMarkerClick ? tempMarkerAddress : undefined}
+        clickedLocation={tempMarkerClick ? tempMarkerLocation : undefined}
         onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
         setTempMarkerClick={() => {
           setTempMarkerClick(false);
