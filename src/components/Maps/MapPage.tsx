@@ -49,7 +49,7 @@ const MapPage = ({
   },
   mode,
 }: {
-  match: { params: { eventId: string, ccpId?: string }; };
+  match: { params: { eventId: string; ccpId?: string } };
   mode: string;
 }) => {
   const history = useHistory();
@@ -59,7 +59,8 @@ const MapPage = ({
     skip: mode !== MapModes.Map,
     variables: { eventId },
   });
-  const pins: Array<LocationPin> = pinResults.data && !pinResults.loading ? pinResults.data.pinsForEvent : [];
+  const pins: Array<LocationPin> =
+    pinResults.data && !pinResults.loading ? pinResults.data.pinsForEvent : [];
 
   const eventResults = useQuery(
     mode === MapModes.EditEvent && eventId ? GET_EVENT_BY_ID : GET_ALL_EVENTS,
@@ -70,7 +71,9 @@ const MapPage = ({
       },
     }
   );
-  const events: Array<Event> = eventResults.data ? eventResults.data.events : [];
+  const events: Array<Event> = eventResults.data
+    ? eventResults.data.events
+    : [];
 
   const ccpResults = useQuery(
     mode === MapModes.EditCCP ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID,
@@ -79,7 +82,9 @@ const MapPage = ({
       variables: { id: ccpId, eventId },
     }
   );
-  const collectionPoint: CCP = ccpResults.data ? ccpResults.data.collectionPoint : null;
+  const collectionPoint: CCP = ccpResults.data
+    ? ccpResults.data.collectionPoint
+    : null;
 
   const [currentLocationPin, setCurrentLocationPin] = React.useState({
     lat: 0,
@@ -182,7 +187,7 @@ const MapPage = ({
   }, [isDeleteConfirmed]);
 
   useEffect(() => {
-    if(mode !== MapModes.Map) {
+    if (mode !== MapModes.Map) {
       setOpenSidebar(true);
     }
   }, [mode]);
@@ -290,7 +295,7 @@ const MapPage = ({
     setInterestPinLocation({ lat: 0, lng: 0 });
   };
 
-   const onMarkerClick = (pin) => {
+  const onMarkerClick = (pin) => {
     if (!openSidebar) {
       setInfoWindowOpen(true);
       setInterestPinAddress(pin.address);
@@ -397,8 +402,18 @@ const MapPage = ({
     });
   };
 
-  const onEventComplete = ({ name, eventDate }) => {
-    if(mode === MapModes.NewEvent) {
+  const onEventComplete = ({ name, eventDate, lat, lng, address }) => {
+    if (mode === MapModes.NewEvent) {
+      addPin({
+        variables: {
+          label: name,
+          eventId,
+          latitude: lat,
+          longitude: lng,
+          address,
+          pinType: PinType.EVENT,
+        },
+      });
       addEvent({
         variables: {
           name,
@@ -407,9 +422,21 @@ const MapPage = ({
           isActive: true,
         },
       });
-    }
-    else if(mode === MapModes.EditEvent) {
-       editEvent({
+    } else if (mode === MapModes.EditEvent) {
+      const eventPinId = pins.filter(
+        (pin) => pin.eventId.id === eventId && pin.pinType === PinType.EVENT
+      )[0].id;
+      editPin({
+        variables: {
+          id: eventPinId,
+          label: name,
+          eventId,
+          latitude: lat,
+          longitude: lng,
+          address,
+        },
+      });
+      editEvent({
         variables: {
           id: eventId,
           name,
@@ -421,8 +448,19 @@ const MapPage = ({
     }
   };
 
-  const onCCPComplete = ({ name }) => {
+  const onCCPComplete = ({ name, lat, lng, address }) => {
     if (mode === MapModes.NewCCP) {
+      addPin({
+        variables: {
+          label: name,
+          eventId,
+          latitude: lat,
+          longitude: lng,
+          address,
+          pinType: PinType.CCP,
+          ccpId,
+        },
+      });
       addCCP({
         variables: {
           name,
@@ -431,6 +469,19 @@ const MapPage = ({
         },
       });
     } else if (mode === MapModes.EditCCP) {
+      const ccpPinId = pins.filter(
+        (pin) => pin.ccpId.id === ccpId && pin.pinType === PinType.CCP
+      )[0].id;
+      editPin({
+        variables: {
+          id: ccpPinId,
+          label: name,
+          eventId,
+          latitude: lat,
+          longitude: lng,
+          address,
+        },
+      });
       editCCP({
         variables: {
           id: ccpId,
