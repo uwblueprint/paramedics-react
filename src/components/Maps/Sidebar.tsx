@@ -76,11 +76,12 @@ const Sidebar = ({
   editLocation,
   onClose,
   onComplete,
-  onEventCCPComplete,
+  onEventComplete,
+  onCCPComplete,
 }: {
   open: boolean;
   title: string;
-  mode: MapModes;
+  mode: string;
   clickedLocation?: { lat: number; lng: number };
   clickedAddress?: string;
   onSuggestionTempMarkerSet: ({ lat, lng, address }) => void;
@@ -90,7 +91,8 @@ const Sidebar = ({
   editLocation?: { lat: number; lng: number };
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
-  onEventCCPComplete: ({ name, eventDate, lat, lng, address }) => void;
+  onEventComplete: ({ name, eventDate, lat, lng, address }) => void;
+  onCCPComplete: ({ name, lat, lng, address }) => void;
 }) => {
   const [address, setAddress] = React.useState('');
   const [latitude, setLatitude] = React.useState(0);
@@ -159,14 +161,21 @@ const Sidebar = ({
         longitude,
         address,
       });
-    } else {
-      onEventCCPComplete({
+    } else if (mode === MapModes.NewEvent || mode === MapModes.EditEvent) {
+      onEventComplete({
         name: label,
         eventDate,
         lat: latitude,
         lng: longitude,
         address,
       });
+    } else if (mode === MapModes.NewCCP || mode === MapModes.EditCCP) {
+      onCCPComplete({
+        name: label,
+        lat: latitude,
+        lng: longitude,
+        address,
+      })
     }
     setAddress('');
     setLabel('');

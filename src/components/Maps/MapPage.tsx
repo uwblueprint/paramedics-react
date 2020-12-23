@@ -100,6 +100,7 @@ const MapPage = ({
   });
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
+  const [sidebarTitle, setSidebarTitle] = React.useState('');
   const [isEdit, setIsEdit] = React.useState(false);
   const [isDeleteClicked, setIsDeleteClicked] = React.useState(false);
   const [isDeleteConfirmed, setIsDeleteConfirmed] = React.useState(false);
@@ -178,8 +179,19 @@ const MapPage = ({
   useEffect(() => {
     if (mode !== MapModes.Map) {
       setOpenSidebar(true);
+      if(mode === MapModes.NewCCP) {
+        setSidebarTitle('Add a new CCP');
+      } else if (mode === MapModes.EditCCP) {
+        setSidebarTitle('Edit a CCP');
+      } else if (mode === MapModes.NewEvent) {
+        setSidebarTitle('Add a new event');
+      } else {
+        setSidebarTitle('Edit an event');
+      }
+    } else {
+      setSidebarTite(isEdit ? 'Edit a location pin' : 'Add a location pin');
     }
-  }, [mode]);
+  }, [mode, isEdit]);
 
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
@@ -495,7 +507,8 @@ const MapPage = ({
       <Sidebar
         open={openSidebar}
         onClose={onSidebarClose}
-        title={isEdit ? 'Edit a location pin' : 'Add a location pin'}
+        mode={mode}
+        title={sidebarTitle}
         clickedAddress={tempMarkerClick ? tempMarkerAddress : undefined}
         clickedLocation={tempMarkerClick ? tempMarkerLocation : undefined}
         onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
@@ -524,6 +537,8 @@ const MapPage = ({
         editLocation={
           interestPinAddress && isEdit ? interestPinLocation : undefined
         }
+        onEventComplete={onEventComplete}
+        onCCPComplete={onCCPComplete}
       />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
