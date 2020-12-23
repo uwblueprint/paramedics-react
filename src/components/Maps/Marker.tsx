@@ -12,16 +12,13 @@ import otherPin from '../../assets/otherPin.svg';
 
 const useStyles = makeStyles({
   root: {
-    color: Colours.Marker,
     textAlign: 'center',
     position: 'absolute',
     transform: 'translate(-50%, -50%)',
+    overflow: 'visible',
   },
   currentLocation: {
     color: Colours.CurrentLocationMarker,
-  },
-  notClicked: {
-    color: Colours.MarkerNotClicked,
     textAlign: 'center',
     position: 'absolute',
     transform: 'translate(-50%, -50%)',
@@ -32,18 +29,18 @@ const Marker = ({
   /* eslint-disable */
   lat,
   lng,
+  /* eslint-enable */
   isCurrentLocation,
   type,
   isClicked,
   onClick,
-}: /* eslint-enable */
-{
+}: {
   lat: number;
   lng: number;
   isCurrentLocation?: boolean;
   type?: PinType;
   isClicked?: boolean;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
 }) => {
   const styles = useStyles();
   const pinSrc =
@@ -56,7 +53,13 @@ const Marker = ({
     return <RadioButtonCheckedIcon className={styles.currentLocation} />;
   }
   return (
-    <Icon onClick={onClick} fontSize="large">
+    <Icon
+      onClick={onClick}
+      fontSize="large"
+      className={styles.root}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+    >
       <img alt="pin" src={isClicked ? selectedPin : pinSrc} />
     </Icon>
   );

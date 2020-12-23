@@ -98,8 +98,12 @@ const MapPage = ({
   const [zoom, setZoom] = React.useState(11);
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
-  const [interestPinLocation, setInterestPinLocation] = React.useState('');
+  const [interestPinAddress, setInterestPinAddress] = React.useState('');
   const [interestPinId, setInterestPinId] = React.useState('');
+  const [interestPinLocation, setInterestPinLocation] = React.useState({
+    lat: 0,
+    lng: 0,
+  });
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -170,8 +174,9 @@ const MapPage = ({
       setInfoWindowOpen(false);
       setIsDeleteClicked(false);
       setInterestPinId('');
-      setInterestPinLocation('');
+      setInterestPinAddress('');
       setInterestPinTitle('');
+      setInterestPinLocation({ lat: 0, lng: 0 });
       setIsDeleteConfirmed(false);
     }
   }, [isDeleteConfirmed]);
@@ -279,16 +284,21 @@ const MapPage = ({
 
   const onInfoWindowClose = () => {
     setInfoWindowOpen(false);
-    setInterestPinLocation('');
+    setInterestPinAddress('');
     setInterestPinTitle('');
     setInterestPinId('');
+    setInterestPinLocation({ lat: 0, lng: 0 });
   };
 
-  const onMarkerClick = (pin) => {
-    setInfoWindowOpen(true);
-    setInterestPinLocation(pin.address);
-    setInterestPinTitle(pin.label);
-    setCenter({ lat: pin.latitude, lng: pin.longitude });
+   const onMarkerClick = (pin) => {
+    if (!openSidebar) {
+      setInfoWindowOpen(true);
+      setInterestPinAddress(pin.address);
+      setInterestPinTitle(pin.label);
+      setInterestPinId(pin.id);
+      setCenter({ lat: pin.latitude, lng: pin.longitude });
+      setInterestPinLocation({ lat: pin.latitude, lng: pin.longitude });
+    }
   };
 
   const onMapClick = (obj: { lat: number; lng: number }) => {
@@ -336,6 +346,7 @@ const MapPage = ({
         pinType: PinType.OTHER,
       },
     });
+    setTempMarkerClick(false);
     setOpenSidebar(false);
   };
 
@@ -359,9 +370,11 @@ const MapPage = ({
     setCenter({ lat, lng });
     setZoom(16);
     setOpenSidebar(false);
+    setTempMarkerClick(false);
     setIsEdit(false);
     setInterestPinTitle(label);
-    setInterestPinLocation(address);
+    setInterestPinAddress(address);
+    setInterestPinLocation({ lat, lng });
     setInfoWindowOpen(true);
   };
 
@@ -433,7 +446,7 @@ const MapPage = ({
       <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
       <InfoWindow
         title={interestPinTitle}
-        address={interestPinLocation}
+        address={interestPinAddress}
         open={infoWindowOpen}
         handleEditClick={onEditClicked}
         handleClose={onInfoWindowClose}
@@ -467,7 +480,10 @@ const MapPage = ({
                 })
         }
         editLabel={interestPinTitle && isEdit ? interestPinTitle : ''}
-        editAddress={interestPinLocation && isEdit ? interestPinLocation : ''}
+        editAddress={interestPinAddress && isEdit ? interestPinAddress : ''}
+        editLocation={
+          interestPinAddress && isEdit ? interestPinLocation : undefined
+        }
       />
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
@@ -482,38 +498,44 @@ const MapPage = ({
           onGoogleApiLoaded={(mapObject) => mapTypeIdListener(mapObject)}
           onClick={(obj) => onMapClick(obj)}
         >
-          {pins.map((pin) => (
-            <Marker
-              key={pin.id}
-              lat={pin.latitude}
-              lng={pin.longitude}
-              isClicked={interestPinTitle === pin.label}
-              type={pin.pinType}
-              onClick={() => {
-                onMarkerClick(pin);
-              }}
-              render
-            />
-          ))}
+          {pins.map(
+            (pin) =>
+              (!tempMarkerClick || interestPinId !== pin.id || !isEdit) && (
+                <Marker
+                  key={pin.id}
+                  lat={pin.latitude}
+                  lng={pin.longitude}
+                  isClicked={interestPinTitle === pin.label}
+                  type={pin.pinType}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMarkerClick(pin);
+                  }}
+                />
+              )
+          )}
           <Marker
             lat={currentLocationPin.lat}
             lng={currentLocationPin.lng}
             isCurrentLocation
-            render
           />
-          <Marker
-            lat={tempMarkerLocation.lat}
-            lng={tempMarkerLocation.lng}
-            render={tempMarkerClick}
-          />
+          {tempMarkerClick && (
+            <Marker
+              lat={tempMarkerLocation.lat}
+              lng={tempMarkerLocation.lng}
+              isClicked
+            />
+          )}
         </GoogleMapReact>
       </div>
-      <AddPinButton
-        handleClick={() => {
-          setInfoWindowOpen(false);
-          setOpenSidebar(true);
-        }}
-      />
+      {!openSidebar && (
+        <AddPinButton
+          handleClick={() => {
+            setInfoWindowOpen(false);
+            setOpenSidebar(true);
+          }}
+        />
+      )}
       <ConfirmModal
         open={isDeleteClicked}
         handleClickCancel={onDeletePinCancel}
