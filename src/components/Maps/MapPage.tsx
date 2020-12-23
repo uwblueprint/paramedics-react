@@ -26,22 +26,11 @@ import {
   LocationPin,
   GET_PINS_BY_EVENT_ID,
   PinType,
+  MapTypes,
+  MapModes,
 } from '../../graphql/queries/maps';
 import { ADD_PIN, EDIT_PIN, DELETE_PIN } from '../../graphql/mutations/maps';
 import ConfirmModal from '../common/ConfirmModal';
-
-enum MapTypes {
-  ROADMAP = 'roadmap',
-  HYBRID = 'hybrid',
-}
-
-enum MapModes {
-  Map = 'map',
-  NewEvent = 'newEvent',
-  NewCCP = 'newCCP',
-  EditEvent = 'editEvent',
-  EditCCP = 'editCCP',
-}
 
 const MapPage = ({
   match: {

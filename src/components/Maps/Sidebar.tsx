@@ -6,9 +6,12 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import SearchBar from './SearchBar';
 import { Colours } from '../../styles/Constants';
+import { MapModes } from '../../graphql/queries/maps';
 
 const useStyles = makeStyles({
   pinLabelField: {
@@ -37,9 +40,33 @@ const useStyles = makeStyles({
   },
 });
 
+const formatDateToString = (date: Date | null) => {
+  if (!date) {
+    return '';
+  }
+  const dateParts: {
+    year?: string;
+    month?: string;
+    day?: string;
+  } = new Intl.DateTimeFormat().formatToParts(date).reduce(
+    (obj, currentPart) => ({
+      ...obj,
+      [currentPart.type]: currentPart.value,
+    }),
+    {}
+  );
+
+  if (dateParts && dateParts.year && dateParts.month && dateParts.day) {
+    return dateParts.year.concat('-', dateParts.month, '-', dateParts.day);
+  }
+
+  return '';
+};
+
 const Sidebar = ({
   open,
   title,
+  mode,
   clickedLocation,
   clickedAddress,
   onSuggestionTempMarkerSet,
@@ -49,9 +76,11 @@ const Sidebar = ({
   editLocation,
   onClose,
   onComplete,
+  onEventCCPComplete,
 }: {
   open: boolean;
   title: string;
+  mode: MapModes;
   clickedLocation?: { lat: number; lng: number };
   clickedAddress?: string;
   onSuggestionTempMarkerSet: ({ lat, lng, address }) => void;
@@ -61,6 +90,7 @@ const Sidebar = ({
   editLocation?: { lat: number; lng: number };
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
+  onEventCCPComplete: ({ name, eventDate, lat, lng, address }) => void;
 }) => {
   const [address, setAddress] = React.useState('');
   const [latitude, setLatitude] = React.useState(0);
@@ -69,6 +99,8 @@ const Sidebar = ({
   const [isAutocompleteClicked, setIsAutocompleteClicked] = React.useState(
     false
   );
+  const [date, setDate] = React.useState(new Date(''));
+  const [eventDate, setEventDate] = React.useState('');
   const styles = useStyles();
 
   useEffect(() => {
@@ -119,6 +151,33 @@ const Sidebar = ({
     setIsAutocompleteClicked(false);
   };
 
+  const onSubmit = (e) => {
+    if (mode === MapModes.Map) {
+      onComplete({
+        label,
+        latitude,
+        longitude,
+        address,
+      });
+    } else {
+      onEventCCPComplete({
+        name: label,
+        eventDate,
+        lat: latitude,
+        lng: longitude,
+        address,
+      });
+    }
+    setAddress('');
+    setLabel('');
+    e.preventDefault();
+  };
+
+  const handleDateChange = (date) => {
+    setEventDate(formatDateToString(date));
+    setDate(date);
+  };
+
   return (
     <Drawer
       open={open}
@@ -134,18 +193,25 @@ const Sidebar = ({
           {title}
         </Typography>
       </Collapse>
+      {(mode === MapModes.NewEvent || mode === MapModes.EditEvent) && (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="normal"
+            id="date-picker-inline"
+            label="Date picker inline"
+            value={date}
+            onChange={handleDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </MuiPickersUtilsProvider>
+      )}
       <ValidatorForm
-        onSubmit={(e) => {
-          onComplete({
-            label,
-            latitude,
-            longitude,
-            address,
-          });
-          setAddress('');
-          setLabel('');
-          e.preventDefault();
-        }}
+        onSubmit={(e) => onSubmit(e)}
       >
         <Collapse in={!isAutocompleteClicked}>
           <Typography variant="body1" classes={{ root: styles.label }}>
