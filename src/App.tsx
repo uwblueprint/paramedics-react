@@ -28,23 +28,23 @@ function App() {
       <Route
         exact
         path="/events/new"
-        component={(props) => <EventCreationPage mode="new" {...props} />}
+        component={(props) => <MapPage mode="newEvent" {...props} />}
       />
       <Route
         exact
         path="/events/:eventId/ccps/new"
-        component={(props) => <CCPFormPage mode="new" {...props} />}
+        component={(props) => <MapPage mode="newCCP" {...props} />}
       />
       <Route
         exact
         path="/events/:eventId/ccps/:ccpId/edit"
-        component={(props) => <CCPFormPage mode="edit" {...props} />}
+        component={(props) => <MapPage mode="editCCP" {...props} />}
       />
       <Route exact path="/events/:eventId" component={EventDashboardPage} />
       <Route
         exact
         path="/events/:eventId/edit"
-        component={(props) => <EventCreationPage mode="edit" {...props} />}
+        component={(props) => <MapPage mode="editEvent" {...props} />}
       />
       <Route exact path="/manage/:resource" component={ResourceOverviewPage} />
       <Route exact path="/manage/">
@@ -95,7 +95,11 @@ function App() {
         path="/events/:eventId/ccps/:ccpId/patients/:patientId"
         component={(props) => <PatientProfilePage mode="edit" {...props} />}
       />
-      <Route exact path="/events/:eventId/map" component={MapPage} />
+      <Route
+        exact
+        path="/events/:eventId/map"
+        component={(props) => <MapPage mode="map" {...props} />}
+      />
       <Route path="/">
         <Redirect to="/events" />
       </Route>

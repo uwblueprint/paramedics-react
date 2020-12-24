@@ -7,7 +7,10 @@ import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import SearchBar from './SearchBar';
 import { Colours } from '../../styles/Constants';
@@ -101,9 +104,15 @@ const Sidebar = ({
   const [isAutocompleteClicked, setIsAutocompleteClicked] = React.useState(
     false
   );
-  const [date, setDate] = React.useState(new Date(''));
+  const [date, setDate] = React.useState<Date | null>(new Date());
   const [eventDate, setEventDate] = React.useState('');
   const styles = useStyles();
+  const placeholderType =
+    mode === MapModes.EditCCP || mode === MapModes.NewCCP
+      ? 'CCP'
+      : mode !== MapModes.Map
+      ? 'Event'
+      : 'Pin';
 
   useEffect(() => {
     if (clickedAddress) {
@@ -164,7 +173,7 @@ const Sidebar = ({
     } else if (mode === MapModes.NewEvent || mode === MapModes.EditEvent) {
       onEventComplete({
         name: label,
-        eventDate,
+        eventDate: formatDateToString(date),
         lat: latitude,
         lng: longitude,
         address,
@@ -175,16 +184,11 @@ const Sidebar = ({
         lat: latitude,
         lng: longitude,
         address,
-      })
+      });
     }
     setAddress('');
     setLabel('');
     e.preventDefault();
-  };
-
-  const handleDateChange = (date) => {
-    setEventDate(formatDateToString(date));
-    setDate(date);
   };
 
   return (
@@ -202,38 +206,38 @@ const Sidebar = ({
           {title}
         </Typography>
       </Collapse>
-      {(mode === MapModes.NewEvent || mode === MapModes.EditEvent) && (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            disableToolbar
-            variant="inline"
-            format="MM/dd/yyyy"
-            margin="normal"
-            id="date-picker-inline"
-            label="Date picker inline"
-            value={date}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
-        </MuiPickersUtilsProvider>
-      )}
-      <ValidatorForm
-        onSubmit={(e) => onSubmit(e)}
-      >
+      <ValidatorForm onSubmit={(e) => onSubmit(e)}>
         <Collapse in={!isAutocompleteClicked}>
           <Typography variant="body1" classes={{ root: styles.label }}>
             Name:
           </Typography>
           <TextValidator
-            placeholder="Pin name"
+            placeholder={`${placeholderType} name`}
             onChange={handleLabelChange}
             value={label}
             validators={['required']}
-            errorMessages={['A pin name is required']}
+            errorMessages={[
+              `A ${placeholderType.toLowerCase()} name is required`,
+            ]}
             className={styles.pinLabelField}
           />
+          {(mode === MapModes.NewEvent || mode === MapModes.EditEvent) && (
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date picker inline"
+                value={date}
+                onChange={(date) => setDate(date)}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </MuiPickersUtilsProvider>
+          )}
         </Collapse>
         <Collapse in={isAutocompleteClicked}>
           <Container classes={{ root: styles.autocompleteBackContainer }}>
@@ -247,7 +251,7 @@ const Sidebar = ({
           </Container>
         </Collapse>
         <Typography variant="body1" classes={{ root: styles.label }}>
-          Pin Location:
+          {`${placeholderType} Location:`}
         </Typography>
         <SearchBar
           existingAddress={address}

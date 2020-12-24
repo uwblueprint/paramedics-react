@@ -32,6 +32,49 @@ import {
 import { ADD_PIN, EDIT_PIN, DELETE_PIN } from '../../graphql/mutations/maps';
 import ConfirmModal from '../common/ConfirmModal';
 
+const sidebarResults = ({ mode, pins, ccp, event }) => {
+  console.log(pins);
+  console.log(ccp);
+  console.log(event);
+  if (mode === MapModes.EditEvent) {
+    const pinOfInterest = pins.filter(
+      (pin) => pin.eventId === event.id && pin.type === PinType.EVENT
+    )[0];
+    return {
+      label: event.name,
+      address: pinOfInterest.address,
+      location: {
+        lat: pinOfInterest.lat,
+        lng: pinOfInterest.lng,
+      },
+    };
+  } 
+  
+  if (mode === MapModes.EditCCP) {
+    const pinOfInterest = pins.filter(
+      (pin) => pin.ccpId.id === ccp.id && pin.type === PinType.CCP
+    );
+    console.log(pinOfInterest);
+    return {
+      label: ccp.name,
+      address: pinOfInterest.address,
+      location: {
+        lat: pinOfInterest.lat,
+        lng: pinOfInterest.lng,
+      },
+    };
+  }
+
+  return {
+    label: '',
+    address: '',
+    location: {
+      lat: 0,
+      lng: 0,
+    },
+  };
+};
+
 const MapPage = ({
   match: {
     params: { eventId, ccpId },
@@ -74,7 +117,6 @@ const MapPage = ({
   const collectionPoint: CCP = ccpResults.data
     ? ccpResults.data.collectionPoint
     : null;
-
   const [currentLocationPin, setCurrentLocationPin] = React.useState({
     lat: 0,
     lng: 0,
@@ -101,6 +143,7 @@ const MapPage = ({
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
   const [openSidebar, setOpenSidebar] = React.useState(false);
   const [sidebarTitle, setSidebarTitle] = React.useState('');
+  const [sidebarRender, setSidebarRender] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [isDeleteClicked, setIsDeleteClicked] = React.useState(false);
   const [isDeleteConfirmed, setIsDeleteConfirmed] = React.useState(false);
@@ -179,7 +222,7 @@ const MapPage = ({
   useEffect(() => {
     if (mode !== MapModes.Map) {
       setOpenSidebar(true);
-      if(mode === MapModes.NewCCP) {
+      if (mode === MapModes.NewCCP) {
         setSidebarTitle('Add a new CCP');
       } else if (mode === MapModes.EditCCP) {
         setSidebarTitle('Edit a CCP');
@@ -189,7 +232,7 @@ const MapPage = ({
         setSidebarTitle('Edit an event');
       }
     } else {
-      setSidebarTite(isEdit ? 'Edit a location pin' : 'Add a location pin');
+      setSidebarTitle(isEdit ? 'Edit a location pin' : 'Add a location pin');
     }
   }, [mode, isEdit]);
 
@@ -332,6 +375,7 @@ const MapPage = ({
     mapObject.map.addListener('maptypeid_changed', () => {
       setMapTypeId(mapObject.map.getMapTypeId());
     });
+    setSidebarRender(true);
   };
 
   const onSidebarClose = () => {
@@ -405,16 +449,6 @@ const MapPage = ({
 
   const onEventComplete = ({ name, eventDate, lat, lng, address }) => {
     if (mode === MapModes.NewEvent) {
-      addPin({
-        variables: {
-          label: name,
-          eventId,
-          latitude: lat,
-          longitude: lng,
-          address,
-          pinType: PinType.EVENT,
-        },
-      });
       addEvent({
         variables: {
           name,
@@ -422,7 +456,18 @@ const MapPage = ({
           createdBy: 1, // TODO: change this to proper user
           isActive: true,
         },
-      });
+      }).then((addEventData) =>
+        addPin({
+          variables: {
+            label: name,
+            eventId: addEventData.data.addEvent.id,
+            latitude: lat,
+            longitude: lng,
+            address,
+            pinType: PinType.EVENT,
+          },
+        })
+      );
     } else if (mode === MapModes.EditEvent) {
       const eventPinId = pins.filter(
         (pin) => pin.eventId.id === eventId && pin.pinType === PinType.EVENT
@@ -451,23 +496,24 @@ const MapPage = ({
 
   const onCCPComplete = ({ name, lat, lng, address }) => {
     if (mode === MapModes.NewCCP) {
-      addPin({
-        variables: {
-          label: name,
-          eventId,
-          latitude: lat,
-          longitude: lng,
-          address,
-          pinType: PinType.CCP,
-          ccpId,
-        },
-      });
       addCCP({
         variables: {
           name,
           eventId,
           createdBy: 1,
         },
+      }).then((addCCPData) => {
+        addPin({
+          variables: {
+            label: name,
+            eventId,
+            latitude: lat,
+            longitude: lng,
+            address,
+            pinType: PinType.CCP,
+            ccpId: addCCPData.data.addCollectionPoint.id,
+          },
+        })
       });
     } else if (mode === MapModes.EditCCP) {
       const ccpPinId = pins.filter(
@@ -495,7 +541,9 @@ const MapPage = ({
 
   return (
     <>
-      <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
+      {mode === MapModes.Map && (
+        <MenuAppBar pageTitle="Map" eventId={eventId} selectedMaps />
+      )}
       <InfoWindow
         title={interestPinTitle}
         address={interestPinAddress}
@@ -504,42 +552,75 @@ const MapPage = ({
         handleClose={onInfoWindowClose}
         handleDeleteClicked={onDeleteClick}
       />
-      <Sidebar
-        open={openSidebar}
-        onClose={onSidebarClose}
-        mode={mode}
-        title={sidebarTitle}
-        clickedAddress={tempMarkerClick ? tempMarkerAddress : undefined}
-        clickedLocation={tempMarkerClick ? tempMarkerLocation : undefined}
-        onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
-        setTempMarkerClick={() => {
-          setTempMarkerClick(false);
-        }}
-        onComplete={
-          isEdit
-            ? ({ label, latitude, longitude, address }) =>
-                onEditPinComplete({
-                  label,
-                  lat: latitude,
-                  lng: longitude,
-                  address,
-                })
-            : ({ label, latitude, longitude, address }) =>
-                onAddPinComplete({
-                  label,
-                  lat: latitude,
-                  lng: longitude,
-                  address,
-                })
-        }
-        editLabel={interestPinTitle && isEdit ? interestPinTitle : ''}
-        editAddress={interestPinAddress && isEdit ? interestPinAddress : ''}
-        editLocation={
-          interestPinAddress && isEdit ? interestPinLocation : undefined
-        }
-        onEventComplete={onEventComplete}
-        onCCPComplete={onCCPComplete}
-      />
+      {sidebarRender && (
+        <Sidebar
+          open={openSidebar}
+          onClose={onSidebarClose}
+          mode={mode}
+          title={sidebarTitle}
+          clickedAddress={tempMarkerClick ? tempMarkerAddress : undefined}
+          clickedLocation={tempMarkerClick ? tempMarkerLocation : undefined}
+          onSuggestionTempMarkerSet={onSuggestionTempMarkerSet}
+          setTempMarkerClick={() => {
+            setTempMarkerClick(false);
+          }}
+          onComplete={
+            isEdit
+              ? ({ label, latitude, longitude, address }) =>
+                  onEditPinComplete({
+                    label,
+                    lat: latitude,
+                    lng: longitude,
+                    address,
+                  })
+              : ({ label, latitude, longitude, address }) =>
+                  onAddPinComplete({
+                    label,
+                    lat: latitude,
+                    lng: longitude,
+                    address,
+                  })
+          }
+          editLabel={
+            interestPinTitle && isEdit
+              ? interestPinTitle
+              : mode !== MapModes.Map
+              ? sidebarResults({
+                  mode,
+                  pins,
+                  ccp: collectionPoint,
+                  event: events,
+                }).label
+              : ''
+          }
+          editAddress={
+            interestPinAddress && isEdit
+              ? interestPinAddress
+              : mode !== MapModes.Map
+              ? sidebarResults({
+                  mode,
+                  pins,
+                  ccp: collectionPoint,
+                  event: events,
+                }).address
+              : ''
+          }
+          editLocation={
+            interestPinAddress && isEdit
+              ? interestPinLocation
+              : mode !== MapModes.Map
+              ? sidebarResults({
+                  mode,
+                  pins,
+                  ccp: collectionPoint,
+                  event: events,
+                }).location
+              : undefined
+          }
+          onEventComplete={onEventComplete}
+          onCCPComplete={onCCPComplete}
+        />
+      )}
       <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
         <GoogleMapReact
           bootstrapURLKeys={{
