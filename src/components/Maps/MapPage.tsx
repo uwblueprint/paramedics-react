@@ -33,15 +33,12 @@ import { ADD_PIN, EDIT_PIN, DELETE_PIN } from '../../graphql/mutations/maps';
 import ConfirmModal from '../common/ConfirmModal';
 
 const sidebarResults = ({ mode, pins, ccp, event }) => {
-  console.log(pins);
-  console.log(ccp);
-  console.log(event);
   if (mode === MapModes.EditEvent) {
     const pinOfInterest = pins.filter(
-      (pin) => pin.eventId === event.id && pin.type === PinType.EVENT
+      (pin) => pin.eventId.id === event[0].id && pin.pinType === PinType.EVENT
     )[0];
     return {
-      label: event.name,
+      label: event[0].name,
       address: pinOfInterest.address,
       location: {
         lat: pinOfInterest.lat,
@@ -52,9 +49,8 @@ const sidebarResults = ({ mode, pins, ccp, event }) => {
   
   if (mode === MapModes.EditCCP) {
     const pinOfInterest = pins.filter(
-      (pin) => pin.ccpId.id === ccp.id && pin.type === PinType.CCP
-    );
-    console.log(pinOfInterest);
+      (pin) => pin.pinType === PinType.CCP && pin.ccpId && pin.ccpId.id === ccp.id
+    )[0];
     return {
       label: ccp.name,
       address: pinOfInterest.address,
@@ -88,7 +84,7 @@ const MapPage = ({
   const { enqueueSnackbar } = useSnackbar();
 
   const pinResults = useQuery(GET_PINS_BY_EVENT_ID, {
-    skip: mode !== MapModes.Map,
+    skip: mode === MapModes.NewEvent,
     variables: { eventId },
   });
   const pins: Array<LocationPin> =
@@ -103,8 +99,10 @@ const MapPage = ({
       },
     }
   );
-  const events: Array<Event> = eventResults.data
+  const events: Array<Event> = eventResults.data && mode === MapModes.NewEvent
     ? eventResults.data.events
+    : eventResults.data && mode === MapModes.EditEvent
+    ? [eventResults.data.event]
     : [];
 
   const ccpResults = useQuery(
@@ -225,11 +223,26 @@ const MapPage = ({
       if (mode === MapModes.NewCCP) {
         setSidebarTitle('Add a new CCP');
       } else if (mode === MapModes.EditCCP) {
+        const pinOfInterest = pins.filter(
+          (pin) => pin.pinType === PinType.CCP && pin.ccpId && pin.ccpId.id === collectionPoint.id
+        )[0];
         setSidebarTitle('Edit a CCP');
+        setCenter({
+          lat: pinOfInterest.latitude,
+          lng: pinOfInterest.longitude,
+        })
       } else if (mode === MapModes.NewEvent) {
         setSidebarTitle('Add a new event');
       } else {
+        const eventOfInterest = events[0];
+        const pinOfInterest = pins.filter(
+          (pin) => pin.eventId.id === eventOfInterest.id && pin.pinType === PinType.EVENT
+        )[0];
         setSidebarTitle('Edit an event');
+        setCenter({
+          lat: pinOfInterest.latitude,
+          lng: pinOfInterest.longitude,
+        })
       }
     } else {
       setSidebarTitle(isEdit ? 'Edit a location pin' : 'Add a location pin');
@@ -238,16 +251,24 @@ const MapPage = ({
 
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
-      const { pinsForEvent } = cache.readQuery<any>({
-        query: GET_PINS_BY_EVENT_ID,
-        variables: { eventId },
-      });
+      if (mode !== MapModes.Map) {
+        cache.writeQuery({
+          query: GET_PINS_BY_EVENT_ID,
+          variables: { eventId },
+          data: { pinsForEvent: [addLocationPin] },
+        });
+      } else {
+        const { pinsForEvent } = cache.readQuery<any>({
+          query: GET_PINS_BY_EVENT_ID,
+          variables: { eventId },
+        });
 
-      cache.writeQuery({
-        query: GET_PINS_BY_EVENT_ID,
-        variables: { eventId },
-        data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
-      });
+        cache.writeQuery({
+          query: GET_PINS_BY_EVENT_ID,
+          variables: { eventId },
+          data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
+        });
+      }
     },
   });
 
@@ -379,10 +400,16 @@ const MapPage = ({
   };
 
   const onSidebarClose = () => {
-    setOpenSidebar(false);
-    setTempMarkerClick(false);
-    setInfoWindowOpen(!!isEdit);
-    setIsEdit(false);
+    if(mode === MapModes.EditCCP || mode === MapModes.NewCCP) {
+      history.replace(`/events/${eventId}`);
+    } else if (mode === MapModes.NewEvent || mode === MapModes.EditEvent) {
+      history.replace('/events');
+    } else {
+      setOpenSidebar(false);
+      setTempMarkerClick(false);
+      setInfoWindowOpen(!!isEdit);
+      setIsEdit(false);
+    }
   };
 
   const onAddPinComplete = ({ label, lat, lng, address }) => {
@@ -513,7 +540,7 @@ const MapPage = ({
             pinType: PinType.CCP,
             ccpId: addCCPData.data.addCollectionPoint.id,
           },
-        })
+        });
       });
     } else if (mode === MapModes.EditCCP) {
       const ccpPinId = pins.filter(
