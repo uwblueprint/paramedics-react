@@ -103,7 +103,7 @@ const ResourceOverviewPage = ({
       default:
         break;
     }
-    history.push(path);
+    history.push(path, { updatedResourceId: null });
   };
 
   const classes = useLayout();

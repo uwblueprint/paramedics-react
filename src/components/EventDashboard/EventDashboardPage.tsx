@@ -86,7 +86,7 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   return (
     <Box className={classes.root}>
-      <MenuAppBar pageTitle="Directory" eventId={eventId} selectedDirectory/>
+      <MenuAppBar pageTitle="Directory" eventId={eventId} selectedDirectory />
       <Container className={classes.container}>
         <Typography variant="h3">{event.name}</Typography>
         <Box

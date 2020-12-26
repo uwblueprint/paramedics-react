@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
@@ -12,10 +12,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import clsx from 'clsx';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper, { Option } from '../common/OptionPopper';
-
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -93,7 +93,12 @@ const useLayout = makeStyles({
     right: '48px',
     bottom: '48px',
   },
+  highlighted: {
+    backgroundColor: Colours.Blue,
+  },
 });
+
+type LocationState = { updatedResourceId: string | null };
 
 const UserOverviewPage: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -110,6 +115,16 @@ const UserOverviewPage: React.FC = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedMember, selectMember] = React.useState<number>(-1);
+  const location = useLocation<LocationState>();
+  const { updatedResourceId: highlightedUserId } = location.state || { updatedResourceId: null };
+
+  window.history.pushState(
+    {
+      ...location.state,
+      updatedResourceId: null,
+    },
+    ''
+  );
 
   const handleCloseConfirmDelete = () => {
     setAnchorEl(null);
@@ -192,7 +207,12 @@ const UserOverviewPage: React.FC = () => {
 
   const cells = members.map((member: User) => {
     return (
-      <TableRow key={member.id}>
+      <TableRow
+        key={member.id}
+        className={clsx({
+          [classes.highlighted]: member.id === highlightedUserId,
+        })}
+      >
         <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
         <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
         <TableCell classes={{ root: dRow.root }}>
