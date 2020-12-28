@@ -6,6 +6,8 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import { createMuiTheme } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -16,11 +18,28 @@ import SearchBar from './SearchBar';
 import { Colours } from '../../styles/Constants';
 import { MapModes } from '../../graphql/queries/maps';
 
+const datePickerTheme = createMuiTheme({
+  overrides: {
+    MuiPickersDay: {
+      daySelected: {
+        backgroundColor: Colours.Primary,
+      },
+    },
+  },
+});
+
 const useStyles = makeStyles({
   pinLabelField: {
     width: '334px',
     marginLeft: '16px',
     marginBottom: '30px',
+  },
+  datePickerField: {
+    width: '334px',
+    marginLeft: '16px',
+    marginBottom: '30px',
+    paddingLeft: '0px',
+    marginTop: '-10px',
   },
   label: {
     marginLeft: '16px',
@@ -59,6 +78,12 @@ const formatDateToString = (date: Date | null) => {
     {}
   );
 
+  if (dateParts.day) {
+    if (dateParts.day.length < 2) {
+      dateParts.day = '0'.concat(dateParts.day);
+    }
+  }
+
   if (dateParts && dateParts.year && dateParts.month && dateParts.day) {
     return dateParts.year.concat('-', dateParts.month, '-', dateParts.day);
   }
@@ -77,6 +102,7 @@ const Sidebar = ({
   editLabel,
   editAddress,
   editLocation,
+  editDate,
   onClose,
   onComplete,
   onEventComplete,
@@ -92,6 +118,7 @@ const Sidebar = ({
   editLabel?: string;
   editAddress?: string;
   editLocation?: { lat: number; lng: number };
+  editDate?: Date;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
   onEventComplete: ({ name, eventDate, lat, lng, address }) => void;
@@ -105,7 +132,6 @@ const Sidebar = ({
     false
   );
   const [date, setDate] = React.useState<Date | null>(new Date());
-  const [eventDate, setEventDate] = React.useState('');
   const styles = useStyles();
   const placeholderType =
     mode === MapModes.EditCCP || mode === MapModes.NewCCP
@@ -133,12 +159,22 @@ const Sidebar = ({
       setLatitude(editLocation.lat);
       setLongitude(editLocation.lng);
     }
+
+    if (editDate) {
+      const convertedDate = new Date(editDate);
+      setDate(
+        new Date(
+          convertedDate.getTime() - convertedDate.getTimezoneOffset() * -60000
+        )
+      );
+    }
   }, [
     clickedAddress,
     clickedLocation,
     editLabel,
     editAddress,
     editLocation,
+    editDate,
     address,
   ]);
 
@@ -222,21 +258,29 @@ const Sidebar = ({
             className={styles.pinLabelField}
           />
           {(mode === MapModes.NewEvent || mode === MapModes.EditEvent) && (
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="Date picker inline"
-                value={date}
-                onChange={(date) => setDate(date)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-            </MuiPickersUtilsProvider>
+            <>
+              <Typography variant="body1" classes={{ root: styles.label }}>
+                Date:
+              </Typography>
+              <Container classes={{ root: styles.datePickerField }}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <ThemeProvider theme={datePickerTheme}>
+                    <KeyboardDatePicker
+                      disableToolbar
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      value={date}
+                      onChange={(date) => setDate(date)}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                    />
+                  </ThemeProvider>
+                </MuiPickersUtilsProvider>
+              </Container>
+            </>
           )}
         </Collapse>
         <Collapse in={isAutocompleteClicked}>

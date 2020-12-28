@@ -277,10 +277,6 @@ const MapPage = ({
         }
       } else {
         const eventOfInterest = events[0];
-        console.log('Event of interest: ', eventOfInterest);
-        console.log('Pins: ', pins);
-        console.log('Events: ', events);
-        console.log('Event results: ', eventResults);
         const pinOfInterest = pins.filter(
           (pin) =>
             pin.eventId.id === eventOfInterest.id &&
@@ -695,11 +691,20 @@ const MapPage = ({
                 }).location
               : undefined
           }
+          editDate={
+            mode === MapModes.EditEvent ? events[0].eventDate : undefined
+          }
           onEventComplete={onEventComplete}
           onCCPComplete={onCCPComplete}
         />
       )}
-      <div style={{ height: '92vh', width: '100%', overflow: 'hidden' }}>
+      <div
+        style={{
+          height: mode === MapModes.Map ? '92vh' : '100vh',
+          width: '100%',
+          overflow: 'hidden',
+        }}
+      >
         <GoogleMapReact
           bootstrapURLKeys={{
             key: process.env.REACT_APP_GMAPS,
