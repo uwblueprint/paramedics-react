@@ -242,7 +242,6 @@ const MapPage = ({
           const pinOfInterest = ccpPins.filter(
             (pin) => pin.ccpId.id === ccpId
           )[0];
-          console.log(pins);
           setSidebarTitle('Edit a CCP');
           setCenter({
             lat: pinOfInterest.latitude,
