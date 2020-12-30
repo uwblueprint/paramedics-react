@@ -107,7 +107,9 @@ const HospitalOverviewPage: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedHospital, selectHospital] = React.useState<number>(-1);
   const location = useLocation<LocationState>();
-  const { updatedResourceId: highlightedHospitalId } = location.state || { updatedResourceId: null };
+  const { updatedResourceId: highlightedHospitalId } = location.state || {
+    updatedResourceId: null,
+  };
 
   window.history.pushState(
     {

@@ -116,7 +116,9 @@ const UserOverviewPage: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedMember, selectMember] = React.useState<number>(-1);
   const location = useLocation<LocationState>();
-  const { updatedResourceId: highlightedUserId } = location.state || { updatedResourceId: null };
+  const { updatedResourceId: highlightedUserId } = location.state || {
+    updatedResourceId: null,
+  };
 
   window.history.pushState(
     {

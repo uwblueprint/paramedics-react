@@ -111,7 +111,9 @@ const AmbulanceOverviewPage: React.FC = () => {
     number | null
   >(null);
   const location = useLocation<LocationState>();
-  const { updatedResourceId: highlightedAmbulanceId } = location.state || { updatedResourceId: null };
+  const { updatedResourceId: highlightedAmbulanceId } = location.state || {
+    updatedResourceId: null,
+  };
 
   window.history.pushState(
     {
