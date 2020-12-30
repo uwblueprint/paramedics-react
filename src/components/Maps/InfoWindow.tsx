@@ -9,6 +9,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Container from '@material-ui/core/Container';
 
 import { Colours } from '../../styles/Constants';
+import { PinType } from '../../graphql/queries/maps';
 
 const useStyles = makeStyles({
   root: {
@@ -47,6 +48,7 @@ const InfoWindow = ({
   title,
   address,
   open,
+  type,
   handleEditClick,
   handleClose,
   handleDeleteClicked,
@@ -54,6 +56,7 @@ const InfoWindow = ({
   title: string;
   address: string;
   open: boolean;
+  type: string;
   handleEditClick: () => void;
   handleClose: () => void;
   handleDeleteClicked: () => void;
@@ -104,14 +107,24 @@ const InfoWindow = ({
         <Container classes={{ root: infoStyles.flexContainerButtons }}>
           <Button
             size="small"
-            style={{ color: Colours.Danger }}
+            style={{
+              color:
+                type === PinType.OTHER ? Colours.Danger : Colours.DisabledText,
+            }}
+            disabled={type !== PinType.OTHER}
             onClick={handleDeleteClicked}
           >
             Delete
           </Button>
           <Button
             size="small"
-            style={{ color: Colours.Secondary }}
+            style={{
+              color:
+                type === PinType.OTHER
+                  ? Colours.Secondary
+                  : Colours.DisabledText,
+            }}
+            disabled={type !== PinType.OTHER}
             onClick={handleEditClick}
           >
             Edit

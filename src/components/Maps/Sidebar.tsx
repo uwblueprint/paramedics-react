@@ -22,7 +22,8 @@ const datePickerTheme = createMuiTheme({
   overrides: {
     MuiPickersDay: {
       daySelected: {
-        backgroundColor: Colours.Primary,
+        color: Colours.White,
+        backgroundColor: Colours.Secondary,
       },
     },
   },
