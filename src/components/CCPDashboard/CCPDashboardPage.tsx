@@ -212,7 +212,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       )[0].address;
       setCCPAddress(ccpPinAddress);
     }
-  }, [pinsInfo, eventId, pinsLoading]);
+  }, [pinsInfo, ccpId, pinsLoading]);
 
   useSubscription(PATIENT_UPDATED, {
     variables: { eventId },
