@@ -300,7 +300,7 @@ const MapPage = ({
 
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
-      if(mode === MapModes.NewEvent) {
+      if (mode === MapModes.NewEvent) {
         cache.writeQuery({
           query: GET_PINS_BY_EVENT_ID,
           variables: { eventId: addLocationPin.eventId.id },
@@ -542,8 +542,7 @@ const MapPage = ({
           createdBy: 1, // TODO: change this to proper user
           isActive: true,
         },
-      }).then((addEventData) =>{
-        console.log("In then");
+      }).then((addEventData) =>
         addPin({
           variables: {
             label: name,
@@ -553,9 +552,8 @@ const MapPage = ({
             address,
             pinType: PinType.EVENT,
           },
-        });
-        console.log("Finished add pin query");
-      });
+        })
+      );
     } else if (mode === MapModes.EditEvent) {
       const eventPinId = pins.filter(
         (pin) => pin.eventId.id === eventId && pin.pinType === PinType.EVENT

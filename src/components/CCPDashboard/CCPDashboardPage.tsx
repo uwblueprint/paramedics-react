@@ -182,8 +182,8 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     GET_PINS_BY_EVENT_ID,
     {
       variables: { eventId },
-    },
-  )
+    }
+  );
 
   const highlightPatient = React.useCallback((id) => {
     setLastUpdatedPatient(id);

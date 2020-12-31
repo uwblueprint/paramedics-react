@@ -22,6 +22,7 @@ import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 import { DELETE_CCP } from '../../graphql/mutations/ccps';
 import ConfirmModal from '../common/ConfirmModal';
+import { GET_PINS_BY_EVENT_ID, PinType } from '../../graphql/queries/maps';
 
 const useStyles = makeStyles({
   root: {
@@ -166,6 +167,25 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         query: GET_CCPS_BY_EVENT_ID,
         variables: { eventId },
         data: { collectionPointsByEvent: updatedCCPsList },
+      });
+
+      // Update GET_PINS_BY_EVENT_ID
+      const { pinsForEvent } = cache.readQuery<any>({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      const updatedPinsList = pinsForEvent.filter(
+        (pin) =>
+          pin.pinType !== PinType.CCP ||
+          (pin.pinType === PinType.CCP &&
+            pin.ccpId.id !== deleteCollectionPoint)
+      );
+
+      cache.writeQuery({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { pinsForEvent: updatedPinsList },
       });
     },
     onCompleted() {

@@ -1,13 +1,11 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import EventsPage from './components/EventOverview/EventsPage';
-import EventCreationPage from './components/EventCreation/EventCreationPage';
 import EventDashboardPage from './components/EventDashboard/EventDashboardPage';
 import ScanPatientPage from './components/ScanPatient/ScanPatientPage';
 import EnterBarcodePage from './components/EnterBarcode/EnterBarcodePage';
 import CCPDashboardPage from './components/CCPDashboard/CCPDashboardPage';
 import PatientProfilePage from './components/PatientProfile/PatientProfilePage';
-import CCPFormPage from './components/CCPForm/CCPFormPage';
 import ResourceOverviewPage from './components/ResourceOverview/ResourceOverviewPage';
 import HospitalFormPage from './components/ResourceForm/HospitalFormPage';
 import AmbulanceFormPage from './components/ResourceForm/AmbulanceFormPage';
