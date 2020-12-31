@@ -15,8 +15,21 @@ import {
   RECONNECTED,
 } from '../subscriptions/constants';
 
+let webSocketUrl = 'ws://localhost:4000/graphql';
+if (process.env.REACT_APP_BACKEND_WEBSOCKET_URL) {
+  if (process.env.REACT_APP_BACKEND_WEBSOCKET_URL[0] === '/') {
+    const url = new URL(
+      process.env.REACT_APP_BACKEND_WEBSOCKET_URL,
+      window.location.href
+    );
+    webSocketUrl = url.protocol.replace('http', 'ws');
+  } else {
+    webSocketUrl = process.env.REACT_APP_BACKEND_WEBSOCKET_URL;
+  }
+}
+
 const myClient = new SubscriptionClient(
-  process.env.REACT_APP_BACKEND_WEBSOCKET_URL || 'ws://localhost:4000/graphql',
+  webSocketUrl || 'ws://localhost:4000/graphql',
   {
     reconnect: true,
   }
