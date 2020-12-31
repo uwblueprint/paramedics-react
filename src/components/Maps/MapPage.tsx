@@ -104,7 +104,7 @@ const MapPage = ({
     }
   );
 
-  const events: Array<Event> =
+  const eventsData: Array<Event> =
     eventResults.data && mode === MapModes.NewEvent
       ? eventResults.data.events
       : eventResults.data &&
@@ -112,7 +112,7 @@ const MapPage = ({
       ? [eventResults.data.event]
       : [];
 
-  const eventOfInterest = events[0];
+  const eventOfInterest = eventsData[0];
 
   const ccpResults = useQuery(
     mode === MapModes.EditCCP ? GET_CCP_BY_ID : GET_CCPS_BY_EVENT_ID,
@@ -151,7 +151,7 @@ const MapPage = ({
     lng: 0,
   });
   const [mapTypeId, setMapTypeId] = React.useState(MapTypes.ROADMAP);
-  const [openSidebar, setOpenSidebar] = React.useState(false);
+  const [openSidebar, setOpenSidebar] = React.useState(mode !== MapModes.Map);
   const [sidebarTitle, setSidebarTitle] = React.useState('');
   const [sidebarRender, setSidebarRender] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -232,7 +232,6 @@ const MapPage = ({
   useEffect(() => {
     if (!pinResults.loading && !ccpResults.loading && !eventResults.loading) {
       if (mode !== MapModes.Map) {
-        setOpenSidebar(true);
         if (mode === MapModes.NewCCP) {
           setSidebarTitle('Add a new CCP');
         } else if (mode === MapModes.EditCCP) {
@@ -301,24 +300,36 @@ const MapPage = ({
 
   const [addPin] = useMutation(ADD_PIN, {
     update(cache, { data: { addLocationPin } }) {
-      const { pinsForEvent } = cache.readQuery<any>({
-        query: GET_PINS_BY_EVENT_ID,
-        variables: { eventId },
-      });
+      if(mode === MapModes.NewEvent) {
+        cache.writeQuery({
+          query: GET_PINS_BY_EVENT_ID,
+          variables: { eventId: addLocationPin.eventId.id },
+          data: { pinsForEvent: [addLocationPin] },
+        });
+      } else {
+        const { pinsForEvent } = cache.readQuery<any>({
+          query: GET_PINS_BY_EVENT_ID,
+          variables: { eventId },
+        });
 
-      cache.writeQuery({
-        query: GET_PINS_BY_EVENT_ID,
-        variables: { eventId },
-        data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
-      });
+        cache.writeQuery({
+          query: GET_PINS_BY_EVENT_ID,
+          variables: { eventId },
+          data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
+        });
+      }
     },
   });
 
   const [addEvent] = useMutation(ADD_EVENT, {
     update(cache, { data: { addEvent } }) {
+      const { events } = cache.readQuery<any>({
+        query: GET_ALL_EVENTS,
+      });
+
       cache.writeQuery({
         query: GET_ALL_EVENTS,
-        data: { events: events.concat([addEvent]) },
+        data: { events: [...events, addEvent] },
       });
     },
     onCompleted({ addEvent }) {
@@ -531,7 +542,8 @@ const MapPage = ({
           createdBy: 1, // TODO: change this to proper user
           isActive: true,
         },
-      }).then((addEventData) =>
+      }).then((addEventData) =>{
+        console.log("In then");
         addPin({
           variables: {
             label: name,
@@ -541,8 +553,9 @@ const MapPage = ({
             address,
             pinType: PinType.EVENT,
           },
-        })
-      );
+        });
+        console.log("Finished add pin query");
+      });
     } else if (mode === MapModes.EditEvent) {
       const eventPinId = pins.filter(
         (pin) => pin.eventId.id === eventId && pin.pinType === PinType.EVENT
@@ -666,7 +679,7 @@ const MapPage = ({
                   mode,
                   pins,
                   ccp: collectionPoint,
-                  event: events,
+                  event: eventsData,
                 }).label
               : ''
           }
@@ -678,7 +691,7 @@ const MapPage = ({
                   mode,
                   pins,
                   ccp: collectionPoint,
-                  event: events,
+                  event: eventsData,
                 }).address
               : ''
           }
@@ -690,12 +703,12 @@ const MapPage = ({
                   mode,
                   pins,
                   ccp: collectionPoint,
-                  event: events,
+                  event: eventsData,
                 }).location
               : undefined
           }
           editDate={
-            mode === MapModes.EditEvent ? events[0].eventDate : undefined
+            mode === MapModes.EditEvent ? eventsData[0].eventDate : undefined
           }
           onEventComplete={onEventComplete}
           onCCPComplete={onCCPComplete}
