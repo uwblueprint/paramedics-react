@@ -55,15 +55,17 @@ const AmbulanceFormPage = ({
         data: { ambulances: ambulances.concat([addAmbulance]) },
       });
     },
-    onCompleted() {
+    onCompleted({ addAmbulance }) {
       enqueueSnackbar('Ambulance added.');
-      history.replace('/manage/ambulances');
+      history.replace('/manage/ambulances', {
+        updatedResourceId: addAmbulance.id,
+      });
     },
   });
   const [editAmbulance] = useMutation(EDIT_AMBULANCE, {
     onCompleted() {
       enqueueSnackbar('Ambulance edited.');
-      history.replace('/manage/ambulances');
+      history.replace('/manage/ambulances', { updatedResourceId: ambulanceId });
     },
   });
 

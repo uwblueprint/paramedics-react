@@ -51,15 +51,17 @@ const HospitalFormPage = ({
         data: { hospitals: hospitals.concat([addHospital]) },
       });
     },
-    onCompleted() {
+    onCompleted({ addHospital }) {
       enqueueSnackbar('Hospital added.');
-      history.replace('/manage/hospitals');
+      history.replace('/manage/hospitals', {
+        updatedResourceId: addHospital.id,
+      });
     },
   });
   const [editHospital] = useMutation(EDIT_HOSPITAL, {
     onCompleted() {
       enqueueSnackbar('Hospital edited.');
-      history.replace('/manage/hospitals');
+      history.replace('/manage/hospitals', { updatedResourceId: hospitalId });
     },
   });
 

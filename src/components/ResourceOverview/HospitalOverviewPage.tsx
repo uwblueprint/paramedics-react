@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -12,10 +12,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import clsx from 'clsx';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper, { Option } from '../common/OptionPopper';
-
 import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
 import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
 import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
@@ -93,7 +93,12 @@ const useLayout = makeStyles({
     right: '48px',
     bottom: '48px',
   },
+  highlighted: {
+    backgroundColor: Colours.Blue,
+  },
 });
+
+type LocationState = { updatedResourceId: string | null };
 
 const HospitalOverviewPage: React.FC = () => {
   const history = useHistory();
@@ -101,6 +106,18 @@ const HospitalOverviewPage: React.FC = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedHospital, selectHospital] = React.useState<number>(-1);
+  const location = useLocation<LocationState>();
+  const { updatedResourceId: highlightedHospitalId } = location.state || {
+    updatedResourceId: null,
+  };
+
+  window.history.pushState(
+    {
+      ...location.state,
+      updatedResourceId: null,
+    },
+    ''
+  );
 
   // Update cache
   useAllHospitals();
@@ -186,7 +203,12 @@ const HospitalOverviewPage: React.FC = () => {
 
   const cells = hospitals.map((hospital: Hospital) => {
     return (
-      <TableRow key={hospital.id}>
+      <TableRow
+        key={hospital.id}
+        className={clsx({
+          [classes.highlighted]: hospital.id === highlightedHospitalId,
+        })}
+      >
         <TableCell classes={{ root: dRow.root }}>{hospital.name}</TableCell>
         <TableCell classes={{ root: optionStyle.root }}>
           <IconButton data-id={hospital.id} onClick={handleClickOptions}>

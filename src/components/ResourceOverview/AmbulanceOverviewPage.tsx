@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
@@ -12,10 +12,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import clsx from 'clsx';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper, { Option } from '../common/OptionPopper';
-
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -96,7 +96,12 @@ const useLayout = makeStyles({
     right: '48px',
     bottom: '48px',
   },
+  highlighted: {
+    backgroundColor: Colours.Blue,
+  },
 });
+
+type LocationState = { updatedResourceId: string | null };
 
 const AmbulanceOverviewPage: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -105,6 +110,18 @@ const AmbulanceOverviewPage: React.FC = () => {
   const [selectedAmbulance, setSelectedAmbulance] = React.useState<
     number | null
   >(null);
+  const location = useLocation<LocationState>();
+  const { updatedResourceId: highlightedAmbulanceId } = location.state || {
+    updatedResourceId: null,
+  };
+
+  window.history.pushState(
+    {
+      ...location.state,
+      updatedResourceId: null,
+    },
+    ''
+  );
 
   // Update cache
   useAllAmbulances();
@@ -193,7 +210,12 @@ const AmbulanceOverviewPage: React.FC = () => {
 
   const cells = ambulances.map((ambulance: Ambulance) => {
     return (
-      <TableRow key={ambulance.id}>
+      <TableRow
+        key={ambulance.id}
+        className={clsx({
+          [classes.highlighted]: ambulance.id === highlightedAmbulanceId,
+        })}
+      >
         <TableCell classes={{ root: dRow.root }}>
           {`#${ambulance.vehicleNumber}`}
         </TableCell>
