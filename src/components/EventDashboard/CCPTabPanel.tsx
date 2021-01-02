@@ -131,7 +131,11 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const optionStyle = useOptions();
 
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
+  const { data: pinData } = useQuery(GET_PINS_BY_EVENT_ID, {
+    variables: { eventId }
+  });
 
+  const pins = pinData ? pinData.pinsForEvent : [];
   const rows = data ? data.collectionPointsByEvent : [];
   const open = Boolean(anchorEl);
   const history = useHistory();
@@ -145,6 +149,10 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
     handleCloseMenu();
     setOpenConfirmDelete(false);
   };
+
+  const getCCPAddress = ({ ccp, pins }) => {
+    return pins.filter((pin) => pin.pinType === PinType.CCP  && pin.ccpId.id === ccp.id)[0].address;
+  }
 
   //  Writing to cache when deleting ccp
   const [deleteCCP] = useMutation(DELETE_CCP, {
@@ -256,7 +264,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           {(row as CCP).name}
         </TableCell>
         <TableCell component="th" scope="row">
-          -
+          {getCCPAddress({ccp: row, pins})}
         </TableCell>
         <TableCell
           width="48px"

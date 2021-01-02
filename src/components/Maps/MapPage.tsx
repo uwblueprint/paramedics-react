@@ -319,6 +319,21 @@ const MapPage = ({
         });
       }
     },
+    onCompleted({ addedPin }) {
+      if(mode === MapModes.NewCCP) {
+        enqueueSnackbar('CCP added.');
+        // TODO: Check for valid eventId
+        history.replace(`/events/${eventId}`);
+      } else if (mode === MapModes.EditCCP) {
+        enqueueSnackbar('CCP edited.');
+        // TODO: Check for valid eventId
+        history.replace(`/events/${eventId}`);
+      } else if (mode === MapModes.NewEvent) {
+        history.replace('/events', { addedEventId: addedPin.eventId.id });
+      } else if (mode === MapModes.EditEvent) {
+        history.replace('/events');
+      }
+    },
   });
 
   const [addEvent] = useMutation(ADD_EVENT, {
@@ -331,9 +346,6 @@ const MapPage = ({
         query: GET_ALL_EVENTS,
         data: { events: [...events, addEvent] },
       });
-    },
-    onCompleted({ addEvent }) {
-      history.replace('/events', { addedEventId: addEvent.id });
     },
     onError() {
       history.replace('/events');
@@ -364,20 +376,9 @@ const MapPage = ({
         },
       });
     },
-    onCompleted() {
-      enqueueSnackbar('CCP added.');
-      // TODO: Check for valid eventId
-      history.replace(`/events/${eventId}`);
-    },
   });
 
-  const [editCCP] = useMutation(EDIT_CCP, {
-    onCompleted() {
-      enqueueSnackbar('CCP edited.');
-      // TODO: Check for valid eventId
-      history.replace(`/events/${eventId}`);
-    },
-  });
+  const [editCCP] = useMutation(EDIT_CCP);
 
   const [editPin] = useMutation(EDIT_PIN);
 
