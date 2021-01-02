@@ -41,7 +41,7 @@ const CancelModal: React.FC<{
 }> = ({ open, handleClose }: { open: boolean; handleClose: () => void }) => {
   const classes = useModalStyles();
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} disableBackdropClick>
       <Container classes={{ root: classes.root }}>
         <Typography classes={{ root: classes.text }}>
           Are you sure you want to cancel this event?
