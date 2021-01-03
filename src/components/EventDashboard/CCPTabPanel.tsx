@@ -132,7 +132,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
 
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
   const { data: pinData } = useQuery(GET_PINS_BY_EVENT_ID, {
-    variables: { eventId }
+    variables: { eventId },
   });
 
   const pins = pinData ? pinData.pinsForEvent : [];
@@ -151,8 +151,10 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   };
 
   const getCCPAddress = ({ ccp, pins }) => {
-    return pins.filter((pin) => pin.pinType === PinType.CCP  && pin.ccpId.id === ccp.id)[0].address;
-  }
+    return pins.filter(
+      (pin) => pin.pinType === PinType.CCP && pin.ccpId.id === ccp.id
+    )[0].address;
+  };
 
   //  Writing to cache when deleting ccp
   const [deleteCCP] = useMutation(DELETE_CCP, {
@@ -264,7 +266,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           {(row as CCP).name}
         </TableCell>
         <TableCell component="th" scope="row">
-          {getCCPAddress({ccp: row, pins})}
+          {getCCPAddress({ ccp: row, pins })}
         </TableCell>
         <TableCell
           width="48px"

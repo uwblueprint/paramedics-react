@@ -25,6 +25,7 @@ import { ADD_CCP, EDIT_CCP } from '../../graphql/mutations/ccps';
 import {
   LocationPin,
   GET_PINS_BY_EVENT_ID,
+  GET_ALL_PINS,
   PinType,
   MapTypes,
   MapModes,
@@ -306,6 +307,15 @@ const MapPage = ({
           variables: { eventId: addLocationPin.eventId.id },
           data: { pinsForEvent: [addLocationPin] },
         });
+
+        const { pins } = cache.readQuery<any>({
+          query: GET_ALL_PINS,
+        });
+
+        cache.writeQuery({
+          query: GET_ALL_PINS,
+          data: { pins: [...pins, addLocationPin] },
+        });
       } else {
         const { pinsForEvent } = cache.readQuery<any>({
           query: GET_PINS_BY_EVENT_ID,
@@ -317,21 +327,26 @@ const MapPage = ({
           variables: { eventId },
           data: { pinsForEvent: [...pinsForEvent, addLocationPin] },
         });
+
+        const { pins: allPins } = cache.readQuery<any>({
+          query: GET_ALL_PINS,
+        });
+
+        cache.writeQuery({
+          query: GET_ALL_PINS,
+          data: { pins: [...allPins, addLocationPin] },
+        });
       }
     },
-    onCompleted({ addedPin }) {
-      if(mode === MapModes.NewCCP) {
+    onCompleted(data) {
+      if (mode === MapModes.NewCCP) {
         enqueueSnackbar('CCP added.');
         // TODO: Check for valid eventId
         history.replace(`/events/${eventId}`);
-      } else if (mode === MapModes.EditCCP) {
-        enqueueSnackbar('CCP edited.');
-        // TODO: Check for valid eventId
-        history.replace(`/events/${eventId}`);
       } else if (mode === MapModes.NewEvent) {
-        history.replace('/events', { addedEventId: addedPin.eventId.id });
-      } else if (mode === MapModes.EditEvent) {
-        history.replace('/events');
+        history.replace('/events', {
+          addedEventId: data.addLocationPin.eventId.id,
+        });
       }
     },
   });
@@ -378,7 +393,15 @@ const MapPage = ({
     },
   });
 
-  const [editCCP] = useMutation(EDIT_CCP);
+  const [editCCP] = useMutation(EDIT_CCP, {
+    onCompleted() {
+      if (mode === MapModes.EditCCP) {
+        enqueueSnackbar('CCP edited.');
+        // TODO: Check for valid eventId
+        history.replace(`/events/${eventId}`);
+      }
+    },
+  });
 
   const [editPin] = useMutation(EDIT_PIN);
 
@@ -402,6 +425,20 @@ const MapPage = ({
         query: GET_PINS_BY_EVENT_ID,
         variables: { eventId },
         data: { pinsForEvent: updatedPinsList },
+      });
+
+      // Update GET_ALL_PINS
+      const { pins } = cache.readQuery<any>({
+        query: GET_ALL_PINS,
+      });
+
+      const updatedAllPins = pins.filter(
+        (pin) => pin.id !== deleteLocationPin
+      );
+
+      cache.writeQuery({
+        query: GET_ALL_PINS,
+        data: { pins: updatedAllPins },
       });
     },
   });
@@ -543,7 +580,8 @@ const MapPage = ({
           createdBy: 1, // TODO: change this to proper user
           isActive: true,
         },
-      }).then((addEventData) =>
+      }).then((addEventData) => {
+        console.log(addEventData);
         addPin({
           variables: {
             label: name,
@@ -553,8 +591,8 @@ const MapPage = ({
             address,
             pinType: PinType.EVENT,
           },
-        })
-      );
+        });
+      });
     } else if (mode === MapModes.EditEvent) {
       const eventPinId = pins.filter(
         (pin) => pin.eventId.id === eventId && pin.pinType === PinType.EVENT

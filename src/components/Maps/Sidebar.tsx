@@ -85,6 +85,12 @@ const formatDateToString = (date: Date | null) => {
     }
   }
 
+  if (dateParts.month) {
+    if (dateParts.month.length < 2) {
+      dateParts.month = '0'.concat(dateParts.month);
+    }
+  }
+
   if (dateParts && dateParts.year && dateParts.month && dateParts.day) {
     return dateParts.year.concat('-', dateParts.month, '-', dateParts.day);
   }
