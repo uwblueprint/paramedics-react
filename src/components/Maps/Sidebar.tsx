@@ -17,6 +17,7 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import SearchBar from './SearchBar';
 import { Colours } from '../../styles/Constants';
 import { MapModes } from '../../graphql/queries/maps';
+import { formatDateToString } from '../../utils/format';
 
 const datePickerTheme = createMuiTheme({
   overrides: {
@@ -24,6 +25,11 @@ const datePickerTheme = createMuiTheme({
       daySelected: {
         color: Colours.White,
         backgroundColor: Colours.Secondary,
+      },
+    },
+    MuiInputBase: {
+      input: {
+        fontWeight: 'bold',
       },
     },
   },
@@ -62,41 +68,6 @@ const useStyles = makeStyles({
     padding: '0px 30px 10px 16px',
   },
 });
-
-const formatDateToString = (date: Date | null) => {
-  if (!date) {
-    return '';
-  }
-  const dateParts: {
-    year?: string;
-    month?: string;
-    day?: string;
-  } = new Intl.DateTimeFormat().formatToParts(date).reduce(
-    (obj, currentPart) => ({
-      ...obj,
-      [currentPart.type]: currentPart.value,
-    }),
-    {}
-  );
-
-  if (dateParts.day) {
-    if (dateParts.day.length < 2) {
-      dateParts.day = '0'.concat(dateParts.day);
-    }
-  }
-
-  if (dateParts.month) {
-    if (dateParts.month.length < 2) {
-      dateParts.month = '0'.concat(dateParts.month);
-    }
-  }
-
-  if (dateParts && dateParts.year && dateParts.month && dateParts.day) {
-    return dateParts.year.concat('-', dateParts.month, '-', dateParts.day);
-  }
-
-  return '';
-};
 
 const Sidebar = ({
   open,
@@ -259,9 +230,7 @@ const Sidebar = ({
             onChange={handleLabelChange}
             value={label}
             validators={['required']}
-            errorMessages={[
-              `A ${placeholderType.toLowerCase()} name is required`,
-            ]}
+            errorMessages={[`${placeholderType} name is required`]}
             className={styles.pinLabelField}
           />
           {(mode === MapModes.NewEvent || mode === MapModes.EditEvent) && (

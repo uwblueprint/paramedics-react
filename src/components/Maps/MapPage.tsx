@@ -432,9 +432,7 @@ const MapPage = ({
         query: GET_ALL_PINS,
       });
 
-      const updatedAllPins = pins.filter(
-        (pin) => pin.id !== deleteLocationPin
-      );
+      const updatedAllPins = pins.filter((pin) => pin.id !== deleteLocationPin);
 
       cache.writeQuery({
         query: GET_ALL_PINS,
@@ -581,7 +579,6 @@ const MapPage = ({
           isActive: true,
         },
       }).then((addEventData) => {
-        console.log(addEventData);
         addPin({
           variables: {
             label: name,

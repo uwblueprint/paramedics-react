@@ -12,6 +12,7 @@ import AmbulanceFormPage from './components/ResourceForm/AmbulanceFormPage';
 import UserFormPage from './components/ResourceForm/UserFormPage';
 import LoginPage from './components/Login/LoginPage';
 import MapPage from './components/Maps/MapPage';
+import { MapModes } from './graphql/queries/maps';
 
 function App() {
   return (
@@ -26,23 +27,23 @@ function App() {
       <Route
         exact
         path="/events/new"
-        component={(props) => <MapPage mode="newEvent" {...props} />}
+        component={(props) => <MapPage mode={MapModes.NewEvent} {...props} />}
       />
       <Route
         exact
         path="/events/:eventId/ccps/new"
-        component={(props) => <MapPage mode="newCCP" {...props} />}
+        component={(props) => <MapPage mode={MapModes.NewCCP} {...props} />}
       />
       <Route
         exact
         path="/events/:eventId/ccps/:ccpId/edit"
-        component={(props) => <MapPage mode="editCCP" {...props} />}
+        component={(props) => <MapPage mode={MapModes.EditCCP} {...props} />}
       />
       <Route exact path="/events/:eventId" component={EventDashboardPage} />
       <Route
         exact
         path="/events/:eventId/edit"
-        component={(props) => <MapPage mode="editEvent" {...props} />}
+        component={(props) => <MapPage mode={MapModes.EditEvent} {...props} />}
       />
       <Route exact path="/manage/:resource" component={ResourceOverviewPage} />
       <Route exact path="/manage/">
@@ -96,7 +97,7 @@ function App() {
       <Route
         exact
         path="/events/:eventId/map"
-        component={(props) => <MapPage mode="map" {...props} />}
+        component={(props) => <MapPage mode={MapModes.Map} {...props} />}
       />
       <Route path="/">
         <Redirect to="/events" />
