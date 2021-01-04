@@ -22,7 +22,7 @@ if (process.env.REACT_APP_BACKEND_WEBSOCKET_URL) {
       process.env.REACT_APP_BACKEND_WEBSOCKET_URL,
       window.location.href
     );
-    webSocketUrl = url.protocol.replace('http', 'ws');
+    webSocketUrl = url.href.replace('http', 'ws');
   } else {
     webSocketUrl = process.env.REACT_APP_BACKEND_WEBSOCKET_URL;
   }
