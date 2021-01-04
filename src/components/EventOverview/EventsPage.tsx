@@ -132,7 +132,7 @@ const EventsPage = () => {
     const pinOfInterest = pins.filter(
       (pin) => pin.pinType === PinType.EVENT && pin.eventId.id === event.id
     );
-    if (pinOfInterest) {
+    if (pinOfInterest && pinOfInterest.length > 0) {
       return pinOfInterest[0].address;
     }
     return 'N/A';
