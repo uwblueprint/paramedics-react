@@ -12,6 +12,7 @@ export interface Event {
   };
   ambulances: Ambulance[];
   hospitals: Hospital[];
+  updatedAt: Date;
 }
 
 export const GET_ALL_EVENTS = gql`
@@ -33,6 +34,7 @@ export const GET_ALL_EVENTS = gql`
         id
         name
       }
+      updatedAt
     }
   }
 `;
@@ -52,6 +54,7 @@ export const GET_EVENT_BY_ID = gql`
         id
         name
       }
+      updatedAt
     }
   }
 `;

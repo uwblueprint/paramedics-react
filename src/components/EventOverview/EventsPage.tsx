@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     minHeight: '100vh',
   },
   topSection: {
-    padding: '56px 56px 0 56px',
+    padding: '35px 64px 0',
     backgroundColor: Colours.White,
   },
   topBar: {
@@ -29,8 +29,8 @@ const useStyles = makeStyles({
   addButton: {
     borderRadius: '2000px',
     position: 'fixed',
-    bottom: '56px',
-    right: '56px',
+    bottom: '38px',
+    right: '64px',
     padding: '12px 26px',
   },
 });
@@ -127,7 +127,14 @@ const EventsPage = () => {
 
   // Filters for inactive or active events
   const filteredEvents = React.useMemo(
-    () => events.filter((event) => event.isActive === (selectedTab === 0)),
+    () =>
+      events
+        .filter((event) => event.isActive === (selectedTab === 0))
+        .sort((a, b) => {
+          const aUpdatedAt = new Date(a.updatedAt);
+          const bUpdatedAt = new Date(b.updatedAt);
+          return bUpdatedAt.getTime() - aUpdatedAt.getTime(); // Sort by recently updated
+        }),
     [events, selectedTab]
   );
 
@@ -144,8 +151,8 @@ const EventsPage = () => {
           tabLabels={tabLabels}
         />
       </Box>
-      <Box padding="70px 56px 168px 56px">
-        <Grid container direction="row" alignItems="center" spacing={3}>
+      <Box padding="53px 51px 114px">
+        <Grid container direction="row" alignItems="center" spacing={1}>
           {filteredEvents.map((event: Event) => (
             <Grid item key={event.id}>
               <EventCard
