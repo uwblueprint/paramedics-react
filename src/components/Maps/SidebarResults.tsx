@@ -1,11 +1,11 @@
 import { MapModes, PinType } from '../../graphql/queries/maps';
 
-const sidebarResults = ({ mode, pins, ccp, event }) => {
+const SidebarResults = ({ mode, pins, ccp, event }) => {
   if (mode === MapModes.EditEvent) {
     const pinOfInterest = pins.filter(
       (pin) => pin.eventId.id === event[0].id && pin.pinType === PinType.EVENT
     )[0];
-    if(pinOfInterest) {
+    if (pinOfInterest) {
       return {
         label: event[0].name,
         address: pinOfInterest.address,
@@ -63,4 +63,4 @@ const sidebarResults = ({ mode, pins, ccp, event }) => {
   };
 };
 
-export default sidebarResults;
+export default SidebarResults;

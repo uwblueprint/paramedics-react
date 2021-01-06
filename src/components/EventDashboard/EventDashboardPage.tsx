@@ -86,7 +86,7 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       const eventPin = pinsInfo.pinsForEvent.filter(
         (pin) => pin.pinType === PinType.EVENT && pin.eventId.id === eventId
       );
-      if(eventPin && eventPin.length > 0) {
+      if (eventPin && eventPin.length > 0) {
         setEventAddress(eventPin[0].address);
       } else {
         setEventAddress('N/A');

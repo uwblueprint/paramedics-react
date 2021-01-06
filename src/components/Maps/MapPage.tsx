@@ -31,7 +31,7 @@ import {
   MapModes,
 } from '../../graphql/queries/maps';
 import { ADD_PIN, EDIT_PIN, DELETE_PIN } from '../../graphql/mutations/maps';
-import sidebarResults from './SidebarResults';
+import SidebarResults from './SidebarResults';
 import ConfirmModal from '../common/ConfirmModal';
 import LoadingState from '../common/LoadingState';
 
@@ -560,8 +560,8 @@ const MapPage = ({
     } else if (mode === MapModes.EditEvent) {
       const eventPin = pins.filter(
         (pin) => pin.eventId.id === eventId && pin.pinType === PinType.EVENT
-      )
-      if(eventPin && eventPin.length > 0) {
+      );
+      if (eventPin && eventPin.length > 0) {
         editPin({
           variables: {
             id: eventPin[0].id,
@@ -622,7 +622,7 @@ const MapPage = ({
         (pin) => pin.ccpId && pin.pinType === PinType.CCP
       );
       const ccpPin = allCCPPins.filter((pin) => pin.ccpId.id === ccpId);
-      if(ccpPin && ccpPin.length > 0) {
+      if (ccpPin && ccpPin.length > 0) {
         editPin({
           variables: {
             id: ccpPin[0].id,
@@ -703,7 +703,7 @@ const MapPage = ({
             interestPinTitle && isEdit
               ? interestPinTitle
               : mode !== MapModes.Map
-              ? sidebarResults({
+              ? SidebarResults({
                   mode,
                   pins,
                   ccp: collectionPoint,
@@ -715,7 +715,7 @@ const MapPage = ({
             interestPinAddress && isEdit
               ? interestPinAddress
               : mode !== MapModes.Map
-              ? sidebarResults({
+              ? SidebarResults({
                   mode,
                   pins,
                   ccp: collectionPoint,
@@ -727,7 +727,7 @@ const MapPage = ({
             interestPinAddress && isEdit
               ? interestPinLocation
               : mode !== MapModes.Map
-              ? sidebarResults({
+              ? SidebarResults({
                   mode,
                   pins,
                   ccp: collectionPoint,
