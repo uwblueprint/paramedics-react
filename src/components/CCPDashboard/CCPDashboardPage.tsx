@@ -207,10 +207,14 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   React.useEffect(() => {
     if (!pinsLoading) {
-      const ccpPinAddress = pinsInfo.pinsForEvent.filter(
+      const ccpPin = pinsInfo.pinsForEvent.filter(
         (pin) => pin.pinType === PinType.CCP && pin.ccpId.id === ccpId
-      )[0].address;
-      setCCPAddress(ccpPinAddress);
+      )[0];
+      if (ccpPin) {
+        setCCPAddress(ccpPin.address);
+      } else {
+        setCCPAddress('N/A');
+      }
     }
   }, [pinsInfo, ccpId, pinsLoading]);
 

@@ -83,10 +83,14 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
 
   useEffect(() => {
     if (!pinsLoading) {
-      const eventPinAddress = pinsInfo.pinsForEvent.filter(
+      const eventPin = pinsInfo.pinsForEvent.filter(
         (pin) => pin.pinType === PinType.EVENT && pin.eventId.id === eventId
-      )[0].address;
-      setEventAddress(eventPinAddress);
+      );
+      if(eventPin && eventPin.length > 0) {
+        setEventAddress(eventPin[0].address);
+      } else {
+        setEventAddress('N/A');
+      }
     }
   }, [pinsInfo, eventId, pinsLoading]);
 

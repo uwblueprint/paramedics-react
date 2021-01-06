@@ -151,9 +151,15 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   };
 
   const getCCPAddress = ({ ccp, pins }) => {
-    return pins.filter(
+    const ccpPin = pins.filter(
       (pin) => pin.pinType === PinType.CCP && pin.ccpId.id === ccp.id
-    )[0].address;
+    );
+
+    if(ccpPin && ccpPin.length > 0) {
+      return ccpPin[0].address;
+    }
+
+    return '-'
   };
 
   //  Writing to cache when deleting ccp
