@@ -8,6 +8,19 @@ export enum PinType {
   OTHER = 'OTHER',
 }
 
+export enum MapTypes {
+  ROADMAP = 'roadmap',
+  HYBRID = 'hybrid',
+}
+
+export enum MapModes {
+  Map = 'map',
+  NewEvent = 'newEvent',
+  NewCCP = 'newCCP',
+  EditEvent = 'editEvent',
+  EditCCP = 'editCCP',
+}
+
 export interface LocationPin {
   id: string;
   eventId: Event;

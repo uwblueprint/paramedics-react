@@ -22,6 +22,7 @@ import { Order, stableSort, getComparator } from '../../utils/sort';
 import { CCP, GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
 import { DELETE_CCP } from '../../graphql/mutations/ccps';
 import ConfirmModal from '../common/ConfirmModal';
+import { GET_PINS_BY_EVENT_ID, PinType } from '../../graphql/queries/maps';
 
 const useStyles = makeStyles({
   root: {
@@ -130,7 +131,11 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const optionStyle = useOptions();
 
   const { data } = useQuery(GET_CCPS_BY_EVENT_ID, { variables: { eventId } });
+  const { data: pinData } = useQuery(GET_PINS_BY_EVENT_ID, {
+    variables: { eventId },
+  });
 
+  const pins = pinData ? pinData.pinsForEvent : [];
   const rows = data ? data.collectionPointsByEvent : [];
   const open = Boolean(anchorEl);
   const history = useHistory();
@@ -143,6 +148,18 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
   const handleCloseConfirmDelete = () => {
     handleCloseMenu();
     setOpenConfirmDelete(false);
+  };
+
+  const getCCPAddress = ({ ccp, pins }) => {
+    const ccpPin = pins.filter(
+      (pin) => pin.pinType === PinType.CCP && pin.ccpId.id === ccp.id
+    );
+
+    if (ccpPin && ccpPin.length > 0) {
+      return ccpPin[0].address;
+    }
+
+    return '-';
   };
 
   //  Writing to cache when deleting ccp
@@ -166,6 +183,25 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
         query: GET_CCPS_BY_EVENT_ID,
         variables: { eventId },
         data: { collectionPointsByEvent: updatedCCPsList },
+      });
+
+      // Update GET_PINS_BY_EVENT_ID
+      const { pinsForEvent } = cache.readQuery<any>({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+      });
+
+      const updatedPinsList = pinsForEvent.filter(
+        (pin) =>
+          pin.pinType !== PinType.CCP ||
+          (pin.pinType === PinType.CCP &&
+            pin.ccpId.id !== deleteCollectionPoint)
+      );
+
+      cache.writeQuery({
+        query: GET_PINS_BY_EVENT_ID,
+        variables: { eventId },
+        data: { pinsForEvent: updatedPinsList },
       });
     },
     onCompleted() {
@@ -236,7 +272,7 @@ const CCPTabPanel = ({ eventId }: { eventId: string }) => {
           {(row as CCP).name}
         </TableCell>
         <TableCell component="th" scope="row">
-          -
+          {getCCPAddress({ ccp: row, pins })}
         </TableCell>
         <TableCell
           width="48px"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -18,6 +18,7 @@ import { GET_EVENT_BY_ID } from '../../graphql/queries/events';
 import ResourceTabPanel from './ResourceTabPanel';
 import { formatDate } from '../../utils/format';
 import LoadingState from '../common/LoadingState';
+import { GET_PINS_BY_EVENT_ID, PinType } from '../../graphql/queries/maps';
 
 type TParams = { eventId: string };
 
@@ -71,10 +72,29 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   const { loading: eventLoading, data: eventInfo } = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId },
   });
-
+  const { loading: pinsLoading, data: pinsInfo } = useQuery(
+    GET_PINS_BY_EVENT_ID,
+    {
+      variables: { eventId },
+    }
+  );
   const [tab, setTab] = React.useState(TabOptions.CCP);
+  const [eventAddress, setEventAddress] = React.useState('');
 
-  if (eventLoading) {
+  useEffect(() => {
+    if (!pinsLoading) {
+      const eventPin = pinsInfo.pinsForEvent.filter(
+        (pin) => pin.pinType === PinType.EVENT && pin.eventId.id === eventId
+      );
+      if (eventPin && eventPin.length > 0) {
+        setEventAddress(eventPin[0].address);
+      } else {
+        setEventAddress('N/A');
+      }
+    }
+  }, [pinsInfo, eventId, pinsLoading]);
+
+  if (eventLoading || pinsLoading) {
     return <LoadingState />;
   }
 
@@ -101,9 +121,7 @@ const EventDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
             {formatDate(event.eventDate)}
           </Typography>
           <LocationOnOutlinedIcon className={classes.icon} />
-          <Typography variant="body1">
-            Ezra Street l1j3j4, Waterloo Canada
-          </Typography>
+          <Typography variant="body1">{eventAddress}</Typography>
         </Box>
       </Container>
       <Tabs

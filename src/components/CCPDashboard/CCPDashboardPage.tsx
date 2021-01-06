@@ -23,6 +23,7 @@ import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
+import { GET_PINS_BY_EVENT_ID, PinType } from '../../graphql/queries/maps';
 import {
   PATIENT_ADDED,
   PATIENT_UPDATED,
@@ -140,6 +141,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     lastUpdatedPatientTimeout,
     setLastUpdatedPatientTimeout,
   ] = React.useState<NodeJS.Timeout>(setTimeout(() => {}, 0));
+  const [ccpAddress, setCCPAddress] = React.useState('');
 
   const { data: connectionData } = useQuery(GET_NETWORK_STATUS);
 
@@ -176,6 +178,13 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [allPatients, ccpId]
   );
 
+  const { data: pinsInfo, loading: pinsLoading } = useQuery(
+    GET_PINS_BY_EVENT_ID,
+    {
+      variables: { eventId },
+    }
+  );
+
   const highlightPatient = React.useCallback((id) => {
     setLastUpdatedPatient(id);
     const highlightTimeout = setTimeout(() => {
@@ -195,6 +204,19 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
   React.useEffect(() => {
     if (userUpdatedPatientId) highlightPatient(userUpdatedPatientId);
   }, [userUpdatedPatientId, highlightPatient]);
+
+  React.useEffect(() => {
+    if (!pinsLoading) {
+      const ccpPin = pinsInfo.pinsForEvent.filter(
+        (pin) => pin.pinType === PinType.CCP && pin.ccpId.id === ccpId
+      )[0];
+      if (ccpPin) {
+        setCCPAddress(ccpPin.address);
+      } else {
+        setCCPAddress('N/A');
+      }
+    }
+  }, [pinsInfo, ccpId, pinsLoading]);
 
   useSubscription(PATIENT_UPDATED, {
     variables: { eventId },
@@ -250,7 +272,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [patients]
   );
 
-  if (loading || ccpLoading) {
+  if (loading || ccpLoading || pinsLoading) {
     return <LoadingState />;
   }
 
@@ -264,7 +286,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       <div className={classes.menuBarTitle}>
         <LocationOnOutlinedIcon className={classes.locationIcon} />
         <Typography variant="caption" className={classes.menuBarTitle}>
-          100 University
+          {ccpAddress}
         </Typography>
         <Typography variant="caption" className={classes.connected}>
           {connectionData.networkStatus}
