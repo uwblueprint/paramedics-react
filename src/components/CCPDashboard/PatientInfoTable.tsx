@@ -393,8 +393,10 @@ export const PatientInfoTable = ({
             case 'triageLevel':
               content = triageLevels[content].label;
               border = {
-                borderLeft: `${isActive ? '16px' : '0px'} solid ${
-                  triageLevels[patient.triageLevel].colour
+                borderLeft: `16px solid ${
+                  isActive
+                    ? triageLevels[patient.triageLevel].colour
+                    : Colours.White
                 }`,
               };
               break;
