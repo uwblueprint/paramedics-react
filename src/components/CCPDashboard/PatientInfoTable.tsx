@@ -36,7 +36,7 @@ import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions } from './CCPDashboardPage';
 import { EDIT_PATIENT, DELETE_PATIENT } from '../../graphql/mutations/patients';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
-import { capitalize } from '../../utils/format';
+import { capitalize, formatLastUpdated } from '../../utils/format';
 
 const useStyles = makeStyles({
   visuallyHidden: {
@@ -211,6 +211,7 @@ export const PatientInfoTable = ({
     { headerId: 'barcodeValue', label: 'Barcode', width: '94px' },
     { headerId: 'gender', label: 'Gender', width: '72px' },
     { headerId: 'age', label: 'Age', width: '34px' },
+    { headerId: 'ctas', label: 'CTAS', width: '46px' },
     { headerId: 'status', label: 'Status', width: '104px' },
     ...(type === CCPDashboardTabOptions.PatientOverview
       ? [
@@ -404,7 +405,7 @@ export const PatientInfoTable = ({
               content = patient.hospitalId?.name;
               break;
             case 'updatedAt':
-              content = moment(patient[value]).format('MMM D YYYY, h:mm A');
+              content = formatLastUpdated(patient[value], false);
               break;
             case 'status':
               content = statusLabels[patient[value]];
