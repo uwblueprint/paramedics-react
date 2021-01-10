@@ -53,15 +53,15 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
 
   const patientDetails: PatientDetail[] = [
     { label: 'Barcode Number', value: patient.barcodeValue },
+    { label: 'Status', value: statusLabels[patient.status] },
     {
       label: 'Triage',
       value: patient.triageLevel,
     },
     { label: 'Run Number', value: patient.runNumber },
     { label: 'Hospital', value: patient.hospitalId?.name },
-    { label: 'Ambulance', value: patient.ambulanceId?.vehicleNumber },
+    { label: 'Ambulance Number', value: patient.ambulanceId?.vehicleNumber },
     { label: 'CCP', value: patient.collectionPointId.name },
-    { label: 'Status', value: statusLabels[patient.status] },
     { label: 'Gender', value: patient.gender },
     { label: 'Age', value: patient.age },
     {
@@ -90,7 +90,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
           <>
             <Grid
               item
-              xs={4}
+              xs={5}
               style={{ marginBottom: '24px' }}
               spacing={5}
               key={d.label}
@@ -103,7 +103,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
                 {`${d.label}:`}
               </Typography>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={7}>
               {d.label === 'Run Number' ? (
                 <TextField
                   type="number"

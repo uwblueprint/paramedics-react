@@ -4,9 +4,6 @@ import { Box, Typography, makeStyles, Card } from '@material-ui/core';
 const useStyles = makeStyles({
   card: {
     padding: '24px',
-    marginTop: '16px',
-    marginRight: '24px',
-    height: '100%',
   },
 });
 
