@@ -127,6 +127,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   );
 };
 
+export const statusLabels = {
+  [Status.ON_SITE]: 'On Scene',
+  [Status.TRANSPORTED]: 'Transported',
+  [Status.RELEASED]: 'Released',
+  [Status.DELETED]: 'Deleted',
+};
+
 export const PatientInfoTable = ({
   patients,
   type,
@@ -184,13 +191,6 @@ export const PatientInfoTable = ({
       colour: Colours.BorderLightGray,
       label: 'White',
     },
-  };
-
-  const statusLabels = {
-    [Status.ON_SITE]: 'On Scene',
-    [Status.TRANSPORTED]: 'Transported',
-    [Status.RELEASED]: 'Released',
-    [Status.DELETED]: 'Deleted',
   };
 
   const [editPatient] = useMutation(EDIT_PATIENT, {
@@ -405,6 +405,7 @@ export const PatientInfoTable = ({
               content = patient.hospitalId?.name;
               break;
             case 'updatedAt':
+            case 'transportTime':
               content = formatLastUpdated(patient[value], false);
               break;
             case 'status':

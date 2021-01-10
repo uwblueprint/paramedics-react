@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Typography,
   Box,
+  Grid,
   makeStyles,
   DialogContent,
   IconButton,
@@ -9,8 +10,9 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
+import { statusLabels } from './PatientInfoTable';
 import { Patient } from '../../graphql/queries/patients';
-import { capitalize } from '../../utils/format';
+import { capitalize, formatLastUpdated } from '../../utils/format';
 
 const useStyles = makeStyles({
   label: {
@@ -54,16 +56,18 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
     {
       label: 'Triage',
       value: patient.triageLevel,
-      styles: {
-        color: Colours[`Triage${capitalize(patient.triageLevel)}`],
-      },
     },
     { label: 'Run Number', value: patient.runNumber },
     { label: 'Hospital', value: patient.hospitalId?.name },
+    { label: 'Ambulance', value: patient.ambulanceId?.vehicleNumber },
     { label: 'CCP', value: patient.collectionPointId.name },
-    { label: 'Status', value: patient.status },
+    { label: 'Status', value: statusLabels[patient.status] },
     { label: 'Gender', value: patient.gender },
     { label: 'Age', value: patient.age },
+    {
+      label: 'Last Edited',
+      value: formatLastUpdated(patient.updatedAt, true),
+    },
   ];
 
   return (
@@ -81,28 +85,40 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
       >
         <Close />
       </IconButton>
-      {patientDetails.map((d: PatientDetail) => (
-        <Box display="flex" marginBottom="24px" key={d.label}>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            className={classes.label}
-          >
-            {`${d.label}:`}
-          </Typography>
-          {d.label === 'Run Number' ? (
-            <TextField
-              type="number"
-              onChange={(e: any) => updateRunNumber(e.target.value)}
-              value={runNumber === null ? '' : runNumber}
-            />
-          ) : (
-            <Typography variant="body1" style={d.styles}>
-              {d.value}
-            </Typography>
-          )}
-        </Box>
-      ))}
+      <Grid container>
+        {patientDetails.map((d: PatientDetail) => (
+          <>
+            <Grid
+              item
+              xs={4}
+              style={{ marginBottom: '24px' }}
+              spacing={5}
+              key={d.label}
+            >
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                className={classes.label}
+              >
+                {`${d.label}:`}
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
+              {d.label === 'Run Number' ? (
+                <TextField
+                  type="number"
+                  onChange={(e: any) => updateRunNumber(e.target.value)}
+                  value={runNumber === null ? '' : runNumber}
+                />
+              ) : (
+                <Typography variant="body1" style={d.styles}>
+                  {d.value}
+                </Typography>
+              )}
+            </Grid>
+          </>
+        ))}
+      </Grid>
       <Box display="flex" flexDirection="column" marginBottom="12px">
         <Typography
           variant="body2"

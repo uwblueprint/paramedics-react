@@ -42,10 +42,7 @@ export const formatDate = (date: string): string => {
   return `${month} ${day}, ${year}`;
 };
 
-export const formatLastUpdated = (
-  date: string,
-  includeTime: boolean
-): string => {
+export const formatLastUpdated = (date: Date, includeTime: boolean): string => {
   const currentDate = new Date();
   const updatedDay = moment(date).format('D'); // 21
   const updatedMonth = moment(date).format('MMM'); // Nov
@@ -56,7 +53,7 @@ export const formatLastUpdated = (
     updatedMonth === months[currentDate.getMonth()] &&
     updatedYear === currentDate.getFullYear().toString()
     ? moment(date).format('h:mm A')
-    : moment(date).format(`MMM D YYYY ${includeTime ? ', h:mm A' : ''}`);
+    : moment(date).format(`MMM D YYYY${includeTime ? ', h:mm A' : ''}`);
 };
 
 export const capitalize = (s: string): string => {
