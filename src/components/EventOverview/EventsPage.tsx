@@ -9,6 +9,7 @@ import UserProfile from './UserProfile';
 import useAllEvents from '../../graphql/queries/hooks/events';
 import { Event, GET_ALL_EVENTS } from '../../graphql/queries/events';
 import { EDIT_EVENT, DELETE_EVENT } from '../../graphql/mutations/events';
+import { GET_ALL_PINS, PinType } from '../../graphql/queries/maps';
 import { Colours } from '../../styles/Constants';
 
 const useStyles = makeStyles({
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
     minHeight: '100vh',
   },
   topSection: {
-    padding: '56px 56px 0 56px',
+    padding: '35px 64px 0',
     backgroundColor: Colours.White,
   },
   topBar: {
@@ -29,8 +30,8 @@ const useStyles = makeStyles({
   addButton: {
     borderRadius: '2000px',
     position: 'fixed',
-    bottom: '56px',
-    right: '56px',
+    bottom: '38px',
+    right: '64px',
     padding: '12px 26px',
   },
 });
@@ -69,6 +70,8 @@ const EventsPage = () => {
 
   // Fetch events from cache
   const { data } = useQuery(GET_ALL_EVENTS);
+  const { data: pinData } = useQuery(GET_ALL_PINS);
+  const pins = pinData ? pinData.pins : [];
   const [editEvent] = useMutation(EDIT_EVENT);
   const [deleteEvent] = useMutation(DELETE_EVENT, {
     update(cache, { data: { deleteEvent } }) {
@@ -125,9 +128,26 @@ const EventsPage = () => {
     });
   };
 
+  const eventAddress = (event: Event) => {
+    const pinOfInterest = pins.filter(
+      (pin) => pin.pinType === PinType.EVENT && pin.eventId.id === event.id
+    );
+    if (pinOfInterest && pinOfInterest.length > 0) {
+      return pinOfInterest[0].address;
+    }
+    return 'N/A';
+  };
+
   // Filters for inactive or active events
   const filteredEvents = React.useMemo(
-    () => events.filter((event) => event.isActive === (selectedTab === 0)),
+    () =>
+      events
+        .filter((event) => event.isActive === (selectedTab === 0))
+        .sort((a, b) => {
+          const aUpdatedAt = new Date(a.updatedAt);
+          const bUpdatedAt = new Date(b.updatedAt);
+          return bUpdatedAt.getTime() - aUpdatedAt.getTime(); // Sort by recently updated
+        }),
     [events, selectedTab]
   );
 
@@ -144,8 +164,8 @@ const EventsPage = () => {
           tabLabels={tabLabels}
         />
       </Box>
-      <Box padding="70px 56px 168px 56px">
-        <Grid container direction="row" alignItems="center" spacing={3}>
+      <Box padding="53px 51px 114px">
+        <Grid container direction="row" alignItems="center" spacing={1}>
           {filteredEvents.map((event: Event) => (
             <Grid item key={event.id}>
               <EventCard
@@ -155,7 +175,7 @@ const EventsPage = () => {
                 eventTitle={event.name}
                 isActive={event.isActive}
                 isNew={event.id === lastUpdatedEventId}
-                address="N/A"
+                address={eventAddress(event)}
                 handleClick={() => history.push(`/events/${event.id}`)}
                 handleArchiveEvent={() => handleArchiveEvent(event)}
                 handleUnarchiveEvent={() => handleUnarchiveEvent(event)}

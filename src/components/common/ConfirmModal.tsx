@@ -70,7 +70,11 @@ const ConfirmModal = ({
   const dialogStyle = dialogStyles();
 
   return (
-    <Dialog classes={{ paper: dialogStyle.paper }} open={open}>
+    <Dialog
+      classes={{ paper: dialogStyle.paper }}
+      open={open}
+      onClick={(event) => event.stopPropagation()}
+    >
       <DialogTitle classes={{ root: dialogStyle.dialogTitle }}>
         {title}
       </DialogTitle>
@@ -96,7 +100,6 @@ const ConfirmModal = ({
           onClick={(event) => {
             event.stopPropagation();
             handleClickAction();
-            handleClickCancel();
           }}
         >
           <Typography variant="body1">{actionLabel}</Typography>

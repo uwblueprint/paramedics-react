@@ -82,7 +82,13 @@ const useStyles = makeStyles({
 });
 
 export default function MenuAppBar(props: MenuAppBarProps) {
-  const { pageTitle, eventId, selectedDirectory, selectedMaps, selectedCcp } = props;
+  const {
+    pageTitle,
+    eventId,
+    selectedDirectory,
+    selectedMaps,
+    selectedCcp,
+  } = props;
   const history = useHistory();
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -163,10 +169,14 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               button
               key="directory"
               onClick={handleDirectoryClick}
-              className={selectedDirectory ? classes.activeRow : classes.sidebarRow}
+              className={
+                selectedDirectory ? classes.activeRow : classes.sidebarRow
+              }
             >
               <ListItemIcon className={classes.sidebarIcon}>
-                <ScanIcon colour={selectedDirectory ? Colours.White : Colours.Black} />
+                <ScanIcon
+                  colour={selectedDirectory ? Colours.White : Colours.Black}
+                />
               </ListItemIcon>
               <Typography variant="body2">Directory</Typography>
             </ListItem>

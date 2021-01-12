@@ -6,15 +6,47 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import { createMuiTheme } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import SearchBar from './SearchBar';
 import { Colours } from '../../styles/Constants';
+import { MapModes } from '../../graphql/queries/maps';
+import { formatDateToString } from '../../utils/format';
+
+const datePickerTheme = createMuiTheme({
+  overrides: {
+    MuiPickersDay: {
+      daySelected: {
+        color: Colours.White,
+        backgroundColor: Colours.Secondary,
+      },
+    },
+    MuiInputBase: {
+      input: {
+        fontWeight: 'bold',
+      },
+    },
+  },
+});
 
 const useStyles = makeStyles({
   pinLabelField: {
     width: '334px',
     marginLeft: '16px',
     marginBottom: '30px',
+  },
+  datePickerField: {
+    width: '334px',
+    marginLeft: '16px',
+    marginBottom: '30px',
+    paddingLeft: '0px',
+    marginTop: '-10px',
   },
   label: {
     marginLeft: '16px',
@@ -40,6 +72,7 @@ const useStyles = makeStyles({
 const Sidebar = ({
   open,
   title,
+  mode,
   clickedLocation,
   clickedAddress,
   onSuggestionTempMarkerSet,
@@ -47,11 +80,15 @@ const Sidebar = ({
   editLabel,
   editAddress,
   editLocation,
+  editDate,
   onClose,
   onComplete,
+  onEventComplete,
+  onCCPComplete,
 }: {
   open: boolean;
   title: string;
+  mode: string;
   clickedLocation?: { lat: number; lng: number };
   clickedAddress?: string;
   onSuggestionTempMarkerSet: ({ lat, lng, address }) => void;
@@ -59,8 +96,11 @@ const Sidebar = ({
   editLabel?: string;
   editAddress?: string;
   editLocation?: { lat: number; lng: number };
+  editDate?: Date;
   onClose: () => void;
   onComplete: ({ label, latitude, longitude, address }) => void;
+  onEventComplete: ({ name, eventDate, lat, lng, address }) => void;
+  onCCPComplete: ({ name, lat, lng, address }) => void;
 }) => {
   const [address, setAddress] = React.useState('');
   const [latitude, setLatitude] = React.useState(0);
@@ -69,7 +109,14 @@ const Sidebar = ({
   const [isAutocompleteClicked, setIsAutocompleteClicked] = React.useState(
     false
   );
+  const [date, setDate] = React.useState<Date | null>(new Date());
   const styles = useStyles();
+  const placeholderType =
+    mode === MapModes.EditCCP || mode === MapModes.NewCCP
+      ? 'CCP'
+      : mode !== MapModes.Map
+      ? 'Event'
+      : 'Pin';
 
   useEffect(() => {
     if (clickedAddress) {
@@ -90,12 +137,22 @@ const Sidebar = ({
       setLatitude(editLocation.lat);
       setLongitude(editLocation.lng);
     }
+
+    if (editDate) {
+      const convertedDate = new Date(editDate);
+      setDate(
+        new Date(
+          convertedDate.getTime() - convertedDate.getTimezoneOffset() * -60000
+        )
+      );
+    }
   }, [
     clickedAddress,
     clickedLocation,
     editLabel,
     editAddress,
     editLocation,
+    editDate,
     address,
   ]);
 
@@ -119,6 +176,35 @@ const Sidebar = ({
     setIsAutocompleteClicked(false);
   };
 
+  const onSubmit = (e) => {
+    if (mode === MapModes.Map) {
+      onComplete({
+        label,
+        latitude,
+        longitude,
+        address,
+      });
+    } else if (mode === MapModes.NewEvent || mode === MapModes.EditEvent) {
+      onEventComplete({
+        name: label,
+        eventDate: formatDateToString(date),
+        lat: latitude,
+        lng: longitude,
+        address,
+      });
+    } else if (mode === MapModes.NewCCP || mode === MapModes.EditCCP) {
+      onCCPComplete({
+        name: label,
+        lat: latitude,
+        lng: longitude,
+        address,
+      });
+    }
+    setAddress('');
+    setLabel('');
+    e.preventDefault();
+  };
+
   return (
     <Drawer
       open={open}
@@ -134,31 +220,44 @@ const Sidebar = ({
           {title}
         </Typography>
       </Collapse>
-      <ValidatorForm
-        onSubmit={(e) => {
-          onComplete({
-            label,
-            latitude,
-            longitude,
-            address,
-          });
-          setAddress('');
-          setLabel('');
-          e.preventDefault();
-        }}
-      >
+      <ValidatorForm onSubmit={(e) => onSubmit(e)}>
         <Collapse in={!isAutocompleteClicked}>
           <Typography variant="body1" classes={{ root: styles.label }}>
             Name:
           </Typography>
           <TextValidator
-            placeholder="Pin name"
+            placeholder={`${placeholderType} name`}
             onChange={handleLabelChange}
             value={label}
             validators={['required']}
-            errorMessages={['A pin name is required']}
+            errorMessages={[`${placeholderType} name is required`]}
             className={styles.pinLabelField}
           />
+          {(mode === MapModes.NewEvent || mode === MapModes.EditEvent) && (
+            <>
+              <Typography variant="body1" classes={{ root: styles.label }}>
+                Date:
+              </Typography>
+              <Container classes={{ root: styles.datePickerField }}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <ThemeProvider theme={datePickerTheme}>
+                    <KeyboardDatePicker
+                      disableToolbar
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      value={date}
+                      onChange={(date) => setDate(date)}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                    />
+                  </ThemeProvider>
+                </MuiPickersUtilsProvider>
+              </Container>
+            </>
+          )}
         </Collapse>
         <Collapse in={isAutocompleteClicked}>
           <Container classes={{ root: styles.autocompleteBackContainer }}>
@@ -172,7 +271,7 @@ const Sidebar = ({
           </Container>
         </Collapse>
         <Typography variant="body1" classes={{ root: styles.label }}>
-          Pin Location:
+          {`${placeholderType} Location:`}
         </Typography>
         <SearchBar
           existingAddress={address}
