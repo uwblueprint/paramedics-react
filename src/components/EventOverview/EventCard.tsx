@@ -32,7 +32,7 @@ const useEventCardStyles = makeStyles({
   root: {
     display: 'inline-block',
     boxShadow: 'none',
-    width: '339px',
+    width: '300px',
     height: '161px',
     cursor: 'pointer',
     border: `1px solid ${Colours.BorderLightGray}`,
@@ -86,7 +86,7 @@ const EventCard: EventCard = ({
           </Box>
         </Box>
         <Typography
-          color="textPrimary"
+          color={isActive ? 'textPrimary' : 'textSecondary'}
           variant="h4"
           className={classes.eventTitle}
         >

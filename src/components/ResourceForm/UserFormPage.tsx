@@ -63,15 +63,15 @@ const UserFormPage = ({
         data: { users: users.concat([addUser]) },
       });
     },
-    onCompleted() {
+    onCompleted({ addUser }) {
       enqueueSnackbar('Team member added.');
-      history.replace('/manage/members');
+      history.replace('/manage/members', { updatedResourceId: addUser.id });
     },
   });
   const [editUser] = useMutation(EDIT_USER, {
     onCompleted() {
       enqueueSnackbar('Team member edited.');
-      history.replace('/manage/members');
+      history.replace('/manage/members', { updatedResourceId: userId });
     },
   });
 

@@ -7,7 +7,6 @@ import {
   IconButton,
   TextField,
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import { Close } from '@material-ui/icons';
 import { Colours } from '../../styles/Constants';
 import { Patient } from '../../graphql/queries/patients';
@@ -40,16 +39,14 @@ interface PatientDetail {
 
 interface PatientDetailsDialogProps {
   patient: Patient;
-  eventId: string;
-  ccpId: string;
+  handleCloseDetails: () => void;
   runNumber: number | null;
   updateRunNumber: (runNumber: number) => void;
 }
 
 export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
-  const { patient, eventId, ccpId, runNumber, updateRunNumber } = props;
+  const { patient, runNumber, updateRunNumber, handleCloseDetails } = props;
 
-  const history = useHistory();
   const classes = useStyles();
 
   const patientDetails: PatientDetail[] = [
@@ -68,10 +65,6 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
     { label: 'Gender', value: patient.gender },
     { label: 'Age', value: patient.age },
   ];
-
-  const handleCloseDetails = () => {
-    history.push(`/events/${eventId}/ccps/${ccpId}`);
-  };
 
   return (
     <DialogContent

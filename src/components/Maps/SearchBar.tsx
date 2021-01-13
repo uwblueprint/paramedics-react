@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -32,18 +32,24 @@ const useStyles = makeStyles({
 });
 
 const SearchBar = ({
-  editAddress,
+  existingAddress,
   onComplete,
   onAutocompleteClick,
 }: {
-  editAddress?: string;
+  existingAddress?: string;
   onComplete: ({ latitude, longitude, address }) => void;
   onAutocompleteClick: () => void;
 }) => {
-  const [address, setAddress] = useState(editAddress || '');
+  const [address, setAddress] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const styles = useStyles();
   const inputEl = useRef(null);
+
+  useEffect(() => {
+    if (existingAddress) {
+      setAddress(existingAddress);
+    }
+  }, [existingAddress]);
 
   const searchOptions = {
     componentRestrictions: {
