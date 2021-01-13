@@ -189,7 +189,6 @@ const UserFormPage = ({
             disabled={mode === 'edit'}
             validators={['required', 'isEmail', 'isUniqueEmail']}
             errorMessages={[
-              ' ',
               'This is a mandatory field',
               'Invalid email',
               'Email is already in use',
