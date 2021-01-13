@@ -102,7 +102,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             sortDirection={orderBy === headCell.headerId ? order : false}
             width={headCell.width}
             style={{
-              minWidth: headCell.width,
+              width: headCell.width,
+              maxWidth: headCell.width,
               ...(index === 0 && { borderLeft: '16px hidden' }),
             }}
           >
@@ -208,7 +209,7 @@ export const PatientInfoTable = ({
   const headCells: HeadCell[] = [
     { headerId: 'triageLevel', label: 'Triage', width: '78px' },
     { headerId: 'barcodeValue', label: 'Barcode', width: '94px' },
-    { headerId: 'gender', label: 'Gender', width: '72px' },
+    { headerId: 'gender', label: 'Gender', width: '62px' },
     { headerId: 'age', label: 'Age', width: '34px' },
     { headerId: 'ctas', label: 'CTAS', width: '46px' },
     { headerId: 'status', label: 'Status', width: '104px' },
