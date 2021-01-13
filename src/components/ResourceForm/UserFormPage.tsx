@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
 import { ValidatorForm } from 'react-material-ui-form-validator';
-import { Typography, makeStyles, Box } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import FormField from '../common/FormField';
 import CancelButton from './CancelButton';
 import DoneButton from './DoneButton';
@@ -183,24 +183,21 @@ const UserFormPage = ({
             onChange={handleNameChange}
             value={memberName}
           />
-          <Box height={180}>
-            <FormField
-              label="*Email:"
-              isValidated
-              disabled={mode === 'edit'}
-              validators={['required', 'isEmail', 'isUniqueEmail']}
-              errorMessages={[
-                ' ',
-                'This is a mandatory field',
-                'Invalid email',
-                'Email is already in use',
-              ]}
-              onChange={handleEmailChange}
-              value={email}
-              onValid={handleValid}
-              isMultiline
-            />
-          </Box>
+          <FormField
+            label="*Email:"
+            isValidated
+            disabled={mode === 'edit'}
+            validators={['required', 'isEmail', 'isUniqueEmail']}
+            errorMessages={[
+              ' ',
+              'This is a mandatory field',
+              'Invalid email',
+              'Email is already in use',
+            ]}
+            onChange={handleEmailChange}
+            value={email}
+            onValid={handleValid}
+          />
           <AccessLevelSelector
             currentValue={Number(role)}
             handleChange={handleRoleChange}
