@@ -5,7 +5,8 @@ import InvalidUserMessage from './InvalidUserMessage';
 import { Colours } from '../../styles/Constants';
 
 import paramedicsLogo from '../../assets/paramedicsLogo.png';
-import paramedicsBackground from '../../assets/paramedicsBackground.png';
+import loginBackground from '../../assets/loginBackground.png';
+import logoAndName from '../../assets/logoAndName.png';
 
 const useStyles = makeStyles({
   root: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
     paddingTop: '207px',
     color: Colours.White,
     backgroundColor: Colours.Secondary,
-    backgroundImage: `url(${paramedicsBackground})`,
+    backgroundImage: `url(${loginBackground})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
   },
@@ -38,7 +39,6 @@ const useStyles = makeStyles({
     paddingTop: '20px',
   },
   appNameText: {
-    paddingTop: '16px',
     margin: 'auto',
     width: '366px',
   },
@@ -75,9 +75,12 @@ const LoginPage = ({ invalidUser }: { invalidUser: Boolean }) => {
         </Box>
       </Box>
       <Box width="50%" className={classes.rightColumn}>
-        <Typography variant="h3">STAT</Typography>
+        <img
+          src={logoAndName}
+          alt="STAT App Logo"
+        />
         <Typography variant="h5" className={classes.appNameText}>
-          Mass Casualty Tracking Application
+          Mass casualty patient tracking made easy.
         </Typography>
         <img
           src={paramedicsLogo}
