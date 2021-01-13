@@ -183,7 +183,7 @@ const UserFormPage = ({
             onChange={handleNameChange}
             value={memberName}
           />
-          <Box height={160}>
+          <Box height={180}>
             <FormField
               label="*Email:"
               isValidated
