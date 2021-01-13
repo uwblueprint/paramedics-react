@@ -12,10 +12,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import clsx from 'clsx';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper, { Option } from '../common/OptionPopper';
+import { Order, stableSort, getComparator } from '../../utils/sort';
 import { GET_ALL_USERS, User } from '../../graphql/queries/users';
 import { useAllUsers } from '../../graphql/queries/hooks/users';
 import { DELETE_USER } from '../../graphql/mutations/users';
@@ -33,6 +35,17 @@ const tableStyles = makeStyles({
     backgroundColor: Colours.White,
     marginTop: 24,
     border: '1px solid #CCCCCC',
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
   },
 });
 
@@ -102,6 +115,8 @@ type LocationState = { updatedResourceId: string | null };
 
 const UserOverviewPage: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const [order, setOrder] = React.useState<Order>('asc');
+  const orderBy = 'name';
 
   // Write new updates to cache
   useAllUsers();
@@ -207,27 +222,29 @@ const UserOverviewPage: React.FC = () => {
     3: 'Dispatch',
   };
 
-  const cells = members.map((member: User) => {
-    return (
-      <TableRow
-        key={member.id}
-        className={clsx({
-          [classes.highlighted]: member.id === highlightedUserId,
-        })}
-      >
-        <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
-        <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
-        <TableCell classes={{ root: dRow.root }}>
-          {member.roleId ? roleMap[member.roleId] : null}
-        </TableCell>
-        <TableCell classes={{ root: optionStyle.root }}>
-          <IconButton data-id={member.id} onClick={handleClickOptions}>
-            <MoreHorizIcon style={{ color: Colours.Black }} />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    );
-  });
+  const cells = stableSort(members, getComparator(order, orderBy)).map(
+    (member: User) => {
+      return (
+        <TableRow
+          key={member.id}
+          className={clsx({
+            [classes.highlighted]: member.id === highlightedUserId,
+          })}
+        >
+          <TableCell classes={{ root: dRow.root }}>{member.name}</TableCell>
+          <TableCell classes={{ root: dRow.root }}>{member.email}</TableCell>
+          <TableCell classes={{ root: dRow.root }}>
+            {member.roleId ? roleMap[member.roleId] : null}
+          </TableCell>
+          <TableCell classes={{ root: optionStyle.root }}>
+            <IconButton data-id={member.id} onClick={handleClickOptions}>
+              <MoreHorizIcon style={{ color: Colours.Black }} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      );
+    }
+  );
 
   return (
     <div className={classes.wrapper}>
@@ -240,7 +257,20 @@ const UserOverviewPage: React.FC = () => {
         <Table classes={{ root: table.root }}>
           <TableHead>
             <TableRow>
-              <TableCell classes={{ root: hRow.root }}>Name</TableCell>
+              <TableCell classes={{ root: hRow.root }} sortDirection={order}>
+                <TableSortLabel
+                  active
+                  direction={order}
+                  onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
+                >
+                  Name
+                  <span className={table.visuallyHidden}>
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
+                  </span>
+                </TableSortLabel>
+              </TableCell>
               <TableCell classes={{ root: hRow.root }}>Email</TableCell>
               <TableCell classes={{ root: hRow.root }}>Role</TableCell>
               <TableCell classes={{ root: optionStyle.root }} />
