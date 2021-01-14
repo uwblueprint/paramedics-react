@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { TextField, Box } from '@material-ui/core';
 import { TextValidator } from 'react-material-ui-form-validator';
 
 const useTextFieldStyles = makeStyles({
@@ -84,26 +84,28 @@ const FormField: React.FC<{
   const classes = useTextFieldStyles();
   if (isValidated) {
     return (
-      <TextValidator
-        label={label}
-        placeholder={placeholder}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        InputProps={{
-          readOnly,
-        }}
-        disabled={disabled}
-        className={classes.root}
-        margin="normal"
-        onChange={onChange}
-        value={value}
-        onFocus={handleFocus}
-        validators={validators}
-        errorMessages={errorMessages}
-        validatorListener={onValid}
-        multiline={isMultiline}
-      />
+      <Box height={180}>
+        <TextValidator
+          label={label}
+          placeholder={placeholder}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          InputProps={{
+            readOnly,
+          }}
+          disabled={disabled}
+          className={classes.root}
+          margin="normal"
+          onChange={onChange}
+          value={value}
+          onFocus={handleFocus}
+          validators={validators}
+          errorMessages={errorMessages}
+          validatorListener={onValid}
+          multiline
+        />
+      </Box>
     );
   }
   return (
