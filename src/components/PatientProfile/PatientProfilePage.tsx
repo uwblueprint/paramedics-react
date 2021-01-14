@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, NavLink } from 'react-router-dom';
+import { useHistory, NavLink, useLocation } from 'react-router-dom';
 import { Box, Button, Typography, makeStyles } from '@material-ui/core';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import { useMutation } from '@apollo/react-hooks';
@@ -34,6 +34,10 @@ import {
   GET_ALL_AMBULANCES,
 } from '../../graphql/queries/ambulances';
 import { CCP, GET_CPP_BY_ID } from '../../graphql/queries/ccps';
+import {
+  CCPDashboardTabOptions,
+  CCPDashboardTabMap,
+} from '../CCPDashboard/CCPDashboardPage';
 
 interface FormFields {
   barcodeValue: string;
@@ -47,6 +51,8 @@ interface FormFields {
   triageCategory?: number | null;
   TriageLevel?: number | null;
 }
+
+type LocationState = { from: 'patientOverview' | 'hospital' | null };
 
 const useStyles = makeStyles({
   patientCancelBtn: {
@@ -74,6 +80,10 @@ const PatientProfilePage = ({
 }) => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation<LocationState>();
+  const { from } = location.state || {
+    from: CCPDashboardTabMap[CCPDashboardTabOptions.PatientOverview],
+  };
   const { enqueueSnackbar } = useSnackbar();
   const [openTransportModal, setOpenTransportModal] = useState(false);
   const [openTransportPage, setOpenTransportPage] = useState(false);
@@ -118,7 +128,7 @@ const PatientProfilePage = ({
     <Button
       onClick={() =>
         history.push(
-          `/events/${eventId}/ccps/${ccpId}/open/${snackbarPatientId}`
+          `/events/${eventId}/ccps/${ccpId}/${from}/open/${snackbarPatientId}`
         )
       }
       style={{ color: Colours.SnackbarButtonBlue }}
@@ -140,7 +150,7 @@ const PatientProfilePage = ({
           action: transportAction(addPatient.id),
         });
       }
-      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+      history.replace(`/events/${eventId}/ccps/${ccpId}/${from}`, {
         userUpdatedPatientId: addPatient.id,
       });
     },
@@ -152,14 +162,14 @@ const PatientProfilePage = ({
           action: transportAction(patientId),
         });
       }
-      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+      history.replace(`/events/${eventId}/ccps/${ccpId}/${from}`, {
         userUpdatedPatientId: patientId,
       });
     },
   });
   const [deletePatient] = useMutation(DELETE_PATIENT, {
     onCompleted() {
-      history.replace(`/events/${eventId}/ccps/${ccpId}`, {
+      history.replace(`/events/${eventId}/ccps/${ccpId}/${from}`, {
         userUpdatedPatientId: patientId,
       });
     },
@@ -389,7 +399,7 @@ const PatientProfilePage = ({
           variant="outlined"
           className={classes.patientCancelBtn}
           component={NavLink}
-          to={`/events/${eventId}/ccps/${ccpId}`}
+          to={`/events/${eventId}/ccps/${ccpId}/${from}`}
         >
           Cancel
         </Button>

@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, makeStyles } from '@material-ui/core';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import CompleteBarcodeButton from './CompleteBarcodeButton';
 import { Colours } from '../../styles/Constants';
-
 import FormField from '../common/FormField';
 import { GET_ALL_PATIENTS } from '../../graphql/queries/patients';
+import {
+  CCPDashboardTabOptions,
+  CCPDashboardTabMap,
+} from '../CCPDashboard/CCPDashboardPage';
+
+type LocationState = { from: 'patientOverview' | 'hospital' | null };
 
 const useStyles = makeStyles({
   barcodeCancelBtn: {
@@ -26,6 +31,10 @@ const EnterBarcodePage = ({
   const classes = useStyles();
   const history = useHistory();
   const { pathname } = history.location;
+  const location = useLocation<LocationState>();
+  const { from } = location.state || {
+    from: CCPDashboardTabMap[CCPDashboardTabOptions.PatientOverview],
+  };
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
   const [barcode, setBarcode] = useState<string>('');
 
@@ -45,16 +54,20 @@ const EnterBarcodePage = ({
         } = selectedPatient[0];
         // Redirect to patient profile
         history.push(
-          `/events/${patientEventId}/ccps/${patientCcpId}/patients/${id}`
+          `/events/${patientEventId}/ccps/${patientCcpId}/patients/${id}`,
+          { from }
         );
       } else {
         // No existing patient
         history.push(
-          `/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`
+          `/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`,
+          { from }
         );
       }
     } else {
-      history.push(`/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`);
+      history.push(`/events/${eventId}/ccps/${ccpId}/patients/new/${barcode}`, {
+        from,
+      });
     }
   };
 
@@ -76,7 +89,7 @@ const EnterBarcodePage = ({
           variant="outlined"
           component={NavLink}
           className={classes.barcodeCancelBtn}
-          to={pathname.split('/manual')[0]}
+          to={`${pathname.split('/manual')[0]}/${from}`}
         >
           Cancel
         </Button>
