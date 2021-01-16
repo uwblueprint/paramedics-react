@@ -36,3 +36,14 @@ export const GET_ALL_USERS = gql`
     }
   }
 `;
+
+export const GET_LOGGED_IN_USER = gql`
+  query {
+    loggedInUser {
+      id
+      name
+      email
+      roleId
+    }
+  }
+`

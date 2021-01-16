@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Redirect } from 'react-router-dom';
+import { UserContext } from '../../utils/userProvider';
 import { makeStyles, Box, Typography } from '@material-ui/core';
 import LoginButton from './LoginButton';
 import InvalidUserMessage from './InvalidUserMessage';
@@ -54,6 +56,13 @@ const useStyles = makeStyles({
 
 const LoginPage = ({ invalidUser }: { invalidUser: Boolean }) => {
   const classes = useStyles();
+
+  // If the user is logged in, redirect to home page
+  const user = useContext(UserContext);
+  console.log(Object.keys(user).length);
+  if (Object.keys(user).length > 0) {
+    return <Redirect to="/events" />;
+  }
 
   return (
     <Box className={classes.root}>

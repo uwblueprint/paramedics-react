@@ -11,7 +11,8 @@ const useStyles = makeStyles({
 const LoginButton = () => {
   const classes = useStyles();
   const handleLogin = () => {
-    fetch('http://localhost:4000/login');
+    // TODO: Replace backend URL with environment variable
+    window.location.href = 'http://localhost:4000/login';
   };
   return (
     <Button
