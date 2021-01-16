@@ -40,6 +40,7 @@ interface FormFields {
   triage: TriageLevel | null;
   gender: Gender;
   age: number | null;
+  ctas: number | null;
   notes: string;
   runNumber?: number | null;
   collectionPointId?: number;
@@ -108,6 +109,7 @@ const PatientProfilePage = ({
     barcodeValue: mode === 'new' && !!barcodeValue ? barcodeValue : '',
     triage: TriageLevel.GREEN,
     gender: Gender.M,
+    ctas: null,
     age: null,
     notes: '',
     status: Status.ON_SITE,
@@ -182,6 +184,7 @@ const PatientProfilePage = ({
         barcodeValue,
         triageLevel,
         gender,
+        ctas,
         age,
         notes,
         status,
@@ -192,6 +195,7 @@ const PatientProfilePage = ({
         barcodeValue: string;
         triageLevel: TriageLevel;
         gender: Gender;
+        ctas: number | null;
         age: number;
         notes: string;
         status: Status;
@@ -205,6 +209,7 @@ const PatientProfilePage = ({
         barcodeValue,
         triage: triageLevel,
         gender,
+        ctas,
         age,
         notes,
         status: formStatus,
@@ -285,6 +290,7 @@ const PatientProfilePage = ({
       addPatient({
         variables: {
           gender: formFields.gender,
+          ctas: formFields.ctas ? parseInt(formFields.ctas.toString()) : null,
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber
             ? parseInt(formFields.runNumber.toString())
@@ -311,6 +317,7 @@ const PatientProfilePage = ({
         variables: {
           id: patientId,
           gender: formFields.gender,
+          ctas: formFields.ctas ? parseInt(formFields.ctas.toString()) : null,
           age: formFields.age ? parseInt(formFields.age.toString()) : -1,
           runNumber: formFields.runNumber
             ? parseInt(formFields.runNumber.toString())
@@ -435,6 +442,31 @@ const PatientProfilePage = ({
                 setFormFields({ ...formFields, triage: newTriage });
               }
             }}
+          />
+          <FormField
+            label="CTAS:"
+            placeholder="Enter CTAS"
+            onChange={(e: React.ChangeEvent<HTMLElement>) => {
+              setFormFields({
+                ...formFields,
+                ctas: parseInt((e.target as HTMLInputElement).value),
+              });
+            }}
+            value={formFields.ctas ? formFields.ctas.toString() : ''}
+            isValidated
+            validators={[
+              'minNumber:1',
+              'maxNumber: 9999',
+              'matchRegexp:^[0-9]*$',
+              'required',
+            ]}
+            errorMessages={[
+              'Invalid CTAS',
+              'Invalid CTAS',
+              'Invalid CTAS',
+              'This is a mandatory field',
+            ]}
+            numeric
           />
           <RadioSelector
             labels={Object.keys(Gender)}

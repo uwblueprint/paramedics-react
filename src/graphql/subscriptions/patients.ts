@@ -30,6 +30,7 @@ export const PATIENT_UPDATED = gql`
         id
         vehicleNumber
       }
+      ctas
     }
   }
 `;
@@ -64,6 +65,7 @@ export const PATIENT_ADDED = gql`
         id
         vehicleNumber
       }
+      ctas
     }
   }
 `;

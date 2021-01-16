@@ -58,6 +58,10 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
       label: 'Triage',
       value: patient.triageLevel,
     },
+    {
+      label: 'CTAS',
+      value: patient.ctas,
+    },
     { label: 'Run Number', value: patient.runNumber },
     { label: 'Hospital', value: patient.hospitalId?.name },
     { label: 'Ambulance Number', value: patient.ambulanceId?.vehicleNumber },

@@ -19,6 +19,7 @@ export const SUBSCRIPTION_UPDATE_PATIENT = gql`
       id
       vehicleNumber
     }
+    ctas
   }
 `;
 

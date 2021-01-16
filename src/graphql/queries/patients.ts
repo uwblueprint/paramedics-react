@@ -38,6 +38,7 @@ export interface Patient {
   updatedAt: Date;
   hospitalId: Hospital;
   ambulanceId: Ambulance;
+  ctas: number;
 }
 
 export const GET_PATIENT_BY_ID = (id: string) => {
@@ -71,6 +72,7 @@ export const GET_PATIENT_BY_ID = (id: string) => {
           id
           vehicleNumber
         }
+        ctas
       }
     }
   `;
@@ -106,6 +108,7 @@ export const GET_ALL_PATIENTS = gql`
         id
         vehicleNumber
       }
+      ctas
     }
   }
 `;
