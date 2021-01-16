@@ -35,10 +35,6 @@ const UserProfile = () => {
     event.stopPropagation();
     history.replace('/manage/members');
   };
-  const handleEditProfileClick = (event) => {
-    event.stopPropagation();
-    // TODO: Redirect to edit profile
-  };
   const handleLogoutClick = (event) => {
     event.stopPropagation();
     // TODO: Replace backend URL with environment variable
@@ -73,7 +69,6 @@ const UserProfile = () => {
           horizontal: 'center',
         }}
       >
-        <MenuItem onClick={handleEditProfileClick}>Edit profile</MenuItem>
         <MenuItem onClick={handleResourceManagementClick}>
           Resource management
         </MenuItem>

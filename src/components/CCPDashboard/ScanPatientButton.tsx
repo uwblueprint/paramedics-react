@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Colours } from '../../styles/Constants';
 import { ScanIcon } from '../common/ScanIcon';
 
@@ -18,10 +18,16 @@ const useStyles = makeStyles({
   },
 });
 
-export const ScanPatientButton = () => {
+export const ScanPatientButton = ({
+  eventId,
+  ccpId,
+  from,
+}: {
+  eventId: string;
+  ccpId: string;
+  from: string | null;
+}) => {
   const classes = useStyles();
-  const history = useHistory();
-  const { pathname } = history.location;
 
   return (
     <Button
@@ -29,7 +35,10 @@ export const ScanPatientButton = () => {
       variant="contained"
       color="secondary"
       component={NavLink}
-      to={`${pathname}/scan`}
+      to={{
+        pathname: `/events/${eventId}/ccps/${ccpId}/scan`,
+        state: { from },
+      }}
     >
       <ScanIcon colour={Colours.White} classes={classes.icon} />
       Scan Patient

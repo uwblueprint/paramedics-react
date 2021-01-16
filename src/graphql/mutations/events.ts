@@ -21,6 +21,7 @@ export const ADD_EVENT = gql`
         id
         name
       }
+      updatedAt
     }
   }
 `;
@@ -48,6 +49,7 @@ export const EDIT_EVENT = gql`
         id
         name
       }
+      updatedAt
     }
   }
 `;

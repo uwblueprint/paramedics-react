@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { TextField, Box } from '@material-ui/core';
 import { TextValidator } from 'react-material-ui-form-validator';
 
 const useTextFieldStyles = makeStyles({
@@ -12,10 +12,13 @@ const useTextFieldStyles = makeStyles({
     padding: '20px',
     marginTop: '0px',
     marginBottom: '20px',
-    height: '120px',
+    minHeight: '120px',
     width: '100%',
     '& .MuiInput-formControl': {
       marginTop: 'auto',
+    },
+    '& .MuiInputBase-multiline': {
+      marginTop: '43.625px',
     },
     '& label': {
       fontWeight: 'bold',
@@ -47,6 +50,8 @@ const FormField: React.FC<{
   readOnly?: boolean;
   disabled?: boolean;
   numeric?: boolean;
+  onValid?: (boolean) => void;
+  isMultiline?: boolean;
 }> = ({
   label,
   placeholder,
@@ -59,6 +64,8 @@ const FormField: React.FC<{
   readOnly,
   disabled,
   numeric,
+  onValid,
+  isMultiline,
 }: {
   label: string;
   placeholder?: string;
@@ -71,28 +78,34 @@ const FormField: React.FC<{
   readOnly?: boolean;
   disabled?: boolean;
   numeric?: boolean;
+  onValid?: (boolean) => void;
+  isMultiline?: boolean;
 }) => {
   const classes = useTextFieldStyles();
   if (isValidated) {
     return (
-      <TextValidator
-        label={label}
-        placeholder={placeholder}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        InputProps={{
-          readOnly,
-        }}
-        disabled={disabled}
-        className={classes.root}
-        margin="normal"
-        onChange={onChange}
-        value={value}
-        onFocus={handleFocus}
-        validators={validators}
-        errorMessages={errorMessages}
-      />
+      <Box height={180}>
+        <TextValidator
+          label={label}
+          placeholder={placeholder}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          InputProps={{
+            readOnly,
+          }}
+          disabled={disabled}
+          className={classes.root}
+          margin="normal"
+          onChange={onChange}
+          value={value}
+          onFocus={handleFocus}
+          validators={validators}
+          errorMessages={errorMessages}
+          validatorListener={onValid}
+          multiline
+        />
+      </Box>
     );
   }
   return (
@@ -112,6 +125,7 @@ const FormField: React.FC<{
       onChange={onChange}
       value={value}
       onFocus={handleFocus}
+      multiline={isMultiline}
     />
   );
 };

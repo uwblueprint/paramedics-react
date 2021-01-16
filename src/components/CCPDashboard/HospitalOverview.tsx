@@ -14,15 +14,14 @@ import { Patient } from '../../graphql/queries/patients';
 import { TriageCard } from './TriageCard';
 import { PatientInfoTable } from './PatientInfoTable';
 import { ScanPatientButton } from './ScanPatientButton';
-import { CCPDashboardTabOptions } from './CCPDashboardPage';
+import { CCPDashboardTabOptions, CCPDashboardTabMap } from './CCPDashboardPage';
 
 interface HospitalOverviewProps {
-  // eslint-disable-next-line react/no-unused-prop-types
   eventId: string;
-  // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
   patientId?: string;
+  lastUpdatedPatient: string | null;
 }
 
 const useStyles = makeStyles({
@@ -33,7 +32,7 @@ const useStyles = makeStyles({
     height: '100%',
   },
   select: {
-    minWidth: '385px',
+    minWidth: '300px',
   },
   menuItem: {
     boxSizing: 'border-box',
@@ -49,7 +48,7 @@ const useStyles = makeStyles({
 });
 
 export const HospitalOverview = (props: HospitalOverviewProps) => {
-  const { patients, eventId, ccpId, patientId } = props;
+  const { patients, eventId, ccpId, patientId, lastUpdatedPatient } = props;
   const classes = useStyles();
 
   const [selectedHospital, setSelectedHospital] = React.useState<string>(
@@ -147,9 +146,14 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
           eventId={eventId}
           ccpId={ccpId}
           patientId={patientId}
+          lastUpdatedPatient={lastUpdatedPatient}
         />
       </Card>
-      <ScanPatientButton />
+      <ScanPatientButton
+        eventId={eventId}
+        ccpId={ccpId}
+        from={CCPDashboardTabMap[CCPDashboardTabOptions.Hospital]}
+      />
     </Grid>
   );
 };

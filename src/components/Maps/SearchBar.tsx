@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -31,14 +32,24 @@ const useStyles = makeStyles({
 });
 
 const SearchBar = ({
+  existingAddress,
   onComplete,
+  onAutocompleteClick,
 }: {
+  existingAddress?: string;
   onComplete: ({ latitude, longitude, address }) => void;
+  onAutocompleteClick: () => void;
 }) => {
   const [address, setAddress] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const styles = useStyles();
   const inputEl = useRef(null);
+
+  useEffect(() => {
+    if (existingAddress) {
+      setAddress(existingAddress);
+    }
+  }, [existingAddress]);
 
   const searchOptions = {
     componentRestrictions: {
@@ -63,9 +74,6 @@ const SearchBar = ({
           longitude: latLng.lng,
           address: selectedAddress,
         });
-      })
-      .catch((e) => { // eslint-disable-line
-        // handle errors
       });
     setMenuOpen(false);
     setAddress(selectedAddress);
@@ -86,9 +94,19 @@ const SearchBar = ({
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
+                    {address ? (
+                      <IconButton
+                        onClick={() => {
+                          setAddress('');
+                        }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton>
+                        <SearchIcon />
+                      </IconButton>
+                    )}
                   </InputAdornment>
                 ),
                 inputProps: getInputProps({
@@ -98,6 +116,7 @@ const SearchBar = ({
               onFocus={() => {
                 setMenuOpen(true);
               }}
+              onClick={onAutocompleteClick}
               value={address}
               className={styles.sidebarTextField}
               validators={['required']}

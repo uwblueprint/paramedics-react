@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useMutation } from '@apollo/react-hooks';
 import { useQuery } from 'react-apollo';
@@ -12,10 +12,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import clsx from 'clsx';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper, { Option } from '../common/OptionPopper';
-
+import { Order, stableSort, getComparator } from '../../utils/sort';
 import { useAllHospitals } from '../../graphql/queries/hooks/hospitals';
 import { GET_ALL_HOSPITALS, Hospital } from '../../graphql/queries/hospitals';
 import { DELETE_HOSPITAL } from '../../graphql/mutations/hospitals';
@@ -33,6 +35,17 @@ const tableStyles = makeStyles({
     backgroundColor: Colours.White,
     marginTop: 24,
     border: '1px solid #CCCCCC',
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
   },
 });
 
@@ -93,14 +106,33 @@ const useLayout = makeStyles({
     right: '48px',
     bottom: '48px',
   },
+  highlighted: {
+    backgroundColor: Colours.Blue,
+  },
 });
 
+type LocationState = { updatedResourceId: string | null };
+
 const HospitalOverviewPage: React.FC = () => {
+  const [order, setOrder] = React.useState<Order>('asc');
+  const orderBy = 'name';
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedHospital, selectHospital] = React.useState<number>(-1);
+  const location = useLocation<LocationState>();
+  const { updatedResourceId: highlightedHospitalId } = location.state || {
+    updatedResourceId: null,
+  };
+
+  window.history.pushState(
+    {
+      ...location.state,
+      updatedResourceId: null,
+    },
+    ''
+  );
 
   // Update cache
   useAllHospitals();
@@ -184,18 +216,25 @@ const HospitalOverviewPage: React.FC = () => {
     },
   ];
 
-  const cells = hospitals.map((hospital: Hospital) => {
-    return (
-      <TableRow key={hospital.id}>
-        <TableCell classes={{ root: dRow.root }}>{hospital.name}</TableCell>
-        <TableCell classes={{ root: optionStyle.root }}>
-          <IconButton data-id={hospital.id} onClick={handleClickOptions}>
-            <MoreHorizIcon style={{ color: Colours.Black }} />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    );
-  });
+  const cells = stableSort(hospitals, getComparator(order, orderBy)).map(
+    (hospital: Hospital) => {
+      return (
+        <TableRow
+          key={hospital.id}
+          className={clsx({
+            [classes.highlighted]: hospital.id === highlightedHospitalId,
+          })}
+        >
+          <TableCell classes={{ root: dRow.root }}>{hospital.name}</TableCell>
+          <TableCell classes={{ root: optionStyle.root }}>
+            <IconButton data-id={hospital.id} onClick={handleClickOptions}>
+              <MoreHorizIcon style={{ color: Colours.Black }} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      );
+    }
+  );
 
   return (
     <div className={classes.wrapper}>
@@ -208,8 +247,24 @@ const HospitalOverviewPage: React.FC = () => {
         <Table classes={{ root: table.root }}>
           <TableHead>
             <TableRow>
-              <TableCell classes={{ root: hRow.root }}>Hospital Name</TableCell>
-              <TableCell />
+              <TableCell
+                classes={{ root: hRow.root }}
+                sortDirection={order}
+                colSpan={2}
+              >
+                <TableSortLabel
+                  active
+                  direction={order}
+                  onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
+                >
+                  Hospital Name
+                  <span className={table.visuallyHidden}>
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
+                  </span>
+                </TableSortLabel>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

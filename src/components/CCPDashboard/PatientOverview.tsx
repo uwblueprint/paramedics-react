@@ -18,14 +18,14 @@ import { TotalPatientCard } from './TotalPatientCard';
 import { TriageCard } from './TriageCard';
 import { PatientInfoTableWithFilters } from './PatientInfoTableWithFilters';
 import { ScanPatientButton } from './ScanPatientButton';
+import { CCPDashboardTabOptions, CCPDashboardTabMap } from './CCPDashboardPage';
 
 interface PatientOverviewProps {
-  // eslint-disable-next-line react/no-unused-prop-types
   eventId: string;
-  // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
   patientId?: string;
+  lastUpdatedPatient: string | null;
 }
 
 interface TableRowData {
@@ -42,8 +42,8 @@ const useStyles = makeStyles({
   categoryTableCard: {
     display: 'flex',
     alignItems: 'center',
-    paddingRight: '0px',
-    paddingLeft: '0px',
+    paddingRight: '22px',
+    paddingLeft: '22px',
     marginTop: '16px',
   },
   lightBorder: {
@@ -73,7 +73,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { patients, eventId, ccpId, patientId } = props;
+  const { patients, eventId, ccpId } = props;
 
   const createCategoryData = (
     category: string,
@@ -171,14 +171,13 @@ export const PatientOverview = (props: PatientOverviewProps) => {
         </Card>
       </Grid>
       <Card variant="outlined" className={classes.patientTableCard}>
-        <PatientInfoTableWithFilters
-          patients={patients}
-          eventId={eventId}
-          ccpId={ccpId}
-          patientId={patientId}
-        />
+        <PatientInfoTableWithFilters {...props} />
       </Card>
-      <ScanPatientButton />
+      <ScanPatientButton
+        eventId={eventId}
+        ccpId={ccpId}
+        from={CCPDashboardTabMap[CCPDashboardTabOptions.PatientOverview]}
+      />
     </Grid>
   );
 };

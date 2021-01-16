@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, IconButton } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useQuery } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
@@ -11,11 +11,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import clsx from 'clsx';
 import AddResourceButton from './AddResourceButton';
 import ConfirmModal from '../common/ConfirmModal';
 import OptionPopper, { Option } from '../common/OptionPopper';
-
+import { Order, stableSort, getComparator } from '../../utils/sort';
 import { useAllAmbulances } from '../../graphql/queries/hooks/ambulances';
 import {
   GET_ALL_AMBULANCES,
@@ -36,6 +38,17 @@ const tableStyles = makeStyles({
     backgroundColor: Colours.White,
     marginTop: 24,
     border: '1px solid #CCCCCC',
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
   },
 });
 
@@ -96,15 +109,34 @@ const useLayout = makeStyles({
     right: '48px',
     bottom: '48px',
   },
+  highlighted: {
+    backgroundColor: Colours.Blue,
+  },
 });
 
+type LocationState = { updatedResourceId: string | null };
+
 const AmbulanceOverviewPage: React.FC = () => {
+  const [order, setOrder] = React.useState<Order>('asc');
+  const orderBy = 'vehicleNumber';
   const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedAmbulance, setSelectedAmbulance] = React.useState<
     number | null
   >(null);
+  const location = useLocation<LocationState>();
+  const { updatedResourceId: highlightedAmbulanceId } = location.state || {
+    updatedResourceId: null,
+  };
+
+  window.history.pushState(
+    {
+      ...location.state,
+      updatedResourceId: null,
+    },
+    ''
+  );
 
   // Update cache
   useAllAmbulances();
@@ -191,20 +223,27 @@ const AmbulanceOverviewPage: React.FC = () => {
     },
   ];
 
-  const cells = ambulances.map((ambulance: Ambulance) => {
-    return (
-      <TableRow key={ambulance.id}>
-        <TableCell classes={{ root: dRow.root }}>
-          {`#${ambulance.vehicleNumber}`}
-        </TableCell>
-        <TableCell classes={{ root: optionStyle.root }}>
-          <IconButton data-id={ambulance.id} onClick={handleClickOptions}>
-            <MoreHorizIcon style={{ color: Colours.Black }} />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    );
-  });
+  const cells = stableSort(ambulances, getComparator(order, orderBy)).map(
+    (ambulance: Ambulance) => {
+      return (
+        <TableRow
+          key={ambulance.id}
+          className={clsx({
+            [classes.highlighted]: ambulance.id === highlightedAmbulanceId,
+          })}
+        >
+          <TableCell classes={{ root: dRow.root }}>
+            {`#${ambulance.vehicleNumber}`}
+          </TableCell>
+          <TableCell classes={{ root: optionStyle.root }}>
+            <IconButton data-id={ambulance.id} onClick={handleClickOptions}>
+              <MoreHorizIcon style={{ color: Colours.Black }} />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+      );
+    }
+  );
 
   return (
     <div className={classes.wrapper}>
@@ -216,10 +255,24 @@ const AmbulanceOverviewPage: React.FC = () => {
         <Table classes={{ root: table.root }}>
           <TableHead>
             <TableRow>
-              <TableCell classes={{ root: hRow.root }}>
-                Ambulance number
+              <TableCell
+                classes={{ root: hRow.root }}
+                sortDirection={order}
+                colSpan={2}
+              >
+                <TableSortLabel
+                  active
+                  direction={order}
+                  onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
+                >
+                  Ambulance Number
+                  <span className={table.visuallyHidden}>
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
+                  </span>
+                </TableSortLabel>
               </TableCell>
-              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>

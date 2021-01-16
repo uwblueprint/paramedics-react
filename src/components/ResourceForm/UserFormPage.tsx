@@ -63,19 +63,20 @@ const UserFormPage = ({
         data: { users: users.concat([addUser]) },
       });
     },
-    onCompleted() {
+    onCompleted({ addUser }) {
       enqueueSnackbar('Team member added.');
-      history.replace('/manage/members');
+      history.replace('/manage/members', { updatedResourceId: addUser.id });
     },
   });
   const [editUser] = useMutation(EDIT_USER, {
     onCompleted() {
       enqueueSnackbar('Team member edited.');
-      history.replace('/manage/members');
+      history.replace('/manage/members', { updatedResourceId: userId });
     },
   });
 
   const [memberName, setMemberName] = useState<string>('');
+  const [validForm, setValidForm] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [role, setRole] = useState<number>(AccessLevel.SUPERVISOR);
 
@@ -90,6 +91,7 @@ const UserFormPage = ({
         email: string;
         roleId: number;
       } = data.user;
+
       setMemberName(name);
       setEmail(email);
       setRole(roleId);
@@ -120,6 +122,10 @@ const UserFormPage = ({
     newRole: AccessLevel
   ) => {
     setRole(newRole);
+  };
+
+  const handleValid = (result: boolean) => {
+    setValidForm(result && email !== '');
   };
 
   const handleComplete = () => {
@@ -189,9 +195,10 @@ const UserFormPage = ({
             ]}
             onChange={handleEmailChange}
             value={email}
+            onValid={handleValid}
           />
           <AccessLevelSelector
-            currentValue={role}
+            currentValue={Number(role)}
             handleChange={handleRoleChange}
           />
           <Typography
@@ -201,7 +208,7 @@ const UserFormPage = ({
             *Denotes a required field
           </Typography>
         </div>
-        <DoneButton disabled={memberName === '' || email === ''} />
+        <DoneButton disabled={memberName === '' || !validForm} />
       </ValidatorForm>
     </div>
   );

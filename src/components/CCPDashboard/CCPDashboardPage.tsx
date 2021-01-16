@@ -1,10 +1,17 @@
 import React from 'react';
-import { Box, Tabs, Tab, makeStyles, Typography } from '@material-ui/core';
-import { RouteComponentProps } from 'react-router';
-import { useQuery } from '@apollo/react-hooks';
+import {
+  Box,
+  Tabs,
+  Tab,
+  makeStyles,
+  Typography,
+  IconButton,
+} from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
-import { GET_CCP_BY_ID } from '../../graphql/queries/ccps';
 import { Colours } from '../../styles/Constants';
 import {
   GET_ALL_PATIENTS,
@@ -15,17 +22,28 @@ import { PatientOverview } from './PatientOverview';
 import { HospitalOverview } from './HospitalOverview';
 import LoadingState from '../common/LoadingState';
 import MenuAppBar from '../common/MenuAppBar';
-
-interface TParams {
-  eventId: string;
-  ccpId: string;
-  patientId?: string;
-}
+import { GET_PINS_BY_EVENT_ID, PinType } from '../../graphql/queries/maps';
+import {
+  PATIENT_ADDED,
+  PATIENT_UPDATED,
+  PATIENT_DELETED,
+} from '../../graphql/subscriptions/patients';
+import { GET_CCPS_BY_EVENT_ID } from '../../graphql/queries/ccps';
+import { GET_NETWORK_STATUS } from '../../graphql/apollo/client';
+import {
+  SUBSCRIPTION_UPDATE_PATIENT,
+  SUBSCRIPTION_DELETE_PATIENT,
+} from '../../graphql/fragments/patients';
 
 export enum CCPDashboardTabOptions {
   PatientOverview = 0,
   Hospital = 1,
 }
+
+export const CCPDashboardTabMap = {
+  [CCPDashboardTabOptions.PatientOverview]: 'patientOverview',
+  [CCPDashboardTabOptions.Hospital]: 'hospital',
+};
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,6 +51,7 @@ interface TabPanelProps {
   value: CCPDashboardTabOptions;
   className?: string;
 }
+type LocationState = { userUpdatedPatientId: string | null };
 
 const useStyles = makeStyles({
   root: {
@@ -40,8 +59,8 @@ const useStyles = makeStyles({
     background: Colours.BackgroundGray,
   },
   tabPanel: {
-    paddingLeft: '56px',
-    paddingRight: '56px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
   },
   tabs: {
     background: Colours.White,
@@ -64,6 +83,10 @@ const useStyles = makeStyles({
     paddingLeft: '44px',
     marginTop: '16px',
   },
+  connected: {
+    position: 'absolute',
+    right: '80px',
+  },
   lightBorder: {
     borderColor: Colours.BackgroundGray,
   },
@@ -82,6 +105,11 @@ const useStyles = makeStyles({
     verticalAlign: 'middle',
     marginLeft: '16px',
   },
+  refreshButton: {
+    position: 'absolute',
+    right: '16px',
+    padding: 0,
+  },
 });
 
 const TabPanel = (props: TabPanelProps) => {
@@ -98,17 +126,60 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
+const CCPDashboardPage = ({
+  match,
+  tab,
+}: {
+  match: {
+    params: {
+      eventId: string;
+      ccpId: string;
+      patientId?: string;
+    };
+  };
+  tab: CCPDashboardTabOptions;
+}) => {
   const classes = useStyles();
+  const history = useHistory();
+  const highlightDuration = 5000; // seconds
   const { eventId, ccpId, patientId } = match.params;
+  const location = useLocation<LocationState>();
+  const { userUpdatedPatientId } = location.state || {
+    userUpdatedPatientId: '',
+  };
+  const [lastUpdatedPatient, setLastUpdatedPatient] = React.useState('');
+  const [
+    lastUpdatedPatientTimeout,
+    setLastUpdatedPatientTimeout,
+  ] = React.useState<NodeJS.Timeout>(setTimeout(() => {}, 0));
+  const [ccpAddress, setCCPAddress] = React.useState('');
+
+  const { data: connectionData } = useQuery(GET_NETWORK_STATUS);
+
   // TO DO: error handling when eventId or ccpId does not exist in database
   // Fetch events from backend
-  useAllPatients();
+  useAllPatients(eventId, connectionData.networkStatus);
+
+  // Clear the userUpdatedPatientId in location state now that it's been used
+  window.history.pushState(
+    {
+      ...location.state,
+      userUpdatedPatientId: null,
+    },
+    ''
+  );
+
   // Should switch to fetching patients from cache
+
   const { data, loading } = useQuery(GET_ALL_PATIENTS);
-  const { loading: ccpLoading, data: ccpInfo } = useQuery(GET_CCP_BY_ID, {
-    variables: { id: ccpId },
-  });
+
+  const { data: ccpInfo, loading: ccpLoading } = useQuery(
+    GET_CCPS_BY_EVENT_ID,
+    {
+      variables: { eventId },
+    }
+  );
+
   const allPatients: Array<Patient> = data ? data.patients : [];
   const patients = React.useMemo(
     () =>
@@ -118,13 +189,95 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [allPatients, ccpId]
   );
 
-  const [tab, setTab] = React.useState(CCPDashboardTabOptions.PatientOverview);
+  const { data: pinsInfo, loading: pinsLoading } = useQuery(
+    GET_PINS_BY_EVENT_ID,
+    {
+      variables: { eventId },
+    }
+  );
+
+  const highlightPatient = React.useCallback((id) => {
+    setLastUpdatedPatient(id);
+    const highlightTimeout = setTimeout(() => {
+      setLastUpdatedPatient('');
+    }, highlightDuration);
+    setLastUpdatedPatientTimeout(highlightTimeout);
+  }, []);
+
+  // If a new update is detected, cleans up old highlight
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(lastUpdatedPatientTimeout);
+    };
+  }, [lastUpdatedPatientTimeout]);
+
+  // First highlight if coming from Add/Edit Patient page
+  React.useEffect(() => {
+    if (userUpdatedPatientId) highlightPatient(userUpdatedPatientId);
+  }, [userUpdatedPatientId, highlightPatient]);
+
+  React.useEffect(() => {
+    if (!pinsLoading) {
+      const ccpPin = pinsInfo.pinsForEvent.filter(
+        (pin) => pin.pinType === PinType.CCP && pin.ccpId.id === ccpId
+      )[0];
+      if (ccpPin) {
+        setCCPAddress(ccpPin.address);
+      } else {
+        setCCPAddress('N/A');
+      }
+    }
+  }, [pinsInfo, ccpId, pinsLoading]);
+
+  useSubscription(PATIENT_UPDATED, {
+    variables: { eventId },
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      highlightPatient(data.patientUpdated.id);
+      client.writeFragment({
+        id: `Patient:${data.patientUpdated.id}`,
+        fragment: SUBSCRIPTION_UPDATE_PATIENT,
+        data: data.patientUpdated,
+      });
+    },
+  });
+
+  useSubscription(PATIENT_ADDED, {
+    variables: { eventId },
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      highlightPatient(data.patientAdded.id);
+      client.writeQuery({
+        query: GET_ALL_PATIENTS,
+        data: {
+          patients: [...allPatients, data.patientAdded],
+        },
+      });
+    },
+  });
+
+  useSubscription(PATIENT_DELETED, {
+    variables: { eventId },
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      highlightPatient(data.patientDeleted.id);
+      client.writeFragment({
+        id: `Patient:${data.patientDeleted.id}`,
+        fragment: SUBSCRIPTION_DELETE_PATIENT,
+        data: data.patientDeleted,
+      });
+    },
+  });
+
+  const [selectedTab, setSelectedTab] = React.useState(
+    tab || CCPDashboardTabOptions.PatientOverview
+  );
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
     newValue: CCPDashboardTabOptions
   ) => {
-    setTab(newValue);
+    history.push(
+      `/events/${eventId}/ccps/${ccpId}/${CCPDashboardTabMap[newValue]}`
+    );
+    setSelectedTab(newValue);
   };
 
   const transportPatients = React.useMemo(
@@ -135,11 +288,13 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     [patients]
   );
 
-  if (loading || ccpLoading) {
+  if (loading || ccpLoading || pinsLoading) {
     return <LoadingState />;
   }
 
-  const currentCcp = ccpInfo.collectionPoint;
+  const currentCcp = ccpInfo.collectionPointsByEvent.find(
+    (x) => x.id === ccpId
+  );
 
   const menuBarTitle = (
     <>
@@ -147,8 +302,19 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       <div className={classes.menuBarTitle}>
         <LocationOnOutlinedIcon className={classes.locationIcon} />
         <Typography variant="caption" className={classes.menuBarTitle}>
-          100 University
+          {ccpAddress}
         </Typography>
+        <Typography variant="caption" className={classes.connected}>
+          {connectionData.networkStatus}
+        </Typography>
+        <IconButton
+          className={classes.refreshButton}
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          <RefreshIcon style={{ color: Colours.White }} />
+        </IconButton>
       </div>
     </>
   );
@@ -162,7 +328,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       />
       <Tabs
         className={classes.tabs}
-        value={tab}
+        value={selectedTab}
         onChange={handleChange}
         textColor="secondary"
       >
@@ -173,7 +339,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         <Tab label="Hospital" id={`tab-${CCPDashboardTabOptions.Hospital}`} />
       </Tabs>
       <TabPanel
-        value={tab}
+        value={selectedTab}
         index={CCPDashboardTabOptions.PatientOverview}
         className={classes.tabPanel}
       >
@@ -181,11 +347,12 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           eventId={eventId}
           ccpId={ccpId}
           patients={patients}
+          lastUpdatedPatient={lastUpdatedPatient}
           patientId={patientId}
         />
       </TabPanel>
       <TabPanel
-        value={tab}
+        value={selectedTab}
         index={CCPDashboardTabOptions.Hospital}
         className={classes.tabPanel}
       >
@@ -193,6 +360,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
           eventId={eventId}
           ccpId={ccpId}
           patients={transportPatients}
+          lastUpdatedPatient={lastUpdatedPatient}
           patientId={patientId}
         />
       </TabPanel>
