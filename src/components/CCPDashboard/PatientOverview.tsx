@@ -18,11 +18,10 @@ import { TotalPatientCard } from './TotalPatientCard';
 import { TriageCard } from './TriageCard';
 import { PatientInfoTableWithFilters } from './PatientInfoTableWithFilters';
 import { ScanPatientButton } from './ScanPatientButton';
+import { CCPDashboardTabOptions, CCPDashboardTabMap } from './CCPDashboardPage';
 
 interface PatientOverviewProps {
-  // eslint-disable-next-line react/no-unused-prop-types
   eventId: string;
-  // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
   patientId?: string;
@@ -77,7 +76,7 @@ const useStyles = makeStyles({
 export const PatientOverview = (props: PatientOverviewProps) => {
   const classes = useStyles();
 
-  const { patients, eventId, ccpId, patientId, lastUpdatedPatient } = props;
+  const { patients, eventId, ccpId } = props;
 
   const createCategoryData = (
     category: string,
@@ -175,15 +174,13 @@ export const PatientOverview = (props: PatientOverviewProps) => {
         </Card>
       </Grid>
       <Card variant="outlined" className={classes.patientTableCard}>
-        <PatientInfoTableWithFilters
-          patients={patients}
-          eventId={eventId}
-          ccpId={ccpId}
-          patientId={patientId}
-          lastUpdatedPatient={lastUpdatedPatient}
-        />
+        <PatientInfoTableWithFilters {...props} />
       </Card>
-      <ScanPatientButton />
+      <ScanPatientButton
+        eventId={eventId}
+        ccpId={ccpId}
+        from={CCPDashboardTabMap[CCPDashboardTabOptions.PatientOverview]}
+      />
     </Grid>
   );
 };

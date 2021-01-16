@@ -32,7 +32,7 @@ import {
 } from '../../graphql/queries/patients';
 import { Order, stableSort, getComparator } from '../../utils/sort';
 import ConfirmModal from '../common/ConfirmModal';
-import { CCPDashboardTabOptions } from './CCPDashboardPage';
+import { CCPDashboardTabOptions, CCPDashboardTabMap } from './CCPDashboardPage';
 import { EDIT_PATIENT, DELETE_PATIENT } from '../../graphql/mutations/patients';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
 import { capitalize, formatLastUpdated } from '../../utils/format';
@@ -313,7 +313,8 @@ export const PatientInfoTable = ({
     history.push(
       `/events/${eventId}/ccps/${ccpId}/patients/${
         ((selectedPatient as unknown) as Patient).id
-      }`
+      }`,
+      { from: CCPDashboardTabMap[type] }
     );
   };
 
@@ -339,7 +340,9 @@ export const PatientInfoTable = ({
 
   const handleCloseDetails = () => {
     if (patientId) {
-      history.push(`/events/${eventId}/ccps/${ccpId}`);
+      history.push(
+        `/events/${eventId}/ccps/${ccpId}/${CCPDashboardTabMap[type]}`
+      );
     } else {
       setOpenDetails(false);
     }

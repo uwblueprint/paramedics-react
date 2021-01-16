@@ -102,7 +102,7 @@ const MapPage = ({
     lng: 0,
   });
   const [tempMarkerAddress, setTempMarkerAddress] = React.useState('');
-  const [zoom, setZoom] = React.useState(11);
+  const [zoom, setZoom] = React.useState(13);
   const [infoWindowOpen, setInfoWindowOpen] = React.useState(false);
   const [interestPinTitle, setInterestPinTitle] = React.useState('');
   const [interestPinAddress, setInterestPinAddress] = React.useState('');
@@ -454,9 +454,12 @@ const MapPage = ({
     setTempMarkerAddress(address);
   };
 
-  const mapTypeIdListener = (mapObject) => {
+  const mapListeners = (mapObject) => {
     mapObject.map.addListener('maptypeid_changed', () => {
       setMapTypeId(mapObject.map.getMapTypeId());
+    });
+    mapObject.map.addListener('zoom_changed', () => {
+      setZoom(mapObject.map.getZoom());
     });
     setSidebarRender(true);
   };
@@ -758,7 +761,7 @@ const MapPage = ({
           zoom={defaultMap.zoom}
           options={getMapOptions}
           yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={(mapObject) => mapTypeIdListener(mapObject)}
+          onGoogleApiLoaded={(mapObject) => mapListeners(mapObject)}
           onClick={(obj) => onMapClick(obj)}
         >
           {pins.map(
@@ -768,6 +771,8 @@ const MapPage = ({
                   key={pin.id}
                   lat={pin.latitude}
                   lng={pin.longitude}
+                  label={pin.label}
+                  zoom={zoom}
                   isClicked={interestPinTitle === pin.label}
                   type={pin.pinType}
                   onClick={(e) => {

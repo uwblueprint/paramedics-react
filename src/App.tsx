@@ -4,7 +4,9 @@ import EventsPage from './components/EventOverview/EventsPage';
 import EventDashboardPage from './components/EventDashboard/EventDashboardPage';
 import ScanPatientPage from './components/ScanPatient/ScanPatientPage';
 import EnterBarcodePage from './components/EnterBarcode/EnterBarcodePage';
-import CCPDashboardPage from './components/CCPDashboard/CCPDashboardPage';
+import CCPDashboardPage, {
+  CCPDashboardTabOptions,
+} from './components/CCPDashboard/CCPDashboardPage';
 import PatientProfilePage from './components/PatientProfile/PatientProfilePage';
 import ResourceOverviewPage from './components/ResourceOverview/ResourceOverviewPage';
 import HospitalFormPage from './components/ResourceForm/HospitalFormPage';
@@ -13,6 +15,7 @@ import UserFormPage from './components/ResourceForm/UserFormPage';
 import LoginPage from './components/Login/LoginPage';
 import MapPage from './components/Maps/MapPage';
 import { MapModes } from './graphql/queries/maps';
+import { capitalize } from './utils/format';
 
 function App() {
   return (
@@ -76,13 +79,23 @@ function App() {
       />
       <Route
         exact
-        path="/events/:eventId/ccps/:ccpId"
-        component={CCPDashboardPage}
+        path="/events/:eventId/ccps/:ccpId/:tab"
+        component={(props) => (
+          <CCPDashboardPage
+            tab={CCPDashboardTabOptions[capitalize(props.match.params.tab)]}
+            {...props}
+          />
+        )}
       />
       <Route
         exact
-        path="/events/:eventId/ccps/:ccpId/open/:patientId"
-        component={(props) => <CCPDashboardPage {...props} />}
+        path="/events/:eventId/ccps/:ccpId/:tab/open/:patientId"
+        component={(props) => (
+          <CCPDashboardPage
+            tab={CCPDashboardTabOptions[capitalize(props.match.params.tab)]}
+            {...props}
+          />
+        )}
       />
       <Route
         exact
@@ -93,6 +106,22 @@ function App() {
         exact
         path="/events/:eventId/ccps/:ccpId/patients/:patientId"
         component={(props) => <PatientProfilePage mode="edit" {...props} />}
+      />
+      <Route
+        exact
+        path="/events/:eventId/ccps/:ccpId"
+        render={(props: {
+          match: {
+            params: {
+              eventId: string;
+              ccpId: string;
+            };
+          };
+        }) => (
+          <Redirect
+            to={`/events/${props.match.params.eventId}/ccps/${props.match.params.ccpId}/patientOverview`}
+          />
+        )}
       />
       <Route
         exact

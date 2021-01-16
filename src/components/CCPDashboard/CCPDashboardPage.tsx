@@ -8,8 +8,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { RouteComponentProps } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { useAllPatients } from '../../graphql/queries/hooks/patients';
@@ -36,16 +35,15 @@ import {
   SUBSCRIPTION_DELETE_PATIENT,
 } from '../../graphql/fragments/patients';
 
-interface TParams {
-  eventId: string;
-  ccpId: string;
-  patientId?: string;
-}
-
 export enum CCPDashboardTabOptions {
   PatientOverview = 0,
   Hospital = 1,
 }
+
+export const CCPDashboardTabMap = {
+  [CCPDashboardTabOptions.PatientOverview]: 'patientOverview',
+  [CCPDashboardTabOptions.Hospital]: 'hospital',
+};
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -127,8 +125,21 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
+const CCPDashboardPage = ({
+  match,
+  tab,
+}: {
+  match: {
+    params: {
+      eventId: string;
+      ccpId: string;
+      patientId?: string;
+    };
+  };
+  tab: CCPDashboardTabOptions;
+}) => {
   const classes = useStyles();
+  const history = useHistory();
   const highlightDuration = 5000; // seconds
   const { eventId, ccpId, patientId } = match.params;
   const location = useLocation<LocationState>();
@@ -254,13 +265,18 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
     },
   });
 
-  const [tab, setTab] = React.useState(CCPDashboardTabOptions.PatientOverview);
+  const [selectedTab, setSelectedTab] = React.useState(
+    tab || CCPDashboardTabOptions.PatientOverview
+  );
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
     newValue: CCPDashboardTabOptions
   ) => {
-    setTab(newValue);
+    history.push(
+      `/events/${eventId}/ccps/${ccpId}/${CCPDashboardTabMap[newValue]}`
+    );
+    setSelectedTab(newValue);
   };
 
   const transportPatients = React.useMemo(
@@ -311,7 +327,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
       />
       <Tabs
         className={classes.tabs}
-        value={tab}
+        value={selectedTab}
         onChange={handleChange}
         textColor="secondary"
       >
@@ -322,7 +338,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         <Tab label="Hospital" id={`tab-${CCPDashboardTabOptions.Hospital}`} />
       </Tabs>
       <TabPanel
-        value={tab}
+        value={selectedTab}
         index={CCPDashboardTabOptions.PatientOverview}
         className={classes.tabPanel}
       >
@@ -335,7 +351,7 @@ const CCPDashboardPage = ({ match }: RouteComponentProps<TParams>) => {
         />
       </TabPanel>
       <TabPanel
-        value={tab}
+        value={selectedTab}
         index={CCPDashboardTabOptions.Hospital}
         className={classes.tabPanel}
       >

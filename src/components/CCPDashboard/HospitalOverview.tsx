@@ -14,12 +14,10 @@ import { Patient } from '../../graphql/queries/patients';
 import { TriageCard } from './TriageCard';
 import { PatientInfoTable } from './PatientInfoTable';
 import { ScanPatientButton } from './ScanPatientButton';
-import { CCPDashboardTabOptions } from './CCPDashboardPage';
+import { CCPDashboardTabOptions, CCPDashboardTabMap } from './CCPDashboardPage';
 
 interface HospitalOverviewProps {
-  // eslint-disable-next-line react/no-unused-prop-types
   eventId: string;
-  // eslint-disable-next-line react/no-unused-prop-types
   ccpId: string;
   patients: Patient[];
   patientId?: string;
@@ -151,7 +149,11 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
           lastUpdatedPatient={lastUpdatedPatient}
         />
       </Card>
-      <ScanPatientButton />
+      <ScanPatientButton
+        eventId={eventId}
+        ccpId={ccpId}
+        from={CCPDashboardTabMap[CCPDashboardTabOptions.Hospital]}
+      />
     </Grid>
   );
 };
