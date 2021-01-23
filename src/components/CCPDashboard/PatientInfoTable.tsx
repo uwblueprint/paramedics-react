@@ -380,7 +380,8 @@ export const PatientInfoTable = ({
       history.push(
         `/events/${eventId}/ccps/${ccpId}/patients/${
           ((selectedPatient as unknown) as Patient).id
-        }`
+        }`,
+        { from: CCPDashboardTabMap[type] }
       );
     }
   };
