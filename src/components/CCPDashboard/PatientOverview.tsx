@@ -42,6 +42,7 @@ const useStyles = makeStyles({
   wideFullHeightGridItem: {
     marginRight: '13px',
     display: 'flex',
+    flexDirection: 'column',
     flexGrow: 1,
   },
   categoryTableCard: {
@@ -108,7 +109,7 @@ export const PatientOverview = (props: PatientOverviewProps) => {
 
   return (
     <Grid container direction="row" style={{ marginTop: '52px' }}>
-      <Grid direction="column" className={classes.wideFullHeightGridItem}>
+      <Grid className={classes.wideFullHeightGridItem}>
         <Grid item>
           <TotalPatientCard numPatients={patients.length} />
         </Grid>

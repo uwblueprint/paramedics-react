@@ -91,14 +91,8 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
       </IconButton>
       <Grid container>
         {patientDetails.map((d: PatientDetail) => (
-          <>
-            <Grid
-              item
-              xs={5}
-              style={{ marginBottom: '24px' }}
-              spacing={5}
-              key={d.label}
-            >
+          <Grid container direction="row" key={d.label}>
+            <Grid item xs={5} style={{ marginBottom: '24px' }}>
               <Typography
                 variant="body2"
                 color="textSecondary"
@@ -120,7 +114,7 @@ export const PatientDetailsDialog = (props: PatientDetailsDialogProps) => {
                 </Typography>
               )}
             </Grid>
-          </>
+          </Grid>
         ))}
       </Grid>
       <Box display="flex" flexDirection="column" marginBottom="12px">
