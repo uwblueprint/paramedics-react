@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import {
@@ -36,7 +35,7 @@ import ConfirmModal from '../common/ConfirmModal';
 import { CCPDashboardTabOptions, CCPDashboardTabMap } from './CCPDashboardPage';
 import { EDIT_PATIENT, DELETE_PATIENT } from '../../graphql/mutations/patients';
 import { PatientDetailsDialog } from './PatientDetailsDialog';
-import { capitalize } from '../../utils/format';
+import { capitalize, formatLastUpdated } from '../../utils/format';
 
 const useStyles = makeStyles({
   visuallyHidden: {
@@ -103,7 +102,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             sortDirection={orderBy === headCell.headerId ? order : false}
             width={headCell.width}
             style={{
-              minWidth: headCell.width,
+              width: headCell.width,
+              maxWidth: headCell.width,
               ...(index === 0 && { borderLeft: '16px hidden' }),
             }}
           >
@@ -125,6 +125,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
       </TableRow>
     </TableHead>
   );
+};
+
+export const statusLabels = {
+  [Status.ON_SITE]: 'On Scene',
+  [Status.TRANSPORTED]: 'Transported',
+  [Status.RELEASED]: 'Released',
+  [Status.DELETED]: 'Deleted',
 };
 
 export const PatientInfoTable = ({
@@ -186,13 +193,6 @@ export const PatientInfoTable = ({
     },
   };
 
-  const statusLabels = {
-    [Status.ON_SITE]: 'On Scene',
-    [Status.TRANSPORTED]: 'Transported',
-    [Status.RELEASED]: 'Released',
-    [Status.DELETED]: 'Deleted',
-  };
-
   const [editPatient] = useMutation(EDIT_PATIENT, {
     update(cache): void {
       const patientId = ((selectedPatient as unknown) as Patient).id;
@@ -209,8 +209,9 @@ export const PatientInfoTable = ({
   const headCells: HeadCell[] = [
     { headerId: 'triageLevel', label: 'Triage', width: '78px' },
     { headerId: 'barcodeValue', label: 'Barcode', width: '94px' },
-    { headerId: 'gender', label: 'Gender', width: '72px' },
+    { headerId: 'gender', label: 'Gender', width: '62px' },
     { headerId: 'age', label: 'Age', width: '34px' },
+    { headerId: 'ctas', label: 'CTAS', width: '46px' },
     { headerId: 'status', label: 'Status', width: '104px' },
     ...(type === CCPDashboardTabOptions.PatientOverview
       ? [
@@ -397,8 +398,10 @@ export const PatientInfoTable = ({
             case 'triageLevel':
               content = triageLevels[content].label;
               border = {
-                borderLeft: `${isActive ? '16px' : '0px'} solid ${
-                  triageLevels[patient.triageLevel].colour
+                borderLeft: `16px solid ${
+                  isActive
+                    ? triageLevels[patient.triageLevel].colour
+                    : Colours.White
                 }`,
               };
               break;
@@ -406,7 +409,8 @@ export const PatientInfoTable = ({
               content = patient.hospitalId?.name;
               break;
             case 'updatedAt':
-              content = moment(patient[value]).format('MMM D YYYY, h:mm A');
+            case 'transportTime':
+              content = formatLastUpdated(patient[value], false);
               break;
             case 'status':
               content = statusLabels[patient[value]];

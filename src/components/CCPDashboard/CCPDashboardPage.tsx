@@ -59,12 +59,11 @@ const useStyles = makeStyles({
     background: Colours.BackgroundGray,
   },
   tabPanel: {
-    paddingLeft: '30px',
-    paddingRight: '30px',
+    padding: '0 56px',
   },
   tabs: {
     background: Colours.White,
-    padding: '0 165px',
+    padding: '0 56px',
   },
   fullHeightGridItem: {
     display: 'flex',

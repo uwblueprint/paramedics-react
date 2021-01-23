@@ -7,8 +7,7 @@ import { TriageTag } from './TriageTag';
 const useStyles = makeStyles({
   card: {
     padding: '24px',
-    marginTop: '16px',
-    height: '100%',
+    marginTop: '24px',
   },
 });
 

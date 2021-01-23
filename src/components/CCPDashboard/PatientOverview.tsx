@@ -39,12 +39,15 @@ const useStyles = makeStyles({
     display: 'flex',
     alignSelf: 'stretch',
   },
+  wideFullHeightGridItem: {
+    marginRight: '13px',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+  },
   categoryTableCard: {
     display: 'flex',
     alignItems: 'center',
-    paddingRight: '22px',
-    paddingLeft: '22px',
-    marginTop: '16px',
   },
   lightBorder: {
     borderColor: Colours.BackgroundGray,
@@ -59,6 +62,7 @@ const useStyles = makeStyles({
   patientTableCard: {
     marginTop: '24px',
     marginBottom: '145px',
+    width: '100%',
   },
   scanButton: {
     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
@@ -104,13 +108,13 @@ export const PatientOverview = (props: PatientOverviewProps) => {
     });
 
   return (
-    <Grid container direction="row" justify="center" alignItems="center">
-      <Grid>
+    <Grid container direction="row" style={{ marginTop: '52px' }}>
+      <Grid className={classes.wideFullHeightGridItem}>
         <Grid item>
           <TotalPatientCard numPatients={patients.length} />
         </Grid>
         <Grid item>
-          <TriageCard patients={patients} styles={{ marginRight: '24px' }} />
+          <TriageCard patients={patients} />
         </Grid>
       </Grid>
       <Grid item className={classes.fullHeightGridItem}>

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const months = [
   'Jan',
   'Feb',
@@ -38,6 +40,20 @@ export const formatDate = (date: string): string => {
   const day = parseInt(dateParts[2]) + nth(parseInt(dateParts[2]));
 
   return `${month} ${day}, ${year}`;
+};
+
+export const formatLastUpdated = (date: Date, includeTime: boolean): string => {
+  const currentDate = new Date();
+  const updatedDay = moment(date).format('D'); // 21
+  const updatedMonth = moment(date).format('MMM'); // Nov
+  const updatedYear = moment(date).format('YYYY'); // 2020
+
+  // Checks if patient was last updated within 24 hours
+  return updatedDay === currentDate.getDate().toString() &&
+    updatedMonth === months[currentDate.getMonth()] &&
+    updatedYear === currentDate.getFullYear().toString()
+    ? moment(date).format('h:mm A')
+    : moment(date).format(`MMM D YYYY${includeTime ? ', h:mm A' : ''}`);
 };
 
 export const capitalize = (s: string): string => {

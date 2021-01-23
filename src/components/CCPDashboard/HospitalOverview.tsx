@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     height: '100%',
   },
   select: {
-    minWidth: '300px',
+    minWidth: '240px',
   },
   menuItem: {
     boxSizing: 'border-box',
@@ -44,6 +44,12 @@ const useStyles = makeStyles({
   patientTableCard: {
     marginTop: '24px',
     marginBottom: '145px',
+    width: '100%',
+  },
+  remainingWidthGridItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
   },
 });
 
@@ -94,8 +100,13 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
   };
 
   return (
-    <Grid container direction="row" justify="center" alignItems="center">
-      <Grid item>
+    <Grid
+      container
+      direction="row"
+      alignItems="center"
+      style={{ marginTop: '52px' }}
+    >
+      <Grid>
         <Card variant="outlined" className={classes.card}>
           <Select
             variant="outlined"
@@ -136,7 +147,7 @@ export const HospitalOverview = (props: HospitalOverviewProps) => {
           </Box>
         </Card>
       </Grid>
-      <Grid item>
+      <Grid className={classes.remainingWidthGridItem}>
         <TriageCard patients={filteredPatients} />
       </Grid>
       <Card variant="outlined" className={classes.patientTableCard}>

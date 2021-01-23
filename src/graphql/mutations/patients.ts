@@ -14,6 +14,7 @@ export const ADD_PATIENT = gql`
     $transportTime: DateTime
     $hospitalId: ID
     $ambulanceId: ID
+    $ctas: Int
   ) {
     addPatient(
       gender: $gender
@@ -28,6 +29,7 @@ export const ADD_PATIENT = gql`
       transportTime: $transportTime
       hospitalId: $hospitalId
       ambulanceId: $ambulanceId
+      ctas: $ctas
     ) {
       id
       gender
@@ -56,6 +58,7 @@ export const ADD_PATIENT = gql`
         id
         vehicleNumber
       }
+      ctas
     }
   }
 `;
@@ -75,6 +78,7 @@ export const EDIT_PATIENT = gql`
     $transportTime: DateTime
     $hospitalId: ID
     $ambulanceId: ID
+    $ctas: Int
   ) {
     updatePatient(
       id: $id
@@ -90,6 +94,7 @@ export const EDIT_PATIENT = gql`
       transportTime: $transportTime
       hospitalId: $hospitalId
       ambulanceId: $ambulanceId
+      ctas: $ctas
     ) {
       id
       gender
@@ -118,6 +123,7 @@ export const EDIT_PATIENT = gql`
         id
         vehicleNumber
       }
+      ctas
     }
   }
 `;
@@ -152,6 +158,7 @@ export const DELETE_PATIENT = gql`
         id
         vehicleNumber
       }
+      ctas
     }
   }
 `;
