@@ -96,7 +96,8 @@ const ConfirmModal = ({
           onClick={(event) => {
             event.stopPropagation();
             handleClickAction();
-            handleClickCancel();
+            // TODO: fix later
+            // handleClickCancel();
           }}
         >
           <Typography variant="body1">{actionLabel}</Typography>

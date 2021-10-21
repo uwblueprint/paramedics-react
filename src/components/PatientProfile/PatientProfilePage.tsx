@@ -10,6 +10,8 @@ import { Colours } from '../../styles/Constants';
 import FormField from '../common/FormField';
 import LoadingState from '../common/LoadingState';
 import CompletePatientButton from './CompletePatientButton';
+import Stepper from '../EventCreation/Stepper';
+import NextButton from '../EventCreation/NextButton';
 import RadioSelector from '../common/RadioSelector';
 import TriagePills from './TriagePills';
 import StatusPills from './StatusPills';
@@ -34,6 +36,8 @@ import {
   GET_ALL_AMBULANCES,
 } from '../../graphql/queries/ambulances';
 import { CCP, GET_CPP_BY_ID } from '../../graphql/queries/ccps';
+import { GET_ALL_EVENTS, GET_EVENT_BY_ID } from '../../graphql/queries/events';
+import { EDIT_CCP } from '../../graphql/mutations/ccps';
 
 interface FormFields {
   barcodeValue: string;
@@ -75,9 +79,10 @@ const PatientProfilePage = ({
   const classes = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const currPatientStatus = React.useRef(Status.ON_SITE);
   const [openTransportModal, setOpenTransportModal] = useState(false);
   const [openTransportPage, setOpenTransportPage] = useState(false);
-  const [transportConfirmed, setTransportConfirmed] = useState(false);
+  const [transportConfirmed, setTransportConfirmed] = useState(true);
   const [transportingPatient, setTransportingPatient] = useState(false);
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital>({
@@ -94,13 +99,18 @@ const PatientProfilePage = ({
       ? GET_PATIENT_BY_ID(patientId)
       : GET_ALL_PATIENTS
   );
+
+  const eventQuery = useQuery(GET_EVENT_BY_ID, {
+    variables: { eventId }
+  });
+  const currEvent = eventQuery.data.event;
+
+  
   const patients: Array<Patient> = data ? data.patients : [];
   const { data: hospitalData } = useQuery(GET_ALL_HOSPITALS);
   const hospitals: Array<Hospital> = hospitalData ? hospitalData.hospitals : [];
   const { data: ambulanceData } = useQuery(GET_ALL_AMBULANCES);
-  const ambulances: Array<Ambulance> = ambulanceData
-    ? ambulanceData.ambulances
-    : [];
+  const ambulances: Array<Ambulance> = ambulanceData ? ambulanceData.ambulances : [];
   const { data: ccpData } = useQuery(GET_CPP_BY_ID(ccpId));
   const ccp: CCP = ccpData ? ccpData.collectionPoint : [];
 
@@ -132,7 +142,6 @@ const PatientProfilePage = ({
     status: Status.ON_SITE,
     runNumber: null,
   });
-
   const headerLabel =
     mode === 'new'
       ? 'Add a patient'
@@ -174,6 +183,8 @@ const PatientProfilePage = ({
         status: formStatus,
         runNumber,
       }));
+
+      currPatientStatus.current = formStatus;
       if (hospitalId) setSelectedHospital(hospitalId);
       if (ambulanceId) setSelectedAmbulance(ambulanceId);
       setTransportConfirmed(status === Status.TRANSPORTED);
@@ -199,26 +210,53 @@ const PatientProfilePage = ({
   };
 
   const handleCloseDialog = () => {
+
     setOpenTransportModal(false);
+    setFormFields({ ...formFields, status: currPatientStatus.current }); 
+
   };
 
   const handleCancelTransport = () => {
-    setSelectedHospital({
-      id: '',
-      name: '',
-    });
-    setSelectedAmbulance({
-      id: '',
-      vehicleNumber: 0,
-    });
     setOpenTransportModal(false);
     setOpenTransportPage(false);
   };
 
   const handleConfirmTransport = () => {
+
     setTransportConfirmed(true);
     setOpenTransportPage(false);
+    handleComplete();
+
   };
+
+  const handleRunNumber = (runNumber) => {
+    setFormFields((formField) => ({
+      ...formField,
+      runNumber: Number(runNumber)
+    }));
+  }
+
+  const handleStatusChange = (
+    e: React.MouseEvent<HTMLElement>,
+    newStatus: Status
+  ) => {
+    if (newStatus) {
+      if (newStatus === Status.TRANSPORTED) {
+        setOpenTransportModal(true);
+      } else {
+        setTransportConfirmed(false);
+        setSelectedHospital({
+          id: '',
+          name: '',
+        });
+        setSelectedAmbulance({
+          id: '',
+          vehicleNumber: 0,
+        });
+      }
+      setFormFields({ ...formFields, status: newStatus });
+    }
+  }
 
   const handleHospitalChange = (e: React.ChangeEvent<HTMLElement>) => {
     setSelectedHospital({
@@ -251,7 +289,6 @@ const PatientProfilePage = ({
 
   const handleComplete = () => {
     if (transportingPatient && !transportConfirmed) {
-      setOpenTransportModal(true);
       return;
     }
     const transportTime =
@@ -282,7 +319,6 @@ const PatientProfilePage = ({
       if (isRestore) {
         enqueueSnackbar(`Patient #${formFields.barcodeValue} restored.`);
       }
-
       editPatient({
         variables: {
           id: patientId,
@@ -322,16 +358,19 @@ const PatientProfilePage = ({
     <Box>
       <PatientTransportPage
         open={openTransportPage}
-        patientBarcode={mode === 'edit' ? formFields.barcodeValue : null}
+        runNumber={formFields.runNumber === undefined || formFields.runNumber === null
+          ? "" : formFields.runNumber.toString()}
         ccp={ccp}
         handleClose={handleCancelTransport}
         handleComplete={handleConfirmTransport}
         hospitals={hospitals}
         ambulances={ambulances}
+        currEvent={currEvent}
         selectedHospital={selectedHospital.id}
         selectedAmbulance={selectedAmbulance.id}
         handleHospitalChange={handleHospitalChange}
         handleAmbulanceChange={handleAmbulanceChange}
+        handleRunNumber={handleRunNumber}
       />
       <ConfirmModal
         open={openTransportModal}
@@ -356,6 +395,8 @@ const PatientProfilePage = ({
         handleClickAction={() => {
           setOpenTransportPage(true);
           setOpenTransportModal(false);
+          setTransportConfirmed(true);
+  
         }}
         handleClickCancel={handleCloseDialog}
       />
@@ -378,7 +419,7 @@ const PatientProfilePage = ({
       </Box>
       <Box padding="56px">
         <ValidatorForm onSubmit={handleComplete}>
-          <Typography variant="h5" style={{ marginBottom: '24px' }}>
+          <Typography variant="h4" style={{ marginBottom: '24px' }}>
             Patient Information
           </Typography>
           <FormField
@@ -397,15 +438,7 @@ const PatientProfilePage = ({
           />
           <StatusPills
             currentStatus={formFields.status}
-            handleChange={(
-              e: React.MouseEvent<HTMLElement>,
-              newStatus: Status
-            ) => {
-              if (newStatus) {
-                setFormFields({ ...formFields, status: newStatus });
-              }
-              setTransportingPatient(newStatus === Status.TRANSPORTED);
-            }}
+            handleChange={handleStatusChange}
           />
           <TriagePills
             currentStatus={formFields.triage}
@@ -460,48 +493,29 @@ const PatientProfilePage = ({
             isValidated={false}
             isMultiline
           />
-          {transportConfirmed === true && (
-            <>
-              <Typography
-                variant="h5"
-                style={{ marginBottom: '24px', marginTop: '30px' }}
-              >
-                Transport Information
-              </Typography>
-              <FormField
-                label="Hospital:"
-                value={selectedHospital.name}
-                readOnly
-                isValidated={false}
-              />
-              <FormField
-                label="Ambulance Number:"
-                value={selectedAmbulance.vehicleNumber.toString()}
-                readOnly
-                isValidated={false}
-              />
-              <FormField
-                label="Run Number:"
-                placeholder="Enter run number"
-                onChange={(e: React.ChangeEvent<HTMLElement>) => {
-                  setFormFields({
-                    ...formFields,
-                    runNumber: parseInt((e.target as HTMLInputElement).value),
-                  });
+        <div style={{ marginBottom: '29px', marginTop: '12px' }}>
+          <Typography variant="caption" color="textSecondary" >
+                *Denotes a required field.
+          </Typography>
+        </div>
+          {transportConfirmed ? 
+          <Stepper
+            activeStep={0}
+            nextButton={
+              <NextButton
+                buttonText="next"
+                handleClick={() => {           
+                  setOpenTransportPage(true);
                 }}
-                value={
-                  formFields.runNumber ? formFields.runNumber.toString() : ''
-                }
-                isValidated={false}
+                disabled={false}
               />
-            </>
-          )}
-          <CompletePatientButton />
+            }
+            backButton={
+              !isRestore && (<DeletePatientButton buttonStyle={{ margin: 0, marginRight: "30px" }} handleClick={handleDeleteClick} />)
+            }
+          /> : <CompletePatientButton/>}
           {mode === 'edit' && (
             <>
-              {!isRestore && (
-                <DeletePatientButton handleClick={handleDeleteClick} />
-              )}
               <ConfirmModal
                 open={deleteClicked}
                 handleClickCancel={handleDeleteCancel}

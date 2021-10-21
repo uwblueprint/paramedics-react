@@ -1,68 +1,61 @@
-import React from 'react';
-import {
-  Typography,
-  makeStyles,
-  Button,
-  Dialog,
-  AppBar,
-  Toolbar,
-} from '@material-ui/core';
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
-import HospitalTransportSelector from './HospitalTransportSelector';
-import AmbulanceTransportSelector from './AmbulanceTransportSelector';
-import { Colours } from '../../styles/Constants';
-import { Hospital } from '../../graphql/queries/hospitals';
-import { Ambulance } from '../../graphql/queries/ambulances';
-import { CCP } from '../../graphql/queries/ccps';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { Typography, makeStyles, Button, Dialog, Box } from "@material-ui/core";
+import HospitalTransportSelector from "./HospitalTransportSelector";
+import AmbulanceTransportSelector from "./AmbulanceTransportSelector";
+import NextButton from "../EventCreation/NextButton";
+import BackButton from "../common/BackButton";
+import Stepper from "../EventCreation/Stepper";
+import { Colours } from "../../styles/Constants";
+import { Hospital } from "../../graphql/queries/hospitals";
+import { Ambulance } from "../../graphql/queries/ambulances";
+import { CCP } from "../../graphql/queries/ccps";
+import FormField from "../common/FormField";
+import HospitalAssignmentPage from "./HospitalAssignmentPage";
+import { Event } from "../../graphql/queries/events";
 
 const useStyles = makeStyles({
   resourceWrapper: {
     backgroundColor: Colours.White,
+    position: "relative",
   },
   resourceCreationTopSection: {
-    margin: '48px 30px 0px 30px',
+    margin: "48px 30px 0px 30px",
     backgroundColor: Colours.White,
     borderBottom: `1px solid ${Colours.BorderLightGray}`,
   },
   resourceHeader: {
-    display: 'flex',
-    padding: '16px 0px',
-    justifyContent: 'space-between',
+    display: "flex",
+    padding: "16px 0px",
+    justifyContent: "space-between",
   },
   resourceForm: {
-    padding: '30px',
-  },
-  caption: {
-    marginBottom: '16px',
+    padding: "0px",
   },
   confirmButton: {
-    minWidth: '160px',
-    minHeight: '40px',
-    fontSize: '18px',
-    margin: '10px 0px 60px 0px',
-    position: 'absolute',
-    right: '30px',
+    minWidth: "160px",
+    minHeight: "40px",
+    fontSize: "18px",
+    marginLeft: "20px",
   },
   cancelButton: {
-    minWidth: '228px',
-    fontSize: '18px',
-    alignSelf: 'center',
-  },
-  appBarText: {
-    marginLeft: '15px',
-  },
-  appBar: {
-    backgroundColor: Colours.SecondaryHover,
+    minWidth: "228px",
+    fontSize: "18px",
+    alignSelf: "center",
   },
   icon: {
-    fontSize: '18px',
-    padding: '0px 5px 0px 20px',
+    fontSize: "18px",
+    padding: "0px 5px 0px 20px",
+  },
+  caption: {
+    marginTop: "32px",
+    marginBottom: "46px",
   },
 });
 
 const PatientTransportPage = ({
   open,
-  patientBarcode,
+  runNumber,
   ccp,
   handleClose,
   handleComplete,
@@ -72,9 +65,11 @@ const PatientTransportPage = ({
   selectedAmbulance,
   handleHospitalChange,
   handleAmbulanceChange,
+  handleRunNumber,
+  currEvent,
 }: {
   open: boolean;
-  patientBarcode: string | null;
+  runNumber: string | null;
   ccp: CCP;
   handleClose: () => void;
   handleComplete: () => void;
@@ -84,69 +79,130 @@ const PatientTransportPage = ({
   selectedAmbulance: string;
   handleHospitalChange: (e: React.ChangeEvent<HTMLElement>) => void;
   handleAmbulanceChange: (e: React.ChangeEvent<HTMLElement>) => void;
+  handleRunNumber: (runNumber: string) => void;
+  currEvent: Event;
 }) => {
+  const [runNumberField, setRunNumberField] = React.useState(runNumber);
+  const [openHospitalAssignment, setOpenHospitalAssignment] =
+    React.useState(false);
+  const [activeHospitals, setActiveHospitals] = React.useState<Hospital[]>([]);
+  const [activeAmbulances, setActiveAmbulances] = React.useState<Ambulance[]>(
+    []
+  );
+
   const classes = useStyles();
+
+  React.useEffect(() => {
+    const activeHospitals = hospitals.filter(hospital => {
+      if (currEvent) {
+        const hospitals = currEvent.hospitals;
+        const hospitalFound = hospitals.find(
+          hospitalEvent => hospital.id === hospitalEvent.id
+        );
+
+        return hospitalFound !== undefined;
+      }
+      return false;
+    });
+
+    const activeAmbulances = ambulances.filter(ambulance => {
+      if (currEvent) {
+        const ambulances = currEvent.ambulances;
+        const ambulanceFound = ambulances.find(
+          ambulanceEvent => ambulance.id === ambulanceEvent.id
+        );
+
+        return ambulanceFound !== undefined;
+      }
+      return false;
+    });
+
+    setActiveHospitals(activeHospitals);
+    setActiveAmbulances(activeAmbulances);
+
+    setRunNumberField(runNumber);
+  }, [runNumber, hospitals, ambulances, currEvent]);
+
+  const handleAssignmentClose = () => {
+    setOpenHospitalAssignment(false);
+  };
+
+  const handleAssignmentSubmit = selectedHospital => {};
+
+  const onRunNumberChange = (e: React.ChangeEvent<HTMLElement>) => {
+    setRunNumberField((e.target as HTMLInputElement).value);
+    handleRunNumber((e.target as HTMLInputElement).value);
+  };
 
   return (
     <Dialog fullScreen open={open} onClose={handleClose}>
-      <AppBar position="relative" className={classes.appBar}>
-        <Toolbar variant="dense">
-          <Typography variant="h6" className={classes.appBarText}>
-            {ccp.name}
-          </Typography>
-          <LocationOnOutlinedIcon className={classes.icon} />
-          <Typography variant="caption">
-            Ezra Street l1j3j4, Waterloo Canada
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <div className={classes.resourceWrapper}>
-        <div className={classes.resourceCreationTopSection}>
-          <div className={classes.resourceHeader}>
-            <Typography variant="h4">Patient Transport</Typography>
-            <Button
-              color="secondary"
-              variant="outlined"
-              onClick={handleClose}
-              className={classes.cancelButton}
-            >
-              Cancel
-            </Button>
-          </div>
-          <div className={classes.caption}>
-            <Typography
-              variant="caption"
-              style={{ color: Colours.SecondaryGray }}
-            >
-              Choose a hospital and an ambulance from the list below to
-              transport patient
-              {patientBarcode ? ` ${patientBarcode} ` : ' '}
-              to.
-            </Typography>
-          </div>
-        </div>
-        <div className={classes.resourceForm}>
-          <HospitalTransportSelector
-            options={hospitals}
-            currentValue={selectedHospital}
-            handleChange={handleHospitalChange}
-          />
-          <AmbulanceTransportSelector
-            options={ambulances}
-            currentValue={selectedAmbulance}
-            handleChange={handleAmbulanceChange}
-          />
-        </div>
+      <HospitalAssignmentPage
+        hospitals={hospitals}
+        open={openHospitalAssignment}
+        handleClose={handleAssignmentClose}
+        handleHospitalChange={handleHospitalChange}
+      />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        padding="56px 56px 36px 56px"
+        borderBottom={`1px solid ${Colours.BorderLightGray}`}
+      >
+        <Typography variant="h4">Edit patient</Typography>
         <Button
-          className={classes.confirmButton}
-          onClick={handleComplete}
           color="secondary"
-          variant="contained"
-          disabled={!selectedAmbulance || !selectedHospital}
+          variant="outlined"
+          className={classes.cancelButton}
+          component={NavLink}
+          to={`/events/${ccp.eventId.id}/ccps/${ccp.id}`}
         >
-          Confirm Transport
+          Cancel
         </Button>
-      </div>
+      </Box>
+      <Box padding="56px">
+        <Typography variant="h4" style={{ marginBottom: "24px" }}>
+          Transport Information
+        </Typography>
+        <div className={classes.resourceWrapper}>
+          <div className={classes.resourceForm}>
+            <HospitalTransportSelector
+              options={activeHospitals}
+              currentValue={selectedHospital}
+              handleChange={handleHospitalChange}
+              setOpenHospitalAssignment={setOpenHospitalAssignment}
+            />
+            <AmbulanceTransportSelector
+              options={activeAmbulances}
+              currentValue={selectedAmbulance}
+              handleChange={handleAmbulanceChange}
+            />
+          </div>
+          <FormField
+            label="Run Number:"
+            placeholder="Enter run number"
+            isValidated={false}
+            onChange={onRunNumberChange}
+            value={runNumberField ? runNumberField : ""}
+          />
+        </div>
+        <div className={classes.caption}>
+          <Typography variant="caption" color="textSecondary">
+            *Denotes a required field.
+          </Typography>
+        </div>
+
+        <Stepper
+          activeStep={1}
+          nextButton={
+            <NextButton
+              buttonText="Save Changes"
+              handleClick={handleComplete}
+              disabled={false}
+            />
+          }
+          backButton={<BackButton onClick={handleClose} />}
+        />
+      </Box>
     </Dialog>
   );
 };
