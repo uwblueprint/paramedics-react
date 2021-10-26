@@ -1,55 +1,55 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { Typography, makeStyles, Button, Dialog, Box } from "@material-ui/core";
-import HospitalTransportSelector from "./HospitalTransportSelector";
-import AmbulanceTransportSelector from "./AmbulanceTransportSelector";
-import NextButton from "../EventCreation/NextButton";
-import BackButton from "../common/BackButton";
-import Stepper from "../EventCreation/Stepper";
-import { Colours } from "../../styles/Constants";
-import { Hospital } from "../../graphql/queries/hospitals";
-import { Ambulance } from "../../graphql/queries/ambulances";
-import { CCP } from "../../graphql/queries/ccps";
-import FormField from "../common/FormField";
-import HospitalAssignmentPage from "./HospitalAssignmentPage";
-import { Event } from "../../graphql/queries/events";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { Typography, makeStyles, Button, Dialog, Box } from '@material-ui/core';
+import HospitalTransportSelector from './HospitalTransportSelector';
+import AmbulanceTransportSelector from './AmbulanceTransportSelector';
+import NextButton from '../EventCreation/NextButton';
+import BackButton from '../common/BackButton';
+import Stepper from '../EventCreation/Stepper';
+import { Colours } from '../../styles/Constants';
+import { Hospital } from '../../graphql/queries/hospitals';
+import { Ambulance } from '../../graphql/queries/ambulances';
+import { CCP } from '../../graphql/queries/ccps';
+import FormField from '../common/FormField';
+import HospitalAssignmentPage from './HospitalAssignmentPage';
+import { Event } from '../../graphql/queries/events';
 
 const useStyles = makeStyles({
   resourceWrapper: {
     backgroundColor: Colours.White,
-    position: "relative",
+    position: 'relative',
   },
   resourceCreationTopSection: {
-    margin: "48px 30px 0px 30px",
+    margin: '48px 30px 0px 30px',
     backgroundColor: Colours.White,
     borderBottom: `1px solid ${Colours.BorderLightGray}`,
   },
   resourceHeader: {
-    display: "flex",
-    padding: "16px 0px",
-    justifyContent: "space-between",
+    display: 'flex',
+    padding: '16px 0px',
+    justifyContent: 'space-between',
   },
   resourceForm: {
-    padding: "0px",
+    padding: '0px',
   },
   confirmButton: {
-    minWidth: "160px",
-    minHeight: "40px",
-    fontSize: "18px",
-    marginLeft: "20px",
+    minWidth: '160px',
+    minHeight: '40px',
+    fontSize: '18px',
+    marginLeft: '20px',
   },
   cancelButton: {
-    minWidth: "228px",
-    fontSize: "18px",
-    alignSelf: "center",
+    minWidth: '228px',
+    fontSize: '18px',
+    alignSelf: 'center',
   },
   icon: {
-    fontSize: "18px",
-    padding: "0px 5px 0px 20px",
+    fontSize: '18px',
+    padding: '0px 5px 0px 20px',
   },
   caption: {
-    marginTop: "32px",
-    marginBottom: "46px",
+    marginTop: '32px',
+    marginBottom: '46px',
   },
 });
 
@@ -83,8 +83,9 @@ const PatientTransportPage = ({
   currEvent: Event;
 }) => {
   const [runNumberField, setRunNumberField] = React.useState(runNumber);
-  const [openHospitalAssignment, setOpenHospitalAssignment] =
-    React.useState(false);
+  const [openHospitalAssignment, setOpenHospitalAssignment] = React.useState(
+    false
+  );
   const [activeHospitals, setActiveHospitals] = React.useState<Hospital[]>([]);
   const [activeAmbulances, setActiveAmbulances] = React.useState<Ambulance[]>(
     []
@@ -93,11 +94,11 @@ const PatientTransportPage = ({
   const classes = useStyles();
 
   React.useEffect(() => {
-    const activeHospitals = hospitals.filter(hospital => {
+    const activeHospitals = hospitals.filter((hospital) => {
       if (currEvent) {
-        const hospitals = currEvent.hospitals;
+        const { hospitals } = currEvent;
         const hospitalFound = hospitals.find(
-          hospitalEvent => hospital.id === hospitalEvent.id
+          (hospitalEvent) => hospital.id === hospitalEvent.id
         );
 
         return hospitalFound !== undefined;
@@ -105,11 +106,11 @@ const PatientTransportPage = ({
       return false;
     });
 
-    const activeAmbulances = ambulances.filter(ambulance => {
+    const activeAmbulances = ambulances.filter((ambulance) => {
       if (currEvent) {
-        const ambulances = currEvent.ambulances;
+        const { ambulances } = currEvent;
         const ambulanceFound = ambulances.find(
-          ambulanceEvent => ambulance.id === ambulanceEvent.id
+          (ambulanceEvent) => ambulance.id === ambulanceEvent.id
         );
 
         return ambulanceFound !== undefined;
@@ -127,7 +128,7 @@ const PatientTransportPage = ({
     setOpenHospitalAssignment(false);
   };
 
-  const handleAssignmentSubmit = selectedHospital => {};
+  const handleAssignmentSubmit = (selectedHospital) => {};
 
   const onRunNumberChange = (e: React.ChangeEvent<HTMLElement>) => {
     setRunNumberField((e.target as HTMLInputElement).value);
@@ -160,7 +161,7 @@ const PatientTransportPage = ({
         </Button>
       </Box>
       <Box padding="56px">
-        <Typography variant="h4" style={{ marginBottom: "24px" }}>
+        <Typography variant="h4" style={{ marginBottom: '24px' }}>
           Transport Information
         </Typography>
         <div className={classes.resourceWrapper}>
@@ -182,7 +183,7 @@ const PatientTransportPage = ({
             placeholder="Enter run number"
             isValidated={false}
             onChange={onRunNumberChange}
-            value={runNumberField ? runNumberField : ""}
+            value={runNumberField || ''}
           />
         </div>
         <div className={classes.caption}>
