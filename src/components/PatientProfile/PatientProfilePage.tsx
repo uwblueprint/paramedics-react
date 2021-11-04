@@ -101,16 +101,17 @@ const PatientProfilePage = ({
   );
 
   const eventQuery = useQuery(GET_EVENT_BY_ID, {
-    variables: { eventId }
+    variables: { eventId },
   });
   const currEvent = eventQuery.data.event;
 
-  
   const patients: Array<Patient> = data ? data.patients : [];
   const { data: hospitalData } = useQuery(GET_ALL_HOSPITALS);
   const hospitals: Array<Hospital> = hospitalData ? hospitalData.hospitals : [];
   const { data: ambulanceData } = useQuery(GET_ALL_AMBULANCES);
-  const ambulances: Array<Ambulance> = ambulanceData ? ambulanceData.ambulances : [];
+  const ambulances: Array<Ambulance> = ambulanceData
+    ? ambulanceData.ambulances
+    : [];
   const { data: ccpData } = useQuery(GET_CPP_BY_ID(ccpId));
   const ccp: CCP = ccpData ? ccpData.collectionPoint : [];
 
@@ -210,10 +211,8 @@ const PatientProfilePage = ({
   };
 
   const handleCloseDialog = () => {
-
     setOpenTransportModal(false);
-    setFormFields({ ...formFields, status: currPatientStatus.current }); 
-
+    setFormFields({ ...formFields, status: currPatientStatus.current });
   };
 
   const handleCancelTransport = () => {
@@ -222,19 +221,17 @@ const PatientProfilePage = ({
   };
 
   const handleConfirmTransport = () => {
-
     setTransportConfirmed(true);
     setOpenTransportPage(false);
     handleComplete();
-
   };
 
   const handleRunNumber = (runNumber) => {
     setFormFields((formField) => ({
       ...formField,
-      runNumber: Number(runNumber)
+      runNumber: Number(runNumber),
     }));
-  }
+  };
 
   const handleStatusChange = (
     e: React.MouseEvent<HTMLElement>,
@@ -256,7 +253,7 @@ const PatientProfilePage = ({
       }
       setFormFields({ ...formFields, status: newStatus });
     }
-  }
+  };
 
   const handleHospitalChange = (e: React.ChangeEvent<HTMLElement>) => {
     setSelectedHospital({
@@ -358,8 +355,11 @@ const PatientProfilePage = ({
     <Box>
       <PatientTransportPage
         open={openTransportPage}
-        runNumber={formFields.runNumber === undefined || formFields.runNumber === null
-          ? "" : formFields.runNumber.toString()}
+        runNumber={
+          formFields.runNumber === undefined || formFields.runNumber === null
+            ? ''
+            : formFields.runNumber.toString()
+        }
         ccp={ccp}
         handleClose={handleCancelTransport}
         handleComplete={handleConfirmTransport}
@@ -396,7 +396,6 @@ const PatientProfilePage = ({
           setOpenTransportPage(true);
           setOpenTransportModal(false);
           setTransportConfirmed(true);
-  
         }}
         handleClickCancel={handleCloseDialog}
       />
@@ -493,27 +492,35 @@ const PatientProfilePage = ({
             isValidated={false}
             isMultiline
           />
-        <div style={{ marginBottom: '29px', marginTop: '12px' }}>
-          <Typography variant="caption" color="textSecondary" >
-                *Denotes a required field.
-          </Typography>
-        </div>
-          {transportConfirmed ? 
-          <Stepper
-            activeStep={0}
-            nextButton={
-              <NextButton
-                buttonText="next"
-                handleClick={() => {           
-                  setOpenTransportPage(true);
-                }}
-                disabled={false}
-              />
-            }
-            backButton={
-              !isRestore && (<DeletePatientButton buttonStyle={{ margin: 0, marginRight: "30px" }} handleClick={handleDeleteClick} />)
-            }
-          /> : <CompletePatientButton/>}
+          <div style={{ marginBottom: '29px', marginTop: '12px' }}>
+            <Typography variant="caption" color="textSecondary">
+              *Denotes a required field.
+            </Typography>
+          </div>
+          {transportConfirmed ? (
+            <Stepper
+              activeStep={0}
+              nextButton={
+                <NextButton
+                  buttonText="next"
+                  handleClick={() => {
+                    setOpenTransportPage(true);
+                  }}
+                  disabled={false}
+                />
+              }
+              backButton={
+                !isRestore && (
+                  <DeletePatientButton
+                    buttonStyle={{ margin: 0, marginRight: '30px' }}
+                    handleClick={handleDeleteClick}
+                  />
+                )
+              }
+            />
+          ) : (
+            <CompletePatientButton />
+          )}
           {mode === 'edit' && (
             <>
               <ConfirmModal

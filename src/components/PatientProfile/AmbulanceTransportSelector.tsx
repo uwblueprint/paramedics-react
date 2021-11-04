@@ -7,21 +7,20 @@ import {
   RadioGroup,
   FormControlLabel,
   Container,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
 import { Ambulance } from '../../graphql/queries/ambulances';
 import { Colours } from '../../styles/Constants';
 import AddIcon from '@material-ui/icons/Add';
 
-
 const useRadioStyles = makeStyles({
   root: {
-    display: "flex",
+    display: 'block',
+    padding: '20px',
     border: '1px solid #E8E8E8',
     boxSizing: 'border-box',
     borderRadius: '10px',
     backgroundColor: '#FFFFFF',
-    padding: '0',
     marginBottom: '20px',
     width: '100%',
     maxWidth: '100%',
@@ -37,15 +36,10 @@ const useRadioStyles = makeStyles({
     },
   },
   radioGroup: {
-    display: 'inline-flex',
-    marginLeft: "-25px",
-    alignItems: 'flex-start',
-    transform: 'translate(0, 1.5px) scale(0.75)',
-
+    display: 'block',
   },
   label: {
     fontWeight: 'bold',
-    margin: '0px',
     color: 'black',
     fontSize: '18px',
     display: 'inline-block',
@@ -53,22 +47,24 @@ const useRadioStyles = makeStyles({
   },
   addLabel: {
     color: Colours.Secondary,
-    display: "flex",
-    alignItems: "center",
-    fontSize: "18px",
+    display: 'inline',
+    fontSize: '18px',
     fontWeight: 500,
-
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
   addRow: {
-    display: "inline-flex",
+    display: 'flex',
+    flexDirection: 'row',
   },
   nameTitle: {
-    display: "flex",
-    verticalAlign: "middle",
-    alignContent: "center",
-    alignItems: "initial",
-  }
+    display: 'flex',
+    verticalAlign: 'middle',
+    alignContent: 'center',
+    alignItems: 'initial',
+  },
 });
+
 const AmbulanceTransportSelector = ({
   options,
   currentValue,
@@ -102,12 +98,18 @@ const AmbulanceTransportSelector = ({
           />
         ))}
         <div className={classes.addRow}>
-          <IconButton style={{ padding: "3.5px", marginLeft: "-11px"}}>
-            <AddIcon fontSize="large" style={{ color: Colours.Secondary}} onClick={() => {
-              history.replace(`/manage/ambulances/new`);
-            }}/>
+          <IconButton>
+            <AddIcon
+              fontSize="large"
+              style={{ color: Colours.Secondary }}
+              onClick={() => {
+                history.replace(`/manage/ambulances/new`);
+              }}
+            />
           </IconButton>
-          <Typography className={classes.addLabel}>Select Other Ambulances to Assign</Typography>
+          <Typography className={classes.addLabel}>
+            Select Other Ambulances to Assign
+          </Typography>
         </div>
       </RadioGroup>
     </Container>

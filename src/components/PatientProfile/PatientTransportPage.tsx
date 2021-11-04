@@ -128,7 +128,7 @@ const PatientTransportPage = ({
     setOpenHospitalAssignment(false);
   };
 
-  const handleAssignmentSubmit = (selectedHospital) => {};
+  // const handleAssignmentSubmit = (selectedHospital) => {};
 
   const onRunNumberChange = (e: React.ChangeEvent<HTMLElement>) => {
     setRunNumberField((e.target as HTMLInputElement).value);

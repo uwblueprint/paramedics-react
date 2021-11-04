@@ -7,22 +7,21 @@ import {
   RadioGroup,
   FormControlLabel,
   Container,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import HospitalAssignmentPage from './HospitalAssignmentPage';
 import { Hospital } from '../../graphql/queries/hospitals';
 import { Colours } from '../../styles/Constants';
-import AddIcon from '@material-ui/icons/Add';
-
 
 const useRadioStyles = makeStyles({
   root: {
-    display: "flex",
+    display: 'block',
+    padding: '20px',
     border: '1px solid #E8E8E8',
     boxSizing: 'border-box',
     borderRadius: '10px',
     backgroundColor: '#FFFFFF',
-    padding: '0',
     marginBottom: '20px',
     width: '100%',
     maxWidth: '100%',
@@ -38,14 +37,10 @@ const useRadioStyles = makeStyles({
     },
   },
   radioGroup: {
-    display: 'inline-flex',
-    alignItems: 'flex-start',
-    transform: 'translate(0, 1.5px) scale(0.75)',
-
+    display: 'block',
   },
   label: {
     fontWeight: 'bold',
-    margin: '0px',
     color: 'black',
     fontSize: '18px',
     display: 'inline-block',
@@ -53,21 +48,22 @@ const useRadioStyles = makeStyles({
   },
   addLabel: {
     color: Colours.Secondary,
-    display: "flex",
-    alignItems: "center",
-    fontSize: "18px",
+    display: 'inline',
+    fontSize: '18px',
     fontWeight: 500,
-
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
   addRow: {
-    display: "inline-flex",
+    display: 'flex',
+    flexDirection: 'row',
   },
   nameTitle: {
-    display: "flex",
-    verticalAlign: "middle",
-    alignContent: "center",
-    alignItems: "initial",
-  }
+    display: 'flex',
+    verticalAlign: 'middle',
+    alignContent: 'center',
+    alignItems: 'initial',
+  },
 });
 
 const HospitalTransportSelector = ({
@@ -81,7 +77,6 @@ const HospitalTransportSelector = ({
   handleChange: (e: React.ChangeEvent<HTMLElement>) => void;
   setOpenHospitalAssignment: (boolean) => void;
 }) => {
-
   const classes = useRadioStyles();
 
   return (
@@ -99,22 +94,27 @@ const HospitalTransportSelector = ({
         {options.map((hospital) => (
           <FormControlLabel
             value={hospital.id}
-            control={<Radio/>}
+            control={<Radio />}
             label={hospital.name}
             key={hospital.id}
           />
         ))}
         <div className={classes.addRow}>
-          <IconButton style={{ padding: "3.5px", marginLeft: "-11px"}}>
-            <AddIcon fontSize="large" style={{ color: Colours.Secondary}} onClick={() => {
-              setOpenHospitalAssignment(true);
-            }}/>
+          <IconButton>
+            <AddIcon
+              fontSize="large"
+              style={{ color: Colours.Secondary }}
+              onClick={() => {
+                setOpenHospitalAssignment(true);
+              }}
+            />
           </IconButton>
-          <Typography className={classes.addLabel}>Select Other Hospitals to Assign</Typography>
+          <Typography className={classes.addLabel}>
+            Select Other Hospitals to Assign
+          </Typography>
         </div>
       </RadioGroup>
     </Container>
-
   );
 };
 
