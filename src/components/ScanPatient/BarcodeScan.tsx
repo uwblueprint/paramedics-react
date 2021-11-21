@@ -26,7 +26,7 @@ const BarcodeScan = ({
   const [barcode, setBarcode] = useState<string>('');
 
   useEffect(() => {
-    if (!loading && barcode !== '' && !error) {
+    if (!loading && barcode !== '' && !error && data) {
       const selectedPatient = data.patients.filter(
         (patient) =>
           patient.barcodeValue && patient.barcodeValue.toString() === barcode

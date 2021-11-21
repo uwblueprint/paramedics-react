@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../../utils/userProvider';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -18,6 +19,10 @@ const useStyles = makeStyles({
 const UserProfile = () => {
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const user = useContext(UserContext);
+
+  console.log('JASON CONTEXT:');
+  console.log(user);
   const handleClick = (event) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
@@ -32,7 +37,8 @@ const UserProfile = () => {
   };
   const handleLogoutClick = (event) => {
     event.stopPropagation();
-    // TODO: Logout
+    // TODO: Replace backend URL with environment variable
+    window.location.href = 'http://localhost:4000/logout';
   };
 
   const classes = useStyles();
@@ -45,7 +51,7 @@ const UserProfile = () => {
       role="button"
     >
       <Typography variant="h6" align="right" style={{ marginRight: '10px' }}>
-        Joe Li
+        {user.name}
       </Typography>
       <AccountCircleIcon fontSize="large" color="secondary" />
       <Menu
