@@ -36,6 +36,8 @@ const DropdownField = ({
   defaultText,
   actionText,
   label,
+  optionValue,
+  optionLabel,
   selected,
   onChange,
 }: {
@@ -45,6 +47,8 @@ const DropdownField = ({
   actionText: string;
   label: string;
   selected: string;
+  optionValue: string;
+  optionLabel: string;
   onChange: (any) => void;
 }) => {
   const classes = useTextFieldStyles();
@@ -56,7 +60,8 @@ const DropdownField = ({
         style={{
           fontWeight: 'bold',
           marginBottom: '20px',
-          transform: 'translate(0, 1.5px) scale(0.75)',
+          transform: 'scale(0.75)',
+          transformOrigin: 'left',
         }}
       >
         {label}
@@ -68,7 +73,7 @@ const DropdownField = ({
       >
         <option>{defaultText}</option>
         {options.map((option) => {
-          return <option>{option.name}</option>;
+          return <option value={option[optionValue as string]}>{option[optionLabel as string]}</option>;
         })}
         <option>{actionText}</option>
       </NativeSelect>

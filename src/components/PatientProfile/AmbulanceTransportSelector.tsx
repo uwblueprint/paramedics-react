@@ -43,7 +43,8 @@ const useRadioStyles = makeStyles({
     color: 'black',
     fontSize: '18px',
     display: 'inline-block',
-    transform: 'translate(0, 1.5px) scale(0.75)',
+    transform: 'scale(0.75)',
+    transformOrigin: 'top left'
   },
   addLabel: {
     color: Colours.Secondary,

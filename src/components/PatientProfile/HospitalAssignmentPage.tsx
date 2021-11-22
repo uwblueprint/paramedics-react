@@ -55,17 +55,19 @@ const useStyles = makeStyles({
 const HospitalAssignmentPage = ({
   open,
   handleClose,
+  handleSubmit,
   hospitals,
   handleHospitalChange,
 }: {
   open: boolean;
   handleClose: () => void;
-  handleHospitalChange: (any) => void;
+  handleSubmit: (selectedHospital: any) => void;
   hospitals: Hospital[];
+  handleHospitalChange: (e: any) => void;
 }) => {
   const [isAddHospital, setAddHospital] = React.useState(false);
   const [hospitalName, setHospitalName] = React.useState('');
-  const [selectedHospital, setSelectedHospital] = React.useState({});
+  const [selectedHospital, setSelectedHospital] = React.useState('');
   const classes = useStyles();
 
   const isNotValidatedSaveChanges = false;
@@ -80,7 +82,6 @@ const HospitalAssignmentPage = ({
 
   const onHospitalOptionChange = (e) => {
     setSelectedHospital(e.target.value);
-
     if (e.target.value === 'Add hospital') {
       setAddHospital(true);
     } else {
@@ -89,7 +90,7 @@ const HospitalAssignmentPage = ({
   };
 
   const onSaveChanges = () => {
-    // handleSubmit();
+    handleSubmit(selectedHospital);
   };
 
   return (
@@ -125,7 +126,9 @@ const HospitalAssignmentPage = ({
           defaultText="Select hospital"
           actionText="Add hospital"
           label="*Hospital Name:"
-          selected={'lol'}
+          optionValue="id"
+          optionLabel="name"
+          selected={selectedHospital}
           onChange={onHospitalOptionChange}
         />
         {isAddHospital ? (

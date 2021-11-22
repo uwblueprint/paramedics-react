@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { Typography, makeStyles, Button, Dialog, Box } from '@material-ui/core';
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
+import { GET_HOSPITAL_BY_ID } from '../../graphql/queries/hospitals';
+import { useQuery } from 'react-apollo';
 import NextButton from '../EventCreation/NextButton';
 import BackButton from '../common/BackButton';
 import Stepper from '../EventCreation/Stepper';
@@ -63,6 +65,8 @@ const PatientTransportPage = ({
   ambulances,
   selectedHospital,
   selectedAmbulance,
+  handleAddHospital,
+  handleAddAmbulance,
   handleHospitalChange,
   handleAmbulanceChange,
   handleRunNumber,
@@ -77,6 +81,8 @@ const PatientTransportPage = ({
   ambulances: Array<Ambulance>;
   selectedHospital: string;
   selectedAmbulance: string;
+  handleAddHospital: (id: string) => void;
+  handleAddAmbulance: (id: string) => void;
   handleHospitalChange: (e: React.ChangeEvent<HTMLElement>) => void;
   handleAmbulanceChange: (e: React.ChangeEvent<HTMLElement>) => void;
   handleRunNumber: (runNumber: string) => void;
@@ -89,7 +95,10 @@ const PatientTransportPage = ({
   const [activeHospitals, setActiveHospitals] = React.useState<Hospital[]>([]);
   const [activeAmbulances, setActiveAmbulances] = React.useState<Ambulance[]>(
     []
-  );
+  );    
+  const { data } = useQuery(GET_HOSPITAL_BY_ID(selectedHospital));
+
+  console.log({ data });
 
   const classes = useStyles();
 
@@ -127,8 +136,13 @@ const PatientTransportPage = ({
   const handleAssignmentClose = () => {
     setOpenHospitalAssignment(false);
   };
-
-  // const handleAssignmentSubmit = (selectedHospital) => {};
+  
+  // 1. Set hospital to active
+  // 2. Update the list of hospitals
+  const handleAssignmentSubmit = (selectedHospital) => {
+    handleAddHospital(selectedHospital);
+  };
+  
 
   const onRunNumberChange = (e: React.ChangeEvent<HTMLElement>) => {
     setRunNumberField((e.target as HTMLInputElement).value);
@@ -142,6 +156,7 @@ const PatientTransportPage = ({
         open={openHospitalAssignment}
         handleClose={handleAssignmentClose}
         handleHospitalChange={handleHospitalChange}
+        handleSubmit={handleAssignmentSubmit}
       />
       <Box
         display="flex"
