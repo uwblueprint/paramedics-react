@@ -36,9 +36,6 @@ const useRadioStyles = makeStyles({
       borderBottomColor: '#2E5584',
     },
   },
-  radioGroup: {
-    display: 'block',
-  },
   label: {
     fontWeight: 'bold',
     color: 'black',
@@ -65,6 +62,9 @@ const useRadioStyles = makeStyles({
     alignContent: 'center',
     alignItems: 'initial',
   },
+  controlLabel: {
+    marginLeft: 0,
+  }
 });
 
 const HospitalTransportSelector = ({
@@ -88,12 +88,12 @@ const HospitalTransportSelector = ({
         </Typography>
       </span>
       <RadioGroup
-        className={classes.radioGroup}
         value={currentValue}
         onChange={handleChange}
       >
         {options.map((hospital) => (
           <FormControlLabel
+            className={classes.controlLabel}
             value={hospital.id}
             control={<Radio />}
             label={hospital.name}
@@ -101,7 +101,7 @@ const HospitalTransportSelector = ({
           />
         ))}
         <div className={classes.addRow}>
-          <IconButton>
+          <IconButton style={{ padding: '0px 3.5px'}}>
             <AddIcon
               fontSize="large"
               style={{ color: Colours.Secondary }}

@@ -368,8 +368,6 @@ const PatientProfilePage = ({
         currEvent={currEvent}
         selectedHospital={selectedHospital.id}
         selectedAmbulance={selectedAmbulance.id}
-        handleAddHospital={ (id) => {} }
-        handleAddAmbulance={ (id) => {} }
         handleHospitalChange={handleHospitalChange}
         handleAmbulanceChange={handleAmbulanceChange}
         handleRunNumber={handleRunNumber}

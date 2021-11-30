@@ -4,16 +4,13 @@ export interface Hospital {
   name: string;
 }
 
-export const GET_HOSPITAL_BY_ID = (id: string) => {
-  return gql`
-      query {
-        hospital(id: ${id}) {
+export const GET_HOSPITAL_BY_ID = gql`
+      query hospital($id: ID!) {
+        hospital(id: $id) {
           id
           name
         }
-      }
-    `;
-};
+      }`;
 
 export const GET_ALL_HOSPITALS = gql`
   query {

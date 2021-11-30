@@ -4,7 +4,8 @@ import { Typography, makeStyles, Button, Dialog, Box } from '@material-ui/core';
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
 import { GET_HOSPITAL_BY_ID } from '../../graphql/queries/hospitals';
-import { useQuery } from 'react-apollo';
+import { ADD_HOSPITALS_TO_EVENT } from '../../graphql/mutations/events';
+import { useQuery, useMutation } from 'react-apollo';
 import NextButton from '../EventCreation/NextButton';
 import BackButton from '../common/BackButton';
 import Stepper from '../EventCreation/Stepper';
@@ -65,8 +66,6 @@ const PatientTransportPage = ({
   ambulances,
   selectedHospital,
   selectedAmbulance,
-  handleAddHospital,
-  handleAddAmbulance,
   handleHospitalChange,
   handleAmbulanceChange,
   handleRunNumber,
@@ -81,8 +80,6 @@ const PatientTransportPage = ({
   ambulances: Array<Ambulance>;
   selectedHospital: string;
   selectedAmbulance: string;
-  handleAddHospital: (id: string) => void;
-  handleAddAmbulance: (id: string) => void;
   handleHospitalChange: (e: React.ChangeEvent<HTMLElement>) => void;
   handleAmbulanceChange: (e: React.ChangeEvent<HTMLElement>) => void;
   handleRunNumber: (runNumber: string) => void;
@@ -95,10 +92,12 @@ const PatientTransportPage = ({
   const [activeHospitals, setActiveHospitals] = React.useState<Hospital[]>([]);
   const [activeAmbulances, setActiveAmbulances] = React.useState<Ambulance[]>(
     []
-  );    
-  const { data } = useQuery(GET_HOSPITAL_BY_ID(selectedHospital));
-
-  console.log({ data });
+  );
+  const [addHospitalsToEvent] = useMutation(ADD_HOSPITALS_TO_EVENT);
+    
+  const inactiveHospitals = hospitals.filter((hospital) => 
+  !activeHospitals.find((activeHospital) => activeHospital.id === hospital.id)
+  );
 
   const classes = useStyles();
 
@@ -137,10 +136,11 @@ const PatientTransportPage = ({
     setOpenHospitalAssignment(false);
   };
   
-  // 1. Set hospital to active
-  // 2. Update the list of hospitals
   const handleAssignmentSubmit = (selectedHospital) => {
-    handleAddHospital(selectedHospital);
+    addHospitalsToEvent({
+      variables: { eventId: currEvent.id, hospitals: [{id: Number(selectedHospital)}] },
+    });
+    setOpenHospitalAssignment(false);
   };
   
 
@@ -152,7 +152,7 @@ const PatientTransportPage = ({
   return (
     <Dialog fullScreen open={open} onClose={handleClose}>
       <HospitalAssignmentPage
-        hospitals={hospitals}
+        hospitals={inactiveHospitals}
         open={openHospitalAssignment}
         handleClose={handleAssignmentClose}
         handleHospitalChange={handleHospitalChange}
