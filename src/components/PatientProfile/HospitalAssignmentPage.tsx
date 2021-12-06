@@ -58,12 +58,14 @@ const HospitalAssignmentPage = ({
   handleSubmit,
   hospitals,
   handleHospitalChange,
+  handleAddHospital
 }: {
   open: boolean;
   handleClose: () => void;
   handleSubmit: (selectedHospital: any) => void;
   hospitals: Hospital[];
   handleHospitalChange: (e: any) => void;
+  handleAddHospital: (hospitalName: string) => void;
 }) => {
   const [isAddHospital, setAddHospital] = React.useState(false);
   const [hospitalName, setHospitalName] = React.useState('');
@@ -90,7 +92,15 @@ const HospitalAssignmentPage = ({
   };
 
   const onSaveChanges = () => {
-    handleSubmit(selectedHospital);
+
+    if (isAddHospital) {
+      console.log("ADDING HOSPITAL...");
+      handleAddHospital(hospitalName);
+
+    } else { 
+      handleSubmit(selectedHospital);
+      handleHospitalChange({ target: { value: selectedHospital }});
+    }
   };
 
   return (

@@ -99,7 +99,7 @@ const AmbulanceTransportSelector = ({
           />
         ))}
         <div className={classes.addRow}>
-          <IconButton>
+          <IconButton style={{ padding: '0px 3.5px'}}>
             <AddIcon
               fontSize="large"
               style={{ color: Colours.Secondary }}

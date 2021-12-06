@@ -3,8 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { Typography, makeStyles, Button, Dialog, Box } from '@material-ui/core';
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
-import { GET_HOSPITAL_BY_ID } from '../../graphql/queries/hospitals';
+import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
 import { ADD_HOSPITALS_TO_EVENT } from '../../graphql/mutations/events';
+import { ADD_HOSPITAL } from '../../graphql/mutations/hospitals';
 import { useQuery, useMutation } from 'react-apollo';
 import NextButton from '../EventCreation/NextButton';
 import BackButton from '../common/BackButton';
@@ -80,7 +81,7 @@ const PatientTransportPage = ({
   ambulances: Array<Ambulance>;
   selectedHospital: string;
   selectedAmbulance: string;
-  handleHospitalChange: (e: React.ChangeEvent<HTMLElement>) => void;
+  handleHospitalChange: (e: any) => void;
   handleAmbulanceChange: (e: React.ChangeEvent<HTMLElement>) => void;
   handleRunNumber: (runNumber: string) => void;
   currEvent: Event;
@@ -94,6 +95,22 @@ const PatientTransportPage = ({
     []
   );
   const [addHospitalsToEvent] = useMutation(ADD_HOSPITALS_TO_EVENT);
+  const { data: hospitalData } = useQuery(GET_ALL_HOSPITALS);
+  const [addHospital, { data }] = useMutation(ADD_HOSPITAL, {
+    update(cache, { data: { addHospital } }) {
+      cache.writeQuery({
+        query: GET_ALL_HOSPITALS,
+        data: { hospitals: hospitals.concat([addHospital]) },
+      });
+    },
+    onCompleted({ addHospital: { id } }) {
+        addHospitalsToEvent({
+          variables: { eventId: currEvent.id, hospitals: [{id: Number(id)}] },
+        });
+        handleHospitalChange({ target: { value: id }});
+        setOpenHospitalAssignment(false);
+    },
+  });
     
   const inactiveHospitals = hospitals.filter((hospital) => 
   !activeHospitals.find((activeHospital) => activeHospital.id === hospital.id)
@@ -136,12 +153,21 @@ const PatientTransportPage = ({
     setOpenHospitalAssignment(false);
   };
   
-  const handleAssignmentSubmit = (selectedHospital) => {
+  const handleAssignmentSubmit = (selectedHospitalId) => {
     addHospitalsToEvent({
-      variables: { eventId: currEvent.id, hospitals: [{id: Number(selectedHospital)}] },
+      variables: { eventId: currEvent.id, hospitals: [{id: Number(selectedHospitalId)}] },
     });
     setOpenHospitalAssignment(false);
   };
+
+  const handleAddingHospital = (hospitalName) => {
+    addHospital({
+      variables: {
+        name: hospitalName
+      }
+    });
+    setOpenHospitalAssignment(false);
+  }
   
 
   const onRunNumberChange = (e: React.ChangeEvent<HTMLElement>) => {
@@ -157,6 +183,7 @@ const PatientTransportPage = ({
         handleClose={handleAssignmentClose}
         handleHospitalChange={handleHospitalChange}
         handleSubmit={handleAssignmentSubmit}
+        handleAddHospital={handleAddingHospital}
       />
       <Box
         display="flex"

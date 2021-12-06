@@ -82,7 +82,7 @@ const PatientProfilePage = ({
   const currPatientStatus = React.useRef(Status.ON_SITE);
   const [openTransportModal, setOpenTransportModal] = useState(false);
   const [openTransportPage, setOpenTransportPage] = useState(false);
-  const [transportConfirmed, setTransportConfirmed] = useState(true);
+  const [transportConfirmed, setTransportConfirmed] = useState(false);
   const [transportingPatient, setTransportingPatient] = useState(false);
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital>({
@@ -255,7 +255,7 @@ const PatientProfilePage = ({
     }
   };
 
-  const handleHospitalChange = (e: React.ChangeEvent<HTMLElement>) => {
+  const handleHospitalChange = (e: any) => {
     setSelectedHospital({
       id: (e.target as HTMLInputElement).value,
       name: hospitals.filter(
