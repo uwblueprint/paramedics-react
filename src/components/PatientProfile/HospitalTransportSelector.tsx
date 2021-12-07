@@ -64,7 +64,7 @@ const useRadioStyles = makeStyles({
   },
   controlLabel: {
     marginLeft: 0,
-  }
+  },
 });
 
 const HospitalTransportSelector = ({

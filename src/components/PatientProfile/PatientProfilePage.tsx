@@ -102,6 +102,7 @@ const PatientProfilePage = ({
 
   const eventQuery = useQuery(GET_EVENT_BY_ID, {
     variables: { eventId },
+    fetchPolicy: 'cache-and-network'
   });
   const currEvent = eventQuery.data.event;
 
