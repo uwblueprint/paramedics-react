@@ -4,19 +4,21 @@ import { Typography, makeStyles, Button, Dialog, Box } from '@material-ui/core';
 import HospitalTransportSelector from './HospitalTransportSelector';
 import AmbulanceTransportSelector from './AmbulanceTransportSelector';
 import { GET_ALL_HOSPITALS } from '../../graphql/queries/hospitals';
-import { ADD_HOSPITALS_TO_EVENT } from '../../graphql/mutations/events';
+import { ADD_HOSPITALS_TO_EVENT, ADD_AMBULANCES_TO_EVENT } from '../../graphql/mutations/events';
 import { ADD_HOSPITAL } from '../../graphql/mutations/hospitals';
+import { ADD_AMBULANCE } from '../../graphql/mutations/ambulances';
 import { useQuery, useMutation } from 'react-apollo';
 import NextButton from '../EventCreation/NextButton';
 import BackButton from '../common/BackButton';
 import Stepper from '../EventCreation/Stepper';
 import { Colours } from '../../styles/Constants';
 import { Hospital } from '../../graphql/queries/hospitals';
-import { Ambulance } from '../../graphql/queries/ambulances';
+import { Ambulance, GET_ALL_AMBULANCES } from '../../graphql/queries/ambulances';
 import { CCP } from '../../graphql/queries/ccps';
 import FormField from '../common/FormField';
 import HospitalAssignmentPage from './HospitalAssignmentPage';
 import { Event } from '../../graphql/queries/events';
+import AmbulanceAssignmentPage from './AmbulanceAssignmentPage';
 
 const useStyles = makeStyles({
   resourceWrapper: {
@@ -82,7 +84,7 @@ const PatientTransportPage = ({
   selectedHospital: string;
   selectedAmbulance: string;
   handleHospitalChange: (e: any) => void;
-  handleAmbulanceChange: (e: React.ChangeEvent<HTMLElement>) => void;
+  handleAmbulanceChange: (e: any) => void;
   handleRunNumber: (runNumber: string) => void;
   currEvent: Event;
 }) => {
@@ -90,13 +92,14 @@ const PatientTransportPage = ({
   const [openHospitalAssignment, setOpenHospitalAssignment] = React.useState(
     false
   );
+  const [openAmbulanceAssignment, setOpenAmbulanceAssignment] = React.useState(false)
   const [activeHospitals, setActiveHospitals] = React.useState<Hospital[]>([]);
   const [activeAmbulances, setActiveAmbulances] = React.useState<Ambulance[]>(
     []
   );
   const [addHospitalsToEvent] = useMutation(ADD_HOSPITALS_TO_EVENT);
-  const { data: hospitalData } = useQuery(GET_ALL_HOSPITALS);
-  const [addHospital, { data }] = useMutation(ADD_HOSPITAL, {
+  const [addAmbulancesToEvent] = useMutation(ADD_AMBULANCES_TO_EVENT);
+  const [addHospital] = useMutation(ADD_HOSPITAL, {
     update(cache, { data: { addHospital } }) {
       cache.writeQuery({
         query: GET_ALL_HOSPITALS,
@@ -108,13 +111,26 @@ const PatientTransportPage = ({
           variables: { eventId: currEvent.id, hospitals: [{id: Number(id)}] },
         });
         handleHospitalChange({ target: { value: id }});
-        setOpenHospitalAssignment(false);
     },
   });
-    
+  const [addAmbulance] = useMutation(ADD_AMBULANCE, {
+    update(cache, { data: { addAmbulance } }) {
+      cache.writeQuery({
+        query: GET_ALL_AMBULANCES,
+        data: { ambulances: ambulances.concat([addAmbulance]) },
+      });
+    },
+    onCompleted({ addAmbulance: { id } }) {
+      addAmbulancesToEvent({
+        variables: { eventId: currEvent.id, ambulances: [{id: Number(id)}] },
+      });
+      handleAmbulanceChange({ target: { value: id }});
+    },
+  });
   const inactiveHospitals = hospitals.filter((hospital) => 
   !activeHospitals.find((activeHospital) => activeHospital.id === hospital.id)
   );
+  const inactiveAmbulances = ambulances.filter((ambulance) => !activeAmbulances.find((activeAmbulance) => activeAmbulance.id === ambulance.id))
 
   const classes = useStyles();
 
@@ -149,11 +165,9 @@ const PatientTransportPage = ({
     setRunNumberField(runNumber);
   }, [runNumber, hospitals, ambulances, currEvent]);
 
-  const handleAssignmentClose = () => {
-    setOpenHospitalAssignment(false);
-  };
+  const handleHospitalAssignmentClose = () => setOpenHospitalAssignment(false);
   
-  const handleAssignmentSubmit = (selectedHospitalId) => {
+  const handleHospitalAssignmentSubmit = (selectedHospitalId) => {
     addHospitalsToEvent({
       variables: { eventId: currEvent.id, hospitals: [{id: Number(selectedHospitalId)}] },
     });
@@ -175,15 +189,39 @@ const PatientTransportPage = ({
     handleRunNumber((e.target as HTMLInputElement).value);
   };
 
+  const handleAmbulanceAssignmentClose = () => setOpenAmbulanceAssignment(false);
+
+  const handleAmbulanceAssignmentSubmit = (selectedAmbulanceId) => {
+    addAmbulancesToEvent({
+      variables: { eventId: currEvent.id, ambulances: [{id: Number(selectedAmbulanceId)}] },
+    });
+    setOpenAmbulanceAssignment(false);
+  };
+
+  const handleAddingAmbulance = (ambulanceNumber) => {
+    addAmbulance({
+      variables: { vehicleNumber: Number(ambulanceNumber) }
+    });
+    setOpenAmbulanceAssignment(false);
+  }
+
   return (
     <Dialog fullScreen open={open} onClose={handleClose}>
       <HospitalAssignmentPage
         hospitals={inactiveHospitals}
         open={openHospitalAssignment}
-        handleClose={handleAssignmentClose}
+        handleClose={handleHospitalAssignmentClose}
         handleHospitalChange={handleHospitalChange}
-        handleSubmit={handleAssignmentSubmit}
+        handleSubmit={handleHospitalAssignmentSubmit}
         handleAddHospital={handleAddingHospital}
+      />
+      <AmbulanceAssignmentPage
+        open={openAmbulanceAssignment}
+        handleClose={handleAmbulanceAssignmentClose}
+        handleSubmit={handleAmbulanceAssignmentSubmit}
+        ambulances={inactiveAmbulances}
+        handleAmbulanceChange={handleAmbulanceChange}
+        handleAddAmbulance={handleAddingAmbulance}
       />
       <Box
         display="flex"
@@ -218,6 +256,7 @@ const PatientTransportPage = ({
               options={activeAmbulances}
               currentValue={selectedAmbulance}
               handleChange={handleAmbulanceChange}
+              setOpenAmbulanceAssignment={setOpenAmbulanceAssignment}
             />
           </div>
           <FormField

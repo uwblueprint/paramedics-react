@@ -70,10 +70,12 @@ const AmbulanceTransportSelector = ({
   options,
   currentValue,
   handleChange,
+  setOpenAmbulanceAssignment
 }: {
   options: Array<Ambulance>;
   currentValue: string;
   handleChange: (e: React.ChangeEvent<HTMLElement>) => void;
+  setOpenAmbulanceAssignment: (isOpenAmbulanceAssignment: boolean) => void;
 }) => {
   const classes = useRadioStyles();
   const history = useHistory();
@@ -82,7 +84,7 @@ const AmbulanceTransportSelector = ({
     <Container className={classes.root}>
       <span className={classes.nameTitle}>
         <Typography variant="body1" className={classes.label}>
-          *Ambulance Name:
+          *Ambulance Number:
         </Typography>
       </span>
       <RadioGroup
@@ -103,9 +105,7 @@ const AmbulanceTransportSelector = ({
             <AddIcon
               fontSize="large"
               style={{ color: Colours.Secondary }}
-              onClick={() => {
-                history.replace(`/manage/ambulances/new`);
-              }}
+              onClick={() => setOpenAmbulanceAssignment(true)}
             />
           </IconButton>
           <Typography className={classes.addLabel}>
