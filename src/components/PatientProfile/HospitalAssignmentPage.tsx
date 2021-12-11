@@ -70,14 +70,8 @@ const HospitalAssignmentPage = ({
   const [isAddHospital, setAddHospital] = React.useState(false);
   const [hospitalName, setHospitalName] = React.useState('');
   const [selectedHospital, setSelectedHospital] = React.useState('');
+  const [isValidatedSaveChanges, setIsValidatedSaveChanges] = React.useState(false);
   const classes = useStyles();
-
-  const isNotValidatedSaveChanges = false;
-  // Object.keys(selectedHospital).length === 0 ||
-  // selectedHospital.length === 0 ||
-  // selectedHospital === "Select hospital" ||
-  // (selectedHospital === "Add hospital" && hospitalName.length === 0);
-
   const onHospitalNameChange = (e) => {
     setHospitalName(e.target.value);
   };
@@ -94,7 +88,6 @@ const HospitalAssignmentPage = ({
   const onSaveChanges = () => {
 
     if (isAddHospital) {
-      console.log("ADDING HOSPITAL...");
       handleAddHospital(hospitalName);
 
     } else { 
@@ -144,16 +137,21 @@ const HospitalAssignmentPage = ({
         {isAddHospital ? (
           <FormField
             label="*Hospital Name"
+            isValidated={true}
+            validators={['matchRegexp:.*[^ ].*']}
+            errorMessages={[
+              'Invalid input',
+            ]}
             placeholder="Enter hospital name"
-            isValidated={false}
             onChange={onHospitalNameChange}
             value={hospitalName}
+            onValid={(isValid) => { setIsValidatedSaveChanges(isValid) }}
           />
         ) : null}
         <div style={{ textAlign: 'right', marginTop: '36px' }}>
           <NextButton
             handleClick={onSaveChanges}
-            disabled={isNotValidatedSaveChanges}
+            disabled={hospitalName.length === 0 || !isValidatedSaveChanges}
             buttonText="SAVE CHANGES"
           />
         </div>

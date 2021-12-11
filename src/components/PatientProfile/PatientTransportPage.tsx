@@ -130,8 +130,8 @@ const PatientTransportPage = ({
   const inactiveHospitals = hospitals.filter((hospital) => 
   !activeHospitals.find((activeHospital) => activeHospital.id === hospital.id)
   );
-  const inactiveAmbulances = ambulances.filter((ambulance) => !activeAmbulances.find((activeAmbulance) => activeAmbulance.id === ambulance.id))
-
+  const inactiveAmbulances = ambulances.filter((ambulance) => !activeAmbulances.find((activeAmbulance) => activeAmbulance.id === ambulance.id));
+  const isValidToSaveChanges = selectedAmbulance.length !== 0 && selectedHospital.length !== 0;
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -279,7 +279,7 @@ const PatientTransportPage = ({
             <NextButton
               buttonText="Save Changes"
               handleClick={handleComplete}
-              disabled={false}
+              disabled={!isValidToSaveChanges}
             />
           }
           backButton={<BackButton onClick={handleClose} />}

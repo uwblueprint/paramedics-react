@@ -63,6 +63,7 @@ const AmbulanceAssignmentPage = ({
   const [isAddAmbulance, setAddAmbulance] = React.useState(false);
   const [ambulanceNumber, setambulanceNumber] = React.useState('');
   const [selectedAmbulanceNumber, setSelectedAmbulanceNumber] = React.useState('');
+  const [isValidatedSaveChanges, setIsValidatedSaveChanges] = React.useState(false);
   const classes = useStyles();
 
   const isNotValidatedSaveChanges = false;
@@ -132,15 +133,20 @@ const AmbulanceAssignmentPage = ({
           <FormField
             label="*Ambulance Number"
             placeholder="Enter ambulance number"
-            isValidated={false}
+            isValidated={true}
+            validators={['matchRegexp:^[^ ]*$']}
+            errorMessages={[
+              'Invalid input',
+            ]}
             onChange={onAmbulanceNumberChange}
             value={ambulanceNumber}
+            onValid={(isValid) => { setIsValidatedSaveChanges(isValid) }}
           />
         ) : null}
         <div style={{ textAlign: 'right', marginTop: '36px' }}>
           <NextButton
             handleClick={onSaveChanges}
-            disabled={isNotValidatedSaveChanges}
+            disabled={ambulanceNumber.length === 0 || !isValidatedSaveChanges}
             buttonText="SAVE CHANGES"
           />
         </div>
